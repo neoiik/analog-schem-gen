@@ -10,7 +10,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_05v0_nvt",
           "sourcePosition": {
-            "x": 120,
+            "x": 59,
             "y": 67
           },
           "sourceTransform": {
@@ -53,7 +53,7 @@
           "deviceClass": "resistor",
           "sourceTarget": "R",
           "sourcePosition": {
-            "x": 121,
+            "x": 60,
             "y": 82
           },
           "sourceTransform": {
@@ -84,12 +84,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 120,
+            "x": 61,
             "y": 35
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "none"
+            "mirror": "horizontal"
           },
           "nodes": [
             {
@@ -127,7 +127,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 137,
+            "x": 103,
             "y": 35
           },
           "sourceTransform": {
@@ -170,12 +170,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 61,
+            "x": 86,
             "y": 35
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "horizontal"
+            "mirror": "none"
           },
           "nodes": [
             {
@@ -213,12 +213,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 61,
+            "x": 86,
             "y": 51
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "horizontal"
+            "mirror": "none"
           },
           "nodes": [
             {
@@ -299,7 +299,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 91,
+            "x": 129,
             "y": 82
           },
           "sourceTransform": {
@@ -342,7 +342,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 91,
+            "x": 129,
             "y": 67
           },
           "sourceTransform": {
@@ -385,12 +385,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 137,
+            "x": 88,
             "y": 82
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "none"
+            "mirror": "horizontal"
           },
           "nodes": [
             {
@@ -428,12 +428,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 154,
+            "x": 131,
             "y": 35
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "none"
+            "mirror": "horizontal"
           },
           "nodes": [
             {
@@ -527,18 +527,18 @@
         "bounds": {
           "minX": 22,
           "minY": 18,
-          "maxX": 185,
-          "maxY": 100
+          "maxX": 157,
+          "maxY": 99
         },
         "portOccurrences": [
           {
-            "occurrenceId": "P_bn_1",
+            "occurrenceId": "P_bn",
             "name": "bn",
             "netName": "bn",
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 113,
+              "x": 52,
               "y": 67
             },
             "sourceTransform": {
@@ -553,53 +553,8 @@
             "direction": "inout",
             "sourceSymbolId": "ground",
             "sourcePosition": {
-              "x": 121,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_2",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 37,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_3",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 92,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_4",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 138,
-              "y": 89
+              "x": 83,
+              "y": 90
             },
             "sourceTransform": {
               "rotation": 270,
@@ -613,53 +568,8 @@
             "direction": "inout",
             "sourceSymbolId": "vdd-port",
             "sourcePosition": {
-              "x": 121,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_2",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 138,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_3",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 60,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_4",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 155,
-              "y": 28
+              "x": 95,
+              "y": 27
             },
             "sourceTransform": {
               "rotation": 90,
@@ -673,7 +583,7 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 179,
+              "x": 151,
               "y": 74
             },
             "sourceTransform": {
@@ -688,7 +598,7 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 179,
+              "x": 151,
               "y": 76
             },
             "sourceTransform": {
@@ -703,12 +613,12 @@
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 68,
+              "x": 79,
               "y": 51
             },
             "sourceTransform": {
               "rotation": 0,
-              "mirror": "horizontal"
+              "mirror": "none"
             }
           },
           {
@@ -718,8 +628,8 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 179,
-              "y": 58
+              "x": 151,
+              "y": 41
             },
             "sourceTransform": {
               "rotation": 0,
@@ -733,7 +643,7 @@
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 84,
+              "x": 122,
               "y": 67
             },
             "sourceTransform": {
@@ -744,83 +654,146 @@
         ],
         "junctions": [
           {
-            "id": "J_gn0_1",
+            "id": "J_vss_1",
+            "netName": "vss",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 60,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vss_2",
+            "netName": "vss",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 83,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vss_3",
+            "netName": "vss",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 87,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vdd_4",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 87,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_vdd_5",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 95,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_vdd_6",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 104,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_gn0_7",
             "netName": "gn0",
             "role": "steiner",
             "sourcePosition": {
-              "x": 133,
+              "x": 87,
               "y": 76
             }
           },
           {
-            "id": "J_gp0_2",
+            "id": "J_gp0_8",
             "netName": "gp0",
             "role": "steiner",
             "sourcePosition": {
-              "x": 150,
+              "x": 130,
               "y": 41
             }
           },
           {
-            "id": "J_iq_n_3",
+            "id": "J_iq_n_9",
             "netName": "iq_n",
             "role": "steiner",
             "sourcePosition": {
               "x": 42,
-              "y": 82
-            }
-          },
-          {
-            "id": "J_iq_n_4",
-            "netName": "iq_n",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 87,
-              "y": 82
-            }
-          },
-          {
-            "id": "J_iq_p_5",
-            "netName": "iq_p",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 121,
-              "y": 41
-            }
-          },
-          {
-            "id": "J_iq_p_6",
-            "netName": "iq_p",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 116,
-              "y": 35
-            }
-          },
-          {
-            "id": "J_gp0_7",
-            "netName": "gp0",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 150,
-              "y": 58
-            }
-          },
-          {
-            "id": "J_iq_n_8",
-            "netName": "iq_n",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 138,
               "y": 74
             }
           },
           {
-            "id": "J_gn0_9",
+            "id": "J_iq_n_10",
+            "netName": "iq_n",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 104,
+              "y": 74
+            }
+          },
+          {
+            "id": "J_iq_p_11",
+            "netName": "iq_p",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 65,
+              "y": 35
+            }
+          },
+          {
+            "id": "J_iq_p_12",
+            "netName": "iq_p",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 82,
+              "y": 35
+            }
+          },
+          {
+            "id": "J_iq_p_13",
+            "netName": "iq_p",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 60,
+              "y": 41
+            }
+          },
+          {
+            "id": "J_gp0_14",
+            "netName": "gp0",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 135,
+              "y": 41
+            }
+          },
+          {
+            "id": "J_iq_n_15",
+            "netName": "iq_n",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 125,
+              "y": 74
+            }
+          },
+          {
+            "id": "J_gn0_16",
             "netName": "gn0",
             "role": "steiner",
             "sourcePosition": {
-              "x": 138,
+              "x": 92,
               "y": 76
             }
           }
@@ -828,26 +801,24 @@
         "contacts": [],
         "routes": [
           {
-            "id": "R_bn_1",
-            "netName": "bn",
+            "id": "R_vss_1",
+            "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-IQSET",
-              "pinName": "G",
+              "kind": "junction",
+              "junctionId": "J_vss_1",
               "sourcePoint": {
-                "x": 117,
-                "y": 67
+                "x": 60,
+                "y": 88
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_bn_1",
-                "pinName": "bn",
+                "kind": "junction",
+                "junctionId": "J_vss_2",
                 "sourcePoint": {
-                  "x": 113,
-                  "y": 67
+                  "x": 83,
+                  "y": 88
                 }
               }
             ]
@@ -857,22 +828,20 @@
             "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-Riqset",
-              "pinName": "M",
+              "kind": "junction",
+              "junctionId": "J_vss_2",
               "sourcePoint": {
-                "x": 121,
-                "y": 85
+                "x": 83,
+                "y": 88
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_1",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_3",
                 "sourcePoint": {
-                  "x": 121,
-                  "y": 89
+                  "x": 87,
+                  "y": 88
                 }
               }
             ]
@@ -892,12 +861,18 @@
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_2",
-                "pinName": "vss",
-                "sourcePoint": {
+                "kind": "bend",
+                "position": {
                   "x": 37,
-                  "y": 89
+                  "y": 88
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vss_1",
+                "sourcePoint": {
+                  "x": 60,
+                  "y": 88
                 }
               }
             ]
@@ -908,21 +883,20 @@
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-IGP",
-              "pinName": "S",
+              "instanceId": "source-Riqset",
+              "pinName": "M",
               "sourcePoint": {
-                "x": 92,
+                "x": 60,
                 "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_3",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_1",
                 "sourcePoint": {
-                  "x": 92,
-                  "y": 89
+                  "x": 60,
+                  "y": 88
                 }
               }
             ]
@@ -932,72 +906,76 @@
             "netName": "vss",
             "presentation": "wire",
             "start": {
+              "kind": "port",
+              "instanceId": "P_vss_1",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 83,
+                "y": 90
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vss_2",
+                "sourcePoint": {
+                  "x": 83,
+                  "y": 88
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_6",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
               "kind": "instance",
               "instanceId": "source-NID",
               "pinName": "S",
               "sourcePoint": {
-                "x": 138,
+                "x": 87,
                 "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_4",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_3",
                 "sourcePoint": {
-                  "x": 138,
-                  "y": 89
+                  "x": 87,
+                  "y": 88
                 }
               }
             ]
           },
           {
-            "id": "R_vdd_6",
-            "netName": "vdd",
+            "id": "R_vss_7",
+            "netName": "vss",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-IQP",
+              "instanceId": "source-IGP",
               "pinName": "S",
               "sourcePoint": {
-                "x": 121,
-                "y": 32
+                "x": 130,
+                "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_1",
-                "pinName": "vdd",
-                "sourcePoint": {
-                  "x": 121,
-                  "y": 28
+                "kind": "bend",
+                "position": {
+                  "x": 130,
+                  "y": 88
                 }
-              }
-            ]
-          },
-          {
-            "id": "R_vdd_7",
-            "netName": "vdd",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IQNFEED",
-              "pinName": "S",
-              "sourcePoint": {
-                "x": 138,
-                "y": 32
-              }
-            },
-            "steps": [
+              },
               {
-                "kind": "port",
-                "instanceId": "P_vdd_2",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vss_3",
                 "sourcePoint": {
-                  "x": 138,
-                  "y": 28
+                  "x": 87,
+                  "y": 88
                 }
               }
             ]
@@ -1007,22 +985,20 @@
             "netName": "vdd",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-IGN",
-              "pinName": "S",
+              "kind": "junction",
+              "junctionId": "J_vdd_4",
               "sourcePoint": {
-                "x": 60,
-                "y": 32
+                "x": 87,
+                "y": 29
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_3",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vdd_5",
                 "sourcePoint": {
-                  "x": 60,
-                  "y": 28
+                  "x": 95,
+                  "y": 29
                 }
               }
             ]
@@ -1032,28 +1008,160 @@
             "netName": "vdd",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-PID",
-              "pinName": "S",
+              "kind": "junction",
+              "junctionId": "J_vdd_5",
               "sourcePoint": {
-                "x": 155,
-                "y": 32
+                "x": 95,
+                "y": 29
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_4",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vdd_6",
                 "sourcePoint": {
-                  "x": 155,
-                  "y": 28
+                  "x": 104,
+                  "y": 29
                 }
               }
             ]
           },
           {
-            "id": "R_pcas_10",
+            "id": "R_vdd_10",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IQP",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 60,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 60,
+                  "y": 29
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_4",
+                "sourcePoint": {
+                  "x": 87,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_11",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IGN",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 87,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_4",
+                "sourcePoint": {
+                  "x": 87,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_12",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_vdd_1",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 95,
+                "y": 27
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_5",
+                "sourcePoint": {
+                  "x": 95,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_13",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IQNFEED",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 104,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_6",
+                "sourcePoint": {
+                  "x": 104,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_14",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PID",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 130,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 130,
+                  "y": 29
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_6",
+                "sourcePoint": {
+                  "x": 104,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_pcas_15",
             "netName": "pcas",
             "presentation": "wire",
             "start": {
@@ -1061,7 +1169,7 @@
               "instanceId": "source-IGN_SHD",
               "pinName": "G",
               "sourcePoint": {
-                "x": 64,
+                "x": 83,
                 "y": 51
               }
             },
@@ -1071,14 +1179,14 @@
                 "instanceId": "P_pcas_1",
                 "pinName": "pcas",
                 "sourcePoint": {
-                  "x": 68,
+                  "x": 79,
                   "y": 51
                 }
               }
             ]
           },
           {
-            "id": "R_ncas_11",
+            "id": "R_ncas_16",
             "netName": "ncas",
             "presentation": "wire",
             "start": {
@@ -1086,7 +1194,7 @@
               "instanceId": "source-IGP_SHD",
               "pinName": "G",
               "sourcePoint": {
-                "x": 88,
+                "x": 126,
                 "y": 67
               }
             },
@@ -1096,64 +1204,39 @@
                 "instanceId": "P_ncas_1",
                 "pinName": "ncas",
                 "sourcePoint": {
-                  "x": 84,
+                  "x": 122,
                   "y": 67
                 }
               }
             ]
           },
           {
-            "id": "R_ign_m_12",
-            "netName": "ign_m",
+            "id": "R_bn_17",
+            "netName": "bn",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-IGN_SHD",
-              "pinName": "S",
+              "kind": "port",
+              "instanceId": "P_bn",
+              "pinName": "bn",
               "sourcePoint": {
-                "x": 60,
-                "y": 48
+                "x": 52,
+                "y": 67
               }
             },
             "steps": [
               {
                 "kind": "instance",
-                "instanceId": "source-IGN",
-                "pinName": "D",
+                "instanceId": "source-IQSET",
+                "pinName": "G",
                 "sourcePoint": {
-                  "x": 60,
-                  "y": 38
+                  "x": 56,
+                  "y": 67
                 }
               }
             ]
           },
           {
-            "id": "R_igp_m_13",
-            "netName": "igp_m",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IGP_SHD",
-              "pinName": "S",
-              "sourcePoint": {
-                "x": 92,
-                "y": 70
-              }
-            },
-            "steps": [
-              {
-                "kind": "instance",
-                "instanceId": "source-IGP",
-                "pinName": "D",
-                "sourcePoint": {
-                  "x": 92,
-                  "y": 79
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_src_14",
+            "id": "R_iq_src_18",
             "netName": "iq_src",
             "presentation": "wire",
             "start": {
@@ -1161,7 +1244,7 @@
               "instanceId": "source-Riqset",
               "pinName": "P",
               "sourcePoint": {
-                "x": 121,
+                "x": 60,
                 "y": 79
               }
             },
@@ -1171,14 +1254,87 @@
                 "instanceId": "source-IQSET",
                 "pinName": "S",
                 "sourcePoint": {
-                  "x": 121,
+                  "x": 60,
                   "y": 70
                 }
               }
             ]
           },
           {
-            "id": "R_gn0_15_a",
+            "id": "R_ign_m_19",
+            "netName": "ign_m",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IGN_SHD",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 87,
+                "y": 48
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-IGN",
+                "pinName": "D",
+                "sourcePoint": {
+                  "x": 87,
+                  "y": 38
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn0_20_a",
+            "netName": "gn0",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NID",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 87,
+                "y": 79
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_gn0_7",
+                "sourcePoint": {
+                  "x": 87,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn0_20_b",
+            "netName": "gn0",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_gn0_7",
+              "sourcePoint": {
+                "x": 87,
+                "y": 76
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-IGN_SHD",
+                "pinName": "D",
+                "sourcePoint": {
+                  "x": 87,
+                  "y": 54
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn0_21_a",
             "netName": "gn0",
             "presentation": "wire",
             "start": {
@@ -1186,7 +1342,7 @@
               "instanceId": "source-NID",
               "pinName": "G",
               "sourcePoint": {
-                "x": 134,
+                "x": 91,
                 "y": 82
               }
             },
@@ -1194,107 +1350,118 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 133,
+                  "x": 92,
                   "y": 82
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_gn0_1",
+                "junctionId": "J_gn0_16",
                 "sourcePoint": {
-                  "x": 133,
+                  "x": 92,
                   "y": 76
                 }
               }
             ]
           },
           {
-            "id": "R_gn0_15_b",
+            "id": "R_gn0_21_b",
             "netName": "gn0",
             "presentation": "wire",
             "start": {
               "kind": "junction",
-              "junctionId": "J_gn0_1",
+              "junctionId": "J_gn0_16",
               "sourcePoint": {
-                "x": 133,
+                "x": 92,
                 "y": 76
               }
             },
             "steps": [
               {
-                "kind": "bend",
-                "position": {
-                  "x": 133,
-                  "y": 60
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 60,
-                  "y": 60
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-IGN_SHD",
-                "pinName": "D",
+                "kind": "junction",
+                "junctionId": "J_gn0_7",
                 "sourcePoint": {
-                  "x": 60,
-                  "y": 54
+                  "x": 87,
+                  "y": 76
                 }
               }
             ]
           },
           {
-            "id": "R_gn0_16_a",
-            "netName": "gn0",
+            "id": "R_igp_m_22",
+            "netName": "igp_m",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-NID",
-              "pinName": "D",
+              "instanceId": "source-IGP_SHD",
+              "pinName": "S",
               "sourcePoint": {
-                "x": 138,
-                "y": 79
+                "x": 130,
+                "y": 70
               }
             },
             "steps": [
               {
-                "kind": "junction",
-                "junctionId": "J_gn0_9",
+                "kind": "instance",
+                "instanceId": "source-IGP",
+                "pinName": "D",
                 "sourcePoint": {
-                  "x": 138,
-                  "y": 76
+                  "x": 130,
+                  "y": 79
                 }
               }
             ]
           },
           {
-            "id": "R_gn0_16_b",
-            "netName": "gn0",
+            "id": "R_gp0_23_a",
+            "netName": "gp0",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PID",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 130,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_gp0_8",
+                "sourcePoint": {
+                  "x": 130,
+                  "y": 41
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp0_23_b",
+            "netName": "gp0",
             "presentation": "wire",
             "start": {
               "kind": "junction",
-              "junctionId": "J_gn0_9",
+              "junctionId": "J_gp0_8",
               "sourcePoint": {
-                "x": 138,
-                "y": 76
+                "x": 130,
+                "y": 41
               }
             },
             "steps": [
               {
-                "kind": "junction",
-                "junctionId": "J_gn0_1",
+                "kind": "instance",
+                "instanceId": "source-IGP_SHD",
+                "pinName": "D",
                 "sourcePoint": {
-                  "x": 133,
-                  "y": 76
+                  "x": 130,
+                  "y": 64
                 }
               }
             ]
           },
           {
-            "id": "R_gp0_17_a",
+            "id": "R_gp0_24_a",
             "netName": "gp0",
             "presentation": "wire",
             "start": {
@@ -1302,7 +1469,7 @@
               "instanceId": "source-PID",
               "pinName": "G",
               "sourcePoint": {
-                "x": 151,
+                "x": 134,
                 "y": 35
               }
             },
@@ -1310,107 +1477,45 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 150,
+                  "x": 135,
                   "y": 35
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_gp0_2",
+                "junctionId": "J_gp0_14",
                 "sourcePoint": {
-                  "x": 150,
+                  "x": 135,
                   "y": 41
                 }
               }
             ]
           },
           {
-            "id": "R_gp0_17_b_a",
+            "id": "R_gp0_24_b",
             "netName": "gp0",
             "presentation": "wire",
             "start": {
               "kind": "junction",
-              "junctionId": "J_gp0_2",
+              "junctionId": "J_gp0_14",
               "sourcePoint": {
-                "x": 150,
+                "x": 135,
                 "y": 41
               }
             },
             "steps": [
               {
                 "kind": "junction",
-                "junctionId": "J_gp0_7",
+                "junctionId": "J_gp0_8",
                 "sourcePoint": {
-                  "x": 150,
-                  "y": 58
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp0_17_b_b",
-            "netName": "gp0",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_gp0_7",
-              "sourcePoint": {
-                "x": 150,
-                "y": 58
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 92,
-                  "y": 58
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-IGP_SHD",
-                "pinName": "D",
-                "sourcePoint": {
-                  "x": 92,
-                  "y": 64
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp0_18",
-            "netName": "gp0",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-PID",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 155,
-                "y": 38
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 155,
-                  "y": 41
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_gp0_2",
-                "sourcePoint": {
-                  "x": 150,
+                  "x": 130,
                   "y": 41
                 }
               }
             ]
           },
           {
-            "id": "R_iq_n_19_a_a",
+            "id": "R_iq_n_25_a_a_a",
             "netName": "iq_n",
             "presentation": "wire",
             "start": {
@@ -1418,139 +1523,83 @@
               "instanceId": "source-IGP",
               "pinName": "G",
               "sourcePoint": {
-                "x": 88,
+                "x": 126,
                 "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_n_4",
-                "sourcePoint": {
-                  "x": 87,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_n_19_a_b",
-            "netName": "iq_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_iq_n_4",
-              "sourcePoint": {
-                "x": 87,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_n_3",
-                "sourcePoint": {
-                  "x": 42,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_n_19_b",
-            "netName": "iq_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_iq_n_3",
-              "sourcePoint": {
-                "x": 42,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "instance",
-                "instanceId": "source-IQN",
-                "pinName": "G",
-                "sourcePoint": {
-                  "x": 41,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_n_20",
-            "netName": "iq_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IQN",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 37,
-                "y": 79
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 37,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 42,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_n_3",
-                "sourcePoint": {
-                  "x": 42,
+                  "x": 125,
                   "y": 82
                 }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_n_21_a",
-            "netName": "iq_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IQNFEED",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 138,
-                "y": 38
-              }
-            },
-            "steps": [
+              },
               {
                 "kind": "junction",
-                "junctionId": "J_iq_n_8",
+                "junctionId": "J_iq_n_15",
                 "sourcePoint": {
-                  "x": 138,
+                  "x": 125,
                   "y": 74
                 }
               }
             ]
           },
           {
-            "id": "R_iq_n_21_b",
+            "id": "R_iq_n_25_a_a_b",
             "netName": "iq_n",
             "presentation": "wire",
             "start": {
               "kind": "junction",
-              "junctionId": "J_iq_n_8",
+              "junctionId": "J_iq_n_15",
               "sourcePoint": {
-                "x": 138,
+                "x": 125,
+                "y": 74
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_n_10",
+                "sourcePoint": {
+                  "x": 104,
+                  "y": 74
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_n_25_a_b",
+            "netName": "iq_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_iq_n_10",
+              "sourcePoint": {
+                "x": 104,
+                "y": 74
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_n_9",
+                "sourcePoint": {
+                  "x": 42,
+                  "y": 74
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_n_25_b",
+            "netName": "iq_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_iq_n_9",
+              "sourcePoint": {
+                "x": 42,
                 "y": 74
               }
             },
@@ -1558,218 +1607,48 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 131,
+                  "x": 37,
                   "y": 74
                 }
               },
               {
-                "kind": "bend",
-                "position": {
-                  "x": 131,
-                  "y": 94
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 87,
-                  "y": 94
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_n_4",
-                "sourcePoint": {
-                  "x": 87,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_p_22_a",
-            "netName": "iq_p",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IQP",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 121,
-                "y": 38
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_p_5",
-                "sourcePoint": {
-                  "x": 121,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_p_22_b",
-            "netName": "iq_p",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_iq_p_5",
-              "sourcePoint": {
-                "x": 121,
-                "y": 41
-              }
-            },
-            "steps": [
-              {
                 "kind": "instance",
-                "instanceId": "source-IQSET",
+                "instanceId": "source-IQN",
                 "pinName": "D",
                 "sourcePoint": {
-                  "x": 121,
-                  "y": 64
+                  "x": 37,
+                  "y": 79
                 }
               }
             ]
           },
           {
-            "id": "R_iq_p_23_a",
-            "netName": "iq_p",
+            "id": "R_iq_n_26",
+            "netName": "iq_n",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-IQP",
+              "instanceId": "source-IQN",
               "pinName": "G",
               "sourcePoint": {
-                "x": 117,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_p_6",
-                "sourcePoint": {
-                  "x": 116,
-                  "y": 35
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_p_23_b",
-            "netName": "iq_p",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_iq_p_6",
-              "sourcePoint": {
-                "x": 116,
-                "y": 35
+                "x": 41,
+                "y": 82
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 116,
-                  "y": 41
+                  "x": 42,
+                  "y": 82
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_iq_p_5",
+                "junctionId": "J_iq_n_9",
                 "sourcePoint": {
-                  "x": 121,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_p_24",
-            "netName": "iq_p",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IQNFEED",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 134,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 133,
-                  "y": 35
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 133,
-                  "y": 41
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_p_5",
-                "sourcePoint": {
-                  "x": 121,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_iq_p_25",
-            "netName": "iq_p",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-IGN",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 64,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_iq_p_6",
-                "sourcePoint": {
-                  "x": 116,
-                  "y": 35
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp0_26",
-            "netName": "gp0",
-            "presentation": "wire",
-            "start": {
-              "kind": "port",
-              "instanceId": "P_gp0",
-              "pinName": "gp0",
-              "sourcePoint": {
-                "x": 179,
-                "y": 58
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_gp0_7",
-                "sourcePoint": {
-                  "x": 150,
-                  "y": 58
+                  "x": 42,
+                  "y": 74
                 }
               }
             ]
@@ -1779,27 +1658,269 @@
             "netName": "iq_n",
             "presentation": "wire",
             "start": {
-              "kind": "port",
-              "instanceId": "P_iq_n",
-              "pinName": "iq_n",
+              "kind": "instance",
+              "instanceId": "source-IQNFEED",
+              "pinName": "D",
               "sourcePoint": {
-                "x": 179,
-                "y": 74
+                "x": 104,
+                "y": 38
               }
             },
             "steps": [
               {
                 "kind": "junction",
-                "junctionId": "J_iq_n_8",
+                "junctionId": "J_iq_n_10",
                 "sourcePoint": {
-                  "x": 138,
+                  "x": 104,
                   "y": 74
                 }
               }
             ]
           },
           {
-            "id": "R_gn0_28",
+            "id": "R_iq_p_28_a_a",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IGN",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 83,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_p_12",
+                "sourcePoint": {
+                  "x": 82,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_p_28_a_b",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_iq_p_12",
+              "sourcePoint": {
+                "x": 82,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_p_11",
+                "sourcePoint": {
+                  "x": 65,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_p_28_b",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_iq_p_11",
+              "sourcePoint": {
+                "x": 65,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-IQP",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 64,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_p_29_a",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IQP",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 60,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_p_13",
+                "sourcePoint": {
+                  "x": 60,
+                  "y": 41
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_p_29_b",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_iq_p_13",
+              "sourcePoint": {
+                "x": 60,
+                "y": 41
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 65,
+                  "y": 41
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_p_11",
+                "sourcePoint": {
+                  "x": 65,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_p_30",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IQNFEED",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 100,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 99,
+                  "y": 35
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 99,
+                  "y": 41
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 82,
+                  "y": 41
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_p_12",
+                "sourcePoint": {
+                  "x": 82,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_p_31",
+            "netName": "iq_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-IQSET",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 60,
+                "y": 64
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_p_13",
+                "sourcePoint": {
+                  "x": 60,
+                  "y": 41
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp0_32",
+            "netName": "gp0",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_gp0",
+              "pinName": "gp0",
+              "sourcePoint": {
+                "x": 151,
+                "y": 41
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_gp0_14",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 41
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_n_33",
+            "netName": "iq_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_iq_n",
+              "pinName": "iq_n",
+              "sourcePoint": {
+                "x": 151,
+                "y": 74
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_iq_n_15",
+                "sourcePoint": {
+                  "x": 125,
+                  "y": 74
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn0_34",
             "netName": "gn0",
             "presentation": "wire",
             "start": {
@@ -1807,16 +1928,16 @@
               "instanceId": "P_gn0",
               "pinName": "gn0",
               "sourcePoint": {
-                "x": 179,
+                "x": 151,
                 "y": 76
               }
             },
             "steps": [
               {
                 "kind": "junction",
-                "junctionId": "J_gn0_9",
+                "junctionId": "J_gn0_16",
                 "sourcePoint": {
-                  "x": 138,
+                  "x": 92,
                   "y": 76
                 }
               }

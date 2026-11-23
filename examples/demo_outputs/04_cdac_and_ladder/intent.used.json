@@ -45,7 +45,8 @@
         "C3",
         "C4"
       ],
-      "commonTopNet": "VDAC"
+      "commonTopNet": "VDAC",
+      "stackedDrivers": []
     },
     {
       "type": "serpentine_chain",

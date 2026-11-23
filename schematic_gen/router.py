@@ -271,9 +271,15 @@ class _GridOccupancy:
         elif pt_port.symbol_id == "vdd-port":
             for ty in range(pt_port.y - 3, pt_port.y):
                 self.body_blocked.add((pt_port.x, ty))
+            self.body_blocked.add((pt_port.x - 1, pt_port.y))
+            self.body_blocked.add((pt_port.x + 1, pt_port.y))
+            self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y + 1)
         elif pt_port.symbol_id == "ground":
             for ty in range(pt_port.y + 1, pt_port.y + 4):
                 self.body_blocked.add((pt_port.x, ty))
+            self.body_blocked.add((pt_port.x - 1, pt_port.y))
+            self.body_blocked.add((pt_port.x + 1, pt_port.y))
+            self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y - 1)
 
     def register_instance_pins(
         self, circuit: NetlistCircuit, bulk_handled: set[tuple[str, str]] | None = None
@@ -983,8 +989,8 @@ def route_placed_schematic(
     max_x = max(po.x for po in edge_right_ports) if edge_right_ports else (max(all_xs) + 14)
     min_y, max_y = min(all_ys) - 14, max(all_ys) + 14
     search_bounds: BBox = (min_x, min_y, max_x, max_y)
-    top_bus_y = min_inst_y - 5
-    bottom_bus_y = max_inst_y + 5
+    top_bus_y = min(all_ys) - 3
+    bottom_bus_y = max(all_ys) + 3
 
     # Map every routable endpoint per net: point -> RouteStepPlaced
     endpoints_by_net: dict[str, list[RouteStepPlaced]] = defaultdict(list)
@@ -1104,80 +1110,6 @@ def route_placed_schematic(
                     occ.add_polyline(net, [(ep.x, ep.y), (ex, ey)])
                     for step_k in range(1, 5):
                         occ.label_blocked.add((ep.x + dx * (4 + step_k), ep.y + dy * (4 + step_k)))
-    for rail_net in [n for n in circuit.nets if n in repeated_port_nets]:
-        rail_ports = port_occs_by_net.get(rail_net, [])
-        if not rail_ports:
-            continue
-        port_step_by_pt = {
-            (po.x, po.y): RouteStepPlaced(
-                kind="port",
-                x=po.x,
-                y=po.y,
-                instance_id=po.occurrence_id,
-                pin_name=po.port_name,
-            )
-            for po in rail_ports
-        }
-        rail_goals = set(port_step_by_pt)
-        for ep in endpoints_by_net.get(rail_net, []):
-            path_r = _astar_connect_to_tree(
-                rail_net,
-                (ep.x, ep.y),
-                rail_goals,
-                occ,
-                search_bounds,
-                allow_tight_parallel=True,
-            )
-            if path_r is None:
-                nearest = min(rail_ports, key=lambda po: abs(po.x - ep.x) + abs(po.y - ep.y))
-                p_step = port_step_by_pt[(nearest.x, nearest.y)]
-                path_r = (
-                    [(ep.x, ep.y), (p_step.x, p_step.y)]
-                    if (ep.x == p_step.x or ep.y == p_step.y)
-                    else [(ep.x, ep.y), (ep.x, p_step.y), (p_step.x, p_step.y)]
-                )
-            p_step = port_step_by_pt[path_r[-1]]
-            steps = [RouteStepPlaced(kind="bend", x=bx, y=by) for (bx, by) in path_r[1:-1]] + [p_step]
-            route_counter += 1
-            routes.append(
-                RoutePlaced(
-                    id=f"R_{rail_net}_{route_counter}",
-                    net_name=rail_net,
-                    start=ep,
-                    steps=steps,
-                )
-            )
-            occ.add_polyline(rail_net, path_r)
-
-    # 2. Order non-rail nets: critical short local nets first, then general full_wire, then perimeter_bus!
-    non_rail_nets = [
-        n
-        for n in circuit.nets
-        if n not in repeated_port_nets and n not in label_stub_nets and n not in bus_handled_nets
-    ]
-    crit_set = set(intent.critical_nets)
-
-    def _net_priority(n: str) -> tuple[int, int, int, int]:
-        pol = intent.net_policies.get(n, "full_wire")
-        if pol == "label_stub" and not allow_wire_labels:
-            pol = "perimeter_bus"
-        inst_eps_n = endpoints_by_net.get(n, [])
-        eps = inst_eps_n + [
-            RouteStepPlaced(kind="port", x=po.x, y=po.y, instance_id=po.occurrence_id, pin_name=po.port_name)
-            for po in port_occs_by_net.get(n, [])
-        ]
-        xs = [e.x for e in (inst_eps_n or eps)] or [0]
-        ys = [e.y for e in (inst_eps_n or eps)] or [0]
-        span = (max(xs) - min(xs)) + (max(ys) - min(ys))
-        # Coarse span band + left-to-right `min(xs)` ordering prevents braided cross-group diagonals!
-        if pol == "perimeter_bus":
-            return (2, len(eps), min(xs), span)
-        if n in crit_set:
-            return (0, span // 56, min(xs), span)
-        return (1, span // 56, min(xs), span)
-
-    non_rail_nets.sort(key=_net_priority)
-
     ep_at_point_by_net: dict[str, dict[Point, RouteStepPlaced]] = defaultdict(dict)
     junction_at_point_by_net: dict[str, dict[Point, str]] = defaultdict(dict)
     tree_points_by_net: dict[str, set[Point]] = defaultdict(set)
@@ -1192,7 +1124,13 @@ def route_placed_schematic(
         avg_y = (sum(inst_ys) / len(inst_ys)) if inst_ys else mid_inst_y
         return top_bus_y if avg_y <= mid_inst_y else bottom_bus_y
 
-    def _connect_ep_to_net_tree(net: str, target_ep: RouteStepPlaced) -> None:
+    def _connect_ep_to_net_tree(
+        net: str,
+        target_ep: RouteStepPlaced,
+        *,
+        bus_y_override: int | None = None,
+        prefer_tight: bool = False,
+    ) -> None:
         nonlocal junc_counter, route_counter
         tree_points = tree_points_by_net[net]
         ep_at_point = ep_at_point_by_net[net]
@@ -1205,19 +1143,20 @@ def route_placed_schematic(
         if start_pt in tree_points:
             return
 
-        bus_y = _bus_target_for_net(net)
+        bus_y = bus_y_override if bus_y_override is not None else _bus_target_for_net(net)
         path = _astar_connect_to_tree(
             net,
             start_pt,
             tree_points,
             occ,
             search_bounds,
-            allow_tight_parallel=False,
+            allow_tight_parallel=prefer_tight,
             bus_y_target=bus_y,
         )
         if path is None:
             # Fallback 1: relax parallel pitch to 1 grid while keeping strict edge-port walls intact!
-            tight_nets.append(net)
+            if not prefer_tight:
+                tight_nets.append(net)
             path = _astar_connect_to_tree(
                 net,
                 start_pt,
@@ -1289,6 +1228,276 @@ def route_placed_schematic(
             else:
                 for x in range(min(a[0], b[0]), max(a[0], b[0]) + 1):
                     tree_points.add((x, a[1]))
+
+    for rail_net in [n for n in circuit.nets if n in repeated_port_nets]:
+        rail_ports = port_occs_by_net.get(rail_net, [])
+        if not rail_ports:
+            continue
+        port_step_by_pt = {
+            (po.x, po.y): RouteStepPlaced(
+                kind="port",
+                x=po.x,
+                y=po.y,
+                instance_id=po.occurrence_id,
+                pin_name=po.port_name,
+            )
+            for po in rail_ports
+        }
+        if rail_net in rails:
+            # Shared Supply / Ground Rail Bus + Single Symbol per cluster (with exact T-junction dots!)
+            for pt_k, pst in port_step_by_pt.items():
+                ep_at_point_by_net[rail_net][pt_k] = pst
+            for ep in endpoints_by_net.get(rail_net, []):
+                ep_at_point_by_net[rail_net][(ep.x, ep.y)] = ep
+
+            clusters_by_po: dict[str, list[RouteStepPlaced]] = defaultdict(list)
+            po_by_id = {po.occurrence_id: po for po in rail_ports}
+
+            def _po_match_cost(po: PortOccurrencePlaced, ep: RouteStepPlaced) -> float:
+                wrong_side = 0.0
+                if po.symbol_id == "vdd-port" and po.y > ep.y:
+                    wrong_side = 500.0
+                elif po.symbol_id == "ground" and po.y < ep.y:
+                    wrong_side = 500.0
+                ya, yb = min(ep.y, po.y), max(ep.y, po.y)
+                blocked_vert = any(
+                    (ep.x, cy) in occ.body_blocked
+                    or (ep.x, cy) in occ.label_blocked
+                    or occ.pin_owner.get((ep.x, cy)) not in (None, rail_net)
+                    for cy in range(ya + 1, yb)
+                )
+                blk_pen = 1000.0 if blocked_vert else 0.0
+                return wrong_side + blk_pen + abs(po.y - ep.y) + abs(po.x - ep.x) * 0.25
+
+            for ep in endpoints_by_net.get(rail_net, []):
+                best_po = min(rail_ports, key=lambda po: _po_match_cost(po, ep))
+                clusters_by_po[best_po.occurrence_id].append(ep)
+
+            for oid, cl_eps in clusters_by_po.items():
+                po = po_by_id[oid]
+                p_step = port_step_by_pt[(po.x, po.y)]
+                if len(cl_eps) >= 2:
+                    if all(e.y >= po.y + 2 for e in cl_eps):
+                        rail_y = po.y + 2
+                    elif all(e.y <= po.y - 2 for e in cl_eps):
+                        rail_y = po.y - 2
+                    else:
+                        rail_y = po.y
+
+                    seen_att: set[Point] = set()
+                    attachments: list[RouteStepPlaced] = []
+                    for att in [p_step, *cl_eps]:
+                        if (att.x, att.y) not in seen_att:
+                            seen_att.add((att.x, att.y))
+                            attachments.append(att)
+                    tap_xs = sorted({a.x for a in attachments})
+
+                    horiz_ok = all(
+                        (x, rail_y) not in occ.body_blocked
+                        and (x, rail_y) not in occ.label_blocked
+                        and occ.pin_owner.get((x, rail_y)) in (None, rail_net)
+                        and not (occ.wire_h.get((x, rail_y), set()) - {rail_net})
+                        and not (occ.wire_corners.get((x, rail_y), set()) - {rail_net})
+                        for x in range(tap_xs[0], tap_xs[-1] + 1)
+                    )
+                    vert_ok = True
+                    for a in attachments:
+                        ya, yb = min(a.y, rail_y), max(a.y, rail_y)
+                        for cy in range(ya, yb + 1):
+                            if cy != a.y and (
+                                (a.x, cy) in occ.body_blocked
+                                or (a.x, cy) in occ.label_blocked
+                                or occ.pin_owner.get((a.x, cy)) not in (None, rail_net)
+                            ):
+                                vert_ok = False
+                                break
+                            if (occ.wire_v.get((a.x, cy), set()) - {rail_net}) or (
+                                cy in (a.y, rail_y) and (occ.wire_corners.get((a.x, cy), set()) - {rail_net})
+                            ):
+                                vert_ok = False
+                                break
+                        if not vert_ok:
+                            break
+
+                    if horiz_ok and vert_ok and len(tap_xs) >= 2:
+                        rail_node_at_x: dict[int, RouteStepPlaced | None] = {}
+                        for tx in tap_xs:
+                            on_rail = next((a for a in attachments if a.x == tx and a.y == rail_y), None)
+                            deg_h = (1 if tx > tap_xs[0] else 0) + (1 if tx < tap_xs[-1] else 0)
+                            deg_v = (1 if any(a.x == tx and a.y < rail_y for a in attachments) else 0) + (
+                                1 if any(a.x == tx and a.y > rail_y for a in attachments) else 0
+                            )
+                            if on_rail is not None:
+                                rail_node_at_x[tx] = on_rail
+                            elif deg_h + deg_v >= 3:
+                                junc_counter += 1
+                                jid = f"J_{rail_net}_{junc_counter}"
+                                junctions[jid] = JunctionPlaced(
+                                    id=jid, net_name=rail_net, x=tx, y=rail_y, role="steiner"
+                                )
+                                junction_at_point_by_net[rail_net][(tx, rail_y)] = jid
+                                rail_node_at_x[tx] = RouteStepPlaced(
+                                    kind="junction", x=tx, y=rail_y, junction_id=jid
+                                )
+                            else:
+                                rail_node_at_x[tx] = None
+
+                        node_xs = [tx for tx in tap_xs if rail_node_at_x[tx] is not None]
+                        if not node_xs:
+                            mid_tx = tap_xs[0]
+                            junc_counter += 1
+                            jid = f"J_{rail_net}_{junc_counter}"
+                            junctions[jid] = JunctionPlaced(
+                                id=jid, net_name=rail_net, x=mid_tx, y=rail_y, role="steiner"
+                            )
+                            junction_at_point_by_net[rail_net][(mid_tx, rail_y)] = jid
+                            rail_node_at_x[mid_tx] = RouteStepPlaced(
+                                kind="junction", x=mid_tx, y=rail_y, junction_id=jid
+                            )
+                            node_xs = [mid_tx]
+
+                        for xa, xb in zip(node_xs, node_xs[1:]):
+                            na_step = rail_node_at_x[xa]
+                            nb_step = rail_node_at_x[xb]
+                            assert na_step is not None and nb_step is not None
+                            route_counter += 1
+                            routes.append(
+                                RoutePlaced(
+                                    id=f"R_{rail_net}_{route_counter}",
+                                    net_name=rail_net,
+                                    start=na_step,
+                                    steps=[nb_step],
+                                )
+                            )
+                            occ.add_polyline(rail_net, [(xa, rail_y), (xb, rail_y)])
+
+                        for tx in tap_xs:
+                            up_stems = sorted(
+                                [a for a in attachments if a.x == tx and a.y < rail_y],
+                                key=lambda s: s.y,
+                                reverse=True,
+                            )
+                            dn_stems = sorted(
+                                [a for a in attachments if a.x == tx and a.y > rail_y],
+                                key=lambda s: s.y,
+                            )
+                            for side_stems in (up_stems, dn_stems):
+                                for s_near, s_far in zip(side_stems, side_stems[1:]):
+                                    route_counter += 1
+                                    routes.append(
+                                        RoutePlaced(
+                                            id=f"R_{rail_net}_{route_counter}",
+                                            net_name=rail_net,
+                                            start=s_far,
+                                            steps=[s_near],
+                                        )
+                                    )
+                                    occ.add_polyline(rail_net, [(tx, s_far.y), (tx, s_near.y)])
+                                if side_stems:
+                                    s0 = side_stems[0]
+                                    rn = rail_node_at_x[tx]
+                                    if rn is not None:
+                                        route_counter += 1
+                                        routes.append(
+                                            RoutePlaced(
+                                                id=f"R_{rail_net}_{route_counter}",
+                                                net_name=rail_net,
+                                                start=s0,
+                                                steps=[rn],
+                                            )
+                                        )
+                                        occ.add_polyline(rail_net, [(tx, s0.y), (tx, rail_y)])
+                                    else:
+                                        tgt_x = node_xs[0] if tx == tap_xs[0] else node_xs[-1]
+                                        tgt_node = rail_node_at_x[tgt_x]
+                                        assert tgt_node is not None
+                                        route_counter += 1
+                                        routes.append(
+                                            RoutePlaced(
+                                                id=f"R_{rail_net}_{route_counter}",
+                                                net_name=rail_net,
+                                                start=s0,
+                                                steps=[
+                                                    RouteStepPlaced(kind="bend", x=tx, y=rail_y),
+                                                    tgt_node,
+                                                ],
+                                            )
+                                        )
+                                        occ.add_polyline(
+                                            rail_net, [(tx, s0.y), (tx, rail_y), (tgt_x, rail_y)]
+                                        )
+                        continue
+
+                tree_points_by_net[rail_net] = {(po.x, po.y)}
+                y_guide: int | None = None
+                if len(cl_eps) >= 2:
+                    y_guide = (po.y + 2) if po.symbol_id == "vdd-port" else (po.y - 2)
+                cl_sorted = sorted(cl_eps, key=lambda e: (abs(e.x - po.x) + abs(e.y - po.y), e.x))
+                for ep in cl_sorted:
+                    _connect_ep_to_net_tree(
+                        rail_net, ep, bus_y_override=y_guide, prefer_tight=True
+                    )
+            continue
+
+        rail_goals = set(port_step_by_pt)
+        for ep in endpoints_by_net.get(rail_net, []):
+            path_r = _astar_connect_to_tree(
+                rail_net,
+                (ep.x, ep.y),
+                rail_goals,
+                occ,
+                search_bounds,
+                allow_tight_parallel=True,
+            )
+            if path_r is None:
+                nearest = min(rail_ports, key=lambda po: abs(po.x - ep.x) + abs(po.y - ep.y))
+                p_step = port_step_by_pt[(nearest.x, nearest.y)]
+                path_r = (
+                    [(ep.x, ep.y), (p_step.x, p_step.y)]
+                    if (ep.x == p_step.x or ep.y == p_step.y)
+                    else [(ep.x, ep.y), (ep.x, p_step.y), (p_step.x, p_step.y)]
+                )
+            p_step = port_step_by_pt[path_r[-1]]
+            steps = [RouteStepPlaced(kind="bend", x=bx, y=by) for (bx, by) in path_r[1:-1]] + [p_step]
+            route_counter += 1
+            routes.append(
+                RoutePlaced(
+                    id=f"R_{rail_net}_{route_counter}",
+                    net_name=rail_net,
+                    start=ep,
+                    steps=steps,
+                )
+            )
+            occ.add_polyline(rail_net, path_r)
+
+    # 2. Order non-rail nets: critical short local nets first, then general full_wire, then perimeter_bus!
+    non_rail_nets = [
+        n
+        for n in circuit.nets
+        if n not in repeated_port_nets and n not in label_stub_nets and n not in bus_handled_nets
+    ]
+    crit_set = set(intent.critical_nets)
+
+    def _net_priority(n: str) -> tuple[int, int, int, int]:
+        pol = intent.net_policies.get(n, "full_wire")
+        if pol == "label_stub" and not allow_wire_labels:
+            pol = "perimeter_bus"
+        inst_eps_n = endpoints_by_net.get(n, [])
+        eps = inst_eps_n + [
+            RouteStepPlaced(kind="port", x=po.x, y=po.y, instance_id=po.occurrence_id, pin_name=po.port_name)
+            for po in port_occs_by_net.get(n, [])
+        ]
+        xs = [e.x for e in (inst_eps_n or eps)] or [0]
+        ys = [e.y for e in (inst_eps_n or eps)] or [0]
+        span = (max(xs) - min(xs)) + (max(ys) - min(ys))
+        # Coarse span band + left-to-right `min(xs)` ordering prevents braided cross-group diagonals!
+        if pol == "perimeter_bus":
+            return (2, len(eps), min(xs), span)
+        if n in crit_set:
+            return (0, span // 56, min(xs), span)
+        return (1, span // 56, min(xs), span)
+
+    non_rail_nets.sort(key=_net_priority)
 
     # 2a. Route all internal device-to-device trunks FIRST using Prim's nearest-collinear-first order!
     for net in non_rail_nets:

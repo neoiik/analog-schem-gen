@@ -650,17 +650,17 @@
           "cell": "opamp_core_p01_beta_multiplier_and_startup",
           "view": "symbol",
           "pinMap": {
-            "bp": "bp",
             "bn": "bn",
+            "bp": "bp",
             "vdd": "vdd",
             "vss": "vss"
           },
           "pinOffsets": {
-            "bp": [
+            "bn": [
               5,
               2
             ],
-            "bn": [
+            "bp": [
               5,
               -2
             ],
@@ -689,11 +689,11 @@
           "pinMap": {
             "hi_ref": "hi_ref",
             "hi_sig": "hi_sig",
-            "vshd_n": "vshd_n",
             "vshd_p": "vshd_p",
             "gp": "gp",
-            "lo_ref": "lo_ref",
             "lo_sig": "lo_sig",
+            "vshd_n": "vshd_n",
+            "lo_ref": "lo_ref",
             "vdd": "vdd",
             "vss": "vss",
             "bp": "bp",
@@ -710,23 +710,23 @@
               -12,
               -2
             ],
-            "vshd_n": [
+            "vshd_p": [
               12,
               8
             ],
-            "vshd_p": [
+            "gp": [
               12,
               4
             ],
-            "gp": [
+            "lo_sig": [
               12,
               0
             ],
-            "lo_ref": [
+            "vshd_n": [
               12,
               -4
             ],
-            "lo_sig": [
+            "lo_ref": [
               12,
               -8
             ],
@@ -1079,8 +1079,8 @@
           "cell": "opamp_core_p07_signed_bridge_drives_gn",
           "view": "symbol",
           "pinMap": {
-            "gn0": "gn0",
             "gp0": "gp0",
+            "gn0": "gn0",
             "iq_n": "iq_n",
             "vdd": "vdd",
             "gp": "gp",
@@ -1088,11 +1088,11 @@
             "vss": "vss"
           },
           "pinOffsets": {
-            "gn0": [
+            "gp0": [
               -8,
               4
             ],
-            "gp0": [
+            "gn0": [
               -8,
               0
             ],

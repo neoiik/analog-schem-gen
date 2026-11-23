@@ -10,7 +10,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 91,
+            "x": 84,
             "y": 82
           },
           "sourceTransform": {
@@ -53,12 +53,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 91,
+            "x": 86,
             "y": 35
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "none"
+            "mirror": "horizontal"
           },
           "nodes": [
             {
@@ -96,7 +96,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 111,
+            "x": 58,
             "y": 82
           },
           "sourceTransform": {
@@ -139,7 +139,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 111,
+            "x": 58,
             "y": 35
           },
           "sourceTransform": {
@@ -182,7 +182,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 39,
+            "x": 44,
             "y": 35
           },
           "sourceTransform": {
@@ -225,12 +225,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 39,
+            "x": 42,
             "y": 51
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "horizontal"
+            "mirror": "none"
           },
           "nodes": [
             {
@@ -268,7 +268,7 @@
           "deviceClass": "resistor",
           "sourceTarget": "R",
           "sourcePosition": {
-            "x": 125,
+            "x": 43,
             "y": 82
           },
           "sourceTransform": {
@@ -299,12 +299,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 140,
+            "x": 160,
             "y": 82
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "none"
+            "mirror": "horizontal"
           },
           "nodes": [
             {
@@ -342,7 +342,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 158,
+            "x": 110,
             "y": 35
           },
           "sourceTransform": {
@@ -385,12 +385,12 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 158,
+            "x": 112,
             "y": 82
           },
           "sourceTransform": {
             "rotation": 0,
-            "mirror": "none"
+            "mirror": "horizontal"
           },
           "nodes": [
             {
@@ -428,7 +428,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 69,
+            "x": 134,
             "y": 82
           },
           "sourceTransform": {
@@ -471,7 +471,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 69,
+            "x": 134,
             "y": 67
           },
           "sourceTransform": {
@@ -514,7 +514,7 @@
           "deviceClass": "resistor",
           "sourceTarget": "R",
           "sourcePosition": {
-            "x": 172,
+            "x": 135,
             "y": 35
           },
           "sourceTransform": {
@@ -545,7 +545,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_g5v0d10v5",
           "sourcePosition": {
-            "x": 187,
+            "x": 158,
             "y": 35
           },
           "sourceTransform": {
@@ -639,9 +639,9 @@
         "coordinateSystem": "source coordinates: x right, y down (1 unit = 1 Virtuoso gridUnit)",
         "bounds": {
           "minX": 12,
-          "minY": 16,
-          "maxX": 215,
-          "maxY": 102
+          "minY": 18,
+          "maxX": 186,
+          "maxY": 100
         },
         "portOccurrences": [
           {
@@ -651,7 +651,7 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 209,
+              "x": 180,
               "y": 58
             },
             "sourceTransform": {
@@ -667,7 +667,7 @@
             "sourceSymbolId": "port",
             "sourcePosition": {
               "x": 18,
-              "y": 93
+              "y": 74
             },
             "sourceTransform": {
               "rotation": 0,
@@ -681,83 +681,8 @@
             "direction": "inout",
             "sourceSymbolId": "ground",
             "sourcePosition": {
-              "x": 92,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_2",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 112,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_3",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 125,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_4",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 141,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_5",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 159,
-              "y": 89
-            },
-            "sourceTransform": {
-              "rotation": 270,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vss_6",
-            "name": "vss",
-            "netName": "vss",
-            "direction": "inout",
-            "sourceSymbolId": "ground",
-            "sourcePosition": {
-              "x": 70,
-              "y": 89
+              "x": 101,
+              "y": 90
             },
             "sourceTransform": {
               "rotation": 270,
@@ -772,7 +697,7 @@
             "sourceSymbolId": "port",
             "sourcePosition": {
               "x": 18,
-              "y": 24
+              "y": 44
             },
             "sourceTransform": {
               "rotation": 0,
@@ -786,8 +711,8 @@
             "direction": "inout",
             "sourceSymbolId": "vdd-port",
             "sourcePosition": {
-              "x": 92,
-              "y": 28
+              "x": 101,
+              "y": 27
             },
             "sourceTransform": {
               "rotation": 90,
@@ -795,93 +720,18 @@
             }
           },
           {
-            "occurrenceId": "P_vdd_2",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 112,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_3",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 38,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_4",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 159,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_5",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 172,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vdd_6",
-            "name": "vdd",
-            "netName": "vdd",
-            "direction": "inout",
-            "sourceSymbolId": "vdd-port",
-            "sourcePosition": {
-              "x": 188,
-              "y": 28
-            },
-            "sourceTransform": {
-              "rotation": 90,
-              "mirror": "none"
-            }
-          },
-          {
-            "occurrenceId": "P_vshd_p_1",
+            "occurrenceId": "P_vshd_p",
             "name": "vshd_p",
             "netName": "vshd_p",
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 46,
+              "x": 35,
               "y": 51
             },
             "sourceTransform": {
               "rotation": 0,
-              "mirror": "horizontal"
+              "mirror": "none"
             }
           },
           {
@@ -891,7 +741,7 @@
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 62,
+              "x": 127,
               "y": 67
             },
             "sourceTransform": {
@@ -902,101 +752,191 @@
         ],
         "junctions": [
           {
-            "id": "J_gn_1",
-            "netName": "gn",
+            "id": "J_vss_1",
+            "netName": "vss",
             "role": "steiner",
             "sourcePosition": {
-              "x": 107,
-              "y": 82
+              "x": 59,
+              "y": 88
             }
           },
           {
-            "id": "J_gp_2",
-            "netName": "gp",
+            "id": "J_vss_2",
+            "netName": "vss",
             "role": "steiner",
             "sourcePosition": {
-              "x": 154,
+              "x": 85,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vss_3",
+            "netName": "vss",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 101,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vss_4",
+            "netName": "vss",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 111,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vss_5",
+            "netName": "vss",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 135,
+              "y": 88
+            }
+          },
+          {
+            "id": "J_vdd_6",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 59,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_vdd_7",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 85,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_vdd_8",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 101,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_vdd_9",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 111,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_vdd_10",
+            "netName": "vdd",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 135,
+              "y": 29
+            }
+          },
+          {
+            "id": "J_lim_p_11",
+            "netName": "lim_p",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 135,
+              "y": 41
+            }
+          },
+          {
+            "id": "J_ns_mon_12",
+            "netName": "ns_mon",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 54,
               "y": 35
             }
           },
           {
-            "id": "J_lim_n_3",
-            "netName": "lim_n",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 125,
-              "y": 78
-            }
-          },
-          {
-            "id": "J_ns_mon_4",
+            "id": "J_ns_mon_13",
             "netName": "ns_mon",
             "role": "steiner",
             "sourcePosition": {
-              "x": 112,
+              "x": 59,
               "y": 41
             }
           },
           {
-            "id": "J_ns_mon_5",
-            "netName": "ns_mon",
+            "id": "J_gn_14",
+            "netName": "gn",
             "role": "steiner",
             "sourcePosition": {
-              "x": 107,
-              "y": 41
-            }
-          },
-          {
-            "id": "J_ps_mon_6",
-            "netName": "ps_mon",
-            "role": "steiner",
-            "sourcePosition": {
-              "x": 159,
+              "x": 80,
               "y": 76
             }
           },
           {
-            "id": "J_ps_mon_7",
+            "id": "J_gp_15",
+            "netName": "gp",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 106,
+              "y": 35
+            }
+          },
+          {
+            "id": "J_ps_mon_16",
             "netName": "ps_mon",
             "role": "steiner",
             "sourcePosition": {
-              "x": 154,
+              "x": 116,
               "y": 82
             }
           },
           {
-            "id": "J_lim_p_8",
-            "netName": "lim_p",
+            "id": "J_ps_mon_17",
+            "netName": "ps_mon",
             "role": "steiner",
             "sourcePosition": {
-              "x": 172,
-              "y": 39
+              "x": 111,
+              "y": 78
             }
           },
           {
-            "id": "J_gp_9",
+            "id": "J_lim_n_18",
+            "netName": "lim_n",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 43,
+              "y": 76
+            }
+          },
+          {
+            "id": "J_gp_19",
             "netName": "gp",
             "role": "steiner",
             "sourcePosition": {
-              "x": 87,
-              "y": 24
+              "x": 90,
+              "y": 35
             }
           },
           {
-            "id": "J_gn_10",
+            "id": "J_gn_20",
             "netName": "gn",
             "role": "steiner",
             "sourcePosition": {
-              "x": 87,
-              "y": 93
+              "x": 54,
+              "y": 76
             }
           },
           {
-            "id": "J_out_11",
+            "id": "J_out_21",
             "netName": "out",
             "role": "steiner",
             "sourcePosition": {
-              "x": 92,
+              "x": 85,
               "y": 58
             }
           }
@@ -1008,22 +948,20 @@
             "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-NOUT",
-              "pinName": "S",
+              "kind": "junction",
+              "junctionId": "J_vss_1",
               "sourcePoint": {
-                "x": 92,
-                "y": 85
+                "x": 59,
+                "y": 88
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_1",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_2",
                 "sourcePoint": {
-                  "x": 92,
-                  "y": 89
+                  "x": 85,
+                  "y": 88
                 }
               }
             ]
@@ -1033,22 +971,20 @@
             "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-NSENSE",
-              "pinName": "S",
+              "kind": "junction",
+              "junctionId": "J_vss_2",
               "sourcePoint": {
-                "x": 112,
-                "y": 85
+                "x": 85,
+                "y": 88
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_2",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_3",
                 "sourcePoint": {
-                  "x": 112,
-                  "y": 89
+                  "x": 101,
+                  "y": 88
                 }
               }
             ]
@@ -1058,22 +994,20 @@
             "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-Rlimn",
-              "pinName": "M",
+              "kind": "junction",
+              "junctionId": "J_vss_3",
               "sourcePoint": {
-                "x": 125,
-                "y": 85
+                "x": 101,
+                "y": 88
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_3",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_4",
                 "sourcePoint": {
-                  "x": 125,
-                  "y": 89
+                  "x": 111,
+                  "y": 88
                 }
               }
             ]
@@ -1083,22 +1017,20 @@
             "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-NCLAMP",
-              "pinName": "S",
+              "kind": "junction",
+              "junctionId": "J_vss_4",
               "sourcePoint": {
-                "x": 141,
-                "y": 85
+                "x": 111,
+                "y": 88
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_4",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_5",
                 "sourcePoint": {
-                  "x": 141,
-                  "y": 89
+                  "x": 135,
+                  "y": 88
                 }
               }
             ]
@@ -1109,21 +1041,27 @@
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-NLREF",
-              "pinName": "S",
+              "instanceId": "source-Rlimn",
+              "pinName": "M",
               "sourcePoint": {
-                "x": 159,
+                "x": 43,
                 "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_5",
-                "pinName": "vss",
+                "kind": "bend",
+                "position": {
+                  "x": 43,
+                  "y": 88
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vss_1",
                 "sourcePoint": {
-                  "x": 159,
-                  "y": 89
+                  "x": 59,
+                  "y": 88
                 }
               }
             ]
@@ -1134,146 +1072,147 @@
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-NLM",
+              "instanceId": "source-NSENSE",
               "pinName": "S",
               "sourcePoint": {
-                "x": 70,
+                "x": 59,
                 "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vss_6",
-                "pinName": "vss",
+                "kind": "junction",
+                "junctionId": "J_vss_1",
                 "sourcePoint": {
-                  "x": 70,
-                  "y": 89
+                  "x": 59,
+                  "y": 88
                 }
               }
             ]
           },
           {
-            "id": "R_vdd_7",
-            "netName": "vdd",
+            "id": "R_vss_7",
+            "netName": "vss",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-POUT",
+              "instanceId": "source-NOUT",
               "pinName": "S",
               "sourcePoint": {
-                "x": 92,
-                "y": 32
+                "x": 85,
+                "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_1",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vss_2",
                 "sourcePoint": {
-                  "x": 92,
-                  "y": 28
+                  "x": 85,
+                  "y": 88
                 }
               }
             ]
           },
           {
-            "id": "R_vdd_8",
-            "netName": "vdd",
+            "id": "R_vss_8",
+            "netName": "vss",
             "presentation": "wire",
             "start": {
-              "kind": "instance",
-              "instanceId": "source-PLND",
-              "pinName": "S",
+              "kind": "port",
+              "instanceId": "P_vss_1",
+              "pinName": "vss",
               "sourcePoint": {
-                "x": 112,
-                "y": 32
+                "x": 101,
+                "y": 90
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_2",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vss_3",
                 "sourcePoint": {
-                  "x": 112,
-                  "y": 28
+                  "x": 101,
+                  "y": 88
                 }
               }
             ]
           },
           {
-            "id": "R_vdd_9",
-            "netName": "vdd",
+            "id": "R_vss_9",
+            "netName": "vss",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-PLNC",
+              "instanceId": "source-NLREF",
               "pinName": "S",
               "sourcePoint": {
-                "x": 38,
-                "y": 32
+                "x": 111,
+                "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_3",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vss_4",
                 "sourcePoint": {
-                  "x": 38,
-                  "y": 28
+                  "x": 111,
+                  "y": 88
                 }
               }
             ]
           },
           {
-            "id": "R_vdd_10",
-            "netName": "vdd",
+            "id": "R_vss_10",
+            "netName": "vss",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-PSENSE",
+              "instanceId": "source-NLM",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 135,
+                "y": 85
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vss_5",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 88
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_11",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NCLAMP",
               "pinName": "S",
               "sourcePoint": {
                 "x": 159,
-                "y": 32
+                "y": 85
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_4",
-                "pinName": "vdd",
-                "sourcePoint": {
+                "kind": "bend",
+                "position": {
                   "x": 159,
-                  "y": 28
+                  "y": 88
                 }
-              }
-            ]
-          },
-          {
-            "id": "R_vdd_11",
-            "netName": "vdd",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-Rlimp",
-              "pinName": "P",
-              "sourcePoint": {
-                "x": 172,
-                "y": 32
-              }
-            },
-            "steps": [
+              },
               {
-                "kind": "port",
-                "instanceId": "P_vdd_5",
-                "pinName": "vdd",
+                "kind": "junction",
+                "junctionId": "J_vss_5",
                 "sourcePoint": {
-                  "x": 172,
-                  "y": 28
+                  "x": 135,
+                  "y": 88
                 }
               }
             ]
@@ -1283,53 +1222,277 @@
             "netName": "vdd",
             "presentation": "wire",
             "start": {
+              "kind": "junction",
+              "junctionId": "J_vdd_6",
+              "sourcePoint": {
+                "x": 59,
+                "y": 29
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_7",
+                "sourcePoint": {
+                  "x": 85,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_13",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vdd_7",
+              "sourcePoint": {
+                "x": 85,
+                "y": 29
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_8",
+                "sourcePoint": {
+                  "x": 101,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_14",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vdd_8",
+              "sourcePoint": {
+                "x": 101,
+                "y": 29
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_9",
+                "sourcePoint": {
+                  "x": 111,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_15",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vdd_9",
+              "sourcePoint": {
+                "x": 111,
+                "y": 29
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_10",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_16",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
               "kind": "instance",
-              "instanceId": "source-PCLAMP",
+              "instanceId": "source-PLNC",
               "pinName": "S",
               "sourcePoint": {
-                "x": 188,
+                "x": 43,
                 "y": 32
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vdd_6",
-                "pinName": "vdd",
+                "kind": "bend",
+                "position": {
+                  "x": 43,
+                  "y": 29
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_6",
                 "sourcePoint": {
-                  "x": 188,
-                  "y": 28
+                  "x": 59,
+                  "y": 29
                 }
               }
             ]
           },
           {
-            "id": "R_vshd_p_13",
-            "netName": "vshd_p",
+            "id": "R_vdd_17",
+            "netName": "vdd",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-PLSH",
-              "pinName": "G",
+              "instanceId": "source-PLND",
+              "pinName": "S",
               "sourcePoint": {
-                "x": 42,
-                "y": 51
+                "x": 59,
+                "y": 32
               }
             },
             "steps": [
               {
-                "kind": "port",
-                "instanceId": "P_vshd_p_1",
-                "pinName": "vshd_p",
+                "kind": "junction",
+                "junctionId": "J_vdd_6",
                 "sourcePoint": {
-                  "x": 46,
-                  "y": 51
+                  "x": 59,
+                  "y": 29
                 }
               }
             ]
           },
           {
-            "id": "R_vshd_n_14",
+            "id": "R_vdd_18",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-POUT",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 85,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_7",
+                "sourcePoint": {
+                  "x": 85,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_19",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_vdd_1",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 101,
+                "y": 27
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_8",
+                "sourcePoint": {
+                  "x": 101,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_20",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PSENSE",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 111,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_9",
+                "sourcePoint": {
+                  "x": 111,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_21",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-Rlimp",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 135,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_10",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_22",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PCLAMP",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 159,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 159,
+                  "y": 29
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vdd_10",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 29
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vshd_n_23",
             "netName": "vshd_n",
             "presentation": "wire",
             "start": {
@@ -1337,7 +1500,7 @@
               "instanceId": "source-NLSH",
               "pinName": "G",
               "sourcePoint": {
-                "x": 66,
+                "x": 131,
                 "y": 67
               }
             },
@@ -1347,14 +1510,39 @@
                 "instanceId": "P_vshd_n_1",
                 "pinName": "vshd_n",
                 "sourcePoint": {
-                  "x": 62,
+                  "x": 127,
                   "y": 67
                 }
               }
             ]
           },
           {
-            "id": "R_lim_nm_15",
+            "id": "R_vshd_p_24",
+            "netName": "vshd_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_vshd_p",
+              "pinName": "vshd_p",
+              "sourcePoint": {
+                "x": 35,
+                "y": 51
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-PLSH",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 39,
+                  "y": 51
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lim_nm_25",
             "netName": "lim_nm",
             "presentation": "wire",
             "start": {
@@ -1362,7 +1550,7 @@
               "instanceId": "source-PLSH",
               "pinName": "S",
               "sourcePoint": {
-                "x": 38,
+                "x": 43,
                 "y": 48
               }
             },
@@ -1372,14 +1560,62 @@
                 "instanceId": "source-PLNC",
                 "pinName": "D",
                 "sourcePoint": {
-                  "x": 38,
+                  "x": 43,
                   "y": 38
                 }
               }
             ]
           },
           {
-            "id": "R_lim_pm_16",
+            "id": "R_out_26_a",
+            "netName": "out",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-POUT",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 85,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_out_21",
+                "sourcePoint": {
+                  "x": 85,
+                  "y": 58
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_out_26_b",
+            "netName": "out",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_out_21",
+              "sourcePoint": {
+                "x": 85,
+                "y": 58
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-NOUT",
+                "pinName": "D",
+                "sourcePoint": {
+                  "x": 85,
+                  "y": 79
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lim_pm_27",
             "netName": "lim_pm",
             "presentation": "wire",
             "start": {
@@ -1387,7 +1623,7 @@
               "instanceId": "source-NLSH",
               "pinName": "S",
               "sourcePoint": {
-                "x": 70,
+                "x": 135,
                 "y": 70
               }
             },
@@ -1397,695 +1633,14 @@
                 "instanceId": "source-NLM",
                 "pinName": "D",
                 "sourcePoint": {
-                  "x": 70,
+                  "x": 135,
                   "y": 79
                 }
               }
             ]
           },
           {
-            "id": "R_out_17_a",
-            "netName": "out",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-POUT",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 92,
-                "y": 38
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_out_11",
-                "sourcePoint": {
-                  "x": 92,
-                  "y": 58
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_out_17_b",
-            "netName": "out",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_out_11",
-              "sourcePoint": {
-                "x": 92,
-                "y": 58
-              }
-            },
-            "steps": [
-              {
-                "kind": "instance",
-                "instanceId": "source-NOUT",
-                "pinName": "D",
-                "sourcePoint": {
-                  "x": 92,
-                  "y": 79
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gn_18_a",
-            "netName": "gn",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-NSENSE",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 108,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_gn_1",
-                "sourcePoint": {
-                  "x": 107,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gn_18_b_a",
-            "netName": "gn",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_gn_1",
-              "sourcePoint": {
-                "x": 107,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 107,
-                  "y": 93
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_gn_10",
-                "sourcePoint": {
-                  "x": 87,
-                  "y": 93
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gn_18_b_b",
-            "netName": "gn",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_gn_10",
-              "sourcePoint": {
-                "x": 87,
-                "y": 93
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 87,
-                  "y": 82
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-NOUT",
-                "pinName": "G",
-                "sourcePoint": {
-                  "x": 88,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gn_19",
-            "netName": "gn",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-NCLAMP",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 141,
-                "y": 79
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 141,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 107,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_gn_1",
-                "sourcePoint": {
-                  "x": 107,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp_20_a",
-            "netName": "gp",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-PCLAMP",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 188,
-                "y": 38
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 188,
-                  "y": 41
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 154,
-                  "y": 41
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_gp_2",
-                "sourcePoint": {
-                  "x": 154,
-                  "y": 35
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp_20_b",
-            "netName": "gp",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_gp_2",
-              "sourcePoint": {
-                "x": 154,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "instance",
-                "instanceId": "source-PSENSE",
-                "pinName": "G",
-                "sourcePoint": {
-                  "x": 155,
-                  "y": 35
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp_21_a",
-            "netName": "gp",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-POUT",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 88,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 87,
-                  "y": 35
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_gp_9",
-                "sourcePoint": {
-                  "x": 87,
-                  "y": 24
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp_21_b",
-            "netName": "gp",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_gp_9",
-              "sourcePoint": {
-                "x": 87,
-                "y": 24
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 154,
-                  "y": 24
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_gp_2",
-                "sourcePoint": {
-                  "x": 154,
-                  "y": 35
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_lim_n_22_a",
-            "netName": "lim_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-Rlimn",
-              "pinName": "P",
-              "sourcePoint": {
-                "x": 125,
-                "y": 79
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_lim_n_3",
-                "sourcePoint": {
-                  "x": 125,
-                  "y": 78
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_lim_n_22_b",
-            "netName": "lim_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_lim_n_3",
-              "sourcePoint": {
-                "x": 125,
-                "y": 78
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 125,
-                  "y": 60
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 38,
-                  "y": 60
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-PLSH",
-                "pinName": "D",
-                "sourcePoint": {
-                  "x": 38,
-                  "y": 54
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_lim_n_23",
-            "netName": "lim_n",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-NCLAMP",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 137,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 136,
-                  "y": 82
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 136,
-                  "y": 78
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_lim_n_3",
-                "sourcePoint": {
-                  "x": 125,
-                  "y": 78
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ns_mon_24_a",
-            "netName": "ns_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-PLND",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 112,
-                "y": 38
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_ns_mon_4",
-                "sourcePoint": {
-                  "x": 112,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ns_mon_24_b",
-            "netName": "ns_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_ns_mon_4",
-              "sourcePoint": {
-                "x": 112,
-                "y": 41
-              }
-            },
-            "steps": [
-              {
-                "kind": "instance",
-                "instanceId": "source-NSENSE",
-                "pinName": "D",
-                "sourcePoint": {
-                  "x": 112,
-                  "y": 79
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ns_mon_25_a",
-            "netName": "ns_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-PLND",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 108,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 107,
-                  "y": 35
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_ns_mon_5",
-                "sourcePoint": {
-                  "x": 107,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ns_mon_25_b",
-            "netName": "ns_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_ns_mon_5",
-              "sourcePoint": {
-                "x": 107,
-                "y": 41
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_ns_mon_4",
-                "sourcePoint": {
-                  "x": 112,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ns_mon_26",
-            "netName": "ns_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-PLNC",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 42,
-                "y": 35
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 43,
-                  "y": 35
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 43,
-                  "y": 41
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_ns_mon_5",
-                "sourcePoint": {
-                  "x": 107,
-                  "y": 41
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ps_mon_27_a",
-            "netName": "ps_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-NLREF",
-              "pinName": "D",
-              "sourcePoint": {
-                "x": 159,
-                "y": 79
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_ps_mon_6",
-                "sourcePoint": {
-                  "x": 159,
-                  "y": 76
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ps_mon_27_b",
-            "netName": "ps_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_ps_mon_6",
-              "sourcePoint": {
-                "x": 159,
-                "y": 76
-              }
-            },
-            "steps": [
-              {
-                "kind": "instance",
-                "instanceId": "source-PSENSE",
-                "pinName": "D",
-                "sourcePoint": {
-                  "x": 159,
-                  "y": 38
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ps_mon_28_a",
-            "netName": "ps_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-NLREF",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 155,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_ps_mon_7",
-                "sourcePoint": {
-                  "x": 154,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ps_mon_28_b",
-            "netName": "ps_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_ps_mon_7",
-              "sourcePoint": {
-                "x": 154,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 154,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_ps_mon_6",
-                "sourcePoint": {
-                  "x": 159,
-                  "y": 76
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ps_mon_29",
-            "netName": "ps_mon",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-NLM",
-              "pinName": "G",
-              "sourcePoint": {
-                "x": 66,
-                "y": 82
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 65,
-                  "y": 82
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 65,
-                  "y": 96
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 154,
-                  "y": 96
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_ps_mon_7",
-                "sourcePoint": {
-                  "x": 154,
-                  "y": 82
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_lim_p_30_a",
+            "id": "R_lim_p_28_a",
             "netName": "lim_p",
             "presentation": "wire",
             "start": {
@@ -2093,68 +1648,47 @@
               "instanceId": "source-Rlimp",
               "pinName": "M",
               "sourcePoint": {
-                "x": 172,
+                "x": 135,
                 "y": 38
               }
             },
             "steps": [
               {
                 "kind": "junction",
-                "junctionId": "J_lim_p_8",
+                "junctionId": "J_lim_p_11",
                 "sourcePoint": {
-                  "x": 172,
-                  "y": 39
+                  "x": 135,
+                  "y": 41
                 }
               }
             ]
           },
           {
-            "id": "R_lim_p_30_b",
+            "id": "R_lim_p_28_b",
             "netName": "lim_p",
             "presentation": "wire",
             "start": {
               "kind": "junction",
-              "junctionId": "J_lim_p_8",
+              "junctionId": "J_lim_p_11",
               "sourcePoint": {
-                "x": 172,
-                "y": 39
+                "x": 135,
+                "y": 41
               }
             },
             "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 168,
-                  "y": 39
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 168,
-                  "y": 22
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 70,
-                  "y": 22
-                }
-              },
               {
                 "kind": "instance",
                 "instanceId": "source-NLSH",
                 "pinName": "D",
                 "sourcePoint": {
-                  "x": 70,
+                  "x": 135,
                   "y": 64
                 }
               }
             ]
           },
           {
-            "id": "R_lim_p_31",
+            "id": "R_lim_p_29",
             "netName": "lim_p",
             "presentation": "wire",
             "start": {
@@ -2162,7 +1696,7 @@
               "instanceId": "source-PCLAMP",
               "pinName": "G",
               "sourcePoint": {
-                "x": 184,
+                "x": 155,
                 "y": 35
               }
             },
@@ -2170,29 +1704,606 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 183,
+                  "x": 154,
                   "y": 35
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 183,
-                  "y": 39
+                  "x": 154,
+                  "y": 41
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_lim_p_8",
+                "junctionId": "J_lim_p_11",
                 "sourcePoint": {
-                  "x": 172,
-                  "y": 39
+                  "x": 135,
+                  "y": 41
                 }
               }
             ]
           },
           {
-            "id": "R_gp_32",
+            "id": "R_ns_mon_30_a",
+            "netName": "ns_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PLNC",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 47,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_ns_mon_12",
+                "sourcePoint": {
+                  "x": 54,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ns_mon_30_b",
+            "netName": "ns_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_ns_mon_12",
+              "sourcePoint": {
+                "x": 54,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-PLND",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 55,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ns_mon_31_a",
+            "netName": "ns_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PLND",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 59,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_ns_mon_13",
+                "sourcePoint": {
+                  "x": 59,
+                  "y": 41
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ns_mon_31_b",
+            "netName": "ns_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_ns_mon_13",
+              "sourcePoint": {
+                "x": 59,
+                "y": 41
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 54,
+                  "y": 41
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_ns_mon_12",
+                "sourcePoint": {
+                  "x": 54,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ns_mon_32",
+            "netName": "ns_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NSENSE",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 59,
+                "y": 79
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_ns_mon_13",
+                "sourcePoint": {
+                  "x": 59,
+                  "y": 41
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn_33_a_a",
+            "netName": "gn",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NSENSE",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 55,
+                "y": 82
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 54,
+                  "y": 82
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_gn_20",
+                "sourcePoint": {
+                  "x": 54,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn_33_a_b",
+            "netName": "gn",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_gn_20",
+              "sourcePoint": {
+                "x": 54,
+                "y": 76
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_gn_14",
+                "sourcePoint": {
+                  "x": 80,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn_33_b",
+            "netName": "gn",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_gn_14",
+              "sourcePoint": {
+                "x": 80,
+                "y": 76
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 80,
+                  "y": 82
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-NOUT",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 81,
+                  "y": 82
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn_34",
+            "netName": "gn",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NCLAMP",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 159,
+                "y": 79
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 159,
+                  "y": 76
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_gn_14",
+                "sourcePoint": {
+                  "x": 80,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp_35_a",
+            "netName": "gp",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PSENSE",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 107,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_gp_15",
+                "sourcePoint": {
+                  "x": 106,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp_35_b_a",
+            "netName": "gp",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_gp_15",
+              "sourcePoint": {
+                "x": 106,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_gp_19",
+                "sourcePoint": {
+                  "x": 90,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp_35_b_b",
+            "netName": "gp",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_gp_19",
+              "sourcePoint": {
+                "x": 90,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-POUT",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 89,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp_36",
+            "netName": "gp",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PCLAMP",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 159,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 159,
+                  "y": 44
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 106,
+                  "y": 44
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_gp_15",
+                "sourcePoint": {
+                  "x": 106,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ps_mon_37_a",
+            "netName": "ps_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NLM",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 131,
+                "y": 82
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_ps_mon_16",
+                "sourcePoint": {
+                  "x": 116,
+                  "y": 82
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ps_mon_37_b",
+            "netName": "ps_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_ps_mon_16",
+              "sourcePoint": {
+                "x": 116,
+                "y": 82
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-NLREF",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 115,
+                  "y": 82
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ps_mon_38_a",
+            "netName": "ps_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NLREF",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 111,
+                "y": 79
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_ps_mon_17",
+                "sourcePoint": {
+                  "x": 111,
+                  "y": 78
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ps_mon_38_b",
+            "netName": "ps_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_ps_mon_17",
+              "sourcePoint": {
+                "x": 111,
+                "y": 78
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 116,
+                  "y": 78
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_ps_mon_16",
+                "sourcePoint": {
+                  "x": 116,
+                  "y": 82
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ps_mon_39",
+            "netName": "ps_mon",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-PSENSE",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 111,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_ps_mon_17",
+                "sourcePoint": {
+                  "x": 111,
+                  "y": 78
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lim_n_40_a",
+            "netName": "lim_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-Rlimn",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 43,
+                "y": 79
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_lim_n_18",
+                "sourcePoint": {
+                  "x": 43,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lim_n_40_b",
+            "netName": "lim_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_lim_n_18",
+              "sourcePoint": {
+                "x": 43,
+                "y": 76
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-PLSH",
+                "pinName": "D",
+                "sourcePoint": {
+                  "x": 43,
+                  "y": 54
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lim_n_41",
+            "netName": "lim_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-NCLAMP",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 163,
+                "y": 82
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 164,
+                  "y": 82
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 164,
+                  "y": 94
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 40,
+                  "y": 94
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 40,
+                  "y": 76
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_lim_n_18",
+                "sourcePoint": {
+                  "x": 43,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp_42",
             "netName": "gp",
             "presentation": "wire",
             "start": {
@@ -2201,22 +2312,43 @@
               "pinName": "gp",
               "sourcePoint": {
                 "x": 18,
-                "y": 24
+                "y": 44
               }
             },
             "steps": [
               {
+                "kind": "bend",
+                "position": {
+                  "x": 32,
+                  "y": 44
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 32,
+                  "y": 26
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 90,
+                  "y": 26
+                }
+              },
+              {
                 "kind": "junction",
-                "junctionId": "J_gp_9",
+                "junctionId": "J_gp_19",
                 "sourcePoint": {
-                  "x": 87,
-                  "y": 24
+                  "x": 90,
+                  "y": 35
                 }
               }
             ]
           },
           {
-            "id": "R_gn_33",
+            "id": "R_gn_43",
             "netName": "gn",
             "presentation": "wire",
             "start": {
@@ -2225,22 +2357,29 @@
               "pinName": "gn",
               "sourcePoint": {
                 "x": 18,
-                "y": 93
+                "y": 74
               }
             },
             "steps": [
               {
+                "kind": "bend",
+                "position": {
+                  "x": 54,
+                  "y": 74
+                }
+              },
+              {
                 "kind": "junction",
-                "junctionId": "J_gn_10",
+                "junctionId": "J_gn_20",
                 "sourcePoint": {
-                  "x": 87,
-                  "y": 93
+                  "x": 54,
+                  "y": 76
                 }
               }
             ]
           },
           {
-            "id": "R_out_34",
+            "id": "R_out_44",
             "netName": "out",
             "presentation": "wire",
             "start": {
@@ -2248,16 +2387,16 @@
               "instanceId": "P_out",
               "pinName": "out",
               "sourcePoint": {
-                "x": 209,
+                "x": 180,
                 "y": 58
               }
             },
             "steps": [
               {
                 "kind": "junction",
-                "junctionId": "J_out_11",
+                "junctionId": "J_out_21",
                 "sourcePoint": {
-                  "x": 92,
+                  "x": 85,
                   "y": 58
                 }
               }

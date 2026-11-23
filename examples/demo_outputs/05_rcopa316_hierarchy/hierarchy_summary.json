@@ -10,19 +10,19 @@
       "cellName": "opamp_core_p01_beta_multiplier_and_startup",
       "passed": true,
       "instances": 6,
-      "crossings": 2
+      "crossings": 1
     },
     {
       "cellName": "opamp_core_p05_rail_fraction_shield_referen",
       "passed": true,
       "instances": 24,
-      "crossings": 22
+      "crossings": 29
     },
     {
       "cellName": "opamp_core_p06_resistor_referenced_idle_cur",
       "passed": true,
       "instances": 11,
-      "crossings": 5
+      "crossings": 6
     },
     {
       "cellName": "opamp_core_p02_unit_copies_and_continuous",
@@ -34,43 +34,43 @@
       "cellName": "opamp_core_p04_common_gate_biases",
       "passed": true,
       "instances": 15,
-      "crossings": 8
+      "crossings": 7
     },
     {
       "cellName": "opamp_core_p03_matched_complementary_input_",
       "passed": true,
       "instances": 15,
-      "crossings": 7
+      "crossings": 9
     },
     {
       "cellName": "opamp_core_p08_differential_overdrive_detec",
       "passed": true,
       "instances": 16,
-      "crossings": 6
+      "crossings": 12
     },
     {
       "cellName": "opamp_core_p07_signed_bridge_drives_gn",
       "passed": true,
       "instances": 20,
-      "crossings": 21
+      "crossings": 16
     },
     {
       "cellName": "opamp_core_p09_pedestal_subtraction_and_two",
       "passed": true,
       "instances": 21,
-      "crossings": 12
+      "crossings": 21
     },
     {
       "cellName": "opamp_core_p10_output_stage_and_bidirection",
       "passed": true,
       "instances": 14,
-      "crossings": 12
+      "crossings": 10
     },
     {
       "cellName": "opamp_core",
       "passed": true,
       "instances": 10,
-      "crossings": 31
+      "crossings": 39
     }
   ]
 }

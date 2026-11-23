@@ -21,9 +21,9 @@
       "stage_order": 25,
       "instances": [
         "Ccn",
-        "Ccp",
         "Rzp",
-        "Rzn"
+        "Rzn",
+        "Ccp"
       ]
     },
     {
@@ -32,21 +32,21 @@
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
-        "BSOFF",
-        "BSNC",
-        "BSPD",
-        "BSGP",
-        "BRGP",
-        "BSGN",
-        "BRGN",
         "BROFF",
         "BRNC",
-        "BRPD",
+        "BSOFF",
+        "BSNC",
+        "PAUX",
+        "Rpick",
+        "NAUX",
+        "BSGN",
+        "BRGN",
+        "BSGP",
+        "BRGP",
         "BRTURN",
         "BRD",
-        "PAUX",
-        "NAUX",
-        "Rpick"
+        "BRPD",
+        "BSPD"
       ]
     }
   ],
@@ -58,28 +58,24 @@
     "Ccp": "horizontal_l2r",
     "Rzn": "horizontal_l2r",
     "Ccn": "horizontal_l2r",
-    "BSOFF": "gate_left",
-    "BSNC": "gate_left",
-    "BSPD": "gate_left",
-    "BSGP": "gate_left",
-    "BRGP": "gate_left",
-    "BSGN": "gate_left",
-    "BRGN": "gate_left",
     "BROFF": "gate_left",
     "BRNC": "gate_left",
-    "BRPD": "gate_left",
+    "BSOFF": "gate_left",
+    "BSNC": "gate_left",
+    "PAUX": "gate_right",
+    "NAUX": "gate_right",
+    "BSGN": "gate_right",
+    "BRGN": "gate_right",
+    "BSGP": "gate_left",
+    "BRGP": "gate_right",
     "BRTURN": "gate_left",
     "BRD": "gate_left",
-    "PAUX": "gate_left",
-    "NAUX": "gate_left",
+    "BRPD": "gate_left",
+    "BSPD": "gate_left",
     "Rpick": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
-    [
-      "BRND",
-      "BSND"
-    ],
     [
       "Rzp"
     ],
@@ -93,37 +89,37 @@
       "Ccn"
     ],
     [
+      "BROFF",
+      "BRNC"
+    ],
+    [
       "BSOFF",
       "BSNC"
     ],
     [
-      "BSPD"
-    ],
-    [
-      "BSGP",
-      "BRGP"
+      "PAUX",
+      "Rpick",
+      "NAUX"
     ],
     [
       "BSGN",
       "BRGN"
     ],
     [
-      "BROFF",
-      "BRNC"
-    ],
-    [
-      "BRPD"
+      "BSGP",
+      "BRGP"
     ],
     [
       "BRTURN",
       "BRD"
     ],
     [
-      "PAUX",
-      "NAUX"
+      "BRPD",
+      "BRND",
+      "BSND"
     ],
     [
-      "Rpick"
+      "BSPD"
     ]
   ],
   "netPolicies": {

@@ -5,16 +5,6 @@
   "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
   "groups": [
     {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "VPSH",
-        "VPSINK"
-      ]
-    },
-    {
       "id": "gain_output_stage",
       "label": "增益与输出级",
       "role": "output_stage",
@@ -28,38 +18,36 @@
         "RCN",
         "RNbot",
         "NCBLEED",
-        "VPD",
+        "BCP",
         "RPbot",
         "RCP",
         "RPtop",
-        "BCP"
+        "VPSH",
+        "VPSINK",
+        "VPD"
       ]
     }
   ],
   "motifs": [],
   "orientations": {
+    "VNFEED": "gate_left",
+    "VND": "gate_right",
+    "NCFEED": "gate_left",
+    "RCN": "gate_right",
+    "NCBLEED": "gate_right",
+    "BCP": "gate_left",
+    "RCP": "gate_left",
     "VPSH": "gate_left",
     "VPSINK": "gate_left",
-    "VNFEED": "gate_left",
-    "VND": "gate_left",
-    "RNCFEED": "vertical",
-    "NCFEED": "gate_left",
-    "RNtop": "vertical",
-    "RCN": "gate_left",
-    "RNbot": "vertical",
-    "NCBLEED": "gate_left",
     "VPD": "gate_left",
+    "RNCFEED": "vertical",
+    "RNtop": "vertical",
+    "RNbot": "vertical",
     "RPbot": "vertical",
-    "RCP": "gate_left",
-    "RPtop": "vertical",
-    "BCP": "gate_left"
+    "RPtop": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
-    [
-      "VPSH",
-      "VPSINK"
-    ],
     [
       "VNFEED",
       "VND"
@@ -72,16 +60,18 @@
       "RNbot"
     ],
     [
-      "NCBLEED"
-    ],
-    [
-      "VPD"
+      "BCP"
     ],
     [
       "RPbot",
       "RCP",
       "RPtop",
-      "BCP"
+      "VPSH",
+      "VPSINK"
+    ],
+    [
+      "VPD",
+      "NCBLEED"
     ]
   ],
   "netPolicies": {

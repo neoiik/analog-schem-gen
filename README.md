@@ -19,7 +19,7 @@ Turn raw SPICE / CDL / Spectre netlists (from 10-transistor OTAs up to 160+ tran
 | Layer | Owner | Role |
 | :--- | :--- | :--- |
 | **Semantics (`IntentSpec`)** | **LLM / Designer** | Stage order, device orientations (`gate_left`, `horizontal_l2r`), and net decluttering policies — **zero coordinates**. |
-| **Geometry & Routing** | **Deterministic Solver** | Vertical branch bundling, **Convex QP** symmetric placement, 2D aspect-ratio folding, and **two-phase Steiner + river-nested port routing**. |
+| **Geometry & Routing** | **Deterministic Solver** | Shortest-connection 2D vertical stacking, **Convex QP** symmetric placement, collinear shared `VDD`/`VSS` rails, and **two-phase Steiner + nearest-boundary port routing**. |
 | **Signoff Gate** | **Deterministic Auditor** | 1-to-1 LVS netlist check, split-net check, zero symbol/label/wire collisions, and Virtuoso-ready `manifest.json` export. |
 
 ### Three Ways to Use (No EDA Environment Required)
@@ -105,9 +105,9 @@ python -B -m unittest discover -s tests -v
 
 - **大模型只做语义决策（零坐标）**：审阅拓扑基元与歧义项，指定信号流顺序（`stage_order`）、语义朝向与母线策略，不手写任何 `(x, y)` 坐标。
 - **确定性算法负责排版与布线**：
-  - **纵向支路自动成列 + 二维画幅折叠**：串联分压、源极退化与推挽支路自动同列垂直对齐，宽图自动双层折叠保持紧凑画幅；
+  - **最简连接 2D 纵向叠放 + 内聚浮动**：打破功能组横向硬隔离，并联阵列与驱动块一对一同列正叠，短支路按共栅/共漏紧密度自适应纵向内聚；
   - **凸二次规划（Convex QP）**：将符号框与 `W/L` 参数文字框统一纳入包络，严格保证差分对整数中心对称 $x_L + x_R = 2 x_{\text{tail}}$；
-  - **两阶段 Steiner 主干 + 端口直线对齐**：片内共线与跨组横梁先行拉通，左右端口自动重排并共线直出，消除绕背钩线与多余折点；
+  - **共享共线电源/地母线 + 就近边界端口**：顶底 `VDD`/`VSS` 自动汇流为单根水平对齐母线与单一符号（内部 `T` 型焊点），信号端口按最近边界共线直出；
   - **大图层次化分页 + 展平还原 LVS**：自动保护差分对/电流镜/RC 原子簇拆分子页，合成 `TOP` 顶层框图并校验 100% 晶体管连接同构。
 - **工艺无关（PDK-Agnostic）**：内置开源 **SKY130** 配置开箱即用；可通过外部 `process_map.json` 或 `extract-pdk` 接入任意 180nm/65nm/28nm 工艺及 Cadence Virtuoso。
 

@@ -4,8 +4,8 @@
   "bounds": {
     "minX": 22,
     "minY": 18,
-    "maxX": 185,
-    "maxY": 100
+    "maxX": 157,
+    "maxY": 99
   },
   "congestionIterations": 1,
   "corridorExpansions": [],
@@ -20,18 +20,6 @@
       ]
     },
     {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "IGN",
-        "IGN_SHD",
-        "IGP_SHD",
-        "IGP"
-      ]
-    },
-    {
       "id": "gain_output_stage",
       "label": "增益与输出级",
       "role": "output_stage",
@@ -40,9 +28,13 @@
         "IQP",
         "IQSET",
         "Riqset",
-        "IQNFEED",
+        "IGN",
+        "IGN_SHD",
         "NID",
-        "PID"
+        "IQNFEED",
+        "PID",
+        "IGP_SHD",
+        "IGP"
       ]
     }
   ],
@@ -54,39 +46,39 @@
       "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 120,
+        "x": 59,
         "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 121,
+          "x": 60,
           "y": 64
         },
         "G": {
-          "x": 117,
+          "x": 56,
           "y": 67
         },
         "S": {
-          "x": 121,
+          "x": 60,
           "y": 70
         },
         "B": {
-          "x": 121,
+          "x": 60,
           "y": 67
         }
       },
       "bodyBox": [
-        117,
+        56,
         64,
-        122,
+        61,
         70
       ],
       "labelBox": [
-        123,
+        62,
         63,
-        131,
+        70,
         67
       ],
       "labelLines": [
@@ -101,31 +93,31 @@
       "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 121,
+        "x": 60,
         "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 121,
+          "x": 60,
           "y": 79
         },
         "M": {
-          "x": 121,
+          "x": 60,
           "y": 85
         }
       },
       "bodyBox": [
-        119,
+        58,
         79,
-        123,
+        62,
         85
       ],
       "labelBox": [
-        124,
+        63,
         80,
-        129,
+        68,
         84
       ],
       "labelLines": [
@@ -140,39 +132,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 120,
+        "x": 61,
         "y": 35
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 121,
+          "x": 60,
           "y": 38
         },
         "G": {
-          "x": 117,
+          "x": 64,
           "y": 35
         },
         "S": {
-          "x": 121,
+          "x": 60,
           "y": 32
         },
         "B": {
-          "x": 121,
+          "x": 60,
           "y": 35
         }
       },
       "bodyBox": [
-        117,
+        59,
         32,
-        122,
+        64,
         38
       ],
       "labelBox": [
-        123,
+        51,
         33,
-        130,
+        58,
         37
       ],
       "labelLines": [
@@ -187,39 +179,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 137,
+        "x": 103,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 138,
+          "x": 104,
           "y": 38
         },
         "G": {
-          "x": 134,
+          "x": 100,
           "y": 35
         },
         "S": {
-          "x": 138,
+          "x": 104,
           "y": 32
         },
         "B": {
-          "x": 138,
+          "x": 104,
           "y": 35
         }
       },
       "bodyBox": [
-        134,
+        100,
         32,
-        139,
+        105,
         38
       ],
       "labelBox": [
-        140,
+        106,
         33,
-        147,
+        113,
         37
       ],
       "labelLines": [
@@ -231,42 +223,42 @@
       "ref": "IGN",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 61,
+        "x": 86,
         "y": 35
       },
-      "semanticOrient": "gate_right",
-      "cadenceOrient": "MY",
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 60,
+          "x": 87,
           "y": 38
         },
         "G": {
-          "x": 64,
+          "x": 83,
           "y": 35
         },
         "S": {
-          "x": 60,
+          "x": 87,
           "y": 32
         },
         "B": {
-          "x": 60,
+          "x": 87,
           "y": 35
         }
       },
       "bodyBox": [
-        59,
+        83,
         32,
-        64,
+        88,
         38
       ],
       "labelBox": [
-        51,
+        89,
         33,
-        58,
+        96,
         37
       ],
       "labelLines": [
@@ -278,42 +270,42 @@
       "ref": "IGN_SHD",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 61,
+        "x": 86,
         "y": 51
       },
-      "semanticOrient": "gate_right",
-      "cadenceOrient": "MY",
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 60,
+          "x": 87,
           "y": 54
         },
         "G": {
-          "x": 64,
+          "x": 83,
           "y": 51
         },
         "S": {
-          "x": 60,
+          "x": 87,
           "y": 48
         },
         "B": {
-          "x": 60,
+          "x": 87,
           "y": 51
         }
       },
       "bodyBox": [
-        59,
+        83,
         48,
-        64,
+        88,
         54
       ],
       "labelBox": [
-        51,
+        89,
         47,
-        58,
+        96,
         51
       ],
       "labelLines": [
@@ -372,42 +364,42 @@
       "ref": "IGP",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 91,
+        "x": 129,
         "y": 82
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 92,
+          "x": 130,
           "y": 79
         },
         "G": {
-          "x": 88,
+          "x": 126,
           "y": 82
         },
         "S": {
-          "x": 92,
+          "x": 130,
           "y": 85
         },
         "B": {
-          "x": 92,
+          "x": 130,
           "y": 82
         }
       },
       "bodyBox": [
-        88,
+        126,
         79,
-        93,
+        131,
         85
       ],
       "labelBox": [
-        94,
+        132,
         80,
-        101,
+        139,
         84
       ],
       "labelLines": [
@@ -419,42 +411,42 @@
       "ref": "IGP_SHD",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 91,
+        "x": 129,
         "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 92,
+          "x": 130,
           "y": 64
         },
         "G": {
-          "x": 88,
+          "x": 126,
           "y": 67
         },
         "S": {
-          "x": 92,
+          "x": 130,
           "y": 70
         },
         "B": {
-          "x": 92,
+          "x": 130,
           "y": 67
         }
       },
       "bodyBox": [
-        88,
+        126,
         64,
-        93,
+        131,
         70
       ],
       "labelBox": [
-        94,
+        132,
         63,
-        101,
+        139,
         67
       ],
       "labelLines": [
@@ -469,39 +461,39 @@
       "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 137,
+        "x": 88,
         "y": 82
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 138,
+          "x": 87,
           "y": 79
         },
         "G": {
-          "x": 134,
+          "x": 91,
           "y": 82
         },
         "S": {
-          "x": 138,
+          "x": 87,
           "y": 85
         },
         "B": {
-          "x": 138,
+          "x": 87,
           "y": 82
         }
       },
       "bodyBox": [
-        134,
+        86,
         79,
-        139,
+        91,
         85
       ],
       "labelBox": [
-        140,
+        75,
         80,
-        150,
+        85,
         84
       ],
       "labelLines": [
@@ -516,39 +508,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 154,
+        "x": 131,
         "y": 35
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 155,
+          "x": 130,
           "y": 38
         },
         "G": {
-          "x": 151,
+          "x": 134,
           "y": 35
         },
         "S": {
-          "x": 155,
+          "x": 130,
           "y": 32
         },
         "B": {
-          "x": 155,
+          "x": 130,
           "y": 35
         }
       },
       "bodyBox": [
-        151,
+        129,
         32,
-        156,
+        134,
         38
       ],
       "labelBox": [
-        157,
+        118,
         33,
-        167,
+        128,
         37
       ],
       "labelLines": [
@@ -559,11 +551,11 @@
   ],
   "ports": [
     {
-      "id": "P_bn_1",
+      "id": "P_bn",
       "name": "bn",
       "net": "bn",
       "symbol": "port",
-      "x": 113,
+      "x": 52,
       "y": 67
     },
     {
@@ -571,71 +563,23 @@
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 121,
-      "y": 89
-    },
-    {
-      "id": "P_vss_2",
-      "name": "vss",
-      "net": "vss",
-      "symbol": "ground",
-      "x": 37,
-      "y": 89
-    },
-    {
-      "id": "P_vss_3",
-      "name": "vss",
-      "net": "vss",
-      "symbol": "ground",
-      "x": 92,
-      "y": 89
-    },
-    {
-      "id": "P_vss_4",
-      "name": "vss",
-      "net": "vss",
-      "symbol": "ground",
-      "x": 138,
-      "y": 89
+      "x": 83,
+      "y": 90
     },
     {
       "id": "P_vdd_1",
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 121,
-      "y": 28
-    },
-    {
-      "id": "P_vdd_2",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 138,
-      "y": 28
-    },
-    {
-      "id": "P_vdd_3",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 60,
-      "y": 28
-    },
-    {
-      "id": "P_vdd_4",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 155,
-      "y": 28
+      "x": 95,
+      "y": 27
     },
     {
       "id": "P_iq_n",
       "name": "iq_n",
       "net": "iq_n",
       "symbol": "port",
-      "x": 179,
+      "x": 151,
       "y": 74
     },
     {
@@ -643,7 +587,7 @@
       "name": "gn0",
       "net": "gn0",
       "symbol": "port",
-      "x": 179,
+      "x": 151,
       "y": 76
     },
     {
@@ -651,7 +595,7 @@
       "name": "pcas",
       "net": "pcas",
       "symbol": "port",
-      "x": 68,
+      "x": 79,
       "y": 51
     },
     {
@@ -659,30 +603,30 @@
       "name": "gp0",
       "net": "gp0",
       "symbol": "port",
-      "x": 179,
-      "y": 58
+      "x": 151,
+      "y": 41
     },
     {
       "id": "P_ncas_1",
       "name": "ncas",
       "net": "ncas",
       "symbol": "port",
-      "x": 84,
+      "x": 122,
       "y": 67
     }
   ],
   "routes": [
     {
-      "id": "R_bn_1",
-      "net": "bn",
+      "id": "R_vss_1",
+      "net": "vss",
       "points": [
         {
-          "x": 117,
-          "y": 67
+          "x": 60,
+          "y": 88
         },
         {
-          "x": 113,
-          "y": 67
+          "x": 83,
+          "y": 88
         }
       ]
     },
@@ -691,12 +635,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 121,
-          "y": 85
+          "x": 83,
+          "y": 88
         },
         {
-          "x": 121,
-          "y": 89
+          "x": 87,
+          "y": 88
         }
       ]
     },
@@ -710,7 +654,11 @@
         },
         {
           "x": 37,
-          "y": 89
+          "y": 88
+        },
+        {
+          "x": 60,
+          "y": 88
         }
       ]
     },
@@ -719,12 +667,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 92,
+          "x": 60,
           "y": 85
         },
         {
-          "x": 92,
-          "y": 89
+          "x": 60,
+          "y": 88
         }
       ]
     },
@@ -733,40 +681,44 @@
       "net": "vss",
       "points": [
         {
-          "x": 138,
+          "x": 83,
+          "y": 90
+        },
+        {
+          "x": 83,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_vss_6",
+      "net": "vss",
+      "points": [
+        {
+          "x": 87,
           "y": 85
         },
         {
-          "x": 138,
-          "y": 89
+          "x": 87,
+          "y": 88
         }
       ]
     },
     {
-      "id": "R_vdd_6",
-      "net": "vdd",
+      "id": "R_vss_7",
+      "net": "vss",
       "points": [
         {
-          "x": 121,
-          "y": 32
+          "x": 130,
+          "y": 85
         },
         {
-          "x": 121,
-          "y": 28
-        }
-      ]
-    },
-    {
-      "id": "R_vdd_7",
-      "net": "vdd",
-      "points": [
-        {
-          "x": 138,
-          "y": 32
+          "x": 130,
+          "y": 88
         },
         {
-          "x": 138,
-          "y": 28
+          "x": 87,
+          "y": 88
         }
       ]
     },
@@ -775,12 +727,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 60,
-          "y": 32
+          "x": 87,
+          "y": 29
         },
         {
-          "x": 60,
-          "y": 28
+          "x": 95,
+          "y": 29
         }
       ]
     },
@@ -789,432 +741,376 @@
       "net": "vdd",
       "points": [
         {
-          "x": 155,
+          "x": 95,
+          "y": 29
+        },
+        {
+          "x": 104,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_10",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 60,
           "y": 32
         },
         {
-          "x": 155,
-          "y": 28
+          "x": 60,
+          "y": 29
+        },
+        {
+          "x": 87,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_pcas_10",
+      "id": "R_vdd_11",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 87,
+          "y": 32
+        },
+        {
+          "x": 87,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_12",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 95,
+          "y": 27
+        },
+        {
+          "x": 95,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_13",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 104,
+          "y": 32
+        },
+        {
+          "x": 104,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_14",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 130,
+          "y": 32
+        },
+        {
+          "x": 130,
+          "y": 29
+        },
+        {
+          "x": 104,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_pcas_15",
       "net": "pcas",
       "points": [
         {
-          "x": 64,
+          "x": 83,
           "y": 51
         },
         {
-          "x": 68,
+          "x": 79,
           "y": 51
         }
       ]
     },
     {
-      "id": "R_ncas_11",
+      "id": "R_ncas_16",
       "net": "ncas",
       "points": [
         {
-          "x": 88,
+          "x": 126,
           "y": 67
         },
         {
-          "x": 84,
+          "x": 122,
           "y": 67
         }
       ]
     },
     {
-      "id": "R_ign_m_12",
-      "net": "ign_m",
+      "id": "R_bn_17",
+      "net": "bn",
+      "points": [
+        {
+          "x": 52,
+          "y": 67
+        },
+        {
+          "x": 56,
+          "y": 67
+        }
+      ]
+    },
+    {
+      "id": "R_iq_src_18",
+      "net": "iq_src",
       "points": [
         {
           "x": 60,
-          "y": 48
+          "y": 79
         },
         {
           "x": 60,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "id": "R_ign_m_19",
+      "net": "ign_m",
+      "points": [
+        {
+          "x": 87,
+          "y": 48
+        },
+        {
+          "x": 87,
           "y": 38
         }
       ]
     },
     {
-      "id": "R_igp_m_13",
-      "net": "igp_m",
-      "points": [
-        {
-          "x": 92,
-          "y": 70
-        },
-        {
-          "x": 92,
-          "y": 79
-        }
-      ]
-    },
-    {
-      "id": "R_iq_src_14",
-      "net": "iq_src",
-      "points": [
-        {
-          "x": 121,
-          "y": 79
-        },
-        {
-          "x": 121,
-          "y": 70
-        }
-      ]
-    },
-    {
-      "id": "R_gn0_15_a",
+      "id": "R_gn0_20_a",
       "net": "gn0",
       "points": [
         {
-          "x": 134,
-          "y": 82
+          "x": 87,
+          "y": 79
         },
         {
-          "x": 133,
-          "y": 82
-        },
-        {
-          "x": 133,
+          "x": 87,
           "y": 76
         }
       ]
     },
     {
-      "id": "R_gn0_15_b",
+      "id": "R_gn0_20_b",
       "net": "gn0",
       "points": [
         {
-          "x": 133,
+          "x": 87,
           "y": 76
         },
         {
-          "x": 133,
-          "y": 60
-        },
-        {
-          "x": 60,
-          "y": 60
-        },
-        {
-          "x": 60,
+          "x": 87,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_gn0_16_a",
+      "id": "R_gn0_21_a",
       "net": "gn0",
       "points": [
         {
-          "x": 138,
+          "x": 91,
+          "y": 82
+        },
+        {
+          "x": 92,
+          "y": 82
+        },
+        {
+          "x": 92,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_gn0_21_b",
+      "net": "gn0",
+      "points": [
+        {
+          "x": 92,
+          "y": 76
+        },
+        {
+          "x": 87,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_igp_m_22",
+      "net": "igp_m",
+      "points": [
+        {
+          "x": 130,
+          "y": 70
+        },
+        {
+          "x": 130,
           "y": 79
-        },
-        {
-          "x": 138,
-          "y": 76
         }
       ]
     },
     {
-      "id": "R_gn0_16_b",
-      "net": "gn0",
-      "points": [
-        {
-          "x": 138,
-          "y": 76
-        },
-        {
-          "x": 133,
-          "y": 76
-        }
-      ]
-    },
-    {
-      "id": "R_gp0_17_a",
+      "id": "R_gp0_23_a",
       "net": "gp0",
       "points": [
         {
-          "x": 151,
-          "y": 35
+          "x": 130,
+          "y": 38
         },
         {
-          "x": 150,
-          "y": 35
-        },
-        {
-          "x": 150,
+          "x": 130,
           "y": 41
         }
       ]
     },
     {
-      "id": "R_gp0_17_b_a",
+      "id": "R_gp0_23_b",
       "net": "gp0",
       "points": [
         {
-          "x": 150,
+          "x": 130,
           "y": 41
         },
         {
-          "x": 150,
-          "y": 58
-        }
-      ]
-    },
-    {
-      "id": "R_gp0_17_b_b",
-      "net": "gp0",
-      "points": [
-        {
-          "x": 150,
-          "y": 58
-        },
-        {
-          "x": 92,
-          "y": 58
-        },
-        {
-          "x": 92,
+          "x": 130,
           "y": 64
         }
       ]
     },
     {
-      "id": "R_gp0_18",
+      "id": "R_gp0_24_a",
       "net": "gp0",
-      "points": [
-        {
-          "x": 155,
-          "y": 38
-        },
-        {
-          "x": 155,
-          "y": 41
-        },
-        {
-          "x": 150,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_iq_n_19_a_a",
-      "net": "iq_n",
-      "points": [
-        {
-          "x": 88,
-          "y": 82
-        },
-        {
-          "x": 87,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_iq_n_19_a_b",
-      "net": "iq_n",
-      "points": [
-        {
-          "x": 87,
-          "y": 82
-        },
-        {
-          "x": 42,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_iq_n_19_b",
-      "net": "iq_n",
-      "points": [
-        {
-          "x": 42,
-          "y": 82
-        },
-        {
-          "x": 41,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_iq_n_20",
-      "net": "iq_n",
-      "points": [
-        {
-          "x": 37,
-          "y": 79
-        },
-        {
-          "x": 37,
-          "y": 76
-        },
-        {
-          "x": 42,
-          "y": 76
-        },
-        {
-          "x": 42,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_iq_n_21_a",
-      "net": "iq_n",
-      "points": [
-        {
-          "x": 138,
-          "y": 38
-        },
-        {
-          "x": 138,
-          "y": 74
-        }
-      ]
-    },
-    {
-      "id": "R_iq_n_21_b",
-      "net": "iq_n",
-      "points": [
-        {
-          "x": 138,
-          "y": 74
-        },
-        {
-          "x": 131,
-          "y": 74
-        },
-        {
-          "x": 131,
-          "y": 94
-        },
-        {
-          "x": 87,
-          "y": 94
-        },
-        {
-          "x": 87,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_iq_p_22_a",
-      "net": "iq_p",
-      "points": [
-        {
-          "x": 121,
-          "y": 38
-        },
-        {
-          "x": 121,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_iq_p_22_b",
-      "net": "iq_p",
-      "points": [
-        {
-          "x": 121,
-          "y": 41
-        },
-        {
-          "x": 121,
-          "y": 64
-        }
-      ]
-    },
-    {
-      "id": "R_iq_p_23_a",
-      "net": "iq_p",
-      "points": [
-        {
-          "x": 117,
-          "y": 35
-        },
-        {
-          "x": 116,
-          "y": 35
-        }
-      ]
-    },
-    {
-      "id": "R_iq_p_23_b",
-      "net": "iq_p",
-      "points": [
-        {
-          "x": 116,
-          "y": 35
-        },
-        {
-          "x": 116,
-          "y": 41
-        },
-        {
-          "x": 121,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_iq_p_24",
-      "net": "iq_p",
       "points": [
         {
           "x": 134,
           "y": 35
         },
         {
-          "x": 133,
+          "x": 135,
           "y": 35
         },
         {
-          "x": 133,
-          "y": 41
-        },
-        {
-          "x": 121,
+          "x": 135,
           "y": 41
         }
       ]
     },
     {
-      "id": "R_iq_p_25",
-      "net": "iq_p",
-      "points": [
-        {
-          "x": 64,
-          "y": 35
-        },
-        {
-          "x": 116,
-          "y": 35
-        }
-      ]
-    },
-    {
-      "id": "R_gp0_26",
+      "id": "R_gp0_24_b",
       "net": "gp0",
       "points": [
         {
-          "x": 179,
-          "y": 58
+          "x": 135,
+          "y": 41
         },
         {
-          "x": 150,
-          "y": 58
+          "x": 130,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_25_a_a_a",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 126,
+          "y": 82
+        },
+        {
+          "x": 125,
+          "y": 82
+        },
+        {
+          "x": 125,
+          "y": 74
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_25_a_a_b",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 125,
+          "y": 74
+        },
+        {
+          "x": 104,
+          "y": 74
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_25_a_b",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 104,
+          "y": 74
+        },
+        {
+          "x": 42,
+          "y": 74
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_25_b",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 42,
+          "y": 74
+        },
+        {
+          "x": 37,
+          "y": 74
+        },
+        {
+          "x": 37,
+          "y": 79
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_26",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 41,
+          "y": 82
+        },
+        {
+          "x": 42,
+          "y": 82
+        },
+        {
+          "x": 42,
+          "y": 74
         }
       ]
     },
@@ -1223,25 +1119,167 @@
       "net": "iq_n",
       "points": [
         {
-          "x": 179,
-          "y": 74
+          "x": 104,
+          "y": 38
         },
         {
-          "x": 138,
+          "x": 104,
           "y": 74
         }
       ]
     },
     {
-      "id": "R_gn0_28",
+      "id": "R_iq_p_28_a_a",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 83,
+          "y": 35
+        },
+        {
+          "x": 82,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_iq_p_28_a_b",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 82,
+          "y": 35
+        },
+        {
+          "x": 65,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_iq_p_28_b",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 65,
+          "y": 35
+        },
+        {
+          "x": 64,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_iq_p_29_a",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 60,
+          "y": 38
+        },
+        {
+          "x": 60,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "id": "R_iq_p_29_b",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 60,
+          "y": 41
+        },
+        {
+          "x": 65,
+          "y": 41
+        },
+        {
+          "x": 65,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_iq_p_30",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 100,
+          "y": 35
+        },
+        {
+          "x": 99,
+          "y": 35
+        },
+        {
+          "x": 99,
+          "y": 41
+        },
+        {
+          "x": 82,
+          "y": 41
+        },
+        {
+          "x": 82,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_iq_p_31",
+      "net": "iq_p",
+      "points": [
+        {
+          "x": 60,
+          "y": 64
+        },
+        {
+          "x": 60,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "id": "R_gp0_32",
+      "net": "gp0",
+      "points": [
+        {
+          "x": 151,
+          "y": 41
+        },
+        {
+          "x": 135,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_33",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 151,
+          "y": 74
+        },
+        {
+          "x": 125,
+          "y": 74
+        }
+      ]
+    },
+    {
+      "id": "R_gn0_34",
       "net": "gn0",
       "points": [
         {
-          "x": 179,
+          "x": 151,
           "y": 76
         },
         {
-          "x": 138,
+          "x": 92,
           "y": 76
         }
       ]

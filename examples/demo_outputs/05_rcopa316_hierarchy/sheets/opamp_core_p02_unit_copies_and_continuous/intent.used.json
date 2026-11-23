@@ -14,45 +14,29 @@
       ]
     },
     {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "UPSH",
-        "UPSET",
-        "HUNIT",
-        "HPLUS",
-        "HMIN",
-        "HDIV",
-        "HPCS",
-        "HPC"
-      ]
-    },
-    {
       "id": "gain_output_stage",
       "label": "增益与输出级",
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
-        "UNFEED",
+        "HUNIT",
+        "HPLUS",
+        "HPD",
+        "HMIN",
+        "PTREF",
+        "HPCS",
+        "HPC",
         "Rup",
         "UP",
+        "UPSH",
+        "UPSET",
+        "UNFEED",
         "HREF",
         "Rhand",
         "HBIAS",
-        "HPD",
+        "HDIV",
         "HND",
-        "PTREF",
-        "Rpoff"
-      ]
-    },
-    {
-      "id": "output_load",
-      "label": "输出负载",
-      "role": "output_stage",
-      "stage_order": 35,
-      "instances": [
+        "Rpoff",
         "Rnoff"
       ]
     }
@@ -60,55 +44,49 @@
   "motifs": [],
   "orientations": {
     "UN": "gate_right",
+    "Rnoff": "vertical",
     "HUNIT": "gate_left",
     "HPLUS": "gate_left",
+    "HPD": "gate_right",
     "HMIN": "gate_left",
-    "HDIV": "gate_left",
-    "UPSH": "gate_left",
-    "UPSET": "gate_left",
+    "PTREF": "gate_right",
     "HPCS": "gate_left",
     "HPC": "gate_left",
-    "Rnoff": "vertical",
+    "UP": "gate_right",
+    "UPSH": "gate_left",
+    "UPSET": "gate_right",
     "UNFEED": "gate_left",
-    "Rup": "vertical",
-    "UP": "gate_left",
     "HREF": "gate_left",
-    "Rhand": "vertical",
     "HBIAS": "gate_left",
-    "HPD": "gate_left",
-    "HND": "gate_left",
-    "PTREF": "gate_left",
+    "HDIV": "gate_left",
+    "HND": "gate_right",
+    "Rup": "vertical",
+    "Rhand": "vertical",
     "Rpoff": "vertical"
   },
-  "tierOverrides": {},
+  "tierOverrides": {
+    "Rnoff": 5
+  },
   "columnOrderHints": [
-    [
-      "UN"
-    ],
     [
       "HUNIT",
       "HPLUS",
+      "HPD"
+    ],
+    [
+      "PTREF",
       "HPCS",
       "HPC"
     ],
     [
-      "HUNIT",
-      "HMIN",
+      "Rup",
+      "UP",
       "UPSH",
       "UPSET"
     ],
     [
-      "HUNIT",
-      "HDIV"
-    ],
-    [
       "UNFEED",
-      "HPD"
-    ],
-    [
-      "Rup",
-      "UP",
-      "HND"
+      "UN"
     ],
     [
       "HREF",
@@ -116,17 +94,17 @@
       "HBIAS"
     ],
     [
-      "PTREF"
+      "HDIV",
+      "HND"
     ],
     [
-      "Rpoff"
-    ],
-    [
+      "Rpoff",
+      "HMIN",
       "Rnoff"
     ]
   ],
   "netPolicies": {
-    "un": "perimeter_bus",
+    "un": "full_wire",
     "bp": "supply_local",
     "vdd": "supply_local",
     "vss": "supply_local",
@@ -140,11 +118,12 @@
     "hp": "perimeter_bus",
     "vip": "full_wire",
     "vin": "full_wire",
-    "hn": "perimeter_bus",
+    "hn": "full_wire",
     "hp_m": "full_wire",
     "pctl": "full_wire"
   },
   "criticalNets": [
+    "un",
     "bp",
     "up_m",
     "up",
@@ -156,6 +135,7 @@
     "hp",
     "vip",
     "vin",
+    "hn",
     "hp_m",
     "pctl"
   ],
@@ -166,8 +146,8 @@
     "vss": "local_repeat",
     "up": "right",
     "vshd_n": "local_repeat",
-    "vip": "local_repeat",
-    "vin": "local_repeat",
+    "vip": "near_pin",
+    "vin": "near_pin",
     "hn": "right",
     "pctl": "right"
   },

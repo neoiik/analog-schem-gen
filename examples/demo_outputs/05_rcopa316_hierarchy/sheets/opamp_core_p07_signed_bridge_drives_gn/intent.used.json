@@ -10,69 +10,65 @@
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
+        "Cgate",
         "REPG",
-        "REPR",
-        "RENG",
-        "RENR",
         "CEPG",
+        "REPR",
         "CEPR",
-        "CENG",
-        "CENR",
         "TRPD",
         "REBP",
         "EBP",
         "ETAIL",
         "TRUP",
+        "RENG",
         "TRDN",
+        "CENG",
+        "RENR",
+        "CENR",
         "TRND",
         "REBN",
         "EBN",
         "TRTURN",
-        "TRBD",
-        "Cgate"
+        "TRBD"
       ]
     }
   ],
   "motifs": [],
   "orientations": {
-    "REPG": "vertical",
-    "REPR": "vertical",
-    "RENG": "vertical",
-    "RENR": "vertical",
-    "CEPG": "vertical",
-    "CEPR": "vertical",
-    "CENG": "vertical",
-    "CENR": "vertical",
-    "TRPD": "gate_left",
-    "REBP": "vertical",
+    "TRPD": "gate_right",
     "EBP": "gate_left",
     "ETAIL": "gate_left",
     "TRUP": "gate_left",
-    "TRDN": "gate_left",
-    "TRND": "gate_left",
-    "REBN": "vertical",
+    "TRDN": "gate_right",
+    "TRND": "gate_right",
     "EBN": "gate_left",
     "TRTURN": "gate_left",
     "TRBD": "gate_left",
-    "Cgate": "vertical"
+    "Cgate": "vertical",
+    "REPG": "vertical",
+    "CEPG": "vertical",
+    "REPR": "vertical",
+    "CEPR": "vertical",
+    "REBP": "vertical",
+    "RENG": "vertical",
+    "CENG": "vertical",
+    "RENR": "vertical",
+    "CENR": "vertical",
+    "REBN": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
     [
-      "REPG",
-      "REPR"
-    ],
-    [
-      "RENG",
-      "RENR"
+      "Cgate",
+      "REPG"
     ],
     [
       "CEPG",
-      "CEPR"
+      "REPR"
     ],
     [
-      "CENG",
-      "CENR"
+      "CEPR",
+      "CENG"
     ],
     [
       "TRPD",
@@ -82,7 +78,12 @@
     ],
     [
       "TRUP",
+      "RENG",
       "TRDN"
+    ],
+    [
+      "RENR",
+      "CENR"
     ],
     [
       "TRND",
@@ -92,9 +93,6 @@
     [
       "TRTURN",
       "TRBD"
-    ],
-    [
-      "Cgate"
     ]
   ],
   "netPolicies": {
@@ -134,7 +132,7 @@
     "gn0": "left",
     "gn": "left",
     "gp0": "left",
-    "iq_n": "local_repeat",
+    "iq_n": "near_pin",
     "vss": "local_repeat",
     "vdd": "local_repeat"
   },

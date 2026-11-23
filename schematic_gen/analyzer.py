@@ -111,12 +111,13 @@ def _bundle_vertical_branches(
                 continue
             base = 120 if fn <= 2 else (85 if fn == 3 else (60 - 3 * fn))
             iu, iv = inst_by_ref[hi], inst_by_ref[lo]
-            mos_bonus = (
-                15
-                if (iu.polarity == "pmos" and iv.polarity == "nmos" and iu.terminals.get("D") == iv.terminals.get("D"))
-                else 0
-            )
-            tier_pen = 2 * abs(default_tiers[lo] - default_tiers[hi] - 1)
+            mos_bonus = 0
+            if iu.polarity == "pmos" and iv.polarity == "nmos":
+                if iu.terminals.get("D") == iv.terminals.get("D"):
+                    mos_bonus += 18
+                if iu.terminals.get("G") == iv.terminals.get("G") and iu.terminals.get("G") not in rails:
+                    mos_bonus += 35
+            tier_pen = 12 * abs(default_tiers[lo] - default_tiers[hi] - 1)
             edges.append((base + mos_bonus - tier_pen, hi, lo))
 
     edges.sort(key=lambda e: (-e[0], pool_refs.index(e[1]), pool_refs.index(e[2])))
@@ -140,6 +141,114 @@ def _bundle_vertical_branches(
     return [c for c in col_list if c]
 
 
+def _order_columns_and_orient_gates(
+    cols: list[list[str]],
+    prior_cols: list[list[str]],
+    inst_by_ref: dict[str, InstanceIR],
+    fanout: dict[str, int],
+    rails: set[str],
+    diode_refs: set[str],
+    circuit: NetlistCircuit,
+    orientations: dict[str, str],
+) -> list[list[str]]:
+    """Order vertical branch columns for shortest inter-column wiring and orient MOS gates toward connected neighbors."""
+    if not cols:
+        return []
+
+    in_port_nets = {p.net for p in circuit.ports if p.direction == "input"} - rails
+    out_port_nets = {p.net for p in circuit.ports if p.direction == "output"} - rails
+
+    def _col_nets(c: list[str]) -> set[str]:
+        return {
+            n
+            for r in c
+            for p, n in inst_by_ref[r].terminals.items()
+            if p != "B" and n not in rails
+        }
+
+    cnets = [_col_nets(c) for c in cols]
+    prior_union = {n for c in prior_cols for n in _col_nets(c)}
+
+    if len(cols) >= 2:
+        n_c = len(cols)
+        adj_w: list[list[float]] = [[0.0] * n_c for _ in range(n_c)]
+        for i in range(n_c):
+            for j in range(i + 1, n_c):
+                sh = cnets[i] & cnets[j]
+                w = sum(16.0 / max(2, fanout.get(n, 2)) for n in sh)
+                adj_w[i][j] = adj_w[j][i] = w
+
+        # Left-anchor score: connection to already-placed left stages or input ports
+        left_bias: list[float] = []
+        for i in range(n_c):
+            sc = sum(10.0 / max(2, fanout.get(n, 2)) for n in (cnets[i] & prior_union))
+            sc += 4.0 * len(cnets[i] & in_port_nets)
+            sc -= 4.0 * len(cnets[i] & out_port_nets)
+            left_bias.append(sc)
+
+        start_idx = max(range(n_c), key=lambda i: (left_bias[i], -len(cols[i]), -i))
+        order = [start_idx]
+        rem = set(range(n_c)) - {start_idx}
+        while rem:
+            last = order[-1]
+            nxt = max(rem, key=lambda j: (adj_w[last][j], left_bias[j], -j))
+            order.append(nxt)
+            rem.remove(nxt)
+
+        # Quick 2-opt refinement to eliminate unnecessary horizontal skips
+        def _chain_score(seq: list[int]) -> float:
+            s = sum(adj_w[seq[k]][seq[k + 1]] for k in range(len(seq) - 1))
+            s += 0.35 * sum(left_bias[seq[k]] * (len(seq) - 1 - k) for k in range(len(seq)))
+            return s
+
+        improved = True
+        while improved:
+            improved = False
+            best_sc = _chain_score(order)
+            for a in range(n_c - 1):
+                for b in range(a + 1, n_c):
+                    cand = order[:a] + list(reversed(order[a : b + 1])) + order[b + 1 :]
+                    cand_sc = _chain_score(cand)
+                    if cand_sc > best_sc + 1e-6:
+                        order = cand
+                        best_sc = cand_sc
+                        improved = True
+        cols = [cols[i] for i in order]
+
+    # Orient MOS gates toward the column(s) driving or sharing their Gate net!
+    full_seq = list(prior_cols) + list(cols)
+    offset = len(prior_cols)
+    for local_i, col in enumerate(cols):
+        abs_i = offset + local_i
+        for r in col:
+            inst = inst_by_ref[r]
+            if inst.device_class != "mos" or r in orientations:
+                continue
+            g_net = inst.terminals.get("G", "")
+            if not g_net or g_net in rails:
+                orientations[r] = "gate_left"
+                continue
+            left_pull = 1.8 if g_net in in_port_nets else 0.0
+            right_pull = 1.8 if g_net in out_port_nets else 0.0
+            for j, other_col in enumerate(full_seq):
+                if j == abs_i:
+                    continue
+                w_col = 0.0
+                for ro in other_col:
+                    io = inst_by_ref[ro]
+                    for po, no in io.terminals.items():
+                        if po == "B" or no != g_net:
+                            continue
+                        w_col += 2.2 if (po != "G" or ro in diode_refs) else 1.2
+                if j < abs_i:
+                    left_pull += w_col
+                else:
+                    right_pull += w_col
+            orientations[r] = "gate_right" if (right_pull > left_pull + 0.1) else "gate_left"
+
+    return cols
+
+
 def _compact_wide_columns_for_aspect_ratio(
     column_hints: list[list[str]],
     groups: list[FunctionalGroupSpec],
@@ -150,36 +259,37 @@ def _compact_wide_columns_for_aspect_ratio(
 ) -> list[list[str]]:
     """Prevent overly wide horizontal ribbon schematics by folding disjoint subcolumns & passive banks."""
     cols = [list(c) for c in column_hints if c]
-    if len(cols) < 7:
+    if len(cols) < 6:
         return cols
 
     group_of = {r: g.id for g in groups for r in g.instances}
 
-    # Pass 1: Within the same group, fold upper-only (`max_tier <= 2`) + lower-only (`min_tier >= 4`) columns
+    # Pass 1: Fold upper-only (`max_tier <= 2`) + lower-only (`min_tier >= 4`) columns by shared connectivity (across groups too!)
     merged_flags = [False] * len(cols)
     active_count = len(cols)
     for i, col_u in enumerate(cols):
-        if active_count < 7 or merged_flags[i] or any(r in locked_refs for r in col_u):
+        if active_count < 6 or merged_flags[i] or any(r in locked_refs for r in col_u):
             continue
-        gid = group_of.get(col_u[0], "")
-        if not gid or any(group_of.get(r) != gid for r in col_u):
-            continue
-        if max(default_tiers[r] for r in col_u) > 2:
+        max_t_u = max(default_tiers[r] for r in col_u)
+        if max_t_u > 2:
             continue
 
         u_nets = {n for r in col_u for n in inst_by_ref[r].terminals.values()} - rails
         best_j = -1
-        best_shared = -1
-        for j in range(i + 1, len(cols)):
+        best_shared = -1.0
+        for j in range(len(cols)):
+            if j == i:
+                continue
             col_l = cols[j]
             if merged_flags[j] or any(r in locked_refs for r in col_l):
                 continue
-            if any(group_of.get(r) != gid for r in col_l):
+            min_t_l = min(default_tiers[r] for r in col_l)
+            if min_t_l <= max_t_u:
                 continue
-            if min(default_tiers[r] for r in col_l) < 4:
-                continue
+            lower_bonus = 2.0 if min_t_l >= 4 else 0.0
+            same_gid_bonus = 0.5 if group_of.get(col_u[0]) == group_of.get(col_l[0]) else 0.0
             l_nets = {n for r in col_l for n in inst_by_ref[r].terminals.values()} - rails
-            sh = len(u_nets & l_nets)
+            sh = len(u_nets & l_nets) + same_gid_bonus + lower_bonus
             if sh > best_shared:
                 best_shared = sh
                 best_j = j
@@ -189,7 +299,7 @@ def _compact_wide_columns_for_aspect_ratio(
             active_count -= 1
 
     cols = [c for idx, c in enumerate(cols) if not merged_flags[idx]]
-    if len(cols) < 7:
+    if len(cols) < 6:
         return cols
 
     # Pass 2: Fold wide single-tier 2-pin passive runs (`>= 5` singletons in same `(group, tier)`) into 2 rows
@@ -290,27 +400,52 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             ),
             None,
         )
-        # Find active load pair directly above/below diff pair drains
+        # Find matched active load pair directly above/below diff pair drains
+        # (exclude folded-cascode base sinks where `da`/`db` also feeds a same-polarity cascode Source!)
         da, db = m_a.terminals["D"], m_b.terminals["D"]
-        load_a = next(
-            (
-                x.ref
-                for x in mos_list
-                if x.polarity != pol and x.terminals["D"] == da and x.terminals["S"] in rails
-            ),
-            None,
-        )
-        load_b = next(
-            (
-                x.ref
-                for x in mos_list
-                if x.polarity != pol
-                and x.ref != load_a
-                and x.terminals["D"] == db
-                and x.terminals["S"] in rails
-            ),
-            None,
-        )
+        cands_a = [
+            x
+            for x in mos_list
+            if x.polarity != pol
+            and x.ref not in used_in_mirror_load
+            and x.terminals["D"] == da
+            and x.terminals["S"] in rails
+            and not any(
+                c.ref != x.ref and c.polarity == x.polarity and c.terminals.get("S") == da
+                for c in mos_list
+            )
+        ]
+        cands_b = [
+            x
+            for x in mos_list
+            if x.polarity != pol
+            and x.ref not in used_in_mirror_load
+            and x.terminals["D"] == db
+            and x.terminals["S"] in rails
+            and not any(
+                c.ref != x.ref and c.polarity == x.polarity and c.terminals.get("S") == db
+                for c in mos_list
+            )
+        ]
+        best_load_pair: tuple[str, str] | None = None
+        best_load_rank = -1
+        for xa in cands_a:
+            for xb in cands_b:
+                if xa.ref == xb.ref or xa.terminals["S"] != xb.terminals["S"]:
+                    continue
+                same_wl = xa.params.get("w") == xb.params.get("w") and xa.params.get("l") == xb.params.get("l")
+                if xa.terminals["G"] == xb.terminals["G"]:
+                    rk = 30 + (5 if same_wl else 0)
+                elif (xa.ref in diode_refs) and (xb.ref in diode_refs) and same_wl:
+                    rk = 25
+                elif (xa.ref not in diode_refs) and (xb.ref not in diode_refs) and same_wl:
+                    rk = 20
+                else:
+                    continue
+                if rk > best_load_rank:
+                    best_load_rank = rk
+                    best_load_pair = (xa.ref, xb.ref)
+
         roles: dict[str, Any] = {
             "left": m_a.ref,
             "right": m_b.ref,
@@ -321,7 +456,9 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         if tail_dev:
             roles["tail_device"] = tail_dev
             inst_group.append(tail_dev)
-        if load_a and load_b and inst_by_ref[load_a].terminals["G"] == inst_by_ref[load_b].terminals["G"]:
+        load_a = best_load_pair[0] if best_load_pair else None
+        load_b = best_load_pair[1] if best_load_pair else None
+        if load_a and load_b:
             roles["active_load_left"] = load_a
             roles["active_load_right"] = load_b
             used_in_mirror_load.update({load_a, load_b})
@@ -529,6 +666,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
     assigned: set[str] = set()
     groups: list[FunctionalGroupSpec] = []
     orientations: dict[str, str] = {}
+    tier_overrides_draft: dict[str, int] = {}
     column_hints: list[list[str]] = []
     intent_motifs: list[dict[str, Any]] = []
 
@@ -581,6 +719,19 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
                 orientations[ref] = "vertical"
 
     # Group B: Differential input stage(s)
+    coupled_dual_diff = (
+        len(diff_motifs) == 2
+        and {
+            inst_by_ref[diff_motifs[0].roles["left"]].terminals["G"],
+            inst_by_ref[diff_motifs[0].roles["right"]].terminals["G"],
+        }
+        == {
+            inst_by_ref[diff_motifs[1].roles["left"]].terminals["G"],
+            inst_by_ref[diff_motifs[1].roles["right"]].terminals["G"],
+        }
+    )
+    coupled_diff_members: list[str] = []
+
     for idx, dm in enumerate(diff_motifs):
         left_ref = dm.roles["left"]
         right_ref = dm.roles["right"]
@@ -588,16 +739,19 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         load_l = dm.roles.get("active_load_left")
         load_r = dm.roles.get("active_load_right")
         g_members = [r for r in dm.instances if r not in assigned]
-        groups.append(
-            FunctionalGroupSpec(
-                id=f"input_diff_{idx + 1}",
-                label="差分输入级",
-                role="input_diff",
-                stage_order=10 + idx * 5,
-                instances=g_members,
-            )
-        )
         assigned.update(g_members)
+        if coupled_dual_diff:
+            coupled_diff_members.extend(g_members)
+        else:
+            groups.append(
+                FunctionalGroupSpec(
+                    id=f"input_diff_{idx + 1}",
+                    label="差分输入级",
+                    role="input_diff",
+                    stage_order=10 + idx * 5,
+                    instances=g_members,
+                )
+            )
 
         # Back-to-back diff pair: left gate_left (R0), right gate_right (MY)
         orientations[left_ref] = "gate_left"
@@ -605,7 +759,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         if tail_ref:
             orientations[tail_ref] = "gate_left"
         if load_l and load_r:
-            # Face-to-face active mirror load above diff pair: gates face center!
+            # Default face-to-face active mirror load above diff pair: gates face center!
             orientations[load_l] = "gate_right"
             orientations[load_r] = "gate_left"
             column_hints.append([load_l, left_ref])
@@ -630,22 +784,38 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             }
         )
 
-    # Group C: Cascode stacks not yet assigned (e.g., folded-cascode output branches)
+    if coupled_dual_diff and coupled_diff_members:
+        groups.append(
+            FunctionalGroupSpec(
+                id="input_diff_1",
+                label="双尾耦合差分输入与有源负载级",
+                role="input_diff",
+                stage_order=10,
+                instances=coupled_diff_members,
+            )
+        )
+        # If inner adjacent active loads (dm0.load_r and dm1.load_l) share a current-mirror Gate net,
+        # orient them face-to-face across the central boundary for a 1-hop mirror tie!
+        l0_r = diff_motifs[0].roles.get("active_load_right")
+        l1_l = diff_motifs[1].roles.get("active_load_left")
+        if l0_r and l1_l and inst_by_ref[l0_r].terminals.get("G") == inst_by_ref[l1_l].terminals.get("G"):
+            orientations[l0_r] = "gate_right"
+            orientations[l1_l] = "gate_left"
+
+    # Group C: True Folded-Cascode full stacks (only when full 4-FET PMOS+NMOS columns or diff-pair folding branches exist;
+    # standalone 2-FET mirror cascodes stay unassigned so Group E chains them vertically with lower branches/resistors!)
     cascode_motifs = [m for m in motifs if m.motif_type == "cascode_pair"]
     unassigned_cascodes = [
         m for m in cascode_motifs if any(r not in assigned for r in m.instances)
     ]
     if unassigned_cascodes:
-        # Pair up vertically aligned PMOS cascode stack + NMOS cascode stack sharing output/folding drain nets!
         cas_members: list[str] = []
         by_drain_col: list[list[str]] = []
-        used_cas: set[str] = set()
         for m in unassigned_cascodes:
             for r in m.instances:
                 if r not in assigned and r not in cas_members:
                     cas_members.append(r)
 
-        # Group vertical cascode pairs that share an output drain net between PMOS_CAS and NMOS_MID
         pmos_stacks = [
             m.instances for m in unassigned_cascodes if inst_by_ref[m.instances[0]].polarity == "pmos"
         ]
@@ -653,7 +823,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             m.instances for m in unassigned_cascodes if inst_by_ref[m.instances[0]].polarity == "nmos"
         ]
         matched_n: set[int] = set()
-        for p_idx, p_stack in enumerate(pmos_stacks):
+        for p_stack in pmos_stacks:
             p_bot_drain = inst_by_ref[p_stack[-1]].terminals["D"]
             match_idx = next(
                 (
@@ -665,48 +835,58 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             )
             if match_idx is not None:
                 matched_n.add(match_idx)
-                full_col = [*p_stack, *nmos_stacks[match_idx]]
-                by_drain_col.append(full_col)
-                used_cas.update(full_col)
+                by_drain_col.append([*p_stack, *nmos_stacks[match_idx]])
             else:
                 by_drain_col.append(list(p_stack))
-                used_cas.update(p_stack)
         for ni, n_stack in enumerate(nmos_stacks):
             if ni not in matched_n:
                 by_drain_col.append(list(n_stack))
-                used_cas.update(n_stack)
 
-        # Orient face-to-face if 2 symmetric folded columns exist
-        if len(by_drain_col) == 2 and len(by_drain_col[0]) == len(by_drain_col[1]):
-            for r in by_drain_col[0]:
-                orientations.setdefault(r, "gate_right")
-            for r in by_drain_col[1]:
-                orientations.setdefault(r, "gate_left")
-            intent_motifs.append(
-                {
-                    "type": "symmetric_columns",
-                    "leftColumn": by_drain_col[0],
-                    "rightColumn": by_drain_col[1],
-                }
-            )
-        else:
-            for col in by_drain_col:
-                for r in col:
+        diff_drain_nets = {
+            inst_by_ref[r].terminals["D"]
+            for dm in diff_motifs
+            for r in (dm.roles["left"], dm.roles["right"])
+        }
+        cas_all_nets = {
+            n
+            for c in by_drain_col
+            for r in c
+            for p, n in inst_by_ref[r].terminals.items()
+            if p != "B" and n not in rails
+        }
+        is_folded_cascode_core = any(len(c) >= 4 for c in by_drain_col) or bool(diff_drain_nets & cas_all_nets)
+
+        if is_folded_cascode_core:
+            if len(by_drain_col) == 2 and len(by_drain_col[0]) == len(by_drain_col[1]):
+                for r in by_drain_col[0]:
+                    orientations.setdefault(r, "gate_right")
+                for r in by_drain_col[1]:
                     orientations.setdefault(r, "gate_left")
+                intent_motifs.append(
+                    {
+                        "type": "symmetric_columns",
+                        "leftColumn": by_drain_col[0],
+                        "rightColumn": by_drain_col[1],
+                    }
+                )
+            else:
+                for col in by_drain_col:
+                    for r in col:
+                        orientations.setdefault(r, "gate_left")
 
-        for col in by_drain_col:
-            column_hints.append([r for r in col if r not in assigned])
+            for col in by_drain_col:
+                column_hints.append([r for r in col if r not in assigned])
 
-        groups.append(
-            FunctionalGroupSpec(
-                id="cascode_stage",
-                label="共源共栅叠层支路",
-                role="cascode_core",
-                stage_order=20,
-                instances=cas_members,
+            groups.append(
+                FunctionalGroupSpec(
+                    id="cascode_stage",
+                    label="共源共栅叠层支路",
+                    role="cascode_core",
+                    stage_order=20,
+                    instances=cas_members,
+                )
             )
-        )
-        assigned.update(cas_members)
+            assigned.update(cas_members)
 
     # Group D: Compensation networks (e.g. Rz + Cc bridging Stage 1 and Stage 2)
     comp_members = [r for r in rc_refs if r not in assigned]
@@ -733,31 +913,64 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             column_hints.append([r_ref])
             column_hints.append([c_ref])
 
-    # Group D2: Regular parallel banks & serpentine resistor chains
+    # Group D2: Regular parallel banks (with automatic 1-to-1 vertical driver stacking!) & serpentine resistor chains
     for bm in [m for m in motifs if m.motif_type == "parallel_bank"]:
         b_members = [r for r in bm.instances if r not in assigned]
         if len(b_members) >= 4:
+            cnet = bm.roles["common_net"]
+            # Check if bank opposite terminals connect 1-to-1 (`fanout <= 3`) to unassigned driver blocks/MOS (e.g. SCDAC XU0..XU5)
+            driver_for_cap: dict[str, str] = {}
+            claimed_drivers: set[str] = set()
+            for r in b_members:
+                inst = inst_by_ref[r]
+                opp_net = inst.terminals["M"] if inst.terminals.get("P") == cnet else inst.terminals.get("P", "")
+                if not opp_net or opp_net in rails or fanout.get(opp_net, 99) > 3:
+                    continue
+                drv_cands = [
+                    cand.ref
+                    for cand in circuit.instances
+                    if cand.ref not in assigned
+                    and cand.ref not in b_members
+                    and cand.ref not in claimed_drivers
+                    and cand.device_class in {"subckt", "mos"}
+                    and opp_net in {n for p_k, n in cand.terminals.items() if p_k != "B"}
+                ]
+                if len(drv_cands) == 1:
+                    driver_for_cap[r] = drv_cands[0]
+                    claimed_drivers.add(drv_cands[0])
+
+            stack_drivers = len(driver_for_cap) >= max(2, len(b_members) // 2)
+            grp_members = list(b_members) + ([driver_for_cap[r] for r in b_members if r in driver_for_cap] if stack_drivers else [])
             groups.append(
                 FunctionalGroupSpec(
                     id=bm.id,
-                    label="规整并联阵列",
+                    label="规整并联阵列与驱动单元" if stack_drivers else "规整并联阵列",
                     role="array_bank",
                     stage_order=26,
-                    instances=b_members,
+                    instances=grp_members,
                 )
             )
-            assigned.update(b_members)
-            cnet = bm.roles["common_net"]
+            assigned.update(grp_members)
             for r in b_members:
                 inst = inst_by_ref[r]
                 orientations[r] = "vertical" if inst.terminals.get("P") == cnet else "vertical_flipped"
-                column_hints.append([r])
+                if stack_drivers:
+                    tier_overrides_draft[r] = 1
+                    if r in driver_for_cap:
+                        drv = driver_for_cap[r]
+                        tier_overrides_draft[drv] = 4
+                        column_hints.append([r, drv])
+                    else:
+                        column_hints.append([r])
+                else:
+                    column_hints.append([r])
             intent_motifs.append(
                 {
                     "type": "parallel_bank",
                     "id": bm.id,
                     "instances": b_members,
                     "commonTopNet": cnet,
+                    "stackedDrivers": list(driver_for_cap.values()) if stack_drivers else [],
                 }
             )
 
@@ -795,7 +1008,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
                 }
             )
 
-    # Group E: Remaining gain / output stage branches & true output-port shunt loads
+    # Group E: Remaining gain / bias / output branches (complete VDD->VSS vertical pairing + connectivity ordering)
     remaining = [i.ref for i in circuit.instances if i.ref not in assigned]
     if remaining:
         output_port_nets = {p.net for p in circuit.ports if p.direction == "output"}
@@ -805,7 +1018,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         for r in remaining:
             inst = inst_by_ref[r]
             terms_set = set(inst.terminals.values())
-            # Only isolate shunt RC to ground as `output_load` when its other terminal is an output port!
+            # Isolate shunt RC to ground on an output port so we can place it immediately beside its driving column!
             if (
                 inst.device_class.startswith(("cap", "res"))
                 and (terms_set & grounds)
@@ -818,6 +1031,9 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
 
         bundled_cols = _bundle_vertical_branches(
             branch_pool, inst_by_ref, default_tiers, fanout, rails
+        )
+        bundled_cols = _order_columns_and_orient_gates(
+            bundled_cols, column_hints, inst_by_ref, fanout, rails, diode_refs, circuit, orientations
         )
         out_stage_refs: list[str] = []
         for col in bundled_cols:
@@ -840,17 +1056,51 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
                 )
             )
         if load_refs:
+            trailing_loads: list[str] = []
+            group_by_member = {r: g for g in groups for r in g.instances}
             for lr in load_refs:
-                column_hints.append([lr])
-            groups.append(
-                FunctionalGroupSpec(
-                    id="output_load",
-                    label="输出负载",
-                    role="output_stage",
-                    stage_order=35,
-                    instances=load_refs,
+                l_inst = inst_by_ref[lr]
+                sig_nets = (set(l_inst.terminals.values()) - rails) & output_port_nets
+                # Find existing column driving `sig_nets`
+                drv_col_idx = next(
+                    (
+                        ci
+                        for ci in range(len(column_hints) - 1, -1, -1)
+                        if any(
+                            sig_nets & (set(inst_by_ref[cr].terminals.values()) - rails)
+                            for cr in column_hints[ci]
+                        )
+                    ),
+                    -1,
                 )
-            )
+                if 0 <= drv_col_idx < len(column_hints) - 1:
+                    # Insert shunt load column immediately adjacent to its driving column
+                    # (to the LEFT of a diff-pair left leg so we never split `(left, tail, right)`!)
+                    diff_lefts = {dm.roles["left"] for dm in diff_motifs}
+                    drv_col = column_hints[drv_col_idx]
+                    ins_pos = drv_col_idx if any(r in diff_lefts for r in drv_col) else (drv_col_idx + 1)
+                    drv_rep = drv_col[0]
+                    column_hints.insert(ins_pos, [lr])
+                    tier_overrides_draft[lr] = 5
+                    if drv_rep in group_by_member:
+                        group_by_member[drv_rep].instances.append(lr)
+                        group_by_member[lr] = group_by_member[drv_rep]
+                    else:
+                        trailing_loads.append(lr)
+                else:
+                    column_hints.append([lr])
+                    trailing_loads.append(lr)
+
+            if trailing_loads:
+                groups.append(
+                    FunctionalGroupSpec(
+                        id="output_load",
+                        label="输出负载",
+                        role="output_stage",
+                        stage_order=35,
+                        instances=trailing_loads,
+                    )
+                )
 
     # Fold overly wide horizontal sheets (`>= 7` columns) into balanced 2D row/column grids
     locked_for_folding: set[str] = set()
@@ -858,7 +1108,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         for k_role in ("left", "right", "tail", "loadLeft", "loadRight"):
             if m_item.get(k_role):
                 locked_for_folding.add(str(m_item[k_role]))
-        for r_m in m_item.get("instances", []):
+        for r_m in m_item.get("instances", []) + m_item.get("stackedDrivers", []):
             locked_for_folding.add(str(r_m))
         for r_m in m_item.get("leftColumn", []) + m_item.get("rightColumn", []):
             locked_for_folding.add(str(r_m))
@@ -941,7 +1191,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             port_sides[p.name] = "local_repeat"
         elif p.direction == "output":
             port_sides[p.name] = "right"
-        elif p.net in diff_gate_nets and fanout.get(p.net, 0) <= 2:
+        elif (p.net in diff_gate_nets or p.net in pure_gate_nets) and fanout.get(p.net, 0) <= 2:
             port_sides[p.name] = "near_pin"
         elif fanout.get(p.net, 0) >= 2 and p.direction == "input" and p.net in pure_gate_nets:
             port_sides[p.name] = "local_repeat"
@@ -953,7 +1203,7 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         groups=sorted(groups, key=lambda g: g.stage_order),
         motifs=intent_motifs,
         orientations=orientations,
-        tier_overrides={},
+        tier_overrides=tier_overrides_draft,
         column_order_hints=[c for c in column_hints if c],
         net_policies=net_policies,
         critical_nets=critical_nets,

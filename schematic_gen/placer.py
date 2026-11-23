@@ -393,6 +393,17 @@ def place_schematic(
                         r, "vertical_flipped" if (c_idx % 2 == 1) else "vertical"
                     )
 
+    # Ensure every non-serpentine column is ordered top-to-bottom by potential tier
+    serp_inst_set = {
+        str(x)
+        for m in intent.motifs
+        if m.get("type") == "serpentine_chain"
+        for x in m.get("instances", [])
+    }
+    for col in columns:
+        if len(col) >= 2 and not any(r in serp_inst_set for r in col):
+            col.sort(key=lambda r: tiers[r])
+
     # Pre-build column neighbor map so stacked vertical 2-pin passives orient shared pins toward each other
     col_pos_map: dict[str, tuple[list[str], int]] = {
         r: (col, idx_c) for col in columns for idx_c, r in enumerate(col)
@@ -479,16 +490,39 @@ def place_schematic(
     eq_x: list[tuple[dict[str, float], float]] = []
     sym_x: list[tuple[str, str, str, int, int, int]] = []
 
-    # Within each vertical column, align primary Drain/P pin X coordinates!
+    # Within each vertical column, align connected pins (including 1-to-1 passive-over-subckt stacking)!
+    col_rel_offset: dict[str, int] = {r: 0 for r in node_ids}
     for col in columns:
         if len(col) >= 2:
-            anchor_ref = col[0]
-            anchor_dx = rel_pins[anchor_ref][_alignment_pin_for_column(inst_map[anchor_ref])][0]
-            for other_ref in col[1:]:
-                # Only align if they don't occupy the exact same (tier, sub_idx)
-                other_dx = rel_pins[other_ref][_alignment_pin_for_column(inst_map[other_ref])][0]
-                # x[other] + other_dx == x[anchor] + anchor_dx  =>  x[other] - x[anchor] == anchor_dx - other_dx
-                eq_x.append(({other_ref: 1.0, anchor_ref: -1.0}, float(anchor_dx - other_dx)))
+            for u_ref, v_ref in zip(col, col[1:]):
+                iu, iv = inst_map[u_ref], inst_map[v_ref]
+                if (iu.device_class == "subckt") != (iv.device_class == "subckt"):
+                    u_terms = {p: n for p, n in iu.terminals.items() if p != "B" and n not in rails}
+                    v_terms = {p: n for p, n in iv.terminals.items() if p != "B" and n not in rails}
+                    shared_nv = set(u_terms.values()) & set(v_terms.values())
+                    if shared_nv:
+                        sh_n = sorted(shared_nv)[0]
+                        pu = next(p for p, n in u_terms.items() if n == sh_n)
+                        pv = next(p for p, n in v_terms.items() if n == sh_n)
+                        du = rel_pins[u_ref][pu][0]
+                        dv = rel_pins[v_ref][pv][0]
+                        if iv.device_class == "subckt":
+                            bx0, _, bx1, _ = rel_body[v_ref]
+                            if dv <= bx0 or dv >= bx1:
+                                dv += 2 if dv > 0 else -2
+                        else:
+                            bx0, _, bx1, _ = rel_body[u_ref]
+                            if du <= bx0 or du >= bx1:
+                                du += 2 if du > 0 else -2
+                        delta = int(round(du - dv))
+                        eq_x.append(({v_ref: 1.0, u_ref: -1.0}, float(delta)))
+                        col_rel_offset[v_ref] = col_rel_offset[u_ref] + delta
+                        continue
+                du = rel_pins[u_ref][_alignment_pin_for_column(iu)][0]
+                dv = rel_pins[v_ref][_alignment_pin_for_column(iv)][0]
+                delta = int(round(du - dv))
+                eq_x.append(({v_ref: 1.0, u_ref: -1.0}, float(delta)))
+                col_rel_offset[v_ref] = col_rel_offset[u_ref] + delta
 
     # Add symmetric triples for diff pairs AND rigid uniform-pitch equalities for regular array motifs!
     for m in intent.motifs:
@@ -505,15 +539,36 @@ def place_schematic(
         elif mtype == "parallel_bank":
             b_insts = [str(x) for x in m.get("instances", []) if str(x) in inst_map]
             if len(b_insts) >= 2:
-                # Force uniform row alignment and exact rigid integer pitch across the entire bank!
+                # Force uniform row alignment and exact rigid integer pitch across the entire bank
+                # (accounting for any wider subckt/MOS drivers stacked in the same columns)!
                 common_tier = tiers[b_insts[0]]
                 for r in b_insts:
                     tiers[r] = common_tier
                     effective_row_key[r] = (common_tier, 0)
-                min_auto_pitch = max(
-                    extents_x[u][1] + extents_x[v][0] + intent.spacing.min_clearance_x + 1
-                    for u, v in zip(b_insts, b_insts[1:])
+                has_stacked_subckt = any(
+                    inst_map[a].device_class == "subckt"
+                    for u in b_insts
+                    for a in columns[col_of[u]]
                 )
+                extra_bank_room = 6 if has_stacked_subckt else 1
+                min_auto_pitch = 8
+                for u, v in zip(b_insts, b_insts[1:]):
+                    cu, cv = columns[col_of[u]], columns[col_of[v]]
+                    for a in cu:
+                        for b in cv:
+                            if tiers[a] == tiers[b]:
+                                # Required x[v] - x[u] so that x[b] - x[a] >= extents_x[a][1] + extents_x[b][0] + clr
+                                off_a = col_rel_offset[a] - col_rel_offset[u]
+                                off_b = col_rel_offset[b] - col_rel_offset[v]
+                                req_uv = (
+                                    extents_x[a][1]
+                                    + extents_x[b][0]
+                                    + intent.spacing.min_clearance_x
+                                    + extra_bank_room
+                                    + off_a
+                                    - off_b
+                                )
+                                min_auto_pitch = max(min_auto_pitch, req_uv)
                 pitch = max(int(m.get("pitchX", 0)), min_auto_pitch)
                 for u, v in zip(b_insts, b_insts[1:]):
                     eq_x.append(({v: 1.0, u: -1.0}, float(pitch)))
@@ -541,7 +596,7 @@ def place_schematic(
                     eq_x.append(({v: 1.0, u: -1.0}, float(s_pitch)))
 
     extra_col_gaps = extra_col_gaps or {}
-    # Column-to-column separation & group compaction springs
+    # Column-to-column separation & connection-driven compaction springs (NO horizontal group wall when tiers don't overlap!)
     for ci in range(len(columns) - 1):
         col_left = columns[ci]
         col_right = columns[ci + 1]
@@ -554,14 +609,13 @@ def place_schematic(
         tiers_right = {tiers[v] for v in col_right}
         shares_tier = bool(tiers_left & tiers_right)
 
-        if shares_tier or not same_group:
+        if shares_tier:
             min_gap = max(intent.spacing.min_clearance_x, (base_target // 2)) + corridor_bonus
             target_gap = max(base_target, min_gap)
-            spring_w = 6.0 if same_group else 3.0
+            spring_w = 6.0 if same_group else 3.5
             for u in col_left:
                 for v in col_right:
-                    if tiers[u] == tiers[v] or not same_group:
-                        sep_x.append((u, v, min_gap))
+                    sep_x.append((u, v, min_gap if tiers[u] == tiers[v] else (2 + corridor_bonus)))
             springs_x.append((col_left[0], col_right[0], target_gap, spring_w))
         else:
             diff_tails = {
@@ -576,12 +630,13 @@ def place_schematic(
                         body_gap = -(extents_x[u][1] + extents_x[v][0]) + 8 + corridor_bonus
                         sep_x.append((u, v, body_gap))
             else:
-                # Non-tail staggered columns: ensure `u`'s text label box never overhangs `v`'s vertical pin column!
+                # Non-tail staggered columns: keep full clearance so Y-floating branches never crowd neighbor labels/gates
+                stagger_min = max(intent.spacing.min_clearance_x, 4) + corridor_bonus
                 for u in col_left:
                     for v in col_right:
-                        sep_x.append((u, v, 2 + corridor_bonus))
+                        sep_x.append((u, v, stagger_min))
                 springs_x.append(
-                    (col_left[0], col_right[0], max(4, base_target // 2) + corridor_bonus, 4.0)
+                    (col_left[0], col_right[0], max(stagger_min, base_target // 2 + corridor_bonus), 4.0)
                 )
 
     # Also enforce non-overlap between columns skipping an intermediate column (e.g. left leg vs right leg across tail column!)
@@ -652,9 +707,343 @@ def place_schematic(
         target_springs=springs_y,
     )
 
+    # Per-instance Y-Axis Convex QP for deep-stack schematics (`max_col_depth >= 4`, e.g. 4-5 tier bias/cascode cores),
+    # plus exact rail-pin alignment for singleton shunt columns (e.g. RESET, C1/C2, CL) on standard 2-3 tier sheets!
+    max_col_depth = max((len(c) for c in columns), default=1)
+    if (intent.authored_by != "analyzer_draft" and bool(intent.tier_overrides)) or max_col_depth <= 3:
+        solved_inst_y = {r: solved_row_y[row_id_of[effective_row_key[r]]] for r in node_ids}
+        if intent.authored_by == "analyzer_draft":
+            net_inst_fanout: dict[str, int] = defaultdict(int)
+            for inst in circuit.instances:
+                for p, n in inst.terminals.items():
+                    if p != "B" and n not in rails:
+                        net_inst_fanout[n] += 1
+
+            parallel_bank_set = {
+                str(x)
+                for m in intent.motifs
+                if m.get("type") == "parallel_bank"
+                for x in m.get("instances", [])
+            }
+            for ci_s, col_s in enumerate(columns):
+                if len(col_s) != 1:
+                    continue
+                r_s = col_s[0]
+                if r_s in parallel_bank_set:
+                    continue
+                inst_s = inst_map[r_s]
+                # Skip if X-overlapping with another column (e.g. centered diff-pair tail)
+                if any(
+                    cj != ci_s
+                    and max(solved_x[r_s] - extents_x[r_s][0], solved_x[v] - extents_x[v][0])
+                    < min(solved_x[r_s] + extents_x[r_s][1], solved_x[v] + extents_x[v][1])
+                    for cj, col_o in enumerate(columns)
+                    for v in col_o
+                ):
+                    continue
+                gnd_dy = next(
+                    (
+                        rel_pins[r_s][p][1]
+                        for p, n in inst_s.terminals.items()
+                        if p != "B" and n in grounds and rel_pins[r_s][p][1] >= 0
+                    ),
+                    None,
+                )
+                if gnd_dy is None:
+                    continue
+                is_passive_shunt = inst_s.device_class not in {"mos", "subckt"}
+                has_local_sig = any(
+                    2 <= net_inst_fanout[n] <= 5
+                    for p, n in inst_s.terminals.items()
+                    if p != "B" and n not in rails
+                )
+                if not is_passive_shunt and has_local_sig:
+                    continue
+                # Align `r_s`'s ground pin Y with the nearest non-singleton (or neighbor) column's bottom ground pin!
+                best_nb_pin_y: int | None = None
+                best_dist = 10**9
+                for cj, col_nb in enumerate(columns):
+                    if cj == ci_s:
+                        continue
+                    r_bot = col_nb[-1]
+                    if len(col_nb) == 1 and inst_map[r_bot].device_class not in {"mos", "subckt"}:
+                        continue
+                    nb_dy = next(
+                        (
+                            rel_pins[r_bot][p][1]
+                            for p, n in inst_map[r_bot].terminals.items()
+                            if p != "B" and n in grounds and rel_pins[r_bot][p][1] >= 0
+                        ),
+                        None,
+                    )
+                    if nb_dy is not None:
+                        pref_penalty = 0 if len(col_nb) >= 2 else 20
+                        d_score = abs(cj - ci_s) + pref_penalty
+                        if d_score < best_dist:
+                            best_dist = d_score
+                            best_nb_pin_y = solved_inst_y[r_bot] + nb_dy
+                if best_nb_pin_y is not None:
+                    solved_inst_y[r_s] = best_nb_pin_y - gnd_dy
+    else:
+        extents_y_inst = {r: (-rel_env[r][1], rel_env[r][3]) for r in node_ids}
+        init_y_inst = {r: float(solved_row_y[row_id_of[effective_row_key[r]]]) for r in node_ids}
+        sep_y_inst: list[tuple[str, str, int]] = []
+        springs_y_inst: list[tuple[str, str, int, float]] = []
+        eq_y_inst: list[tuple[dict[str, float], float]] = []
+
+        def _add_pin_y_spring(u: str, dy_u: int, v: str, dy_v: int, w: float) -> None:
+            if u == v or w <= 0:
+                return
+            ideal_g = int(round((dy_u - dy_v) - extents_y_inst[u][1] - extents_y_inst[v][0]))
+            springs_y_inst.append((u, v, ideal_g, w))
+
+        # 1) Intra-column vertical separations & tight signal-branch cohesion springs
+        for col in columns:
+            for u, v in zip(col, col[1:]):
+                has_mid_rail = any(
+                    (n in supplies and rel_pins[v][p][1] < 0)
+                    for p, n in inst_map[v].terminals.items()
+                    if p != "B"
+                ) or any(
+                    (n in grounds and rel_pins[u][p][1] > 0)
+                    for p, n in inst_map[u].terminals.items()
+                    if p != "B"
+                )
+                mid_rail_pad = 6 if has_mid_rail else 0
+                cmos_corridor_pad = (
+                    4
+                    if (
+                        inst_map[u].device_class == "mos"
+                        and inst_map[v].device_class == "mos"
+                        and inst_map[u].polarity != inst_map[v].polarity
+                    )
+                    else 0
+                )
+                same_tier = tiers[u] == tiers[v]
+                bonus_y = extra_tier_gaps.get((tiers[u], tiers[v]), 0) + mid_rail_pad
+                min_gy = intent.spacing.min_clearance_y + bonus_y
+                tgt_gy = (
+                    intent.spacing.intra_stack_gap_y if same_tier else intent.spacing.inter_tier_gap_y
+                ) + bonus_y + cmos_corridor_pad
+                sep_y_inst.append((u, v, min_gy))
+                u_sig = {n for p, n in inst_map[u].terminals.items() if p != "B"} - rails
+                v_sig = {n for p, n in inst_map[v].terminals.items() if p != "B"} - rails
+                w_intra = 7.5 if (u_sig & v_sig) else 5.0
+                springs_y_inst.append((u, v, tgt_gy, w_intra))
+
+        # 2) Cross-column vertical separation whenever X envelopes strictly overlap (e.g. centered diff-pair tail M5)
+        for ci in range(len(columns)):
+            for cj in range(ci + 1, len(columns)):
+                for u in columns[ci]:
+                    for v in columns[cj]:
+                        u_l, u_r = solved_x[u] - extents_x[u][0], solved_x[u] + extents_x[u][1]
+                        v_l, v_r = solved_x[v] - extents_x[v][0], solved_x[v] + extents_x[v][1]
+                        if max(u_l, v_l) < min(u_r, v_r):
+                            top_r, bot_r = (
+                                (u, v)
+                                if (effective_row_key[u], ci) <= (effective_row_key[v], cj)
+                                else (v, u)
+                            )
+                            bonus_y = extra_tier_gaps.get((tiers[top_r], tiers[bot_r]), 0)
+                            sep_y_inst.append((top_r, bot_r, intent.spacing.min_clearance_y + bonus_y))
+                            springs_y_inst.append(
+                                (top_r, bot_r, intent.spacing.inter_tier_gap_y + bonus_y, 5.5)
+                            )
+
+        def _add_ordered_diff_sep(a: str | None, b: str | None, add_spring: bool = False) -> None:
+            if not a or not b or a not in inst_map or b not in inst_map:
+                return
+            u_top, v_bot = (a, b) if effective_row_key[a] <= effective_row_key[b] else (b, a)
+            sep_y_inst.append((u_top, v_bot, intent.spacing.min_clearance_y))
+            if add_spring:
+                springs_y_inst.append((u_top, v_bot, intent.spacing.inter_tier_gap_y, 6.0))
+
+        for m in intent.motifs:
+            if m.get("type") == "diff_pair":
+                l_r, r_r, t_r = m.get("left"), m.get("right"), m.get("tail")
+                ll_r, lr_r = m.get("loadLeft"), m.get("loadRight")
+                _add_ordered_diff_sep(ll_r, l_r)
+                _add_ordered_diff_sep(lr_r, r_r)
+                _add_ordered_diff_sep(l_r, t_r, add_spring=True)
+                _add_ordered_diff_sep(r_r, t_r)
+
+        # 3) Cycle-safe exact row alignment equalities for true symmetric / array / matched-mirror motifs
+        uf_parent = {r: r for r in node_ids}
+
+        def _uf_find(x_id: str) -> str:
+            while uf_parent[x_id] != x_id:
+                uf_parent[x_id] = uf_parent[uf_parent[x_id]]
+                x_id = uf_parent[x_id]
+            return x_id
+
+        def _creates_sep_cycle(ca: str, cb: str) -> bool:
+            adj_c: dict[str, set[str]] = defaultdict(set)
+            for su, sv, _ in sep_y_inst:
+                cu, cv = _uf_find(su), _uf_find(sv)
+                if cu != cv:
+                    adj_c[cu].add(cv)
+            for start_c, goal_c in ((ca, cb), (cb, ca)):
+                seen_c = {start_c}
+                stack_c = [start_c]
+                while stack_c:
+                    cur_c = stack_c.pop()
+                    if cur_c == goal_c:
+                        return True
+                    for nxt_c in adj_c.get(cur_c, ()):
+                        if nxt_c not in seen_c:
+                            seen_c.add(nxt_c)
+                            stack_c.append(nxt_c)
+            return False
+
+        def _align_same_y(a: str | None, b: str | None) -> None:
+            if not a or not b or a not in inst_map or b not in inst_map:
+                return
+            ca, cb = _uf_find(a), _uf_find(b)
+            if ca == cb or _creates_sep_cycle(ca, cb):
+                return
+            uf_parent[cb] = ca
+            eq_y_inst.append(({b: 1.0, a: -1.0}, 0.0))
+
+        diff_by_grp: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for m in intent.motifs:
+            mtype = m.get("type")
+            if mtype == "diff_pair":
+                l_r, r_r = m.get("left"), m.get("right")
+                ll_r, lr_r = m.get("loadLeft"), m.get("loadRight")
+                _align_same_y(l_r, r_r)
+                _align_same_y(ll_r, lr_r)
+                if l_r in group_of:
+                    diff_by_grp[group_of[l_r]].append(m)
+            elif mtype == "folded_cascode":
+                l_col = [str(x) for x in m.get("leftColumn", [])]
+                r_col = [str(x) for x in m.get("rightColumn", [])]
+                if len(l_col) == len(r_col):
+                    for lu, ru in zip(l_col, r_col):
+                        _align_same_y(lu, ru)
+            elif mtype == "parallel_bank":
+                b_insts = [str(x) for x in m.get("instances", []) if str(x) in inst_map]
+                for u, v in zip(b_insts, b_insts[1:]):
+                    _align_same_y(u, v)
+                s_drvs = [str(x) for x in m.get("stackedDrivers", []) if str(x) in inst_map]
+                for u, v in zip(s_drvs, s_drvs[1:]):
+                    _align_same_y(u, v)
+            elif mtype == "serpentine_chain":
+                s_insts = [str(x) for x in m.get("instances", []) if str(x) in inst_map]
+                rpc = max(1, int(m.get("rowsPerColumn", 4)))
+                by_sub: dict[int, list[str]] = defaultdict(list)
+                for ci_s in range(0, len(s_insts), rpc):
+                    chunk = s_insts[ci_s : ci_s + rpc]
+                    ordered_td = list(reversed(chunk)) if ((ci_s // rpc) % 2 == 1) else list(chunk)
+                    for sub_r, r_s in enumerate(ordered_td):
+                        by_sub[sub_r].append(r_s)
+                for r_list in by_sub.values():
+                    for u, v in zip(r_list, r_list[1:]):
+                        _align_same_y(u, v)
+
+        for d_list in diff_by_grp.values():
+            for dm_a, dm_b in zip(d_list, d_list[1:]):
+                _align_same_y(dm_a.get("left"), dm_b.get("left"))
+                _align_same_y(dm_a.get("loadLeft"), dm_b.get("loadLeft"))
+                _align_same_y(dm_a.get("tail"), dm_b.get("tail"))
+
+        # Align matched current-mirror MOS sharing `(polarity, G, S_rail)` at column extremes,
+        # plus matched cascode-mirror MOS sharing `(polarity, G, tier)`
+        mirror_buckets: dict[tuple[str, str, str], list[str]] = defaultdict(list)
+        cas_buckets: dict[tuple[str, str, int], list[str]] = defaultdict(list)
+        for r in node_ids:
+            inst = inst_map[r]
+            if inst.device_class != "mos":
+                continue
+            g_net = inst.terminals.get("G", "")
+            s_net = inst.terminals.get("S", "")
+            if g_net and g_net not in rails:
+                col_r = columns[col_of[r]]
+                if s_net in supplies and col_r[0] == r:
+                    mirror_buckets[(inst.polarity or "", g_net, s_net)].append(r)
+                elif s_net in grounds and col_r[-1] == r:
+                    mirror_buckets[(inst.polarity or "", g_net, s_net)].append(r)
+                elif tiers[r] in {2, 4}:
+                    cas_buckets[(inst.polarity or "", g_net, tiers[r])].append(r)
+        for m_refs in mirror_buckets.values():
+            for u, v in zip(m_refs, m_refs[1:]):
+                _align_same_y(u, v)
+        for c_refs in cas_buckets.values():
+            for u, v in zip(c_refs, c_refs[1:]):
+                _align_same_y(u, v)
+
+        # 4) Cross-column non-rail signal pin alignment springs (shortest connection priority!)
+        has_sig_spring: set[str] = set()
+        for net in circuit.nets:
+            if net in rails or intent.net_policies.get(net) == "perimeter_bus":
+                continue
+            conn = [
+                (r, p, rel_pins[r][p][1])
+                for r in node_ids
+                for p, n in inst_map[r].terminals.items()
+                if n == net and p != "B"
+            ]
+            if not (2 <= len(conn) <= 6):
+                continue
+            base_w = 4.8 / float(len(conn) - 1)
+            for idx_a, (ra, pa, dya) in enumerate(conn):
+                for rb, pb, dyb in conn[idx_a + 1 :]:
+                    col_dist = abs(col_of[ra] - col_of[rb])
+                    if 1 <= col_dist <= 2:
+                        gate_boost = 1.35 if (pa == "G" or pb == "G") else 1.0
+                        w_pair = base_w * gate_boost * (1.0 if col_dist == 1 else 0.65)
+                        _add_pin_y_spring(ra, dya, rb, dyb, w_pair)
+                        has_sig_spring.add(ra)
+                        has_sig_spring.add(rb)
+
+        # 5) Outer supply/ground pin alignment springs:
+        #    - Strong (`2.8`) for rail-shunt passives or singletons with no mid-sheet signal springs (e.g. RESET, C1, CL)
+        #    - Gentle (`0.45`) for active signal branches (e.g. M8, M9, M3 in bias_ini) so mutual signal connections win!
+        top_vdd_pins: list[tuple[str, int]] = []
+        bot_vss_pins: list[tuple[str, int]] = []
+        for col in columns:
+            r_top = col[0]
+            for p, n in inst_map[r_top].terminals.items():
+                if p != "B" and n in supplies and rel_pins[r_top][p][1] <= 0:
+                    top_vdd_pins.append((r_top, rel_pins[r_top][p][1]))
+                    break
+            r_bot = col[-1]
+            for p, n in inst_map[r_bot].terminals.items():
+                if p != "B" and n in grounds and rel_pins[r_bot][p][1] >= 0:
+                    bot_vss_pins.append((r_bot, rel_pins[r_bot][p][1]))
+                    break
+
+        max_col_len = max((len(c) for c in columns), default=1)
+        for rail_pin_list in (top_vdd_pins, bot_vss_pins):
+            for (ra, dya), (rb, dyb) in zip(rail_pin_list, rail_pin_list[1:]):
+                la, lb = len(columns[col_of[ra]]), len(columns[col_of[rb]])
+                a_shunt = (ra not in has_sig_spring) or (
+                    inst_map[ra].device_class not in {"mos", "subckt"} and la == 1
+                )
+                b_shunt = (rb not in has_sig_spring) or (
+                    inst_map[rb].device_class not in {"mos", "subckt"} and lb == 1
+                )
+                short_active_branch = (
+                    max_col_len >= 4
+                    and min(la, lb) <= max_col_len - 2
+                    and not a_shunt
+                    and not b_shunt
+                )
+                w_rail = 0.35 if short_active_branch else 3.6
+                _add_pin_y_spring(ra, dya, rb, dyb, w_rail)
+
+        solved_inst_y = solve_1d_compaction_qp(
+            node_ids=node_ids,
+            initial_pos=init_y_inst,
+            extents=extents_y_inst,
+            separations=sep_y_inst,
+            target_springs=springs_y_inst,
+            equalities=eq_y_inst,
+            anchor_weight=0.02,
+        )
+
     # Normalize coordinates so top-left starts cleanly around (28, 24)
     raw_min_x = min(solved_x[r] + rel_env[r][0] for r in node_ids)
-    raw_min_y = min(solved_row_y[row_id_of[effective_row_key[r]]] + rel_env[r][1] for r in node_ids)
+    raw_min_y = min(solved_inst_y[r] + rel_env[r][1] for r in node_ids)
     shift_x = 28 - raw_min_x
     shift_y = 24 - raw_min_y
 
@@ -665,7 +1054,7 @@ def place_schematic(
     for inst in circuit.instances:
         r = inst.ref
         px = solved_x[r] + shift_x
-        py = solved_row_y[row_id_of[effective_row_key[r]]] + shift_y
+        py = solved_inst_y[r] + shift_y
         rot, mir, cad, sem = transforms[r]
         pins_abs = {p: (px + dx, py + dy) for p, (dx, dy) in rel_pins[r].items()}
         bx0, by0, bx1, by1 = rel_body[r]
@@ -703,17 +1092,30 @@ def place_schematic(
     min_env_y = min(p.full_envelope[1] for p in placements.values())
     max_env_y = max(p.full_envelope[3] for p in placements.values())
 
+    # Nearest-boundary port side adaptation: don't wrap a far-left output port across the entire schematic!
+    span_env_w = max_env_x - min_env_x
+    effective_port_side: dict[str, str] = {}
+    for p in circuit.ports:
+        raw_side = intent.port_sides.get(
+            p.name,
+            "local_repeat" if p.net in rails else ("right" if p.direction == "output" else "left"),
+        )
+        if intent.authored_by == "analyzer_draft" and raw_side in {"left", "right"} and span_env_w >= 70:
+            c_xs = [
+                placements[inst.ref].pin_points[pin][0]
+                for inst in circuit.instances
+                for pin, net in inst.terminals.items()
+                if net == p.net and pin != "B"
+            ]
+            if c_xs and raw_side == "right" and max(c_xs) <= min_env_x + 0.35 * span_env_w:
+                raw_side = "left"
+        effective_port_side[p.name] = raw_side
+
     n_left_edge = sum(
-        1
-        for p in circuit.ports
-        if p.net not in rails
-        and intent.port_sides.get(p.name, "right" if p.direction == "output" else "left") == "left"
+        1 for p in circuit.ports if p.net not in rails and effective_port_side[p.name] == "left"
     )
     n_right_edge = sum(
-        1
-        for p in circuit.ports
-        if p.net not in rails
-        and intent.port_sides.get(p.name, "right" if p.direction == "output" else "left") == "right"
+        1 for p in circuit.ports if p.net not in rails and effective_port_side[p.name] == "right"
     )
     left_port_x = min_env_x - max(intent.spacing.port_margin_x, 6 + 2 * n_left_edge)
     right_port_x = max_env_x + max(intent.spacing.port_margin_x, 6 + 2 * n_right_edge)
@@ -725,17 +1127,69 @@ def place_schematic(
         for pin, pt in placements[inst.ref].pin_points.items()
     }
 
-    for port in circuit.ports:
-        side = intent.port_sides.get(
-            port.name,
-            "local_repeat" if port.net in rails else ("right" if port.direction == "output" else "left"),
+    min_phys_y = min(min(p.body_box[1], p.label_box[1]) for p in placements.values())
+    max_phys_y = max(max(p.body_box[3], p.label_box[3]) for p in placements.values())
+    mid_phys_y = (min_phys_y + max_phys_y) / 2.0
+    next_top_rail_y = min_phys_y - 3
+    next_bot_rail_y = max_phys_y + 3
+
+    has_top_perim_bus = False
+    has_bot_perim_bus = False
+    for b_net, pol in intent.net_policies.items():
+        if pol != "perimeter_bus":
+            continue
+        b_ys = [
+            placements[inst.ref].pin_points[p][1]
+            for inst in circuit.instances
+            for p, n in inst.terminals.items()
+            if n == b_net and p != "B" and p in placements[inst.ref].pin_points
+        ]
+        if b_ys:
+            if (sum(b_ys) / len(b_ys)) <= mid_phys_y:
+                has_top_perim_bus = True
+            else:
+                has_bot_perim_bus = True
+
+    def _box_hits_seg(box: BBox, x0: int, y0: int, x1: int, y1: int, pad: int = 1) -> bool:
+        return (
+            max(x0, box[0] - pad) <= min(x1, box[2] + pad)
+            and max(y0, box[1] - pad) <= min(y1, box[3] + pad)
         )
+
+    def _vert_clear_to_rail(ax: int, y_from: int, y_to: int, own_ref: str, net_n: str) -> bool:
+        ya, yb = min(y_from, y_to), max(y_from, y_to)
+        own_pl = placements[own_ref]
+        if _box_hits_seg(own_pl.label_box, ax, ya, ax, yb, pad=0):
+            return False
+        for r_o, b_o in placements.items():
+            if r_o == own_ref:
+                continue
+            if _box_hits_seg(b_o.body_box, ax, ya, ax, yb, pad=1) or _box_hits_seg(b_o.label_box, ax, ya, ax, yb, pad=1):
+                return False
+        for cy in range(ya, yb + 1):
+            if cy != y_from and used_port_owner.get((ax, cy)) not in (None, net_n):
+                return False
+        return True
+
+    def _horiz_clear_on_rail(x_a: int, x_b: int, y_r: int, net_n: str) -> bool:
+        xa, xb = min(x_a, x_b), max(x_a, x_b)
+        for b_o in placements.values():
+            if _box_hits_seg(b_o.body_box, xa, y_r, xb, y_r, pad=1) or _box_hits_seg(b_o.label_box, xa, y_r, xb, y_r, pad=1):
+                return False
+        for cx in range(xa, xb + 1):
+            if used_port_owner.get((cx, y_r)) not in (None, net_n):
+                return False
+        return True
+
+    for port in circuit.ports:
+        side = effective_port_side[port.name]
         if port.net in rails:
             is_vdd = port.net in supplies
             sym_id = "vdd-port" if is_vdd else "ground"
             rot = 90 if is_vdd else 270
-            # Create one crisp vertical local supply/ground tap for each non-bulk terminal connected to this rail!
             occ_idx = 0
+
+            rail_terms: list[tuple[int, int, bool, str]] = []
             for inst in circuit.instances:
                 pl = placements[inst.ref]
                 for pin, net in inst.terminals.items():
@@ -743,18 +1197,50 @@ def place_schematic(
                         continue
                     ax, ay = pl.pin_points[pin]
                     go_up = is_vdd if (ay <= pl.y) else (False if ay > pl.y else is_vdd)
-                    ty = (ay - 4) if go_up else (ay + 4)
-                    while any(
-                        b.full_envelope[0] - 1 <= ax <= b.full_envelope[2] + 1
-                        and max((ty - 3) if is_vdd else ty, b.full_envelope[1] - 1)
-                        <= min(ty if is_vdd else (ty + 3), b.full_envelope[3] + 1)
-                        for r_other, b in placements.items()
-                        if r_other != inst.ref
-                    ) or (used_port_owner.get((ax, ty)) not in (None, port.net)):
-                        ty += -2 if go_up else 2
-                    if used_port_owner.get((ax, ty)) == port.net:
-                        continue
-                    used_port_owner[(ax, ty)] = port.net
+                    rail_terms.append((ax, ay, go_up, inst.ref))
+
+            if not rail_terms:
+                continue
+
+            # 1) Merge unobstructed outward terminals onto ONE shared top VDD rail or bottom VSS rail + single symbol!
+            unobstructed_global: list[tuple[int, int, bool, str]] = []
+            interior_terms: list[tuple[int, int, bool, str]] = []
+            global_rail_y = next_top_rail_y if is_vdd else next_bot_rail_y
+            for ax, ay, go_up, ref_n in rail_terms:
+                if go_up == is_vdd and (
+                    (is_vdd and ay >= global_rail_y and _vert_clear_to_rail(ax, ay, global_rail_y, ref_n, port.net))
+                    or (not is_vdd and ay <= global_rail_y and _vert_clear_to_rail(ax, ay, global_rail_y, ref_n, port.net))
+                ):
+                    unobstructed_global.append((ax, ay, go_up, ref_n))
+                else:
+                    interior_terms.append((ax, ay, go_up, ref_n))
+
+            if unobstructed_global:
+                g_xs = sorted({t[0] for t in unobstructed_global})
+                max_outer_gap = 40 if (has_top_perim_bus if is_vdd else has_bot_perim_bus) else 100000
+                g_clusters: list[list[int]] = [[g_xs[0]]]
+                for nxt_gx in g_xs[1:]:
+                    if (nxt_gx - g_clusters[-1][-1] <= max_outer_gap) and _horiz_clear_on_rail(
+                        g_clusters[-1][-1], nxt_gx, global_rail_y, port.net
+                    ):
+                        g_clusters[-1].append(nxt_gx)
+                    else:
+                        g_clusters.append([nxt_gx])
+
+                extreme_sy = global_rail_y
+                for cl_gxs in g_clusters:
+                    if len(cl_gxs) == 1:
+                        sx, sy = cl_gxs[0], global_rail_y
+                    else:
+                        sx = (cl_gxs[0] + cl_gxs[-1]) // 2
+                        if sx in cl_gxs and (cl_gxs[-1] - cl_gxs[0]) >= 4:
+                            sx += 2
+                        sy = global_rail_y + (-2 if is_vdd else 2)
+                        while used_port_owner.get((sx, sy)) not in (None, port.net):
+                            sx += 2
+                        for gx in range(cl_gxs[0], cl_gxs[-1] + 1):
+                            used_port_owner.setdefault((gx, global_rail_y), port.net)
+                    used_port_owner[(sx, sy)] = port.net
                     occ_idx += 1
                     placed_ports.append(
                         PortOccurrencePlaced(
@@ -763,8 +1249,105 @@ def place_schematic(
                             net_name=port.net,
                             direction=port.direction,
                             symbol_id=sym_id,
-                            x=ax,
-                            y=ty,
+                            x=sx,
+                            y=sy,
+                            rotation=rot,
+                            mirror="none",
+                        )
+                    )
+                    extreme_sy = min(extreme_sy, sy) if is_vdd else max(extreme_sy, sy)
+                if is_vdd:
+                    next_top_rail_y = min(next_top_rail_y, extreme_sy - 3)
+                else:
+                    next_bot_rail_y = max(next_bot_rail_y, extreme_sy + 3)
+
+            # 2) For interior terminals blocked from the outer rail (e.g. stacked sub-rows), merge nearby clear taps!
+            local_taps: list[tuple[int, int, bool, int, str]] = []
+            for ax, ay, go_up, ref_n in interior_terms:
+                ty = (ay - 3) if go_up else (ay + 3)
+                while not _vert_clear_to_rail(ax, ay, ty, ref_n, port.net) or (
+                    used_port_owner.get((ax, ty)) not in (None, port.net)
+                ):
+                    ty += -2 if go_up else 2
+                local_taps.append((ax, ty, go_up, ay, ref_n))
+
+            # Group `local_taps` by `(ty, go_up)` and step slightly past subckt label boxes if that merges a sub-row!
+            by_ty: dict[tuple[int, bool], list[tuple[int, int, str]]] = defaultdict(list)
+            seen_ty_x: set[tuple[int, bool, int]] = set()
+            for ax, ty, go_up, ay, ref_n in local_taps:
+                if (ty, go_up, ax) not in seen_ty_x:
+                    seen_ty_x.add((ty, go_up, ax))
+                    by_ty[(ty, go_up)].append((ax, ay, ref_n))
+
+            for (ty, go_up), items_raw in sorted(by_ty.items()):
+                items_sorted = sorted(items_raw, key=lambda it: it[0])
+                xs_sorted = [it[0] for it in items_sorted]
+                ty_eff = ty
+                if len(xs_sorted) >= 2:
+                    best_clusters_n = len(xs_sorted)
+                    for step_k in (0, 1, 2, 3):
+                        ty_try = ty + (-2 * step_k if go_up else 2 * step_k)
+                        if not all(
+                            _vert_clear_to_rail(ax_i, ay_i, ty_try, ref_i, port.net)
+                            for ax_i, ay_i, ref_i in items_sorted
+                        ):
+                            continue
+                        tmp_cl: list[list[int]] = [[xs_sorted[0]]]
+                        for nxt_x in xs_sorted[1:]:
+                            if (nxt_x - tmp_cl[-1][-1] <= 44) and _horiz_clear_on_rail(
+                                tmp_cl[-1][-1], nxt_x, ty_try, port.net
+                            ):
+                                tmp_cl[-1].append(nxt_x)
+                            else:
+                                tmp_cl.append([nxt_x])
+                        if len(tmp_cl) < best_clusters_n:
+                            best_clusters_n = len(tmp_cl)
+                            ty_eff = ty_try
+                            if best_clusters_n == 1:
+                                break
+
+                clusters_x: list[list[int]] = [[xs_sorted[0]]]
+                for nxt_x in xs_sorted[1:]:
+                    if (nxt_x - clusters_x[-1][-1] <= 44) and _horiz_clear_on_rail(
+                        clusters_x[-1][-1], nxt_x, ty_eff, port.net
+                    ):
+                        clusters_x[-1].append(nxt_x)
+                    else:
+                        clusters_x.append([nxt_x])
+                for cl_xs in clusters_x:
+                    if len(cl_xs) == 1:
+                        sx, sy = cl_xs[0], ty_eff
+                    else:
+                        mid_cx = (cl_xs[0] + cl_xs[-1]) // 2
+                        cand_sy = ty_eff + (-2 if go_up else 2)
+                        sx, sy = cl_xs[0], ty_eff
+                        for dx_try in (0, 2, -2, 4, -4, 8, -8, 10, -10):
+                            try_sx = mid_cx + dx_try
+                            if cl_xs[0] <= try_sx <= cl_xs[-1] and (
+                                try_sx not in cl_xs or (cl_xs[-1] - cl_xs[0]) < 4
+                            ):
+                                if _horiz_clear_on_rail(try_sx, try_sx, cand_sy, port.net) and _horiz_clear_on_rail(
+                                    try_sx, try_sx, ty_eff, port.net
+                                ):
+                                    sx, sy = try_sx, cand_sy
+                                    break
+                        for gx in range(cl_xs[0], cl_xs[-1] + 1):
+                            used_port_owner.setdefault((gx, ty_eff), port.net)
+                    if used_port_owner.get((sx, sy)) == port.net and any(
+                        po.x == sx and po.y == sy and po.net_name == port.net for po in placed_ports
+                    ):
+                        continue
+                    used_port_owner[(sx, sy)] = port.net
+                    occ_idx += 1
+                    placed_ports.append(
+                        PortOccurrencePlaced(
+                            occurrence_id=f"P_{port.name}_{occ_idx}",
+                            port_name=port.name,
+                            net_name=port.net,
+                            direction=port.direction,
+                            symbol_id=sym_id,
+                            x=sx,
+                            y=sy,
                             rotation=rot,
                             mirror="none",
                         )

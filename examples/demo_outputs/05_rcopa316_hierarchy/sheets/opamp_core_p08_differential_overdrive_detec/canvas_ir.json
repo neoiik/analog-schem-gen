@@ -3,33 +3,13 @@
   "cellName": "opamp_core_p08_differential_overdrive_detec",
   "bounds": {
     "minX": 22,
-    "minY": 18,
-    "maxX": 220,
+    "minY": 16,
+    "maxX": 218,
     "maxY": 114
   },
   "congestionIterations": 1,
   "corridorExpansions": [],
   "groups": [
-    {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "BSTS",
-        "BSDET",
-        "BSDUMP",
-        "BSTR",
-        "BRDET",
-        "BRDUMP",
-        "BNDS",
-        "BNTS",
-        "BNXS",
-        "BNDR",
-        "BNTR",
-        "BNXR"
-      ]
-    },
     {
       "id": "gain_output_stage",
       "label": "增益与输出级",
@@ -37,8 +17,20 @@
       "stage_order": 30,
       "instances": [
         "BNPS",
-        "BNCS",
+        "BNDS",
+        "BNTS",
         "BNPR",
+        "BNDR",
+        "BNTR",
+        "BNXR",
+        "BSDUMP",
+        "BSTS",
+        "BSDET",
+        "BSTR",
+        "BRDET",
+        "BRDUMP",
+        "BNXS",
+        "BNCS",
         "BNCR"
       ]
     }
@@ -48,42 +40,42 @@
       "ref": "BSTS",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 42,
+        "x": 108,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 43,
+          "x": 109,
           "y": 38
         },
         "G": {
-          "x": 39,
+          "x": 105,
           "y": 35
         },
         "S": {
-          "x": 43,
+          "x": 109,
           "y": 32
         },
         "B": {
-          "x": 43,
+          "x": 109,
           "y": 35
         }
       },
       "bodyBox": [
-        39,
+        105,
         32,
-        44,
+        110,
         38
       ],
       "labelBox": [
-        45,
+        111,
         33,
-        53,
+        119,
         37
       ],
       "labelLines": [
@@ -95,42 +87,42 @@
       "ref": "BSDET",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 42,
+        "x": 108,
         "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 43,
+          "x": 109,
           "y": 54
         },
         "G": {
-          "x": 39,
+          "x": 105,
           "y": 51
         },
         "S": {
-          "x": 43,
+          "x": 109,
           "y": 48
         },
         "B": {
-          "x": 43,
+          "x": 109,
           "y": 51
         }
       },
       "bodyBox": [
-        39,
+        105,
         48,
-        44,
+        110,
         54
       ],
       "labelBox": [
-        45,
+        111,
         47,
-        50,
+        116,
         51
       ],
       "labelLines": [
@@ -142,42 +134,42 @@
       "ref": "BSDUMP",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 71,
+        "x": 164,
         "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 72,
+          "x": 165,
           "y": 54
         },
         "G": {
-          "x": 68,
+          "x": 161,
           "y": 51
         },
         "S": {
-          "x": 72,
+          "x": 165,
           "y": 48
         },
         "B": {
-          "x": 72,
+          "x": 165,
           "y": 51
         }
       },
       "bodyBox": [
-        68,
+        161,
         48,
-        73,
+        166,
         54
       ],
       "labelBox": [
-        74,
+        167,
         47,
-        81,
+        174,
         51
       ],
       "labelLines": [
@@ -189,42 +181,42 @@
       "ref": "BSTR",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 99,
+        "x": 137,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 100,
+          "x": 138,
           "y": 38
         },
         "G": {
-          "x": 96,
+          "x": 134,
           "y": 35
         },
         "S": {
-          "x": 100,
+          "x": 138,
           "y": 32
         },
         "B": {
-          "x": 100,
+          "x": 138,
           "y": 35
         }
       },
       "bodyBox": [
-        96,
+        134,
         32,
-        101,
+        139,
         38
       ],
       "labelBox": [
-        102,
+        140,
         33,
-        110,
+        148,
         37
       ],
       "labelLines": [
@@ -236,42 +228,42 @@
       "ref": "BRDET",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 99,
+        "x": 137,
         "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 100,
+          "x": 138,
           "y": 54
         },
         "G": {
-          "x": 96,
+          "x": 134,
           "y": 51
         },
         "S": {
-          "x": 100,
+          "x": 138,
           "y": 48
         },
         "B": {
-          "x": 100,
+          "x": 138,
           "y": 51
         }
       },
       "bodyBox": [
-        96,
+        134,
         48,
-        101,
+        139,
         54
       ],
       "labelBox": [
-        102,
+        140,
         47,
-        107,
+        145,
         51
       ],
       "labelLines": [
@@ -283,42 +275,42 @@
       "ref": "BRDUMP",
       "deviceClass": "mos",
       "kind": "pmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 128,
+        "x": 192,
         "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 129,
+          "x": 193,
           "y": 54
         },
         "G": {
-          "x": 125,
+          "x": 189,
           "y": 51
         },
         "S": {
-          "x": 129,
+          "x": 193,
           "y": 48
         },
         "B": {
-          "x": 129,
+          "x": 193,
           "y": 51
         }
       },
       "bodyBox": [
-        125,
+        189,
         48,
-        130,
+        194,
         54
       ],
       "labelBox": [
-        131,
+        195,
         47,
-        138,
+        202,
         51
       ],
       "labelLines": [
@@ -330,7 +322,7 @@
       "ref": "BNTS",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
         "x": 42,
@@ -377,42 +369,42 @@
       "ref": "BNDS",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 71,
+        "x": 44,
         "y": 82
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 72,
+          "x": 43,
           "y": 79
         },
         "G": {
-          "x": 68,
+          "x": 47,
           "y": 82
         },
         "S": {
-          "x": 72,
+          "x": 43,
           "y": 85
         },
         "B": {
-          "x": 72,
+          "x": 43,
           "y": 82
         }
       },
       "bodyBox": [
-        68,
+        42,
         79,
-        73,
+        47,
         85
       ],
       "labelBox": [
-        74,
+        36,
         78,
-        79,
+        41,
         82
       ],
       "labelLines": [
@@ -424,42 +416,42 @@
       "ref": "BNXS",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 42,
+        "x": 108,
         "y": 82
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 43,
+          "x": 109,
           "y": 79
         },
         "G": {
-          "x": 39,
+          "x": 105,
           "y": 82
         },
         "S": {
-          "x": 43,
+          "x": 109,
           "y": 85
         },
         "B": {
-          "x": 43,
+          "x": 109,
           "y": 82
         }
       },
       "bodyBox": [
-        39,
+        105,
         79,
-        44,
+        110,
         85
       ],
       "labelBox": [
-        45,
+        111,
         78,
-        53,
+        119,
         82
       ],
       "labelLines": [
@@ -474,39 +466,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 151,
+        "x": 44,
         "y": 35
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 152,
+          "x": 43,
           "y": 38
         },
         "G": {
-          "x": 148,
+          "x": 47,
           "y": 35
         },
         "S": {
-          "x": 152,
+          "x": 43,
           "y": 32
         },
         "B": {
-          "x": 152,
+          "x": 43,
           "y": 35
         }
       },
       "bodyBox": [
-        148,
+        42,
         32,
-        153,
+        47,
         38
       ],
       "labelBox": [
-        154,
+        36,
         33,
-        159,
+        41,
         37
       ],
       "labelLines": [
@@ -521,39 +513,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 166,
+        "x": 164,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 167,
+          "x": 165,
           "y": 38
         },
         "G": {
-          "x": 163,
+          "x": 161,
           "y": 35
         },
         "S": {
-          "x": 167,
+          "x": 165,
           "y": 32
         },
         "B": {
-          "x": 167,
+          "x": 165,
           "y": 35
         }
       },
       "bodyBox": [
-        163,
+        161,
         32,
-        168,
+        166,
         38
       ],
       "labelBox": [
-        169,
+        167,
         33,
-        174,
+        172,
         37
       ],
       "labelLines": [
@@ -565,42 +557,42 @@
       "ref": "BNTR",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 99,
+        "x": 74,
         "y": 97
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 100,
+          "x": 75,
           "y": 94
         },
         "G": {
-          "x": 96,
+          "x": 71,
           "y": 97
         },
         "S": {
-          "x": 100,
+          "x": 75,
           "y": 100
         },
         "B": {
-          "x": 100,
+          "x": 75,
           "y": 97
         }
       },
       "bodyBox": [
-        96,
+        71,
         94,
-        101,
+        76,
         100
       ],
       "labelBox": [
-        102,
+        77,
         95,
-        109,
+        84,
         99
       ],
       "labelLines": [
@@ -612,42 +604,42 @@
       "ref": "BNDR",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 128,
+        "x": 76,
         "y": 82
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 129,
+          "x": 75,
           "y": 79
         },
         "G": {
-          "x": 125,
+          "x": 79,
           "y": 82
         },
         "S": {
-          "x": 129,
+          "x": 75,
           "y": 85
         },
         "B": {
-          "x": 129,
+          "x": 75,
           "y": 82
         }
       },
       "bodyBox": [
-        125,
+        74,
         79,
-        130,
+        79,
         85
       ],
       "labelBox": [
-        131,
+        68,
         78,
-        136,
+        73,
         82
       ],
       "labelLines": [
@@ -659,42 +651,42 @@
       "ref": "BNXR",
       "deviceClass": "mos",
       "kind": "nmos_hv",
-      "group": "cascode_stage",
+      "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 99,
+        "x": 164,
         "y": 82
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 100,
+          "x": 165,
           "y": 79
         },
         "G": {
-          "x": 96,
+          "x": 161,
           "y": 82
         },
         "S": {
-          "x": 100,
+          "x": 165,
           "y": 85
         },
         "B": {
-          "x": 100,
+          "x": 165,
           "y": 82
         }
       },
       "bodyBox": [
-        96,
+        161,
         79,
-        101,
+        166,
         85
       ],
       "labelBox": [
-        102,
+        167,
         78,
-        110,
+        175,
         82
       ],
       "labelLines": [
@@ -709,39 +701,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 181,
+        "x": 76,
         "y": 35
       },
-      "semanticOrient": "gate_left",
-      "cadenceOrient": "R0",
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
       "pins": {
         "D": {
-          "x": 182,
+          "x": 75,
           "y": 38
         },
         "G": {
-          "x": 178,
+          "x": 79,
           "y": 35
         },
         "S": {
-          "x": 182,
+          "x": 75,
           "y": 32
         },
         "B": {
-          "x": 182,
+          "x": 75,
           "y": 35
         }
       },
       "bodyBox": [
-        178,
+        74,
         32,
-        183,
+        79,
         38
       ],
       "labelBox": [
-        184,
+        68,
         33,
-        189,
+        73,
         37
       ],
       "labelLines": [
@@ -756,39 +748,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 196,
+        "x": 192,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 197,
+          "x": 193,
           "y": 38
         },
         "G": {
-          "x": 193,
+          "x": 189,
           "y": 35
         },
         "S": {
-          "x": 197,
+          "x": 193,
           "y": 32
         },
         "B": {
-          "x": 197,
+          "x": 193,
           "y": 35
         }
       },
       "bodyBox": [
-        193,
+        189,
         32,
-        198,
+        194,
         38
       ],
       "labelBox": [
-        199,
+        195,
         33,
-        204,
+        200,
         37
       ],
       "labelLines": [
@@ -803,7 +795,7 @@
       "name": "pctl",
       "net": "pctl",
       "symbol": "port",
-      "x": 35,
+      "x": 101,
       "y": 35
     },
     {
@@ -811,7 +803,7 @@
       "name": "pctl",
       "net": "pctl",
       "symbol": "port",
-      "x": 92,
+      "x": 130,
       "y": 35
     },
     {
@@ -819,79 +811,39 @@
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 43,
-      "y": 28
+      "x": 118,
+      "y": 27
     },
     {
       "id": "P_vdd_2",
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 100,
-      "y": 28
+      "x": 109,
+      "y": 76
     },
     {
       "id": "P_vdd_3",
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 43,
-      "y": 75
-    },
-    {
-      "id": "P_vdd_4",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 152,
-      "y": 28
-    },
-    {
-      "id": "P_vdd_5",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 167,
-      "y": 28
-    },
-    {
-      "id": "P_vdd_6",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 100,
-      "y": 75
-    },
-    {
-      "id": "P_vdd_7",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 182,
-      "y": 28
-    },
-    {
-      "id": "P_vdd_8",
-      "name": "vdd",
-      "net": "vdd",
-      "symbol": "vdd-port",
-      "x": 197,
-      "y": 28
+      "x": 165,
+      "y": 76
     },
     {
       "id": "P_ds",
       "name": "ds",
       "net": "ds",
       "symbol": "port",
-      "x": 214,
-      "y": 62
+      "x": 212,
+      "y": 42
     },
     {
       "id": "P_vip_1",
       "name": "vip",
       "net": "vip",
       "symbol": "port",
-      "x": 35,
+      "x": 101,
       "y": 51
     },
     {
@@ -899,7 +851,7 @@
       "name": "vip",
       "net": "vip",
       "symbol": "port",
-      "x": 121,
+      "x": 185,
       "y": 51
     },
     {
@@ -907,7 +859,7 @@
       "name": "vip",
       "net": "vip",
       "symbol": "port",
-      "x": 35,
+      "x": 101,
       "y": 82
     },
     {
@@ -915,7 +867,7 @@
       "name": "vip",
       "net": "vip",
       "symbol": "port",
-      "x": 121,
+      "x": 83,
       "y": 82
     },
     {
@@ -923,39 +875,23 @@
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 72,
-      "y": 58
+      "x": 118,
+      "y": 105
     },
     {
       "id": "P_vss_2",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 129,
-      "y": 58
-    },
-    {
-      "id": "P_vss_3",
-      "name": "vss",
-      "net": "vss",
-      "symbol": "ground",
-      "x": 43,
-      "y": 104
-    },
-    {
-      "id": "P_vss_4",
-      "name": "vss",
-      "net": "vss",
-      "symbol": "ground",
-      "x": 100,
-      "y": 104
+      "x": 165,
+      "y": 57
     },
     {
       "id": "P_vin_1",
       "name": "vin",
       "net": "vin",
       "symbol": "port",
-      "x": 64,
+      "x": 157,
       "y": 51
     },
     {
@@ -963,7 +899,7 @@
       "name": "vin",
       "net": "vin",
       "symbol": "port",
-      "x": 92,
+      "x": 130,
       "y": 51
     },
     {
@@ -971,7 +907,7 @@
       "name": "vin",
       "net": "vin",
       "symbol": "port",
-      "x": 64,
+      "x": 51,
       "y": 82
     },
     {
@@ -979,7 +915,7 @@
       "name": "vin",
       "net": "vin",
       "symbol": "port",
-      "x": 92,
+      "x": 157,
       "y": 82
     },
     {
@@ -987,8 +923,8 @@
       "name": "dr",
       "net": "dr",
       "symbol": "port",
-      "x": 214,
-      "y": 66
+      "x": 212,
+      "y": 62
     },
     {
       "id": "P_hn_1",
@@ -1003,7 +939,7 @@
       "name": "hn",
       "net": "hn",
       "symbol": "port",
-      "x": 92,
+      "x": 67,
       "y": 97
     }
   ],
@@ -1013,11 +949,11 @@
       "net": "pctl",
       "points": [
         {
-          "x": 39,
+          "x": 105,
           "y": 35
         },
         {
-          "x": 35,
+          "x": 101,
           "y": 35
         }
       ]
@@ -1027,11 +963,11 @@
       "net": "pctl",
       "points": [
         {
-          "x": 96,
+          "x": 134,
           "y": 35
         },
         {
-          "x": 92,
+          "x": 130,
           "y": 35
         }
       ]
@@ -1041,12 +977,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 43,
-          "y": 32
+          "x": 75,
+          "y": 29
         },
         {
-          "x": 43,
-          "y": 28
+          "x": 109,
+          "y": 29
         }
       ]
     },
@@ -1055,12 +991,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 100,
-          "y": 32
+          "x": 109,
+          "y": 29
         },
         {
-          "x": 100,
-          "y": 28
+          "x": 118,
+          "y": 29
         }
       ]
     },
@@ -1069,12 +1005,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 43,
-          "y": 79
+          "x": 118,
+          "y": 29
         },
         {
-          "x": 43,
-          "y": 75
+          "x": 138,
+          "y": 29
         }
       ]
     },
@@ -1083,12 +1019,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 152,
-          "y": 32
+          "x": 138,
+          "y": 29
         },
         {
-          "x": 152,
-          "y": 28
+          "x": 165,
+          "y": 29
         }
       ]
     },
@@ -1097,12 +1033,16 @@
       "net": "vdd",
       "points": [
         {
-          "x": 167,
+          "x": 43,
           "y": 32
         },
         {
-          "x": 167,
-          "y": 28
+          "x": 43,
+          "y": 29
+        },
+        {
+          "x": 75,
+          "y": 29
         }
       ]
     },
@@ -1111,12 +1051,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 100,
-          "y": 79
+          "x": 75,
+          "y": 32
         },
         {
-          "x": 100,
-          "y": 75
+          "x": 75,
+          "y": 29
         }
       ]
     },
@@ -1125,12 +1065,12 @@
       "net": "vdd",
       "points": [
         {
-          "x": 182,
+          "x": 109,
           "y": 32
         },
         {
-          "x": 182,
-          "y": 28
+          "x": 109,
+          "y": 29
         }
       ]
     },
@@ -1139,664 +1079,794 @@
       "net": "vdd",
       "points": [
         {
-          "x": 197,
+          "x": 118,
+          "y": 27
+        },
+        {
+          "x": 118,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_11",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 138,
           "y": 32
         },
         {
-          "x": 197,
-          "y": 28
+          "x": 138,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_vip_11",
-      "net": "vip",
+      "id": "R_vdd_12",
+      "net": "vdd",
       "points": [
         {
-          "x": 39,
-          "y": 51
+          "x": 165,
+          "y": 32
         },
         {
-          "x": 35,
-          "y": 51
+          "x": 165,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_vip_12",
-      "net": "vip",
-      "points": [
-        {
-          "x": 125,
-          "y": 51
-        },
-        {
-          "x": 121,
-          "y": 51
-        }
-      ]
-    },
-    {
-      "id": "R_vip_13",
-      "net": "vip",
-      "points": [
-        {
-          "x": 39,
-          "y": 82
-        },
-        {
-          "x": 35,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_vip_14",
-      "net": "vip",
-      "points": [
-        {
-          "x": 125,
-          "y": 82
-        },
-        {
-          "x": 121,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_vss_15",
-      "net": "vss",
-      "points": [
-        {
-          "x": 72,
-          "y": 54
-        },
-        {
-          "x": 72,
-          "y": 58
-        }
-      ]
-    },
-    {
-      "id": "R_vss_16",
-      "net": "vss",
-      "points": [
-        {
-          "x": 129,
-          "y": 54
-        },
-        {
-          "x": 129,
-          "y": 58
-        }
-      ]
-    },
-    {
-      "id": "R_vss_17",
-      "net": "vss",
-      "points": [
-        {
-          "x": 43,
-          "y": 100
-        },
-        {
-          "x": 43,
-          "y": 104
-        }
-      ]
-    },
-    {
-      "id": "R_vss_18",
-      "net": "vss",
-      "points": [
-        {
-          "x": 100,
-          "y": 100
-        },
-        {
-          "x": 100,
-          "y": 104
-        }
-      ]
-    },
-    {
-      "id": "R_vin_19",
-      "net": "vin",
-      "points": [
-        {
-          "x": 68,
-          "y": 51
-        },
-        {
-          "x": 64,
-          "y": 51
-        }
-      ]
-    },
-    {
-      "id": "R_vin_20",
-      "net": "vin",
-      "points": [
-        {
-          "x": 96,
-          "y": 51
-        },
-        {
-          "x": 92,
-          "y": 51
-        }
-      ]
-    },
-    {
-      "id": "R_vin_21",
-      "net": "vin",
-      "points": [
-        {
-          "x": 68,
-          "y": 82
-        },
-        {
-          "x": 64,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_vin_22",
-      "net": "vin",
-      "points": [
-        {
-          "x": 96,
-          "y": 82
-        },
-        {
-          "x": 92,
-          "y": 82
-        }
-      ]
-    },
-    {
-      "id": "R_hn_23",
-      "net": "hn",
-      "points": [
-        {
-          "x": 39,
-          "y": 97
-        },
-        {
-          "x": 35,
-          "y": 97
-        }
-      ]
-    },
-    {
-      "id": "R_hn_24",
-      "net": "hn",
-      "points": [
-        {
-          "x": 96,
-          "y": 97
-        },
-        {
-          "x": 92,
-          "y": 97
-        }
-      ]
-    },
-    {
-      "id": "R_bns_25_a",
-      "net": "bns",
-      "points": [
-        {
-          "x": 43,
-          "y": 85
-        },
-        {
-          "x": 43,
-          "y": 88
-        }
-      ]
-    },
-    {
-      "id": "R_bns_25_b",
-      "net": "bns",
-      "points": [
-        {
-          "x": 43,
-          "y": 88
-        },
-        {
-          "x": 43,
-          "y": 94
-        }
-      ]
-    },
-    {
-      "id": "R_bns_26",
-      "net": "bns",
-      "points": [
-        {
-          "x": 72,
-          "y": 85
-        },
-        {
-          "x": 72,
-          "y": 88
-        },
-        {
-          "x": 43,
-          "y": 88
-        }
-      ]
-    },
-    {
-      "id": "R_bs_27_a",
-      "net": "bs",
-      "points": [
-        {
-          "x": 43,
-          "y": 48
-        },
-        {
-          "x": 43,
-          "y": 44
-        }
-      ]
-    },
-    {
-      "id": "R_bs_27_b",
-      "net": "bs",
-      "points": [
-        {
-          "x": 43,
-          "y": 44
-        },
-        {
-          "x": 43,
-          "y": 38
-        }
-      ]
-    },
-    {
-      "id": "R_bs_28",
-      "net": "bs",
-      "points": [
-        {
-          "x": 72,
-          "y": 48
-        },
-        {
-          "x": 72,
-          "y": 44
-        },
-        {
-          "x": 43,
-          "y": 44
-        }
-      ]
-    },
-    {
-      "id": "R_bnr_29_a",
-      "net": "bnr",
-      "points": [
-        {
-          "x": 100,
-          "y": 85
-        },
-        {
-          "x": 100,
-          "y": 88
-        }
-      ]
-    },
-    {
-      "id": "R_bnr_29_b",
-      "net": "bnr",
-      "points": [
-        {
-          "x": 100,
-          "y": 88
-        },
-        {
-          "x": 100,
-          "y": 94
-        }
-      ]
-    },
-    {
-      "id": "R_bnr_30",
-      "net": "bnr",
-      "points": [
-        {
-          "x": 129,
-          "y": 85
-        },
-        {
-          "x": 129,
-          "y": 88
-        },
-        {
-          "x": 100,
-          "y": 88
-        }
-      ]
-    },
-    {
-      "id": "R_br_31_a",
-      "net": "br",
-      "points": [
-        {
-          "x": 100,
-          "y": 48
-        },
-        {
-          "x": 100,
-          "y": 44
-        }
-      ]
-    },
-    {
-      "id": "R_br_31_b",
-      "net": "br",
-      "points": [
-        {
-          "x": 100,
-          "y": 44
-        },
-        {
-          "x": 100,
-          "y": 38
-        }
-      ]
-    },
-    {
-      "id": "R_br_32",
-      "net": "br",
-      "points": [
-        {
-          "x": 129,
-          "y": 48
-        },
-        {
-          "x": 129,
-          "y": 44
-        },
-        {
-          "x": 100,
-          "y": 44
-        }
-      ]
-    },
-    {
-      "id": "R_dnr_33_a",
-      "net": "dnr",
-      "points": [
-        {
-          "x": 178,
-          "y": 35
-        },
-        {
-          "x": 177,
-          "y": 35
-        },
-        {
-          "x": 177,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_dnr_33_b",
-      "net": "dnr",
-      "points": [
-        {
-          "x": 177,
-          "y": 41
-        },
-        {
-          "x": 177,
-          "y": 76
-        },
-        {
-          "x": 129,
-          "y": 76
-        },
-        {
-          "x": 129,
-          "y": 79
-        }
-      ]
-    },
-    {
-      "id": "R_dnr_34_a",
-      "net": "dnr",
-      "points": [
-        {
-          "x": 182,
-          "y": 38
-        },
-        {
-          "x": 182,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_dnr_34_b",
-      "net": "dnr",
-      "points": [
-        {
-          "x": 182,
-          "y": 41
-        },
-        {
-          "x": 177,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_dnr_35",
-      "net": "dnr",
+      "id": "R_vdd_13",
+      "net": "vdd",
       "points": [
         {
           "x": 193,
-          "y": 35
+          "y": 32
         },
         {
-          "x": 192,
-          "y": 35
+          "x": 193,
+          "y": 29
         },
         {
-          "x": 192,
-          "y": 41
-        },
-        {
-          "x": 182,
-          "y": 41
+          "x": 165,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_ds_36_a",
+      "id": "R_vdd_14",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 109,
+          "y": 79
+        },
+        {
+          "x": 109,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_15",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 165,
+          "y": 79
+        },
+        {
+          "x": 165,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_vip_16",
+      "net": "vip",
+      "points": [
+        {
+          "x": 105,
+          "y": 51
+        },
+        {
+          "x": 101,
+          "y": 51
+        }
+      ]
+    },
+    {
+      "id": "R_vip_17",
+      "net": "vip",
+      "points": [
+        {
+          "x": 189,
+          "y": 51
+        },
+        {
+          "x": 185,
+          "y": 51
+        }
+      ]
+    },
+    {
+      "id": "R_vip_18",
+      "net": "vip",
+      "points": [
+        {
+          "x": 105,
+          "y": 82
+        },
+        {
+          "x": 101,
+          "y": 82
+        }
+      ]
+    },
+    {
+      "id": "R_vip_19",
+      "net": "vip",
+      "points": [
+        {
+          "x": 79,
+          "y": 82
+        },
+        {
+          "x": 83,
+          "y": 82
+        }
+      ]
+    },
+    {
+      "id": "R_vss_20",
+      "net": "vss",
+      "points": [
+        {
+          "x": 165,
+          "y": 54
+        },
+        {
+          "x": 165,
+          "y": 55
+        }
+      ]
+    },
+    {
+      "id": "R_vss_21",
+      "net": "vss",
+      "points": [
+        {
+          "x": 165,
+          "y": 57
+        },
+        {
+          "x": 165,
+          "y": 55
+        }
+      ]
+    },
+    {
+      "id": "R_vss_22",
+      "net": "vss",
+      "points": [
+        {
+          "x": 193,
+          "y": 54
+        },
+        {
+          "x": 193,
+          "y": 55
+        },
+        {
+          "x": 165,
+          "y": 55
+        }
+      ]
+    },
+    {
+      "id": "R_vss_23",
+      "net": "vss",
+      "points": [
+        {
+          "x": 43,
+          "y": 100
+        },
+        {
+          "x": 43,
+          "y": 103
+        },
+        {
+          "x": 75,
+          "y": 103
+        }
+      ]
+    },
+    {
+      "id": "R_vss_24",
+      "net": "vss",
+      "points": [
+        {
+          "x": 75,
+          "y": 100
+        },
+        {
+          "x": 75,
+          "y": 103
+        }
+      ]
+    },
+    {
+      "id": "R_vss_25",
+      "net": "vss",
+      "points": [
+        {
+          "x": 118,
+          "y": 105
+        },
+        {
+          "x": 118,
+          "y": 103
+        },
+        {
+          "x": 75,
+          "y": 103
+        }
+      ]
+    },
+    {
+      "id": "R_vin_26",
+      "net": "vin",
+      "points": [
+        {
+          "x": 161,
+          "y": 51
+        },
+        {
+          "x": 157,
+          "y": 51
+        }
+      ]
+    },
+    {
+      "id": "R_vin_27",
+      "net": "vin",
+      "points": [
+        {
+          "x": 134,
+          "y": 51
+        },
+        {
+          "x": 130,
+          "y": 51
+        }
+      ]
+    },
+    {
+      "id": "R_vin_28",
+      "net": "vin",
+      "points": [
+        {
+          "x": 47,
+          "y": 82
+        },
+        {
+          "x": 51,
+          "y": 82
+        }
+      ]
+    },
+    {
+      "id": "R_vin_29",
+      "net": "vin",
+      "points": [
+        {
+          "x": 161,
+          "y": 82
+        },
+        {
+          "x": 157,
+          "y": 82
+        }
+      ]
+    },
+    {
+      "id": "R_hn_30",
+      "net": "hn",
+      "points": [
+        {
+          "x": 39,
+          "y": 97
+        },
+        {
+          "x": 35,
+          "y": 97
+        }
+      ]
+    },
+    {
+      "id": "R_hn_31",
+      "net": "hn",
+      "points": [
+        {
+          "x": 71,
+          "y": 97
+        },
+        {
+          "x": 67,
+          "y": 97
+        }
+      ]
+    },
+    {
+      "id": "R_bns_32_a",
+      "net": "bns",
+      "points": [
+        {
+          "x": 43,
+          "y": 85
+        },
+        {
+          "x": 43,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_bns_32_b",
+      "net": "bns",
+      "points": [
+        {
+          "x": 43,
+          "y": 88
+        },
+        {
+          "x": 43,
+          "y": 94
+        }
+      ]
+    },
+    {
+      "id": "R_bns_33",
+      "net": "bns",
+      "points": [
+        {
+          "x": 109,
+          "y": 85
+        },
+        {
+          "x": 109,
+          "y": 88
+        },
+        {
+          "x": 43,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_bnr_34_a",
+      "net": "bnr",
+      "points": [
+        {
+          "x": 75,
+          "y": 85
+        },
+        {
+          "x": 75,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_bnr_34_b",
+      "net": "bnr",
+      "points": [
+        {
+          "x": 75,
+          "y": 90
+        },
+        {
+          "x": 75,
+          "y": 94
+        }
+      ]
+    },
+    {
+      "id": "R_bnr_35",
+      "net": "bnr",
+      "points": [
+        {
+          "x": 165,
+          "y": 85
+        },
+        {
+          "x": 165,
+          "y": 90
+        },
+        {
+          "x": 75,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_bs_36_a",
+      "net": "bs",
+      "points": [
+        {
+          "x": 109,
+          "y": 48
+        },
+        {
+          "x": 109,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_bs_36_b",
+      "net": "bs",
+      "points": [
+        {
+          "x": 109,
+          "y": 44
+        },
+        {
+          "x": 109,
+          "y": 38
+        }
+      ]
+    },
+    {
+      "id": "R_bs_37",
+      "net": "bs",
+      "points": [
+        {
+          "x": 165,
+          "y": 48
+        },
+        {
+          "x": 165,
+          "y": 44
+        },
+        {
+          "x": 109,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_ds_38_a",
       "net": "ds",
       "points": [
         {
-          "x": 167,
+          "x": 165,
           "y": 38
         },
         {
-          "x": 167,
-          "y": 62
+          "x": 165,
+          "y": 42
         }
       ]
     },
     {
-      "id": "R_ds_36_b",
+      "id": "R_ds_38_b",
       "net": "ds",
       "points": [
         {
-          "x": 167,
-          "y": 62
+          "x": 165,
+          "y": 42
         },
         {
-          "x": 43,
-          "y": 62
+          "x": 118,
+          "y": 42
         },
         {
-          "x": 43,
+          "x": 118,
+          "y": 57
+        },
+        {
+          "x": 109,
+          "y": 57
+        },
+        {
+          "x": 109,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_dns_37_a",
+      "id": "R_br_39_a",
+      "net": "br",
+      "points": [
+        {
+          "x": 138,
+          "y": 48
+        },
+        {
+          "x": 138,
+          "y": 46
+        }
+      ]
+    },
+    {
+      "id": "R_br_39_b",
+      "net": "br",
+      "points": [
+        {
+          "x": 138,
+          "y": 46
+        },
+        {
+          "x": 138,
+          "y": 38
+        }
+      ]
+    },
+    {
+      "id": "R_br_40",
+      "net": "br",
+      "points": [
+        {
+          "x": 193,
+          "y": 48
+        },
+        {
+          "x": 193,
+          "y": 45
+        },
+        {
+          "x": 167,
+          "y": 45
+        },
+        {
+          "x": 167,
+          "y": 46
+        },
+        {
+          "x": 138,
+          "y": 46
+        }
+      ]
+    },
+    {
+      "id": "R_dr_41_a",
+      "net": "dr",
+      "points": [
+        {
+          "x": 193,
+          "y": 38
+        },
+        {
+          "x": 193,
+          "y": 44
+        },
+        {
+          "x": 203,
+          "y": 44
+        },
+        {
+          "x": 203,
+          "y": 62
+        }
+      ]
+    },
+    {
+      "id": "R_dr_41_b",
+      "net": "dr",
+      "points": [
+        {
+          "x": 203,
+          "y": 62
+        },
+        {
+          "x": 138,
+          "y": 62
+        },
+        {
+          "x": 138,
+          "y": 54
+        }
+      ]
+    },
+    {
+      "id": "R_dns_42_a",
       "net": "dns",
       "points": [
         {
-          "x": 148,
-          "y": 35
+          "x": 43,
+          "y": 38
         },
         {
-          "x": 147,
-          "y": 35
-        },
-        {
-          "x": 147,
+          "x": 43,
           "y": 41
         }
       ]
     },
     {
-      "id": "R_dns_37_b",
+      "id": "R_dns_42_b",
       "net": "dns",
       "points": [
         {
-          "x": 147,
+          "x": 43,
           "y": 41
         },
         {
-          "x": 147,
-          "y": 64
-        },
-        {
-          "x": 72,
-          "y": 64
-        },
-        {
-          "x": 72,
+          "x": 43,
           "y": 79
         }
       ]
     },
     {
-      "id": "R_dns_38_a",
+      "id": "R_dns_43_a",
       "net": "dns",
       "points": [
         {
-          "x": 152,
-          "y": 38
-        },
-        {
-          "x": 152,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_dns_38_b",
-      "net": "dns",
-      "points": [
-        {
-          "x": 152,
-          "y": 41
-        },
-        {
-          "x": 147,
-          "y": 41
-        }
-      ]
-    },
-    {
-      "id": "R_dns_39",
-      "net": "dns",
-      "points": [
-        {
-          "x": 163,
+          "x": 47,
           "y": 35
         },
         {
-          "x": 162,
+          "x": 48,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_dns_43_b",
+      "net": "dns",
+      "points": [
+        {
+          "x": 48,
           "y": 35
         },
         {
-          "x": 162,
+          "x": 48,
           "y": 41
         },
         {
-          "x": 152,
+          "x": 43,
           "y": 41
         }
       ]
     },
     {
-      "id": "R_dr_40_a",
-      "net": "dr",
+      "id": "R_dns_44",
+      "net": "dns",
       "points": [
         {
-          "x": 197,
+          "x": 161,
+          "y": 35
+        },
+        {
+          "x": 160,
+          "y": 35
+        },
+        {
+          "x": 160,
+          "y": 22
+        },
+        {
+          "x": 48,
+          "y": 22
+        },
+        {
+          "x": 48,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_dnr_45_a",
+      "net": "dnr",
+      "points": [
+        {
+          "x": 75,
           "y": 38
         },
         {
-          "x": 197,
-          "y": 66
+          "x": 75,
+          "y": 41
         }
       ]
     },
     {
-      "id": "R_dr_40_b",
+      "id": "R_dnr_45_b_a",
+      "net": "dnr",
+      "points": [
+        {
+          "x": 75,
+          "y": 41
+        },
+        {
+          "x": 75,
+          "y": 64
+        }
+      ]
+    },
+    {
+      "id": "R_dnr_45_b_b",
+      "net": "dnr",
+      "points": [
+        {
+          "x": 75,
+          "y": 64
+        },
+        {
+          "x": 75,
+          "y": 79
+        }
+      ]
+    },
+    {
+      "id": "R_dnr_46",
+      "net": "dnr",
+      "points": [
+        {
+          "x": 79,
+          "y": 35
+        },
+        {
+          "x": 80,
+          "y": 35
+        },
+        {
+          "x": 80,
+          "y": 41
+        },
+        {
+          "x": 75,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "id": "R_dnr_47",
+      "net": "dnr",
+      "points": [
+        {
+          "x": 189,
+          "y": 35
+        },
+        {
+          "x": 176,
+          "y": 35
+        },
+        {
+          "x": 176,
+          "y": 64
+        },
+        {
+          "x": 75,
+          "y": 64
+        }
+      ]
+    },
+    {
+      "id": "R_dr_48",
       "net": "dr",
       "points": [
         {
-          "x": 197,
-          "y": 66
+          "x": 212,
+          "y": 62
         },
         {
-          "x": 100,
-          "y": 66
-        },
-        {
-          "x": 100,
-          "y": 54
+          "x": 203,
+          "y": 62
         }
       ]
     },
     {
-      "id": "R_dr_41",
-      "net": "dr",
-      "points": [
-        {
-          "x": 214,
-          "y": 66
-        },
-        {
-          "x": 197,
-          "y": 66
-        }
-      ]
-    },
-    {
-      "id": "R_ds_42",
+      "id": "R_ds_49",
       "net": "ds",
       "points": [
         {
-          "x": 214,
-          "y": 62
+          "x": 212,
+          "y": 42
         },
         {
-          "x": 167,
-          "y": 62
+          "x": 165,
+          "y": 42
         }
       ]
     }

@@ -5,98 +5,72 @@
   "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
   "groups": [
     {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "PLNC",
-        "PLSH",
-        "NLSH",
-        "NLM"
-      ]
-    },
-    {
       "id": "gain_output_stage",
       "label": "增益与输出级",
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
-        "POUT",
-        "NOUT",
+        "NCLAMP",
+        "PLNC",
+        "PLSH",
+        "Rlimn",
         "PLND",
         "NSENSE",
-        "Rlimn",
-        "NCLAMP",
+        "POUT",
+        "NOUT",
         "PSENSE",
         "NLREF",
         "Rlimp",
+        "NLSH",
+        "NLM",
         "PCLAMP"
       ]
     }
   ],
-  "motifs": [
-    {
-      "type": "symmetric_columns",
-      "leftColumn": [
-        "PLNC",
-        "PLSH"
-      ],
-      "rightColumn": [
-        "NLSH",
-        "NLM"
-      ]
-    }
-  ],
+  "motifs": [],
   "orientations": {
+    "NCLAMP": "gate_right",
     "PLNC": "gate_right",
-    "PLSH": "gate_right",
-    "NLSH": "gate_left",
-    "NLM": "gate_left",
-    "POUT": "gate_left",
-    "NOUT": "gate_left",
+    "PLSH": "gate_left",
     "PLND": "gate_left",
     "NSENSE": "gate_left",
-    "Rlimn": "vertical",
-    "NCLAMP": "gate_left",
+    "POUT": "gate_right",
+    "NOUT": "gate_left",
     "PSENSE": "gate_left",
-    "NLREF": "gate_left",
-    "Rlimp": "vertical",
-    "PCLAMP": "gate_left"
+    "NLREF": "gate_right",
+    "NLSH": "gate_left",
+    "NLM": "gate_left",
+    "PCLAMP": "gate_left",
+    "Rlimn": "vertical",
+    "Rlimp": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
     [
       "PLNC",
-      "PLSH"
-    ],
-    [
-      "NLSH",
-      "NLM"
-    ],
-    [
-      "POUT",
-      "NOUT"
+      "PLSH",
+      "Rlimn"
     ],
     [
       "PLND",
       "NSENSE"
     ],
     [
-      "Rlimn"
-    ],
-    [
-      "NCLAMP"
+      "POUT",
+      "NOUT"
     ],
     [
       "PSENSE",
       "NLREF"
     ],
     [
-      "Rlimp"
+      "Rlimp",
+      "NLSH",
+      "NLM"
     ],
     [
-      "PCLAMP"
+      "PCLAMP",
+      "NCLAMP"
     ]
   ],
   "netPolicies": {
@@ -133,7 +107,7 @@
     "vss": "local_repeat",
     "gp": "left",
     "vdd": "local_repeat",
-    "vshd_p": "local_repeat",
+    "vshd_p": "near_pin",
     "vshd_n": "local_repeat"
   },
   "spacing": {

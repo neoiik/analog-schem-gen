@@ -6,7 +6,7 @@
   "groups": [
     {
       "id": "input_diff_1",
-      "label": "差分输入级",
+      "label": "双尾耦合差分输入与有源负载级",
       "role": "input_diff",
       "stage_order": 10,
       "instances": [
@@ -14,15 +14,7 @@
         "INR",
         "NTAIL",
         "APS",
-        "APR"
-      ]
-    },
-    {
-      "id": "input_diff_2",
-      "label": "差分输入级",
-      "role": "input_diff",
-      "stage_order": 15,
-      "instances": [
+        "APR",
         "IPS",
         "IPR",
         "PTAIL"
@@ -73,12 +65,12 @@
     "IPS": "gate_left",
     "IPR": "gate_right",
     "PTAIL": "gate_left",
-    "RFPR": "vertical",
     "FPR": "gate_left",
-    "RFPS": "vertical",
     "FPS": "gate_left",
     "APREF": "gate_left",
     "ACOPY": "gate_left",
+    "RFPR": "vertical",
+    "RFPS": "vertical",
     "Rapoff": "vertical"
   },
   "tierOverrides": {},

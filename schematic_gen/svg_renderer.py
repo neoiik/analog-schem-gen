@@ -230,8 +230,9 @@ def render_schematic_svg(
         f'{escape(solved.circuit.cell_name)} · {escape(pdk.process_name.upper())} Schematic (gridUnit = {pdk.grid_unit:g}")</text>'
     )
 
-    # 1. Optional functional group dashed frames
+    # 1. Optional functional group dashed frames (skip overlapping boxes when 2D placement interleaves groups)
     if show_groups:
+        grp_boxes: list[tuple[str, float, float, float, float]] = []
         for grp in solved.intent.groups:
             members = [solved.placements[r] for r in grp.instances if r in solved.placements]
             if not members:
@@ -240,12 +241,22 @@ def render_schematic_svg(
             gy0 = min(m.full_envelope[1] for m in members) - 2.5
             gx1 = max(m.full_envelope[2] for m in members) + 2
             gy1 = max(m.full_envelope[3] for m in members) + 2
+            grp_boxes.append((grp.label, gx0, gy0, gx1, gy1))
+        for idx_g, (glabel, gx0, gy0, gx1, gy1) in enumerate(grp_boxes):
+            overlaps_other = any(
+                idx_o != idx_g
+                and max(gx0, ox0) < min(gx1, ox1) - 0.5
+                and max(gy0, oy0) < min(gy1, oy1) - 0.5
+                for idx_o, (_, ox0, oy0, ox1, oy1) in enumerate(grp_boxes)
+            )
+            if overlaps_other:
+                continue
             out.append(
                 f'<rect x="{_px(gx0)}" y="{_px(gy0)}" width="{_px(gx1 - gx0)}" height="{_px(gy1 - gy0)}" '
                 f'rx="6" fill="#f3f8f6" fill-opacity="0.55" stroke="#b9d0cb" stroke-width="1" stroke-dasharray="5,4"/>'
             )
             out.append(
-                f'<text x="{_px(gx0) + 6}" y="{_px(gy0) + 12}" font-size="10" fill="#527370">{escape(grp.label)}</text>'
+                f'<text x="{_px(gx0) + 6}" y="{_px(gy0) + 12}" font-size="10" fill="#527370">{escape(glabel)}</text>'
             )
 
     # 2. Wires (color-coded by semantic role)

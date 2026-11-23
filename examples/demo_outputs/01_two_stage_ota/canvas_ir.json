@@ -4,8 +4,8 @@
   "bounds": {
     "minX": 22,
     "minY": 18,
-    "maxX": 205,
-    "maxY": 106
+    "maxX": 196,
+    "maxY": 104
   },
   "congestionIterations": 1,
   "corridorExpansions": [],
@@ -384,35 +384,35 @@
       "group": "miller_comp",
       "tier": 3,
       "position": {
-        "x": 120,
+        "x": 117,
         "y": 54
       },
       "semanticOrient": "horizontal_l2r",
       "cadenceOrient": "R90",
       "pins": {
         "P": {
-          "x": 117,
+          "x": 114,
           "y": 54
         },
         "M": {
-          "x": 123,
+          "x": 120,
           "y": 54
         },
         "B": {
-          "x": 120,
+          "x": 117,
           "y": 56
         }
       },
       "bodyBox": [
-        117,
+        114,
         52,
-        123,
+        120,
         56
       ],
       "labelBox": [
-        117,
+        114,
         47,
-        122,
+        119,
         51
       ],
       "labelLines": [
@@ -427,31 +427,31 @@
       "group": "miller_comp",
       "tier": 3,
       "position": {
-        "x": 138,
+        "x": 136,
         "y": 54
       },
       "semanticOrient": "horizontal_l2r",
       "cadenceOrient": "R90",
       "pins": {
         "P": {
-          "x": 135,
+          "x": 133,
           "y": 54
         },
         "M": {
-          "x": 141,
+          "x": 139,
           "y": 54
         }
       },
       "bodyBox": [
-        135,
+        133,
         52,
-        141,
+        139,
         56
       ],
       "labelBox": [
-        134,
+        132,
         47,
-        141,
+        139,
         51
       ],
       "labelLines": [
@@ -466,39 +466,39 @@
       "group": "gain_stage2",
       "tier": 1,
       "position": {
-        "x": 158,
+        "x": 149,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 159,
+          "x": 150,
           "y": 38
         },
         "G": {
-          "x": 155,
+          "x": 146,
           "y": 35
         },
         "S": {
-          "x": 159,
+          "x": 150,
           "y": 32
         },
         "B": {
-          "x": 159,
+          "x": 150,
           "y": 35
         }
       },
       "bodyBox": [
-        155,
+        146,
         32,
-        160,
+        151,
         38
       ],
       "labelBox": [
-        161,
+        152,
         33,
-        169,
+        160,
         37
       ],
       "labelLines": [
@@ -513,39 +513,39 @@
       "group": "gain_stage2",
       "tier": 5,
       "position": {
-        "x": 158,
+        "x": 149,
         "y": 85
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 159,
+          "x": 150,
           "y": 82
         },
         "G": {
-          "x": 155,
+          "x": 146,
           "y": 85
         },
         "S": {
-          "x": 159,
+          "x": 150,
           "y": 88
         },
         "B": {
-          "x": 159,
+          "x": 150,
           "y": 85
         }
       },
       "bodyBox": [
-        155,
+        146,
         82,
-        160,
+        151,
         88
       ],
       "labelBox": [
-        161,
+        152,
         83,
-        169,
+        160,
         87
       ],
       "labelLines": [
@@ -560,31 +560,31 @@
       "group": "gain_stage2",
       "tier": 5,
       "position": {
-        "x": 179,
+        "x": 170,
         "y": 85
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 179,
+          "x": 170,
           "y": 82
         },
         "M": {
-          "x": 179,
+          "x": 170,
           "y": 88
         }
       },
       "bodyBox": [
-        177,
+        168,
         82,
-        181,
+        172,
         88
       ],
       "labelBox": [
-        182,
+        173,
         83,
-        189,
+        180,
         87
       ],
       "labelLines": [
@@ -615,7 +615,7 @@
       "name": "VOUT",
       "net": "VOUT",
       "symbol": "port",
-      "x": 199,
+      "x": 190,
       "y": 79
     },
     {
@@ -623,32 +623,8 @@
       "name": "VDD",
       "net": "VDD",
       "symbol": "vdd-port",
-      "x": 35,
-      "y": 28
-    },
-    {
-      "id": "P_VDD_2",
-      "name": "VDD",
-      "net": "VDD",
-      "symbol": "vdd-port",
-      "x": 66,
-      "y": 28
-    },
-    {
-      "id": "P_VDD_3",
-      "name": "VDD",
-      "net": "VDD",
-      "symbol": "vdd-port",
-      "x": 94,
-      "y": 28
-    },
-    {
-      "id": "P_VDD_4",
-      "name": "VDD",
-      "net": "VDD",
-      "symbol": "vdd-port",
-      "x": 159,
-      "y": 28
+      "x": 92,
+      "y": 27
     },
     {
       "id": "P_VSS_1",
@@ -656,7 +632,7 @@
       "net": "VSS",
       "symbol": "ground",
       "x": 35,
-      "y": 92
+      "y": 91
     },
     {
       "id": "P_VSS_2",
@@ -664,23 +640,15 @@
       "net": "VSS",
       "symbol": "ground",
       "x": 80,
-      "y": 92
+      "y": 91
     },
     {
       "id": "P_VSS_3",
       "name": "VSS",
       "net": "VSS",
       "symbol": "ground",
-      "x": 159,
-      "y": 92
-    },
-    {
-      "id": "P_VSS_4",
-      "name": "VSS",
-      "net": "VSS",
-      "symbol": "ground",
-      "x": 179,
-      "y": 92
+      "x": 160,
+      "y": 93
     }
   ],
   "routes": [
@@ -689,12 +657,12 @@
       "net": "VDD",
       "points": [
         {
-          "x": 35,
-          "y": 32
+          "x": 66,
+          "y": 29
         },
         {
-          "x": 35,
-          "y": 28
+          "x": 92,
+          "y": 29
         }
       ]
     },
@@ -703,12 +671,12 @@
       "net": "VDD",
       "points": [
         {
-          "x": 66,
-          "y": 32
+          "x": 92,
+          "y": 29
         },
         {
-          "x": 66,
-          "y": 28
+          "x": 94,
+          "y": 29
         }
       ]
     },
@@ -717,12 +685,16 @@
       "net": "VDD",
       "points": [
         {
-          "x": 94,
+          "x": 35,
           "y": 32
         },
         {
-          "x": 94,
-          "y": 28
+          "x": 35,
+          "y": 29
+        },
+        {
+          "x": 66,
+          "y": 29
         }
       ]
     },
@@ -731,54 +703,58 @@
       "net": "VDD",
       "points": [
         {
-          "x": 159,
+          "x": 66,
           "y": 32
         },
         {
-          "x": 159,
-          "y": 28
+          "x": 66,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_VSS_5",
-      "net": "VSS",
+      "id": "R_VDD_5",
+      "net": "VDD",
       "points": [
         {
-          "x": 35,
-          "y": 88
+          "x": 92,
+          "y": 27
         },
         {
-          "x": 35,
-          "y": 92
+          "x": 92,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_VSS_6",
-      "net": "VSS",
+      "id": "R_VDD_6",
+      "net": "VDD",
       "points": [
         {
-          "x": 80,
-          "y": 88
+          "x": 94,
+          "y": 32
         },
         {
-          "x": 80,
-          "y": 92
+          "x": 94,
+          "y": 29
         }
       ]
     },
     {
-      "id": "R_VSS_7",
-      "net": "VSS",
+      "id": "R_VDD_7",
+      "net": "VDD",
       "points": [
         {
-          "x": 159,
-          "y": 88
+          "x": 150,
+          "y": 32
         },
         {
-          "x": 159,
-          "y": 92
+          "x": 150,
+          "y": 29
+        },
+        {
+          "x": 94,
+          "y": 29
         }
       ]
     },
@@ -787,17 +763,81 @@
       "net": "VSS",
       "points": [
         {
-          "x": 179,
+          "x": 35,
           "y": 88
         },
         {
-          "x": 179,
-          "y": 92
+          "x": 35,
+          "y": 91
         }
       ]
     },
     {
-      "id": "R_VINP_9",
+      "id": "R_VSS_9",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 80,
+          "y": 88
+        },
+        {
+          "x": 80,
+          "y": 91
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_10",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 150,
+          "y": 88
+        },
+        {
+          "x": 150,
+          "y": 91
+        },
+        {
+          "x": 160,
+          "y": 91
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_11",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 160,
+          "y": 93
+        },
+        {
+          "x": 160,
+          "y": 91
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_12",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 170,
+          "y": 88
+        },
+        {
+          "x": 170,
+          "y": 91
+        },
+        {
+          "x": 160,
+          "y": 91
+        }
+      ]
+    },
+    {
+      "id": "R_VINP_13",
       "net": "VINP",
       "points": [
         {
@@ -811,7 +851,7 @@
       ]
     },
     {
-      "id": "R_vtail_10_a",
+      "id": "R_vtail_14_a",
       "net": "vtail",
       "points": [
         {
@@ -829,7 +869,7 @@
       ]
     },
     {
-      "id": "R_vtail_10_b",
+      "id": "R_vtail_14_b",
       "net": "vtail",
       "points": [
         {
@@ -847,7 +887,7 @@
       ]
     },
     {
-      "id": "R_vtail_11",
+      "id": "R_vtail_15",
       "net": "vtail",
       "points": [
         {
@@ -861,7 +901,7 @@
       ]
     },
     {
-      "id": "R_VINN_12",
+      "id": "R_VINN_16",
       "net": "VINN",
       "points": [
         {
@@ -875,21 +915,21 @@
       ]
     },
     {
-      "id": "R_vmiller_13",
+      "id": "R_vmiller_17",
       "net": "vmiller",
       "points": [
         {
-          "x": 135,
+          "x": 133,
           "y": 54
         },
         {
-          "x": 123,
+          "x": 120,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_net_mir_14_a",
+      "id": "R_net_mir_18_a",
       "net": "net_mir",
       "points": [
         {
@@ -903,7 +943,7 @@
       ]
     },
     {
-      "id": "R_net_mir_14_b",
+      "id": "R_net_mir_18_b",
       "net": "net_mir",
       "points": [
         {
@@ -917,7 +957,7 @@
       ]
     },
     {
-      "id": "R_net_mir_15_a",
+      "id": "R_net_mir_19_a",
       "net": "net_mir",
       "points": [
         {
@@ -931,7 +971,7 @@
       ]
     },
     {
-      "id": "R_net_mir_15_b",
+      "id": "R_net_mir_19_b",
       "net": "net_mir",
       "points": [
         {
@@ -949,7 +989,7 @@
       ]
     },
     {
-      "id": "R_net_mir_16",
+      "id": "R_net_mir_20",
       "net": "net_mir",
       "points": [
         {
@@ -963,7 +1003,7 @@
       ]
     },
     {
-      "id": "R_vout1_17_a",
+      "id": "R_vout1_21_a",
       "net": "vout1",
       "points": [
         {
@@ -977,7 +1017,7 @@
       ]
     },
     {
-      "id": "R_vout1_17_b",
+      "id": "R_vout1_21_b",
       "net": "vout1",
       "points": [
         {
@@ -991,25 +1031,25 @@
       ]
     },
     {
-      "id": "R_vout1_18_a",
+      "id": "R_vout1_22_a",
       "net": "vout1",
       "points": [
         {
-          "x": 117,
+          "x": 114,
           "y": 54
         },
         {
-          "x": 116,
+          "x": 113,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_vout1_18_b",
+      "id": "R_vout1_22_b",
       "net": "vout1",
       "points": [
         {
-          "x": 116,
+          "x": 113,
           "y": 54
         },
         {
@@ -1019,109 +1059,109 @@
       ]
     },
     {
-      "id": "R_vout1_19",
+      "id": "R_vout1_23",
       "net": "vout1",
       "points": [
         {
-          "x": 155,
+          "x": 146,
           "y": 35
         },
         {
-          "x": 116,
+          "x": 113,
           "y": 35
         },
         {
-          "x": 116,
+          "x": 113,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_VOUT_20_a_a",
+      "id": "R_VOUT_24_a_a",
       "net": "VOUT",
       "points": [
         {
-          "x": 159,
+          "x": 150,
           "y": 82
         },
         {
-          "x": 159,
+          "x": 150,
           "y": 79
         }
       ]
     },
     {
-      "id": "R_VOUT_20_a_b",
+      "id": "R_VOUT_24_a_b",
       "net": "VOUT",
       "points": [
         {
-          "x": 159,
+          "x": 150,
           "y": 79
         },
         {
-          "x": 159,
+          "x": 150,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_VOUT_20_b",
+      "id": "R_VOUT_24_b",
       "net": "VOUT",
       "points": [
         {
-          "x": 159,
+          "x": 150,
           "y": 54
         },
         {
-          "x": 159,
+          "x": 150,
           "y": 38
         }
       ]
     },
     {
-      "id": "R_VOUT_21",
+      "id": "R_VOUT_25",
       "net": "VOUT",
       "points": [
         {
-          "x": 141,
+          "x": 139,
           "y": 54
         },
         {
-          "x": 159,
+          "x": 150,
           "y": 54
         }
       ]
     },
     {
-      "id": "R_VOUT_22_a",
+      "id": "R_VOUT_26_a",
       "net": "VOUT",
       "points": [
         {
-          "x": 179,
+          "x": 170,
           "y": 82
         },
         {
-          "x": 179,
+          "x": 170,
           "y": 79
         }
       ]
     },
     {
-      "id": "R_VOUT_22_b",
+      "id": "R_VOUT_26_b",
       "net": "VOUT",
       "points": [
         {
-          "x": 179,
+          "x": 170,
           "y": 79
         },
         {
-          "x": 159,
+          "x": 150,
           "y": 79
         }
       ]
     },
     {
-      "id": "R_vbias_n_23_a_a",
+      "id": "R_vbias_n_27_a_a",
       "net": "vbias_n",
       "points": [
         {
@@ -1135,7 +1175,7 @@
       ]
     },
     {
-      "id": "R_vbias_n_23_a_b",
+      "id": "R_vbias_n_27_a_b",
       "net": "vbias_n",
       "points": [
         {
@@ -1149,7 +1189,7 @@
       ]
     },
     {
-      "id": "R_vbias_n_23_b",
+      "id": "R_vbias_n_27_b",
       "net": "vbias_n",
       "points": [
         {
@@ -1163,7 +1203,7 @@
       ]
     },
     {
-      "id": "R_vbias_n_24_a",
+      "id": "R_vbias_n_28_a",
       "net": "vbias_n",
       "points": [
         {
@@ -1177,7 +1217,7 @@
       ]
     },
     {
-      "id": "R_vbias_n_24_b",
+      "id": "R_vbias_n_28_b",
       "net": "vbias_n",
       "points": [
         {
@@ -1195,7 +1235,7 @@
       ]
     },
     {
-      "id": "R_vbias_n_25",
+      "id": "R_vbias_n_29",
       "net": "vbias_n",
       "points": [
         {
@@ -1209,24 +1249,24 @@
       ]
     },
     {
-      "id": "R_vbias_n_26",
+      "id": "R_vbias_n_30",
       "net": "vbias_n",
       "points": [
         {
-          "x": 155,
+          "x": 146,
           "y": 85
         },
         {
-          "x": 154,
+          "x": 145,
           "y": 85
         },
         {
-          "x": 154,
-          "y": 100
+          "x": 145,
+          "y": 98
         },
         {
           "x": 75,
-          "y": 100
+          "y": 98
         },
         {
           "x": 75,
@@ -1235,15 +1275,15 @@
       ]
     },
     {
-      "id": "R_VOUT_27",
+      "id": "R_VOUT_31",
       "net": "VOUT",
       "points": [
         {
-          "x": 199,
+          "x": 190,
           "y": 79
         },
         {
-          "x": 179,
+          "x": 170,
           "y": 79
         }
       ]

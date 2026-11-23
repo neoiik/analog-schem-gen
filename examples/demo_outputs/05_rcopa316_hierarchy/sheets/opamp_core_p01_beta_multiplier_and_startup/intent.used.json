@@ -40,7 +40,7 @@
     "BP0": "gate_right",
     "Rstart": "vertical",
     "BP1": "gate_left",
-    "BN0": "gate_left",
+    "BN0": "gate_right",
     "BN1": "gate_left",
     "Rbeta": "vertical"
   },

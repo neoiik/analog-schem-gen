@@ -9,8 +9,8 @@
   "metrics": {
     "instanceCount": 10,
     "netCount": 26,
-    "routeSegmentCount": 114,
-    "totalWireLengthGrids": 2216,
+    "routeSegmentCount": 139,
+    "totalWireLengthGrids": 2798,
     "symbolOverlapCount": 0,
     "labelOverlapCount": 0,
     "wireThroughBodyCount": 0,
@@ -18,28 +18,31 @@
     "collinearForeignWireOverlapCount": 0,
     "ambiguousCrossingCount": 0,
     "parallelCrowdGridPairs": 0,
-    "wireCrossingCount": 31,
+    "wireCrossingCount": 39,
     "crossingsByNet": {
-      "bn": 6,
-      "hi_ref": 4,
-      "vip": 13,
-      "vin": 9,
+      "gp0": 4,
+      "iq_n": 5,
+      "vin": 10,
+      "vip": 14,
+      "dr": 2,
+      "vshd_p": 5,
+      "lo_sig": 4,
+      "vss": 10,
       "gn0": 3,
+      "bn": 2,
+      "out": 2,
+      "ds": 2,
+      "lo_ref": 4,
+      "hi_ref": 4,
       "hi_sig": 4,
-      "vshd_p": 4,
-      "lo_sig": 6,
-      "lo_ref": 6,
-      "out": 1,
-      "ds": 1,
-      "iq_n": 2,
-      "gp0": 2,
-      "dr": 1
+      "vdd": 2,
+      "up": 1
     }
   },
   "findings": [],
   "llmRefinementSuggestions": [
-    "网络 'vip' 当前产生 13 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vip = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
-    "网络 'vin' 当前产生 9 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vin = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
-    "网络 'bn' 当前产生 6 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.bn = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+    "网络 'vip' 当前产生 14 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vip = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'vin' 当前产生 10 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vin = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'vss' 当前产生 10 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vss = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
   ]
 }

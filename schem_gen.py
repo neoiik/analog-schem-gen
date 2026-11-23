@@ -453,7 +453,7 @@ def cmd_demo(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="analog-schem-gen",
-        description="PDK-agnostic high-readability analog circuit schematic generator v0.2.0",
+        description="PDK-agnostic high-readability analog circuit schematic generator v0.3.0",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 

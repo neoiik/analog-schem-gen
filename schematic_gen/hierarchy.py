@@ -564,8 +564,25 @@ def compile_hierarchical_circuit(
             bottom_pins=sides["bottom"],
         )
 
-    # Topological bottom-up order: leaf cells first, `design.top_cell` last
-    ordered_cells = [c for c in design.cells if c != design.top_cell] + [design.top_cell]
+    # True topological bottom-up post-order DFS: leaf cells first, intermediate parents next, `design.top_cell` last
+    visited_order: list[str] = []
+    seen_cells: set[str] = set()
+
+    def _visit_cell(cn: str) -> None:
+        if cn in seen_cells or cn not in design.cells:
+            return
+        seen_cells.add(cn)
+        for inst in design.cells[cn].instances:
+            child_cn = inst.subckt_cell or inst.source_model
+            if child_cn in design.cells and child_cn != cn:
+                _visit_cell(child_cn)
+        visited_order.append(cn)
+
+    for cn in design.cells:
+        if cn != design.top_cell:
+            _visit_cell(cn)
+    _visit_cell(design.top_cell)
+    ordered_cells = visited_order
     solved_pages: dict[str, SolvedSchematic] = {}
     audits: dict[str, AuditReport] = {}
     manifest_circuits: list[dict[str, Any]] = []
@@ -596,44 +613,37 @@ def compile_hierarchical_circuit(
                 if n not in rails and fan >= 5 and n not in {p.net for p in cell.ports}:
                     intent.net_policies[n] = "perimeter_bus"
         if cname == design.top_cell:
-            # Before compiling `TOP`, sync every child block symbol's left/right pin order
-            # with the exact top-to-bottom solved port Y coordinates of its child schematic!
-            for child_name, sides in pin_sides_by_cell.items():
-                child_solved = solved_pages.get(child_name)
-                if child_solved is None:
-                    continue
-                y_by_port: dict[str, float] = {}
-                for po in child_solved.ports:
-                    if po.port_name not in y_by_port:
-                        y_by_port[po.port_name] = float(po.y)
-                sides["left"] = sorted(sides["left"], key=lambda pn: (y_by_port.get(pn, 1e6), pn))
-                sides["right"] = sorted(sides["right"], key=lambda pn: (y_by_port.get(pn, 1e6), pn))
-                pdk_work.register_block_symbol(
-                    child_name,
-                    left_pins=sides["left"],
-                    right_pins=sides["right"],
-                    top_pins=sides["top"],
-                    bottom_pins=sides["bottom"],
-                )
-
-            # On `TOP` block diagram: arrange child blocks cleanly in multi-row grid (e.g. 3~4 blocks per row)
-            # and declutter multi-page global bias distribution via `label_stub` (or `perimeter_bus`)!
-            blocks = [i.ref for i in cell.instances]
-            cols_per_row = min(4, max(2, (len(blocks) + 1) // 2))
-            intent.column_order_hints = []
-            for idx_b, bref in enumerate(blocks):
-                col_slot = idx_b % cols_per_row
-                row_slot = idx_b // cols_per_row
-                intent.tier_overrides[bref] = 2 + row_slot * 2
-                while len(intent.column_order_hints) <= col_slot:
-                    intent.column_order_hints.append([])
-                intent.column_order_hints[col_slot].append(bref)
-            intent.spacing.inter_group_gap_x = 18
-            intent.spacing.intra_group_gap_x = 16
-            intent.spacing.inter_tier_gap_y = 14
+            # On pure-block `TOP` diagram: arrange child blocks cleanly in multi-row grid (e.g. 3~4 blocks per row).
+            # On mixed-level `TOP` sheets (child blocks + R/C/MOS primitives, e.g. SCDAC or Flash ADC), preserve
+            # analyzer's 2D vertical stacking & array motifs!
+            if cell.instances and all(i.device_class == "subckt" for i in cell.instances):
+                blocks = [i.ref for i in cell.instances]
+                cols_per_row = min(4, max(2, (len(blocks) + 1) // 2))
+                intent.column_order_hints = []
+                for idx_b, bref in enumerate(blocks):
+                    col_slot = idx_b % cols_per_row
+                    row_slot = idx_b // cols_per_row
+                    intent.tier_overrides[bref] = 2 + row_slot * 2
+                    while len(intent.column_order_hints) <= col_slot:
+                        intent.column_order_hints.append([])
+                    intent.column_order_hints[col_slot].append(bref)
+                intent.spacing.inter_group_gap_x = 18
+                intent.spacing.intra_group_gap_x = 16
+                intent.spacing.inter_tier_gap_y = max(14, 10 + 2 * cols_per_row)
+                port_nets_top = {p.net for p in cell.ports}
+                for n, fan in analysis.net_fanout.items():
+                    if n not in rails and fan >= 6:
+                        intent.net_policies[n] = (
+                            "perimeter_bus" if (n in port_nets_top or not allow_wire_labels) else "label_stub"
+                        )
             for bnet in global_bias_set:
                 if bnet in cell.nets:
                     intent.net_policies[bnet] = "label_stub" if allow_wire_labels else "perimeter_bus"
+
+        if any(i.device_class == "subckt" for i in cell.instances) and not all(i.device_class == "subckt" for i in cell.instances):
+            intent.spacing.inter_group_gap_x = max(intent.spacing.inter_group_gap_x, 14)
+            intent.spacing.intra_group_gap_x = max(intent.spacing.intra_group_gap_x, 12)
+            intent.spacing.inter_tier_gap_y = max(intent.spacing.inter_tier_gap_y, 14)
 
         if optimize_crossings and len(cell.instances) <= 22:
             solved = optimize_schematic_crossings(
@@ -647,6 +657,24 @@ def compile_hierarchical_circuit(
 
         solved_pages[cname] = solved
         audits[cname] = audit_solved_schematic(solved, pdk_work)
+
+        # Immediately sync this cell's block symbol left/right pin order with its solved port Y coordinates
+        # BEFORE any parent cell (at 2-level or N-level hierarchy depth) instantiates and routes to it!
+        if cname in pin_sides_by_cell:
+            sides = pin_sides_by_cell[cname]
+            y_by_port: dict[str, float] = {}
+            for po in solved.ports:
+                if po.port_name not in y_by_port:
+                    y_by_port[po.port_name] = float(po.y)
+            sides["left"] = sorted(sides["left"], key=lambda pn: (y_by_port.get(pn, 1e6), pn))
+            sides["right"] = sorted(sides["right"], key=lambda pn: (y_by_port.get(pn, 1e6), pn))
+            pdk_work.register_block_symbol(
+                cname,
+                left_pins=sides["left"],
+                right_pins=sides["right"],
+                top_pins=sides["top"],
+                bottom_pins=sides["bottom"],
+            )
         single_m = build_bridge_manifest(solved, pdk_work)
         manifest_circuits.extend(single_m["circuits"])
 

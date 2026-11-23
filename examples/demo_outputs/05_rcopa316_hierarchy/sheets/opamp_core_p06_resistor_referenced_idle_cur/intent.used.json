@@ -14,18 +14,6 @@
       ]
     },
     {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "IGN",
-        "IGN_SHD",
-        "IGP_SHD",
-        "IGP"
-      ]
-    },
-    {
       "id": "gain_output_stage",
       "label": "增益与输出级",
       "role": "output_stage",
@@ -34,37 +22,29 @@
         "IQP",
         "IQSET",
         "Riqset",
-        "IQNFEED",
-        "NID",
-        "PID"
-      ]
-    }
-  ],
-  "motifs": [
-    {
-      "type": "symmetric_columns",
-      "leftColumn": [
         "IGN",
-        "IGN_SHD"
-      ],
-      "rightColumn": [
+        "IGN_SHD",
+        "NID",
+        "IQNFEED",
+        "PID",
         "IGP_SHD",
         "IGP"
       ]
     }
   ],
+  "motifs": [],
   "orientations": {
     "IQN": "gate_right",
-    "IGN": "gate_right",
-    "IGN_SHD": "gate_right",
+    "IQP": "gate_right",
+    "IQSET": "gate_left",
+    "IGN": "gate_left",
+    "IGN_SHD": "gate_left",
+    "NID": "gate_right",
+    "IQNFEED": "gate_left",
+    "PID": "gate_right",
     "IGP_SHD": "gate_left",
     "IGP": "gate_left",
-    "IQP": "gate_left",
-    "IQSET": "gate_left",
-    "Riqset": "vertical",
-    "IQNFEED": "gate_left",
-    "NID": "gate_left",
-    "PID": "gate_left"
+    "Riqset": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
@@ -72,24 +52,22 @@
       "IQN"
     ],
     [
-      "IGN",
-      "IGN_SHD"
-    ],
-    [
-      "IGP_SHD",
-      "IGP"
-    ],
-    [
       "IQP",
       "IQSET",
       "Riqset"
     ],
     [
-      "IQNFEED",
+      "IGN",
+      "IGN_SHD",
       "NID"
     ],
     [
-      "PID"
+      "IQNFEED"
+    ],
+    [
+      "PID",
+      "IGP_SHD",
+      "IGP"
     ]
   ],
   "netPolicies": {
@@ -98,7 +76,7 @@
     "iq_src": "full_wire",
     "vss": "supply_local",
     "vdd": "supply_local",
-    "iq_n": "perimeter_bus",
+    "iq_n": "full_wire",
     "ign_m": "full_wire",
     "gn0": "full_wire",
     "pcas": "supply_local",
@@ -110,6 +88,7 @@
     "iq_p",
     "bn",
     "iq_src",
+    "iq_n",
     "ign_m",
     "gn0",
     "pcas",
@@ -118,7 +97,7 @@
     "ncas"
   ],
   "portSides": {
-    "bn": "local_repeat",
+    "bn": "near_pin",
     "vss": "local_repeat",
     "vdd": "local_repeat",
     "iq_n": "right",

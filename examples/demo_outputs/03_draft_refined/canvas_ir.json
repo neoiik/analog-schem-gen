@@ -188,23 +188,15 @@
       "net": "VDD",
       "symbol": "vdd-port",
       "x": 66,
-      "y": 28
+      "y": 29
     },
     {
       "id": "P_VSS_1",
       "name": "VSS",
       "net": "VSS",
       "symbol": "ground",
-      "x": 32,
-      "y": 58
-    },
-    {
-      "id": "P_VSS_2",
-      "name": "VSS",
-      "net": "VSS",
-      "symbol": "ground",
-      "x": 49,
-      "y": 58
+      "x": 40,
+      "y": 59
     }
   ],
   "routes": [
@@ -218,7 +210,7 @@
         },
         {
           "x": 66,
-          "y": 28
+          "y": 29
         }
       ]
     },
@@ -232,7 +224,11 @@
         },
         {
           "x": 32,
-          "y": 58
+          "y": 57
+        },
+        {
+          "x": 40,
+          "y": 57
         }
       ]
     },
@@ -241,17 +237,35 @@
       "net": "VSS",
       "points": [
         {
+          "x": 40,
+          "y": 59
+        },
+        {
+          "x": 40,
+          "y": 57
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_4",
+      "net": "VSS",
+      "points": [
+        {
           "x": 49,
           "y": 54
         },
         {
           "x": 49,
-          "y": 58
+          "y": 57
+        },
+        {
+          "x": 40,
+          "y": 57
         }
       ]
     },
     {
-      "id": "R_vbias_4_a",
+      "id": "R_vbias_5_a",
       "net": "vbias",
       "points": [
         {
@@ -273,7 +287,7 @@
       ]
     },
     {
-      "id": "R_vbias_4_b",
+      "id": "R_vbias_5_b",
       "net": "vbias",
       "points": [
         {
@@ -287,7 +301,7 @@
       ]
     },
     {
-      "id": "R_vbias_5",
+      "id": "R_vbias_6",
       "net": "vbias",
       "points": [
         {
@@ -309,7 +323,7 @@
       ]
     },
     {
-      "id": "R_VOUT_6_a",
+      "id": "R_VOUT_7_a",
       "net": "VOUT",
       "points": [
         {
@@ -323,7 +337,7 @@
       ]
     },
     {
-      "id": "R_VOUT_6_b",
+      "id": "R_VOUT_7_b",
       "net": "VOUT",
       "points": [
         {
@@ -341,7 +355,7 @@
       ]
     },
     {
-      "id": "R_VIN_7",
+      "id": "R_VIN_8",
       "net": "VIN",
       "points": [
         {
@@ -355,7 +369,7 @@
       ]
     },
     {
-      "id": "R_VOUT_8",
+      "id": "R_VOUT_9",
       "net": "VOUT",
       "points": [
         {

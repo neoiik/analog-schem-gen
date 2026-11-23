@@ -6,8 +6,8 @@
       "metrics": {
         "instanceCount": 12,
         "netCount": 10,
-        "routeSegmentCount": 55,
-        "totalWireLengthGrids": 599,
+        "routeSegmentCount": 63,
+        "totalWireLengthGrids": 702,
         "symbolOverlapCount": 0,
         "labelOverlapCount": 0,
         "wireThroughBodyCount": 0,
@@ -25,8 +25,8 @@
       "metrics": {
         "instanceCount": 12,
         "netCount": 15,
-        "routeSegmentCount": 54,
-        "totalWireLengthGrids": 479,
+        "routeSegmentCount": 62,
+        "totalWireLengthGrids": 608,
         "symbolOverlapCount": 0,
         "labelOverlapCount": 0,
         "wireThroughBodyCount": 0,
@@ -66,8 +66,8 @@
       "afterMetrics": {
         "instanceCount": 3,
         "netCount": 5,
-        "routeSegmentCount": 18,
-        "totalWireLengthGrids": 146,
+        "routeSegmentCount": 21,
+        "totalWireLengthGrids": 162,
         "symbolOverlapCount": 0,
         "labelOverlapCount": 0,
         "wireThroughBodyCount": 0,
@@ -86,7 +86,7 @@
         "instanceCount": 12,
         "netCount": 16,
         "routeSegmentCount": 55,
-        "totalWireLengthGrids": 992,
+        "totalWireLengthGrids": 989,
         "symbolOverlapCount": 0,
         "labelOverlapCount": 0,
         "wireThroughBodyCount": 0,
@@ -94,13 +94,13 @@
         "collinearForeignWireOverlapCount": 0,
         "ambiguousCrossingCount": 0,
         "parallelCrowdGridPairs": 0,
-        "wireCrossingCount": 5,
+        "wireCrossingCount": 6,
         "crossingsByNet": {
           "VDAC": 3,
-          "VREFL": 2,
+          "VREFL": 3,
+          "VREFH": 3,
           "Vtap3": 1,
           "n4": 1,
-          "VREFH": 2,
           "B0": 1
         }
       }

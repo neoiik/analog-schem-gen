@@ -5,136 +5,114 @@
   "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
   "groups": [
     {
-      "id": "cascode_stage",
-      "label": "共源共栅叠层支路",
-      "role": "cascode_core",
-      "stage_order": 20,
-      "instances": [
-        "SHDN",
-        "DIVNS",
-        "DIVPF",
-        "SHDP"
-      ]
-    },
-    {
       "id": "gain_output_stage",
       "label": "增益与输出级",
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
+        "CPR",
+        "DIVPF",
+        "Rdiv_phi",
+        "SHDP",
+        "SHDPN",
+        "DIVNS",
         "Rdiv_nhi",
-        "Rdiv_nlo",
         "Cdiv_n",
         "SHDNP",
-        "Rdiv_phi",
-        "Rdiv_plo",
-        "Cdiv_p",
-        "SHDPN",
-        "CPR",
-        "CPR_SHD",
-        "CNR",
-        "FNR",
-        "RFNR",
-        "FNS",
-        "RFNS",
-        "CFNR",
-        "CFNS",
+        "SHDN",
+        "Rdiv_nlo",
         "CPGP",
         "CNGP_SHD",
-        "CNGP"
+        "CNGP",
+        "FNS",
+        "RFNS",
+        "CFNS",
+        "Cdiv_p",
+        "Rdiv_plo",
+        "CFNR",
+        "FNR",
+        "RFNR",
+        "CPR_SHD",
+        "CNR"
       ]
     }
   ],
-  "motifs": [
-    {
-      "type": "symmetric_columns",
-      "leftColumn": [
-        "DIVPF",
-        "SHDP"
-      ],
-      "rightColumn": [
-        "SHDN",
-        "DIVNS"
-      ]
-    }
-  ],
+  "motifs": [],
   "orientations": {
-    "DIVPF": "gate_right",
-    "SHDP": "gate_right",
-    "SHDN": "gate_left",
-    "DIVNS": "gate_left",
-    "Rdiv_nhi": "vertical",
-    "Rdiv_nlo": "vertical",
-    "Cdiv_n": "vertical",
-    "SHDNP": "gate_left",
-    "Rdiv_phi": "vertical",
-    "Rdiv_plo": "vertical",
-    "Cdiv_p": "vertical",
-    "SHDPN": "gate_left",
     "CPR": "gate_left",
-    "CPR_SHD": "gate_left",
-    "CNR": "gate_left",
-    "FNR": "gate_left",
-    "RFNR": "vertical",
-    "FNS": "gate_left",
-    "RFNS": "vertical",
-    "CFNR": "vertical",
-    "CFNS": "vertical",
+    "DIVPF": "gate_left",
+    "SHDP": "gate_right",
+    "SHDPN": "gate_left",
+    "DIVNS": "gate_left",
+    "SHDNP": "gate_left",
+    "SHDN": "gate_right",
     "CPGP": "gate_left",
     "CNGP_SHD": "gate_left",
-    "CNGP": "gate_left"
+    "CNGP": "gate_left",
+    "FNS": "gate_right",
+    "FNR": "gate_right",
+    "CPR_SHD": "gate_left",
+    "CNR": "gate_left",
+    "Rdiv_phi": "vertical",
+    "Rdiv_nhi": "vertical",
+    "Cdiv_n": "vertical",
+    "Rdiv_nlo": "vertical",
+    "RFNS": "vertical",
+    "CFNS": "vertical",
+    "Cdiv_p": "vertical",
+    "Rdiv_plo": "vertical",
+    "CFNR": "vertical",
+    "RFNR": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
     [
-      "DIVPF",
-      "SHDP"
-    ],
-    [
-      "SHDN",
+      "CPR",
       "DIVNS"
     ],
     [
-      "Rdiv_nhi",
-      "Rdiv_nlo"
+      "DIVPF",
+      "CNGP"
     ],
     [
+      "Rdiv_phi",
+      "SHDP",
+      "SHDPN"
+    ],
+    [
+      "Rdiv_nhi",
       "Cdiv_n"
     ],
     [
       "SHDNP",
-      "SHDPN"
-    ],
-    [
-      "Rdiv_phi",
-      "Rdiv_plo"
-    ],
-    [
-      "Cdiv_p",
-      "FNR",
-      "RFNR"
-    ],
-    [
-      "CPR",
-      "FNS",
-      "RFNS"
-    ],
-    [
-      "CPR_SHD",
-      "CNR"
-    ],
-    [
-      "CFNR"
-    ],
-    [
-      "CFNS"
+      "SHDN",
+      "Rdiv_nlo"
     ],
     [
       "CPGP",
       "CNGP_SHD"
     ],
     [
-      "CNGP"
+      "FNS",
+      "RFNS"
+    ],
+    [
+      "CFNS"
+    ],
+    [
+      "Cdiv_p",
+      "Rdiv_plo"
+    ],
+    [
+      "CFNR"
+    ],
+    [
+      "FNR",
+      "RFNR"
+    ],
+    [
+      "CPR_SHD",
+      "CNR"
     ]
   ],
   "netPolicies": {

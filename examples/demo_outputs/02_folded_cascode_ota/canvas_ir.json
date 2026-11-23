@@ -691,48 +691,16 @@
       "name": "VDD",
       "net": "VDD",
       "symbol": "vdd-port",
-      "x": 108,
-      "y": 28
-    },
-    {
-      "id": "P_VDD_2",
-      "name": "VDD",
-      "net": "VDD",
-      "symbol": "vdd-port",
-      "x": 134,
-      "y": 28
+      "x": 121,
+      "y": 27
     },
     {
       "id": "P_VSS_1",
       "name": "VSS",
       "net": "VSS",
       "symbol": "ground",
-      "x": 56,
-      "y": 89
-    },
-    {
-      "id": "P_VSS_2",
-      "name": "VSS",
-      "net": "VSS",
-      "symbol": "ground",
-      "x": 108,
-      "y": 89
-    },
-    {
-      "id": "P_VSS_3",
-      "name": "VSS",
-      "net": "VSS",
-      "symbol": "ground",
-      "x": 134,
-      "y": 89
-    },
-    {
-      "id": "P_VSS_4",
-      "name": "VSS",
-      "net": "VSS",
-      "symbol": "ground",
-      "x": 161,
-      "y": 89
+      "x": 110,
+      "y": 90
     }
   ],
   "routes": [
@@ -844,7 +812,11 @@
         },
         {
           "x": 108,
-          "y": 28
+          "y": 29
+        },
+        {
+          "x": 121,
+          "y": 29
         }
       ]
     },
@@ -853,26 +825,30 @@
       "net": "VDD",
       "points": [
         {
+          "x": 121,
+          "y": 27
+        },
+        {
+          "x": 121,
+          "y": 29
+        }
+      ]
+    },
+    {
+      "id": "R_VDD_10",
+      "net": "VDD",
+      "points": [
+        {
           "x": 134,
           "y": 32
         },
         {
           "x": 134,
-          "y": 28
-        }
-      ]
-    },
-    {
-      "id": "R_VSS_10",
-      "net": "VSS",
-      "points": [
-        {
-          "x": 56,
-          "y": 85
+          "y": 29
         },
         {
-          "x": 56,
-          "y": 89
+          "x": 121,
+          "y": 29
         }
       ]
     },
@@ -882,11 +858,11 @@
       "points": [
         {
           "x": 108,
-          "y": 85
+          "y": 88
         },
         {
-          "x": 108,
-          "y": 89
+          "x": 110,
+          "y": 88
         }
       ]
     },
@@ -895,12 +871,12 @@
       "net": "VSS",
       "points": [
         {
-          "x": 134,
-          "y": 85
+          "x": 110,
+          "y": 88
         },
         {
           "x": 134,
-          "y": 89
+          "y": 88
         }
       ]
     },
@@ -909,17 +885,81 @@
       "net": "VSS",
       "points": [
         {
+          "x": 56,
+          "y": 85
+        },
+        {
+          "x": 56,
+          "y": 88
+        },
+        {
+          "x": 108,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_14",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 108,
+          "y": 85
+        },
+        {
+          "x": 108,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_15",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 110,
+          "y": 90
+        },
+        {
+          "x": 110,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_16",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 134,
+          "y": 85
+        },
+        {
+          "x": 134,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_17",
+      "net": "VSS",
+      "points": [
+        {
           "x": 161,
           "y": 85
         },
         {
           "x": 161,
-          "y": 89
+          "y": 88
+        },
+        {
+          "x": 134,
+          "y": 88
         }
       ]
     },
     {
-      "id": "R_VINP_14",
+      "id": "R_VINP_18",
       "net": "VINP",
       "points": [
         {
@@ -933,7 +973,7 @@
       ]
     },
     {
-      "id": "R_vtail_15_a",
+      "id": "R_vtail_19_a",
       "net": "vtail",
       "points": [
         {
@@ -951,7 +991,7 @@
       ]
     },
     {
-      "id": "R_vtail_15_b",
+      "id": "R_vtail_19_b",
       "net": "vtail",
       "points": [
         {
@@ -969,7 +1009,7 @@
       ]
     },
     {
-      "id": "R_vtail_16",
+      "id": "R_vtail_20",
       "net": "vtail",
       "points": [
         {
@@ -983,7 +1023,7 @@
       ]
     },
     {
-      "id": "R_VINN_17",
+      "id": "R_VINN_21",
       "net": "VINN",
       "points": [
         {
@@ -997,7 +1037,7 @@
       ]
     },
     {
-      "id": "R_vcas_l_18_a",
+      "id": "R_vcas_l_22_a",
       "net": "vcas_l",
       "points": [
         {
@@ -1011,7 +1051,7 @@
       ]
     },
     {
-      "id": "R_vcas_l_18_b",
+      "id": "R_vcas_l_22_b",
       "net": "vcas_l",
       "points": [
         {
@@ -1025,7 +1065,7 @@
       ]
     },
     {
-      "id": "R_vcas_l_19_a",
+      "id": "R_vcas_l_23_a",
       "net": "vcas_l",
       "points": [
         {
@@ -1039,7 +1079,7 @@
       ]
     },
     {
-      "id": "R_vcas_l_19_b",
+      "id": "R_vcas_l_23_b",
       "net": "vcas_l",
       "points": [
         {
@@ -1057,7 +1097,7 @@
       ]
     },
     {
-      "id": "R_vcas_l_20",
+      "id": "R_vcas_l_24",
       "net": "vcas_l",
       "points": [
         {
@@ -1071,7 +1111,7 @@
       ]
     },
     {
-      "id": "R_VOUT_21_a",
+      "id": "R_VOUT_25_a",
       "net": "VOUT",
       "points": [
         {
@@ -1085,7 +1125,7 @@
       ]
     },
     {
-      "id": "R_VOUT_21_b",
+      "id": "R_VOUT_25_b",
       "net": "VOUT",
       "points": [
         {
@@ -1099,7 +1139,7 @@
       ]
     },
     {
-      "id": "R_VOUT_22_a",
+      "id": "R_VOUT_26_a",
       "net": "VOUT",
       "points": [
         {
@@ -1113,7 +1153,7 @@
       ]
     },
     {
-      "id": "R_VOUT_22_b",
+      "id": "R_VOUT_26_b",
       "net": "VOUT",
       "points": [
         {
@@ -1127,7 +1167,7 @@
       ]
     },
     {
-      "id": "R_vfold_l_23_a",
+      "id": "R_vfold_l_27_a",
       "net": "vfold_l",
       "points": [
         {
@@ -1141,7 +1181,7 @@
       ]
     },
     {
-      "id": "R_vfold_l_23_b",
+      "id": "R_vfold_l_27_b",
       "net": "vfold_l",
       "points": [
         {
@@ -1155,7 +1195,7 @@
       ]
     },
     {
-      "id": "R_vfold_l_24",
+      "id": "R_vfold_l_28",
       "net": "vfold_l",
       "points": [
         {
@@ -1173,7 +1213,7 @@
       ]
     },
     {
-      "id": "R_vfold_r_25_a",
+      "id": "R_vfold_r_29_a",
       "net": "vfold_r",
       "points": [
         {
@@ -1187,7 +1227,7 @@
       ]
     },
     {
-      "id": "R_vfold_r_25_b",
+      "id": "R_vfold_r_29_b",
       "net": "vfold_r",
       "points": [
         {
@@ -1201,7 +1241,7 @@
       ]
     },
     {
-      "id": "R_vfold_r_26",
+      "id": "R_vfold_r_30",
       "net": "vfold_r",
       "points": [
         {
@@ -1227,7 +1267,7 @@
       ]
     },
     {
-      "id": "R_vm_l_27",
+      "id": "R_vm_l_31",
       "net": "vm_l",
       "points": [
         {
@@ -1241,7 +1281,7 @@
       ]
     },
     {
-      "id": "R_vm_r_28",
+      "id": "R_vm_r_32",
       "net": "vm_r",
       "points": [
         {
@@ -1255,7 +1295,7 @@
       ]
     },
     {
-      "id": "R_VOUT_29",
+      "id": "R_VOUT_33",
       "net": "VOUT",
       "points": [
         {
