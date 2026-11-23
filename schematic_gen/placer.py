@@ -451,15 +451,26 @@ def place_schematic(
             intent.spacing.intra_group_gap_x if same_group else intent.spacing.inter_group_gap_x
         )
         corridor_bonus = extra_col_gaps.get((ci, ci + 1), 0)
-        min_gap = max(intent.spacing.min_clearance_x, (base_target // 2)) + corridor_bonus
-        target_gap = max(base_target, min_gap)
-        spring_w = 6.0 if same_group else 2.5
+        tiers_left = {tiers[u] for u in col_left}
+        tiers_right = {tiers[v] for v in col_right}
+        shares_tier = bool(tiers_left & tiers_right)
 
-        # Enforce pairwise clearance across adjacent columns; also protect non-adjacent columns in same tier
-        for u in col_left:
-            for v in col_right:
-                sep_x.append((u, v, min_gap))
-        springs_x.append((col_left[0], col_right[0], target_gap, spring_w))
+        if shares_tier or not same_group:
+            min_gap = max(intent.spacing.min_clearance_x, (base_target // 2)) + corridor_bonus
+            target_gap = max(base_target, min_gap)
+            spring_w = 6.0 if same_group else 3.0
+            for u in col_left:
+                for v in col_right:
+                    if tiers[u] == tiers[v] or not same_group:
+                        sep_x.append((u, v, min_gap))
+            springs_x.append((col_left[0], col_right[0], target_gap, spring_w))
+        else:
+            # Same-group staggered-tier subcolumn (e.g. tail M5 in Tier 5 between M1 & M2 in Tier 4, or RZ->CC):
+            # Only require clean pin/body X ordering without inflating horizontal span by off-row text boxes!
+            for u in col_left:
+                for v in col_right:
+                    body_gap = -(extents_x[u][1] + extents_x[v][0]) + 8 + corridor_bonus
+                    sep_x.append((u, v, body_gap))
 
     # Also enforce non-overlap between columns skipping an intermediate column (e.g. left leg vs right leg across tail column!)
     for ci in range(len(columns)):

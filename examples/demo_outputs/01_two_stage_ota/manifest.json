@@ -11,7 +11,7 @@
           "sourceTarget": "I",
           "sourcePosition": {
             "x": 35,
-            "y": 42
+            "y": 27
           },
           "sourceTransform": {
             "rotation": 0,
@@ -42,7 +42,7 @@
           "sourceTarget": "sky130_fd_pr__nfet_01v8",
           "sourcePosition": {
             "x": 36,
-            "y": 92
+            "y": 77
           },
           "sourceTransform": {
             "rotation": 0,
@@ -127,7 +127,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_01v8",
           "sourcePosition": {
-            "x": 113,
+            "x": 93,
             "y": 27
           },
           "sourceTransform": {
@@ -171,7 +171,7 @@
           "sourceTarget": "sky130_fd_pr__nfet_01v8",
           "sourcePosition": {
             "x": 65,
-            "y": 77
+            "y": 62
           },
           "sourceTransform": {
             "rotation": 0,
@@ -213,8 +213,8 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_01v8",
           "sourcePosition": {
-            "x": 115,
-            "y": 77
+            "x": 95,
+            "y": 62
           },
           "sourceTransform": {
             "rotation": 0,
@@ -256,8 +256,8 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_01v8",
           "sourcePosition": {
-            "x": 89,
-            "y": 92
+            "x": 79,
+            "y": 77
           },
           "sourceTransform": {
             "rotation": 0,
@@ -299,8 +299,8 @@
           "deviceClass": "res_poly_3t",
           "sourceTarget": "sky130_fd_pr__res_high_po_0p35",
           "sourcePosition": {
-            "x": 139,
-            "y": 61
+            "x": 120,
+            "y": 46
           },
           "sourceTransform": {
             "rotation": 270,
@@ -336,8 +336,8 @@
           "deviceClass": "cap_mim",
           "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
           "sourcePosition": {
-            "x": 158,
-            "y": 61
+            "x": 138,
+            "y": 46
           },
           "sourceTransform": {
             "rotation": 270,
@@ -369,7 +369,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_01v8",
           "sourcePosition": {
-            "x": 177,
+            "x": 158,
             "y": 27
           },
           "sourceTransform": {
@@ -412,8 +412,8 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_01v8",
           "sourcePosition": {
-            "x": 177,
-            "y": 92
+            "x": 158,
+            "y": 77
           },
           "sourceTransform": {
             "rotation": 0,
@@ -455,8 +455,8 @@
           "deviceClass": "cap_mim",
           "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
           "sourcePosition": {
-            "x": 198,
-            "y": 92
+            "x": 179,
+            "y": 77
           },
           "sourceTransform": {
             "rotation": 0,
@@ -527,8 +527,8 @@
         "bounds": {
           "minX": 22,
           "minY": 14,
-          "maxX": 226,
-          "maxY": 109
+          "maxX": 207,
+          "maxY": 94
         },
         "portOccurrences": [
           {
@@ -539,7 +539,7 @@
             "sourceSymbolId": "port",
             "sourcePosition": {
               "x": 58,
-              "y": 77
+              "y": 62
             },
             "sourceTransform": {
               "rotation": 0,
@@ -553,8 +553,8 @@
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 122,
-              "y": 77
+              "x": 102,
+              "y": 62
             },
             "sourceTransform": {
               "rotation": 0,
@@ -568,8 +568,8 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 220,
-              "y": 67
+              "x": 201,
+              "y": 56
             },
             "sourceTransform": {
               "rotation": 0,
@@ -584,7 +584,7 @@
             "sourceSymbolId": "vdd-port",
             "sourcePosition": {
               "x": 35,
-              "y": 35
+              "y": 20
             },
             "sourceTransform": {
               "rotation": 90,
@@ -613,7 +613,7 @@
             "direction": "inout",
             "sourceSymbolId": "vdd-port",
             "sourcePosition": {
-              "x": 114,
+              "x": 94,
               "y": 20
             },
             "sourceTransform": {
@@ -628,7 +628,7 @@
             "direction": "inout",
             "sourceSymbolId": "vdd-port",
             "sourcePosition": {
-              "x": 178,
+              "x": 159,
               "y": 20
             },
             "sourceTransform": {
@@ -644,7 +644,7 @@
             "sourceSymbolId": "ground",
             "sourcePosition": {
               "x": 35,
-              "y": 99
+              "y": 84
             },
             "sourceTransform": {
               "rotation": 270,
@@ -658,8 +658,8 @@
             "direction": "inout",
             "sourceSymbolId": "ground",
             "sourcePosition": {
-              "x": 90,
-              "y": 99
+              "x": 80,
+              "y": 84
             },
             "sourceTransform": {
               "rotation": 270,
@@ -673,8 +673,8 @@
             "direction": "inout",
             "sourceSymbolId": "ground",
             "sourcePosition": {
-              "x": 178,
-              "y": 99
+              "x": 159,
+              "y": 84
             },
             "sourceTransform": {
               "rotation": 270,
@@ -688,8 +688,8 @@
             "direction": "inout",
             "sourceSymbolId": "ground",
             "sourcePosition": {
-              "x": 198,
-              "y": 99
+              "x": 179,
+              "y": 84
             },
             "sourceTransform": {
               "rotation": 270,
@@ -703,8 +703,8 @@
             "netName": "vtail",
             "role": "steiner",
             "sourcePosition": {
-              "x": 90,
-              "y": 81
+              "x": 80,
+              "y": 66
             }
           },
           {
@@ -730,8 +730,8 @@
             "netName": "vout1",
             "role": "steiner",
             "sourcePosition": {
-              "x": 114,
-              "y": 61
+              "x": 94,
+              "y": 46
             }
           },
           {
@@ -739,8 +739,8 @@
             "netName": "vout1",
             "role": "steiner",
             "sourcePosition": {
-              "x": 114,
-              "y": 31
+              "x": 116,
+              "y": 46
             }
           },
           {
@@ -748,8 +748,8 @@
             "netName": "VOUT",
             "role": "steiner",
             "sourcePosition": {
-              "x": 178,
-              "y": 61
+              "x": 159,
+              "y": 46
             }
           },
           {
@@ -757,8 +757,8 @@
             "netName": "VOUT",
             "role": "steiner",
             "sourcePosition": {
-              "x": 178,
-              "y": 88
+              "x": 159,
+              "y": 73
             }
           },
           {
@@ -766,8 +766,8 @@
             "netName": "VOUT",
             "role": "steiner",
             "sourcePosition": {
-              "x": 178,
-              "y": 67
+              "x": 159,
+              "y": 56
             }
           },
           {
@@ -776,7 +776,7 @@
             "role": "steiner",
             "sourcePosition": {
               "x": 35,
-              "y": 88
+              "y": 73
             }
           },
           {
@@ -785,7 +785,7 @@
             "role": "steiner",
             "sourcePosition": {
               "x": 40,
-              "y": 92
+              "y": 77
             }
           },
           {
@@ -793,8 +793,8 @@
             "netName": "vbias_n",
             "role": "steiner",
             "sourcePosition": {
-              "x": 85,
-              "y": 92
+              "x": 75,
+              "y": 77
             }
           }
         ],
@@ -810,7 +810,7 @@
               "pinName": "P",
               "sourcePoint": {
                 "x": 35,
-                "y": 39
+                "y": 24
               }
             },
             "steps": [
@@ -820,7 +820,7 @@
                 "pinName": "VDD",
                 "sourcePoint": {
                   "x": 35,
-                  "y": 35
+                  "y": 20
                 }
               }
             ]
@@ -859,7 +859,7 @@
               "instanceId": "source-M4",
               "pinName": "S",
               "sourcePoint": {
-                "x": 114,
+                "x": 94,
                 "y": 24
               }
             },
@@ -869,7 +869,7 @@
                 "instanceId": "P_VDD_3",
                 "pinName": "VDD",
                 "sourcePoint": {
-                  "x": 114,
+                  "x": 94,
                   "y": 20
                 }
               }
@@ -884,7 +884,7 @@
               "instanceId": "source-M6",
               "pinName": "S",
               "sourcePoint": {
-                "x": 178,
+                "x": 159,
                 "y": 24
               }
             },
@@ -894,7 +894,7 @@
                 "instanceId": "P_VDD_4",
                 "pinName": "VDD",
                 "sourcePoint": {
-                  "x": 178,
+                  "x": 159,
                   "y": 20
                 }
               }
@@ -910,7 +910,7 @@
               "pinName": "S",
               "sourcePoint": {
                 "x": 35,
-                "y": 95
+                "y": 80
               }
             },
             "steps": [
@@ -920,7 +920,7 @@
                 "pinName": "VSS",
                 "sourcePoint": {
                   "x": 35,
-                  "y": 99
+                  "y": 84
                 }
               }
             ]
@@ -934,8 +934,8 @@
               "instanceId": "source-M5",
               "pinName": "S",
               "sourcePoint": {
-                "x": 90,
-                "y": 95
+                "x": 80,
+                "y": 80
               }
             },
             "steps": [
@@ -944,8 +944,8 @@
                 "instanceId": "P_VSS_2",
                 "pinName": "VSS",
                 "sourcePoint": {
-                  "x": 90,
-                  "y": 99
+                  "x": 80,
+                  "y": 84
                 }
               }
             ]
@@ -959,8 +959,8 @@
               "instanceId": "source-M7",
               "pinName": "S",
               "sourcePoint": {
-                "x": 178,
-                "y": 95
+                "x": 159,
+                "y": 80
               }
             },
             "steps": [
@@ -969,8 +969,8 @@
                 "instanceId": "P_VSS_3",
                 "pinName": "VSS",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 99
+                  "x": 159,
+                  "y": 84
                 }
               }
             ]
@@ -984,8 +984,8 @@
               "instanceId": "source-CL",
               "pinName": "M",
               "sourcePoint": {
-                "x": 198,
-                "y": 95
+                "x": 179,
+                "y": 80
               }
             },
             "steps": [
@@ -994,8 +994,8 @@
                 "instanceId": "P_VSS_4",
                 "pinName": "VSS",
                 "sourcePoint": {
-                  "x": 198,
-                  "y": 99
+                  "x": 179,
+                  "y": 84
                 }
               }
             ]
@@ -1010,7 +1010,7 @@
               "pinName": "G",
               "sourcePoint": {
                 "x": 62,
-                "y": 77
+                "y": 62
               }
             },
             "steps": [
@@ -1020,7 +1020,7 @@
                 "pinName": "VINP",
                 "sourcePoint": {
                   "x": 58,
-                  "y": 77
+                  "y": 62
                 }
               }
             ]
@@ -1034,8 +1034,8 @@
               "instanceId": "P_VINN",
               "pinName": "VINN",
               "sourcePoint": {
-                "x": 122,
-                "y": 77
+                "x": 102,
+                "y": 62
               }
             },
             "steps": [
@@ -1044,8 +1044,8 @@
                 "instanceId": "source-M2",
                 "pinName": "G",
                 "sourcePoint": {
-                  "x": 118,
-                  "y": 77
+                  "x": 98,
+                  "y": 62
                 }
               }
             ]
@@ -1059,8 +1059,8 @@
               "instanceId": "source-CC",
               "pinName": "P",
               "sourcePoint": {
-                "x": 155,
-                "y": 61
+                "x": 135,
+                "y": 46
               }
             },
             "steps": [
@@ -1069,8 +1069,8 @@
                 "instanceId": "source-RZ",
                 "pinName": "M",
                 "sourcePoint": {
-                  "x": 142,
-                  "y": 61
+                  "x": 123,
+                  "y": 46
                 }
               }
             ]
@@ -1084,8 +1084,8 @@
               "instanceId": "source-M5",
               "pinName": "D",
               "sourcePoint": {
-                "x": 90,
-                "y": 89
+                "x": 80,
+                "y": 74
               }
             },
             "steps": [
@@ -1093,8 +1093,8 @@
                 "kind": "junction",
                 "junctionId": "J_vtail_1",
                 "sourcePoint": {
-                  "x": 90,
-                  "y": 81
+                  "x": 80,
+                  "y": 66
                 }
               }
             ]
@@ -1107,8 +1107,8 @@
               "kind": "junction",
               "junctionId": "J_vtail_1",
               "sourcePoint": {
-                "x": 90,
-                "y": 81
+                "x": 80,
+                "y": 66
               }
             },
             "steps": [
@@ -1116,7 +1116,7 @@
                 "kind": "bend",
                 "position": {
                   "x": 66,
-                  "y": 81
+                  "y": 66
                 }
               },
               {
@@ -1125,7 +1125,7 @@
                 "pinName": "S",
                 "sourcePoint": {
                   "x": 66,
-                  "y": 80
+                  "y": 65
                 }
               }
             ]
@@ -1139,24 +1139,24 @@
               "instanceId": "source-M2",
               "pinName": "S",
               "sourcePoint": {
-                "x": 114,
-                "y": 80
+                "x": 94,
+                "y": 65
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 114,
-                  "y": 81
+                  "x": 94,
+                  "y": 66
                 }
               },
               {
                 "kind": "junction",
                 "junctionId": "J_vtail_1",
                 "sourcePoint": {
-                  "x": 90,
-                  "y": 81
+                  "x": 80,
+                  "y": 66
                 }
               }
             ]
@@ -1171,7 +1171,7 @@
               "pinName": "D",
               "sourcePoint": {
                 "x": 66,
-                "y": 74
+                "y": 59
               }
             },
             "steps": [
@@ -1272,7 +1272,7 @@
               "instanceId": "source-M4",
               "pinName": "G",
               "sourcePoint": {
-                "x": 110,
+                "x": 90,
                 "y": 27
               }
             },
@@ -1296,8 +1296,8 @@
               "instanceId": "source-M2",
               "pinName": "D",
               "sourcePoint": {
-                "x": 114,
-                "y": 74
+                "x": 94,
+                "y": 59
               }
             },
             "steps": [
@@ -1305,45 +1305,22 @@
                 "kind": "junction",
                 "junctionId": "J_vout1_4",
                 "sourcePoint": {
-                  "x": 114,
-                  "y": 61
+                  "x": 94,
+                  "y": 46
                 }
               }
             ]
           },
           {
-            "id": "R_vout1_17_b_a",
+            "id": "R_vout1_17_b",
             "netName": "vout1",
             "presentation": "wire",
             "start": {
               "kind": "junction",
               "junctionId": "J_vout1_4",
               "sourcePoint": {
-                "x": 114,
-                "y": 61
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_vout1_5",
-                "sourcePoint": {
-                  "x": 114,
-                  "y": 31
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vout1_17_b_b",
-            "netName": "vout1",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_vout1_5",
-              "sourcePoint": {
-                "x": 114,
-                "y": 31
+                "x": 94,
+                "y": 46
               }
             },
             "steps": [
@@ -1352,14 +1329,14 @@
                 "instanceId": "source-M4",
                 "pinName": "D",
                 "sourcePoint": {
-                  "x": 114,
+                  "x": 94,
                   "y": 30
                 }
               }
             ]
           },
           {
-            "id": "R_vout1_18",
+            "id": "R_vout1_18_a",
             "netName": "vout1",
             "presentation": "wire",
             "start": {
@@ -1367,8 +1344,31 @@
               "instanceId": "source-RZ",
               "pinName": "P",
               "sourcePoint": {
-                "x": 136,
-                "y": 61
+                "x": 117,
+                "y": 46
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vout1_5",
+                "sourcePoint": {
+                  "x": 116,
+                  "y": 46
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vout1_18_b",
+            "netName": "vout1",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vout1_5",
+              "sourcePoint": {
+                "x": 116,
+                "y": 46
               }
             },
             "steps": [
@@ -1376,8 +1376,8 @@
                 "kind": "junction",
                 "junctionId": "J_vout1_4",
                 "sourcePoint": {
-                  "x": 114,
-                  "y": 61
+                  "x": 94,
+                  "y": 46
                 }
               }
             ]
@@ -1391,7 +1391,7 @@
               "instanceId": "source-M6",
               "pinName": "G",
               "sourcePoint": {
-                "x": 174,
+                "x": 155,
                 "y": 27
               }
             },
@@ -1399,23 +1399,16 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 124,
+                  "x": 116,
                   "y": 27
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 124,
-                  "y": 31
                 }
               },
               {
                 "kind": "junction",
                 "junctionId": "J_vout1_5",
                 "sourcePoint": {
-                  "x": 114,
-                  "y": 31
+                  "x": 116,
+                  "y": 46
                 }
               }
             ]
@@ -1429,7 +1422,7 @@
               "instanceId": "source-M6",
               "pinName": "D",
               "sourcePoint": {
-                "x": 178,
+                "x": 159,
                 "y": 30
               }
             },
@@ -1438,8 +1431,8 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_6",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 61
+                  "x": 159,
+                  "y": 46
                 }
               }
             ]
@@ -1452,8 +1445,8 @@
               "kind": "junction",
               "junctionId": "J_VOUT_6",
               "sourcePoint": {
-                "x": 178,
-                "y": 61
+                "x": 159,
+                "y": 46
               }
             },
             "steps": [
@@ -1462,8 +1455,8 @@
                 "instanceId": "source-CC",
                 "pinName": "M",
                 "sourcePoint": {
-                  "x": 161,
-                  "y": 61
+                  "x": 141,
+                  "y": 46
                 }
               }
             ]
@@ -1477,8 +1470,8 @@
               "instanceId": "source-M7",
               "pinName": "D",
               "sourcePoint": {
-                "x": 178,
-                "y": 89
+                "x": 159,
+                "y": 74
               }
             },
             "steps": [
@@ -1486,8 +1479,8 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_7",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 88
+                  "x": 159,
+                  "y": 73
                 }
               }
             ]
@@ -1500,8 +1493,8 @@
               "kind": "junction",
               "junctionId": "J_VOUT_7",
               "sourcePoint": {
-                "x": 178,
-                "y": 88
+                "x": 159,
+                "y": 73
               }
             },
             "steps": [
@@ -1509,8 +1502,8 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_8",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 67
+                  "x": 159,
+                  "y": 56
                 }
               }
             ]
@@ -1523,8 +1516,8 @@
               "kind": "junction",
               "junctionId": "J_VOUT_8",
               "sourcePoint": {
-                "x": 178,
-                "y": 67
+                "x": 159,
+                "y": 56
               }
             },
             "steps": [
@@ -1532,8 +1525,8 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_6",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 61
+                  "x": 159,
+                  "y": 46
                 }
               }
             ]
@@ -1547,24 +1540,24 @@
               "instanceId": "source-CL",
               "pinName": "P",
               "sourcePoint": {
-                "x": 198,
-                "y": 89
+                "x": 179,
+                "y": 74
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 198,
-                  "y": 88
+                  "x": 179,
+                  "y": 73
                 }
               },
               {
                 "kind": "junction",
                 "junctionId": "J_VOUT_7",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 88
+                  "x": 159,
+                  "y": 73
                 }
               }
             ]
@@ -1578,8 +1571,8 @@
               "instanceId": "P_VOUT",
               "pinName": "VOUT",
               "sourcePoint": {
-                "x": 220,
-                "y": 67
+                "x": 201,
+                "y": 56
               }
             },
             "steps": [
@@ -1587,8 +1580,8 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_8",
                 "sourcePoint": {
-                  "x": 178,
-                  "y": 67
+                  "x": 159,
+                  "y": 56
                 }
               }
             ]
@@ -1603,7 +1596,7 @@
               "pinName": "D",
               "sourcePoint": {
                 "x": 35,
-                "y": 89
+                "y": 74
               }
             },
             "steps": [
@@ -1612,7 +1605,7 @@
                 "junctionId": "J_vbias_n_9",
                 "sourcePoint": {
                   "x": 35,
-                  "y": 88
+                  "y": 73
                 }
               }
             ]
@@ -1626,7 +1619,7 @@
               "junctionId": "J_vbias_n_9",
               "sourcePoint": {
                 "x": 35,
-                "y": 88
+                "y": 73
               }
             },
             "steps": [
@@ -1636,7 +1629,7 @@
                 "pinName": "M",
                 "sourcePoint": {
                   "x": 35,
-                  "y": 45
+                  "y": 30
                 }
               }
             ]
@@ -1651,7 +1644,7 @@
               "pinName": "G",
               "sourcePoint": {
                 "x": 39,
-                "y": 92
+                "y": 77
               }
             },
             "steps": [
@@ -1660,7 +1653,7 @@
                 "junctionId": "J_vbias_n_10",
                 "sourcePoint": {
                   "x": 40,
-                  "y": 92
+                  "y": 77
                 }
               }
             ]
@@ -1674,7 +1667,7 @@
               "junctionId": "J_vbias_n_10",
               "sourcePoint": {
                 "x": 40,
-                "y": 92
+                "y": 77
               }
             },
             "steps": [
@@ -1682,7 +1675,7 @@
                 "kind": "bend",
                 "position": {
                   "x": 40,
-                  "y": 88
+                  "y": 73
                 }
               },
               {
@@ -1690,7 +1683,7 @@
                 "junctionId": "J_vbias_n_9",
                 "sourcePoint": {
                   "x": 35,
-                  "y": 88
+                  "y": 73
                 }
               }
             ]
@@ -1704,8 +1697,8 @@
               "instanceId": "source-M5",
               "pinName": "G",
               "sourcePoint": {
-                "x": 86,
-                "y": 92
+                "x": 76,
+                "y": 77
               }
             },
             "steps": [
@@ -1713,8 +1706,8 @@
                 "kind": "junction",
                 "junctionId": "J_vbias_n_11",
                 "sourcePoint": {
-                  "x": 85,
-                  "y": 92
+                  "x": 75,
+                  "y": 77
                 }
               }
             ]
@@ -1727,8 +1720,8 @@
               "kind": "junction",
               "junctionId": "J_vbias_n_11",
               "sourcePoint": {
-                "x": 85,
-                "y": 92
+                "x": 75,
+                "y": 77
               }
             },
             "steps": [
@@ -1737,7 +1730,7 @@
                 "junctionId": "J_vbias_n_10",
                 "sourcePoint": {
                   "x": 40,
-                  "y": 92
+                  "y": 77
                 }
               }
             ]
@@ -1751,38 +1744,38 @@
               "instanceId": "source-M7",
               "pinName": "G",
               "sourcePoint": {
-                "x": 174,
-                "y": 92
+                "x": 155,
+                "y": 77
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 173,
-                  "y": 92
+                  "x": 154,
+                  "y": 77
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 173,
-                  "y": 103
+                  "x": 154,
+                  "y": 88
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 85,
-                  "y": 103
+                  "x": 75,
+                  "y": 88
                 }
               },
               {
                 "kind": "junction",
                 "junctionId": "J_vbias_n_11",
                 "sourcePoint": {
-                  "x": 85,
-                  "y": 92
+                  "x": 75,
+                  "y": 77
                 }
               }
             ]

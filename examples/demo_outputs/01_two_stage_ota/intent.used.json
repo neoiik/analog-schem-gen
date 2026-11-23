@@ -75,7 +75,7 @@
     "CL": "vertical"
   },
   "tierOverrides": {
-    "IB0": 2,
+    "IB0": 1,
     "MB0": 5,
     "M3": 1,
     "M4": 1,

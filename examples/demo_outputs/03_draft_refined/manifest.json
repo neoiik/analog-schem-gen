@@ -53,7 +53,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__nfet_01v8",
           "sourcePosition": {
-            "x": 50,
+            "x": 49,
             "y": 43
           },
           "sourceTransform": {
@@ -96,7 +96,7 @@
           "deviceClass": "mos",
           "sourceTarget": "sky130_fd_pr__pfet_01v8",
           "sourcePosition": {
-            "x": 71,
+            "x": 67,
             "y": 27
           },
           "sourceTransform": {
@@ -168,7 +168,7 @@
         "bounds": {
           "minX": 10,
           "minY": 14,
-          "maxX": 100,
+          "maxX": 96,
           "maxY": 56
         },
         "portOccurrences": [
@@ -194,7 +194,7 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 94,
+              "x": 90,
               "y": 35
             },
             "sourceTransform": {
@@ -209,7 +209,7 @@
             "direction": "inout",
             "sourceSymbolId": "vdd-port",
             "sourcePosition": {
-              "x": 72,
+              "x": 68,
               "y": 20
             },
             "sourceTransform": {
@@ -239,7 +239,7 @@
             "direction": "inout",
             "sourceSymbolId": "ground",
             "sourcePosition": {
-              "x": 51,
+              "x": 50,
               "y": 50
             },
             "sourceTransform": {
@@ -263,7 +263,7 @@
             "netName": "VOUT",
             "role": "steiner",
             "sourcePosition": {
-              "x": 72,
+              "x": 68,
               "y": 35
             }
           }
@@ -279,7 +279,7 @@
               "instanceId": "source-M2",
               "pinName": "S",
               "sourcePoint": {
-                "x": 72,
+                "x": 68,
                 "y": 24
               }
             },
@@ -289,7 +289,7 @@
                 "instanceId": "P_VDD_1",
                 "pinName": "VDD",
                 "sourcePoint": {
-                  "x": 72,
+                  "x": 68,
                   "y": 20
                 }
               }
@@ -329,7 +329,7 @@
               "instanceId": "source-M1",
               "pinName": "S",
               "sourcePoint": {
-                "x": 51,
+                "x": 50,
                 "y": 46
               }
             },
@@ -339,7 +339,7 @@
                 "instanceId": "P_VSS_2",
                 "pinName": "VSS",
                 "sourcePoint": {
-                  "x": 51,
+                  "x": 50,
                   "y": 50
                 }
               }
@@ -416,7 +416,7 @@
               "instanceId": "source-M1",
               "pinName": "G",
               "sourcePoint": {
-                "x": 47,
+                "x": 46,
                 "y": 43
               }
             },
@@ -454,7 +454,7 @@
               "instanceId": "source-M2",
               "pinName": "G",
               "sourcePoint": {
-                "x": 68,
+                "x": 64,
                 "y": 27
               }
             },
@@ -479,7 +479,7 @@
               "instanceId": "source-M2",
               "pinName": "D",
               "sourcePoint": {
-                "x": 72,
+                "x": 68,
                 "y": 30
               }
             },
@@ -488,7 +488,7 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_2",
                 "sourcePoint": {
-                  "x": 72,
+                  "x": 68,
                   "y": 35
                 }
               }
@@ -502,7 +502,7 @@
               "kind": "junction",
               "junctionId": "J_VOUT_2",
               "sourcePoint": {
-                "x": 72,
+                "x": 68,
                 "y": 35
               }
             },
@@ -510,14 +510,14 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 72,
+                  "x": 68,
                   "y": 39
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 51,
+                  "x": 50,
                   "y": 39
                 }
               },
@@ -526,7 +526,7 @@
                 "instanceId": "source-M1",
                 "pinName": "D",
                 "sourcePoint": {
-                  "x": 51,
+                  "x": 50,
                   "y": 40
                 }
               }
@@ -541,7 +541,7 @@
               "instanceId": "P_VOUT",
               "pinName": "VOUT",
               "sourcePoint": {
-                "x": 94,
+                "x": 90,
                 "y": 35
               }
             },
@@ -550,7 +550,7 @@
                 "kind": "junction",
                 "junctionId": "J_VOUT_2",
                 "sourcePoint": {
-                  "x": 72,
+                  "x": 68,
                   "y": 35
                 }
               }

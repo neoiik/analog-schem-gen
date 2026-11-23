@@ -18,5 +18,5 @@
 | 异网共线重叠数 (`collinearForeignWireOverlapCount`) | `0` | `= 0` |
 | 歧义拐点/T点跨线数 (`ambiguousCrossingCount`) | `0` | `= 0` |
 | 正交跨线交叉总数 (`wireCrossingCount`) | `1` | 越少越好（无连接圆点） |
-| 总正交走线长度（格） | `566` | 紧凑无绕远 |
+| 总正交走线长度（格） | `502` | 紧凑无绕远 |
 

@@ -96,6 +96,7 @@ python -B -m unittest discover -s tests -v
 - **AI Agent 技能指令**：[SKILL.md](SKILL.md)
 - **模算协同分工详解**：[docs/模算协同颗粒度规范.md](docs/模算协同颗粒度规范.md)
 - **CLI 与 JSON 接口契约**：[docs/接口与数据结构.md](docs/接口与数据结构.md)
+- **后续演进路线图（v0.2+）**：[docs/演进路线图.md](docs/演进路线图.md)
 - **17 项已知解/反例与基准测试记录**：[VALIDATION.md](VALIDATION.md)
 - **维护与边界约定**：[AGENTS.md](AGENTS.md)
 

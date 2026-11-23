@@ -13,6 +13,7 @@
     "README.md",
     "docs/模算协同颗粒度规范.md",
     "docs/接口与数据结构.md",
+    "docs/演进路线图.md",
     "VALIDATION.md"
   ],
   "pdk_configs": [

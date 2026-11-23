@@ -9,8 +9,8 @@
   "metrics": {
     "instanceCount": 12,
     "netCount": 15,
-    "routeSegmentCount": 53,
-    "totalWireLengthGrids": 566,
+    "routeSegmentCount": 55,
+    "totalWireLengthGrids": 502,
     "symbolOverlapCount": 0,
     "labelOverlapCount": 0,
     "wireThroughBodyCount": 0,
@@ -21,7 +21,7 @@
     "wireCrossingCount": 1,
     "crossingsByNet": {
       "vfold_r": 1,
-      "vfold_l": 1
+      "vcas_l": 1
     }
   },
   "findings": [],
