@@ -590,11 +590,32 @@ def compile_hierarchical_circuit(
                     if conn_pins and all(pin == "G" for pin in conn_pins):
                         intent.port_sides[p.name] = "local_repeat"
                         intent.net_policies[p.net] = "supply_local"
-            # Multi-group internal bias nets inside a child sheet use `label_stub` (when allowed) or `perimeter_bus`
+            # Multi-group internal bias nets inside a child sheet use continuous `perimeter_bus` wires
+            # (never sever child-sheet devices into floating `label_stub` islands!)
             for n, fan in analysis.net_fanout.items():
                 if n not in rails and fan >= 5 and n not in {p.net for p in cell.ports}:
-                    intent.net_policies[n] = "label_stub" if allow_wire_labels else "perimeter_bus"
-        else:
+                    intent.net_policies[n] = "perimeter_bus"
+        if cname == design.top_cell:
+            # Before compiling `TOP`, sync every child block symbol's left/right pin order
+            # with the exact top-to-bottom solved port Y coordinates of its child schematic!
+            for child_name, sides in pin_sides_by_cell.items():
+                child_solved = solved_pages.get(child_name)
+                if child_solved is None:
+                    continue
+                y_by_port: dict[str, float] = {}
+                for po in child_solved.ports:
+                    if po.port_name not in y_by_port:
+                        y_by_port[po.port_name] = float(po.y)
+                sides["left"] = sorted(sides["left"], key=lambda pn: (y_by_port.get(pn, 1e6), pn))
+                sides["right"] = sorted(sides["right"], key=lambda pn: (y_by_port.get(pn, 1e6), pn))
+                pdk_work.register_block_symbol(
+                    child_name,
+                    left_pins=sides["left"],
+                    right_pins=sides["right"],
+                    top_pins=sides["top"],
+                    bottom_pins=sides["bottom"],
+                )
+
             # On `TOP` block diagram: arrange child blocks cleanly in multi-row grid (e.g. 3~4 blocks per row)
             # and declutter multi-page global bias distribution via `label_stub` (or `perimeter_bus`)!
             blocks = [i.ref for i in cell.instances]

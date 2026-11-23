@@ -22,34 +22,26 @@
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
-        "CPR_SHD",
-        "CNR",
-        "CPGP",
-        "CNGP_SHD",
         "Rdiv_nhi",
+        "Rdiv_nlo",
+        "Cdiv_n",
         "SHDNP",
         "Rdiv_phi",
+        "Rdiv_plo",
         "Cdiv_p",
         "SHDPN",
         "CPR",
+        "CPR_SHD",
+        "CNR",
         "FNR",
-        "FNS",
-        "CNGP"
-      ]
-    },
-    {
-      "id": "output_load",
-      "label": "输出负载",
-      "role": "output_stage",
-      "stage_order": 35,
-      "instances": [
-        "Rdiv_nlo",
-        "Cdiv_n",
-        "Rdiv_plo",
         "RFNR",
+        "FNS",
         "RFNS",
         "CFNR",
-        "CFNS"
+        "CFNS",
+        "CPGP",
+        "CNGP_SHD",
+        "CNGP"
       ]
     }
   ],
@@ -71,10 +63,6 @@
     "SHDP": "gate_right",
     "SHDN": "gate_left",
     "DIVNS": "gate_left",
-    "CPR_SHD": "gate_left",
-    "CNR": "gate_left",
-    "CPGP": "gate_left",
-    "CNGP_SHD": "gate_left",
     "Rdiv_nhi": "vertical",
     "Rdiv_nlo": "vertical",
     "Cdiv_n": "vertical",
@@ -84,12 +72,16 @@
     "Cdiv_p": "vertical",
     "SHDPN": "gate_left",
     "CPR": "gate_left",
+    "CPR_SHD": "gate_left",
+    "CNR": "gate_left",
     "FNR": "gate_left",
-    "FNS": "gate_left",
     "RFNR": "vertical",
+    "FNS": "gate_left",
     "RFNS": "vertical",
     "CFNR": "vertical",
     "CFNS": "vertical",
+    "CPGP": "gate_left",
+    "CNGP_SHD": "gate_left",
     "CNGP": "gate_left"
   },
   "tierOverrides": {},
@@ -103,70 +95,56 @@
       "DIVNS"
     ],
     [
-      "CPR_SHD",
-      "CNR"
-    ],
-    [
-      "CPGP",
-      "CNGP_SHD"
-    ],
-    [
-      "Rdiv_nhi"
-    ],
-    [
-      "SHDNP"
-    ],
-    [
-      "Rdiv_phi"
-    ],
-    [
-      "Cdiv_p"
-    ],
-    [
-      "SHDPN"
-    ],
-    [
-      "CPR"
-    ],
-    [
-      "FNR"
-    ],
-    [
-      "FNS"
-    ],
-    [
-      "CNGP"
-    ],
-    [
+      "Rdiv_nhi",
       "Rdiv_nlo"
     ],
     [
       "Cdiv_n"
     ],
     [
+      "SHDNP",
+      "SHDPN"
+    ],
+    [
+      "Rdiv_phi",
       "Rdiv_plo"
     ],
     [
+      "Cdiv_p",
+      "FNR",
       "RFNR"
     ],
     [
+      "CPR",
+      "FNS",
       "RFNS"
+    ],
+    [
+      "CPR_SHD",
+      "CNR"
     ],
     [
       "CFNR"
     ],
     [
       "CFNS"
+    ],
+    [
+      "CPGP",
+      "CNGP_SHD"
+    ],
+    [
+      "CNGP"
     ]
   ],
   "netPolicies": {
     "vdd": "supply_local",
-    "vdiv_n": "label_stub",
+    "vdiv_n": "perimeter_bus",
     "vss": "supply_local",
     "vshd_n": "full_wire",
     "bp": "supply_local",
     "un": "supply_local",
-    "vdiv_p": "label_stub",
+    "vdiv_p": "perimeter_bus",
     "vshd_p": "full_wire",
     "pr_m": "full_wire",
     "pcas": "supply_local",
@@ -182,9 +160,11 @@
     "ngp_m": "full_wire"
   },
   "criticalNets": [
+    "vdiv_n",
     "vshd_n",
     "bp",
     "un",
+    "vdiv_p",
     "vshd_p",
     "pr_m",
     "pcas",
@@ -215,15 +195,15 @@
     "hi_sig": "left"
   },
   "spacing": {
-    "intra_group_gap_x": 8,
-    "inter_group_gap_x": 14,
-    "min_clearance_x": 5,
-    "intra_stack_gap_y": 8,
-    "inter_tier_gap_y": 10,
+    "intra_group_gap_x": 6,
+    "inter_group_gap_x": 10,
+    "min_clearance_x": 4,
+    "intra_stack_gap_y": 7,
+    "inter_tier_gap_y": 9,
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }

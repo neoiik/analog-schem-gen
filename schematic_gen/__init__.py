@@ -6,4 +6,4 @@ grid-aligned obstacle-avoiding orthogonal routing + track nudging, local crossin
 hierarchical multi-sheet partitioning, and flatten-back LVS / readability DRC verification.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"

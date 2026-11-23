@@ -132,13 +132,13 @@
   "spacing": {
     "intra_group_gap_x": 16,
     "inter_group_gap_x": 18,
-    "min_clearance_x": 5,
-    "intra_stack_gap_y": 8,
+    "min_clearance_x": 4,
+    "intra_stack_gap_y": 7,
     "inter_tier_gap_y": 14,
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }

@@ -17,10 +17,12 @@
 | 导线擦异网引脚数 (`wireOverForeignPinCount`) | `0` | `= 0` |
 | 异网共线重叠数 (`collinearForeignWireOverlapCount`) | `0` | `= 0` |
 | 歧义拐点/T点跨线数 (`ambiguousCrossingCount`) | `0` | `= 0` |
-| 正交跨线交叉总数 (`wireCrossingCount`) | `2` | 越少越好（无连接圆点） |
-| 总正交走线长度（格） | `1253` | 紧凑无绕远 |
+| 正交跨线交叉总数 (`wireCrossingCount`) | `6` | 越少越好（无连接圆点） |
+| 总正交走线长度（格） | `940` | 紧凑无绕远 |
 
 ## 面向大模型的迭代建议 (`llmRefinementSuggestions`)
 
-- 网络 'ds' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.ds = "perimeter_bus"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。
+- 网络 'ds' 当前产生 4 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.ds = "perimeter_bus"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。
+- 网络 'dr' 当前产生 4 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.dr = "perimeter_bus"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。
+- 网络 'dnr' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.dnr = "perimeter_bus"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。
 

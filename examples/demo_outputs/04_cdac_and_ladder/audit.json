@@ -9,8 +9,8 @@
   "metrics": {
     "instanceCount": 12,
     "netCount": 16,
-    "routeSegmentCount": 48,
-    "totalWireLengthGrids": 1034,
+    "routeSegmentCount": 55,
+    "totalWireLengthGrids": 992,
     "symbolOverlapCount": 0,
     "labelOverlapCount": 0,
     "wireThroughBodyCount": 0,
@@ -18,17 +18,20 @@
     "collinearForeignWireOverlapCount": 0,
     "ambiguousCrossingCount": 0,
     "parallelCrowdGridPairs": 0,
-    "wireCrossingCount": 12,
+    "wireCrossingCount": 5,
     "crossingsByNet": {
-      "VREFL": 6,
-      "VDAC": 12,
-      "VREFH": 6
+      "VDAC": 3,
+      "VREFL": 2,
+      "Vtap3": 1,
+      "n4": 1,
+      "VREFH": 2,
+      "B0": 1
     }
   },
   "findings": [],
   "llmRefinementSuggestions": [
-    "网络 'VDAC' 当前产生 12 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VDAC = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
-    "网络 'VREFL' 当前产生 6 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VREFL = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
-    "网络 'VREFH' 当前产生 6 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VREFH = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+    "网络 'VDAC' 当前产生 3 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VDAC = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'VREFL' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VREFL = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'VREFH' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VREFH = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
   ]
 }

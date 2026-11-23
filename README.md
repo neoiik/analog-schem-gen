@@ -85,7 +85,7 @@ python -B schem_gen.py refine examples/cramped_draft_manifest.json --out work/re
 # Read-only PDK symbol profiler (offline Xschem .sym directory or live Virtuoso Bridge)
 python -B schem_gen.py extract-pdk --from-xschem /path/to/xschem/symbols --process my_pdk --out pdk/my_pdk_map.json
 
-# Run all 24 analytical known-solution, counterexample, hierarchy LVS, and Bridge tests
+# Run all 26 analytical known-solution, counterexample, hierarchy LVS, and Bridge tests
 python -B -m unittest discover -s tests -v
 ```
 
@@ -127,7 +127,7 @@ python -B -m unittest discover -s tests -v
 - **模算协同分工详解**：[docs/模算协同颗粒度规范.md](docs/模算协同颗粒度规范.md)
 - **CLI 与 JSON 接口契约**：[docs/接口与数据结构.md](docs/接口与数据结构.md)
 - **演进路线图与 `v0.2` 详细方案**：[docs/演进路线图.md](docs/演进路线图.md) · [docs/v0.2_详细方案设计.md](docs/v0.2_详细方案设计.md)
-- **24 项已知解/反例与 5 组基准电路实测记录**：[VALIDATION.md](VALIDATION.md)
+- **26 项已知解/反例与 5 组基准电路实测记录**：[VALIDATION.md](VALIDATION.md)
 - **维护与边界约定**：[AGENTS.md](AGENTS.md)
 
 ## License

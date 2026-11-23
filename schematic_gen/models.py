@@ -167,15 +167,15 @@ class FunctionalGroupSpec:
 class SpacingConfig:
     """Target gaps and clearance bounds in integer gridUnits (0.0625 inch each)."""
 
-    intra_group_gap_x: int = 8
-    inter_group_gap_x: int = 14
-    min_clearance_x: int = 5
-    intra_stack_gap_y: int = 8
-    inter_tier_gap_y: int = 10
+    intra_group_gap_x: int = 6
+    inter_group_gap_x: int = 10
+    min_clearance_x: int = 4
+    intra_stack_gap_y: int = 7
+    inter_tier_gap_y: int = 9
     min_clearance_y: int = 6
     wire_track_pitch: int = 2
     shape_buffer: int = 2
-    port_margin_x: int = 12
+    port_margin_x: int = 10
     port_margin_y: int = 8
 
     @classmethod

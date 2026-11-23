@@ -107,6 +107,21 @@ def optimize_schematic_crossings(
                     cand.net_policies[net] = "perimeter_bus"
                     candidate_intents.append((f"netPolicy {net}: full_wire -> perimeter_bus", cand))
 
+        # 2b. Move crossing low-fanout Gate input ports from far-left `left` edge to `near_pin`
+        for p_port in circuit.ports:
+            if p_port.direction == "input" and p_port.net in hot_nets and p_port.net not in rails:
+                if best_intent.port_sides.get(p_port.name, "left") == "left":
+                    conn_pins = [
+                        pin
+                        for inst in circuit.instances
+                        for pin, pnet in inst.terminals.items()
+                        if pnet == p_port.net and pin != "B"
+                    ]
+                    if 1 <= len(conn_pins) <= 2 and all(pin == "G" for pin in conn_pins):
+                        cand = copy.deepcopy(best_intent)
+                        cand.port_sides[p_port.name] = "near_pin"
+                        candidate_intents.append((f"portSide {p_port.name}: left -> near_pin", cand))
+
         # 3. Adjacent intra-group column swap for unlocked columns touching crossing nets
         group_of = {r: g.id for g in best_intent.groups for r in g.instances}
         cols = best_intent.column_order_hints

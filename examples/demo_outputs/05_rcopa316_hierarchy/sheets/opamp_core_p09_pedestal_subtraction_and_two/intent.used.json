@@ -20,10 +20,10 @@
       "role": "compensation",
       "stage_order": 25,
       "instances": [
-        "Rzn",
         "Ccn",
         "Ccp",
-        "Rzp"
+        "Rzp",
+        "Rzn"
       ]
     },
     {
@@ -34,18 +34,18 @@
       "instances": [
         "BSOFF",
         "BSNC",
+        "BSPD",
         "BSGP",
         "BRGP",
         "BSGN",
         "BRGN",
         "BROFF",
         "BRNC",
+        "BRPD",
         "BRTURN",
         "BRD",
         "PAUX",
         "NAUX",
-        "BSPD",
-        "BRPD",
         "Rpick"
       ]
     }
@@ -60,18 +60,18 @@
     "Ccn": "horizontal_l2r",
     "BSOFF": "gate_left",
     "BSNC": "gate_left",
+    "BSPD": "gate_left",
     "BSGP": "gate_left",
     "BRGP": "gate_left",
     "BSGN": "gate_left",
     "BRGN": "gate_left",
     "BROFF": "gate_left",
     "BRNC": "gate_left",
+    "BRPD": "gate_left",
     "BRTURN": "gate_left",
     "BRD": "gate_left",
     "PAUX": "gate_left",
     "NAUX": "gate_left",
-    "BSPD": "gate_left",
-    "BRPD": "gate_left",
     "Rpick": "vertical"
   },
   "tierOverrides": {},
@@ -97,6 +97,9 @@
       "BSNC"
     ],
     [
+      "BSPD"
+    ],
+    [
       "BSGP",
       "BRGP"
     ],
@@ -109,6 +112,9 @@
       "BRNC"
     ],
     [
+      "BRPD"
+    ],
+    [
       "BRTURN",
       "BRD"
     ],
@@ -117,27 +123,21 @@
       "NAUX"
     ],
     [
-      "BSPD"
-    ],
-    [
-      "BRPD"
-    ],
-    [
       "Rpick"
     ]
   ],
   "netPolicies": {
     "ds": "full_wire",
     "vss": "supply_local",
-    "ps": "label_stub",
+    "ps": "perimeter_bus",
     "bp": "supply_local",
     "vdd": "supply_local",
     "gp": "full_wire",
     "gn": "full_wire",
     "dr": "full_wire",
-    "pr": "label_stub",
-    "brn": "label_stub",
-    "os": "label_stub",
+    "pr": "perimeter_bus",
+    "brn": "perimeter_bus",
+    "os": "perimeter_bus",
     "out": "full_wire",
     "mzp": "full_wire",
     "mzn": "full_wire"
@@ -167,15 +167,15 @@
     "out": "right"
   },
   "spacing": {
-    "intra_group_gap_x": 8,
-    "inter_group_gap_x": 14,
-    "min_clearance_x": 5,
-    "intra_stack_gap_y": 8,
-    "inter_tier_gap_y": 10,
+    "intra_group_gap_x": 6,
+    "inter_group_gap_x": 10,
+    "min_clearance_x": 4,
+    "intra_stack_gap_y": 7,
+    "inter_tier_gap_y": 9,
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }

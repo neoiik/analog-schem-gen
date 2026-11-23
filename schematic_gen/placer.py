@@ -393,6 +393,11 @@ def place_schematic(
                         r, "vertical_flipped" if (c_idx % 2 == 1) else "vertical"
                     )
 
+    # Pre-build column neighbor map so stacked vertical 2-pin passives orient shared pins toward each other
+    col_pos_map: dict[str, tuple[list[str], int]] = {
+        r: (col, idx_c) for col in columns for idx_c, r in enumerate(col)
+    }
+
     for inst in circuit.instances:
         if inst.device_class == "subckt":
             default_sem = "R0"
@@ -408,14 +413,24 @@ def place_schematic(
             else:
                 default_sem = "vertical"
         sem = intent.orientations.get(inst.ref, default_sem)
-        # Auto-correct upside-down vertical passives where M=VDD or P=VSS
-        if sem == "vertical" and inst.device_class not in {"mos", "subckt"}:
+        # Auto-correct upside-down vertical passives (rail polarity OR facing a same-column stacked neighbor!)
+        if sem == "vertical" and inst.device_class not in {"mos", "subckt"} and "P" in inst.terminals and "M" in inst.terminals:
             p_net = inst.terminals.get("P", "")
             m_net = inst.terminals.get("M", "")
             if (m_net in supplies and p_net not in supplies) or (
                 p_net in grounds and m_net not in grounds
             ):
                 sem = "vertical_flipped"
+            elif p_net not in rails and m_net not in rails and inst.ref in col_pos_map:
+                col_members, idx_c = col_pos_map[inst.ref]
+                if idx_c > 0:
+                    up_nets = set(inst_map[col_members[idx_c - 1]].terminals.values()) - rails
+                    if m_net in up_nets and p_net not in up_nets:
+                        sem = "vertical_flipped"
+                elif idx_c + 1 < len(col_members):
+                    dn_nets = set(inst_map[col_members[idx_c + 1]].terminals.values()) - rails
+                    if p_net in dn_nets and m_net not in dn_nets:
+                        sem = "vertical_flipped"
         rot, mir, cad = semantic_to_transform(sem)
         transforms[inst.ref] = (rot, mir, cad, sem)
         rel_pins[inst.ref] = pdk.source_pin_offsets(inst.device_key, rot, mir)
@@ -549,12 +564,25 @@ def place_schematic(
                         sep_x.append((u, v, min_gap))
             springs_x.append((col_left[0], col_right[0], target_gap, spring_w))
         else:
-            # Same-group staggered-tier subcolumn (e.g. tail M5 in Tier 5 between M1 & M2 in Tier 4, or RZ->CC):
-            # Only require clean pin/body X ordering without inflating horizontal span by off-row text boxes!
-            for u in col_left:
-                for v in col_right:
-                    body_gap = -(extents_x[u][1] + extents_x[v][0]) + 8 + corridor_bonus
-                    sep_x.append((u, v, body_gap))
+            diff_tails = {
+                str(m["tail"])
+                for m in intent.motifs
+                if m.get("type") == "diff_pair" and m.get("tail")
+            }
+            if any(r in diff_tails for r in col_left + col_right):
+                # Centered tail M5 between M1 & M2: keep compact body-only subcolumn offset
+                for u in col_left:
+                    for v in col_right:
+                        body_gap = -(extents_x[u][1] + extents_x[v][0]) + 8 + corridor_bonus
+                        sep_x.append((u, v, body_gap))
+            else:
+                # Non-tail staggered columns: ensure `u`'s text label box never overhangs `v`'s vertical pin column!
+                for u in col_left:
+                    for v in col_right:
+                        sep_x.append((u, v, 2 + corridor_bonus))
+                springs_x.append(
+                    (col_left[0], col_right[0], max(4, base_target // 2) + corridor_bonus, 4.0)
+                )
 
     # Also enforce non-overlap between columns skipping an intermediate column (e.g. left leg vs right leg across tail column!)
     for ci in range(len(columns)):
@@ -675,8 +703,20 @@ def place_schematic(
     min_env_y = min(p.full_envelope[1] for p in placements.values())
     max_env_y = max(p.full_envelope[3] for p in placements.values())
 
-    left_port_x = min_env_x - intent.spacing.port_margin_x
-    right_port_x = max_env_x + intent.spacing.port_margin_x
+    n_left_edge = sum(
+        1
+        for p in circuit.ports
+        if p.net not in rails
+        and intent.port_sides.get(p.name, "right" if p.direction == "output" else "left") == "left"
+    )
+    n_right_edge = sum(
+        1
+        for p in circuit.ports
+        if p.net not in rails
+        and intent.port_sides.get(p.name, "right" if p.direction == "output" else "left") == "right"
+    )
+    left_port_x = min_env_x - max(intent.spacing.port_margin_x, 6 + 2 * n_left_edge)
+    right_port_x = max_env_x + max(intent.spacing.port_margin_x, 6 + 2 * n_right_edge)
     used_left_ys: set[int] = set()
     used_right_ys: set[int] = set()
     used_port_owner: dict[Point, str] = {

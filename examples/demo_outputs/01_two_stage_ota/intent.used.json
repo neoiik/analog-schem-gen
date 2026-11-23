@@ -155,7 +155,7 @@
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }

@@ -197,6 +197,63 @@ B 5 7.5 -2.5 12.5 2.5 {name=b dir=in}
         book = render_hierarchy_book_html(res, pdk)
         self.assertIn("opamp_core", book)
 
+    def test_08_edge_port_reordering_and_straight_ray_alignment(self) -> None:
+        opa_path = ROOT / "examples" / "sky130_rcopa316_core.spice"
+        circuit = parse_netlist_file(opa_path)
+        pdk = PdkRegistry()
+        res = compile_hierarchical_circuit(circuit, pdk=pdk, optimize_crossings=False)
+
+        # 1. Sheet P01: `bp` must stay in upper/mid half (no bottom-floor detour below ground symbols)
+        # and both right output ports (`bn`, `bp`) must exit horizontally without wrapping behind ports
+        p01 = res.solved_pages["opamp_core_p01_beta_multiplier_and_startup"]
+        max_inst_y = max(pl.full_envelope[3] for pl in p01.placements.values())
+        bp_ys = [pt[1] for rt in p01.routes if rt.net_name == "bp" for pt in rt.points()]
+        self.assertLessEqual(max(bp_ys), max_inst_y)
+        right_ports_p01 = [po for po in p01.ports if po.port_name in {"bp", "bn"}]
+        max_port_x = max(po.x for po in right_ports_p01)
+        all_wire_xs_p01 = [pt[0] for rt in p01.routes for pt in rt.points()]
+        self.assertLessEqual(max(all_wire_xs_p01), max_port_x)
+
+        # 2. Sheet P03: zero wires may wrap left of `left_port_x`, and `hi_ref`/`hi_sig` exit as 0-bend straight rays
+        p03 = res.solved_pages["opamp_core_p03_matched_complementary_input_"]
+        y_by_p03 = {po.port_name: po.y for po in p03.ports if po.port_name in {"hi_ref", "hi_sig", "lo_sig", "lo_ref"}}
+        min_left_x = min(po.x for po in p03.ports if po.port_name in y_by_p03)
+        all_wire_xs_p03 = [pt[0] for rt in p03.routes for pt in rt.points()]
+        self.assertGreaterEqual(min(all_wire_xs_p03), min_left_x)
+        for p_net in ("hi_ref", "hi_sig"):
+            port_rts = [rt for rt in p03.routes if rt.net_name == p_net and rt.start.kind == "port"]
+            self.assertEqual(len(port_rts), 1)
+            self.assertEqual(len(port_rts[0].points()), 2, f"{p_net} port wire should be 0-bend straight line")
+
+        # 3. Sheet P08: `ds` and `dr` exit as 0-bend straight horizontal lines, and `dns` has 0 crossings with `dnr`
+        p08 = res.solved_pages["opamp_core_p08_differential_overdrive_detec"]
+        for p_net in ("ds", "dr"):
+            port_rts = [rt for rt in p08.routes if rt.net_name == p_net and rt.start.kind == "port"]
+            self.assertEqual(len(port_rts), 1)
+            self.assertEqual(len(port_rts[0].points()), 2, f"{p_net} port wire on P08 should be 0-bend straight line")
+
+    def test_09_vertical_branch_bundling_and_no_isolated_child_stubs(self) -> None:
+        opa_path = ROOT / "examples" / "sky130_rcopa316_core.spice"
+        circuit = parse_netlist_file(opa_path)
+        pdk = PdkRegistry()
+        res = compile_hierarchical_circuit(circuit, pdk=pdk, optimize_crossings=False)
+
+        # Every child sheet must draw continuous wires (`0` isolated `WireLabelStub`s)
+        for cname, solved in res.solved_pages.items():
+            if cname != res.design.top_cell:
+                self.assertEqual(len(solved.wire_label_stubs), 0, f"Child sheet {cname} should have 0 isolated stubs")
+
+        # On P03: RFPR-FPR, RFPS-FPS, and APREF-ACOPY must align vertically on identical X pin columns
+        p03 = res.solved_pages["opamp_core_p03_matched_complementary_input_"]
+        self.assertEqual(p03.placements["RFPR"].pin_points["M"][0], p03.placements["FPR"].pin_points["S"][0])
+        self.assertEqual(p03.placements["RFPS"].pin_points["M"][0], p03.placements["FPS"].pin_points["S"][0])
+        self.assertEqual(p03.placements["APREF"].pin_points["D"][0], p03.placements["ACOPY"].pin_points["D"][0])
+
+        # On P08: folded 2D layout keeps balanced aspect ratio (< 2.2)
+        p08 = res.solved_pages["opamp_core_p08_differential_overdrive_detec"]
+        bx0, by0, bx1, by1 = p08.bounds
+        self.assertLess((bx1 - bx0) / float(by1 - by0), 2.2)
+
 
 if __name__ == "__main__":
     unittest.main()

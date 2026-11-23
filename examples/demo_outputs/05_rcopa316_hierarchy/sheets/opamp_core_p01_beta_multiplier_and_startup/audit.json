@@ -9,8 +9,8 @@
   "metrics": {
     "instanceCount": 6,
     "netCount": 5,
-    "routeSegmentCount": 41,
-    "totalWireLengthGrids": 505,
+    "routeSegmentCount": 33,
+    "totalWireLengthGrids": 318,
     "symbolOverlapCount": 0,
     "labelOverlapCount": 0,
     "wireThroughBodyCount": 0,
@@ -18,12 +18,15 @@
     "collinearForeignWireOverlapCount": 0,
     "ambiguousCrossingCount": 0,
     "parallelCrowdGridPairs": 0,
-    "wireCrossingCount": 1,
+    "wireCrossingCount": 2,
     "crossingsByNet": {
-      "bn": 1,
-      "bp": 1
+      "bn": 2,
+      "bp": 2
     }
   },
   "findings": [],
-  "llmRefinementSuggestions": []
+  "llmRefinementSuggestions": [
+    "网络 'bn' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.bn = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'bp' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.bp = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+  ]
 }

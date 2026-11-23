@@ -70,6 +70,162 @@ def _assign_default_tiers(circuit: NetlistCircuit) -> dict[str, int]:
     return tiers
 
 
+def _bundle_vertical_branches(
+    pool_refs: list[str],
+    inst_by_ref: dict[str, InstanceIR],
+    default_tiers: dict[str, int],
+    fanout: dict[str, int],
+    rails: set[str],
+) -> list[list[str]]:
+    """Bundle vertically connected series/degenerated/divider/mirror devices into aligned columns.
+
+    Pairs devices `(u, v)` with `tier[u] < tier[v]` sharing a non-rail vertical terminal net
+    (`D/S` for MOS, `P/M` for passives/sources) in descending specificity (`fanout == 2` series
+    nodes first), eliminating unnecessary horizontal step jogs and reducing horizontal sprawl.
+    """
+    if not pool_refs:
+        return []
+
+    def _vert_nets(ref: str) -> set[str]:
+        inst = inst_by_ref[ref]
+        if inst.device_class == "mos":
+            return {inst.terminals[p] for p in ("D", "S") if p in inst.terminals} - rails
+        if inst.device_class != "subckt":
+            return {inst.terminals[p] for p in ("P", "M") if p in inst.terminals} - rails
+        return set()
+
+    vnets = {r: _vert_nets(r) for r in pool_refs}
+    edges: list[tuple[int, str, str]] = []
+    for i_u, u in enumerate(pool_refs):
+        for v in pool_refs[i_u + 1 :]:
+            tu, tv = default_tiers[u], default_tiers[v]
+            if tu == tv:
+                continue
+            hi, lo = (u, v) if tu < tv else (v, u)
+            shared = vnets[hi] & vnets[lo]
+            if not shared:
+                continue
+            best_n = min(shared, key=lambda n: fanout.get(n, 99))
+            fn = fanout.get(best_n, 99)
+            if fn > 8:
+                continue
+            base = 120 if fn <= 2 else (85 if fn == 3 else (60 - 3 * fn))
+            iu, iv = inst_by_ref[hi], inst_by_ref[lo]
+            mos_bonus = (
+                15
+                if (iu.polarity == "pmos" and iv.polarity == "nmos" and iu.terminals.get("D") == iv.terminals.get("D"))
+                else 0
+            )
+            tier_pen = 2 * abs(default_tiers[lo] - default_tiers[hi] - 1)
+            edges.append((base + mos_bonus - tier_pen, hi, lo))
+
+    edges.sort(key=lambda e: (-e[0], pool_refs.index(e[1]), pool_refs.index(e[2])))
+    col_list: list[list[str]] = [[r] for r in pool_refs]
+    col_idx_of: dict[str, int] = {r: i for i, r in enumerate(pool_refs)}
+
+    for _, hi, lo in edges:
+        c_hi = col_idx_of[hi]
+        c_lo = col_idx_of[lo]
+        if c_hi == c_lo:
+            continue
+        list_hi = col_list[c_hi]
+        list_lo = col_list[c_lo]
+        if max(default_tiers[x] for x in list_hi) < min(default_tiers[y] for y in list_lo):
+            merged = sorted(list_hi + list_lo, key=lambda x: default_tiers[x])
+            col_list[c_hi] = merged
+            col_list[c_lo] = []
+            for x in merged:
+                col_idx_of[x] = c_hi
+
+    return [c for c in col_list if c]
+
+
+def _compact_wide_columns_for_aspect_ratio(
+    column_hints: list[list[str]],
+    groups: list[FunctionalGroupSpec],
+    inst_by_ref: dict[str, InstanceIR],
+    default_tiers: dict[str, int],
+    locked_refs: set[str],
+    rails: set[str],
+) -> list[list[str]]:
+    """Prevent overly wide horizontal ribbon schematics by folding disjoint subcolumns & passive banks."""
+    cols = [list(c) for c in column_hints if c]
+    if len(cols) < 7:
+        return cols
+
+    group_of = {r: g.id for g in groups for r in g.instances}
+
+    # Pass 1: Within the same group, fold upper-only (`max_tier <= 2`) + lower-only (`min_tier >= 4`) columns
+    merged_flags = [False] * len(cols)
+    active_count = len(cols)
+    for i, col_u in enumerate(cols):
+        if active_count < 7 or merged_flags[i] or any(r in locked_refs for r in col_u):
+            continue
+        gid = group_of.get(col_u[0], "")
+        if not gid or any(group_of.get(r) != gid for r in col_u):
+            continue
+        if max(default_tiers[r] for r in col_u) > 2:
+            continue
+
+        u_nets = {n for r in col_u for n in inst_by_ref[r].terminals.values()} - rails
+        best_j = -1
+        best_shared = -1
+        for j in range(i + 1, len(cols)):
+            col_l = cols[j]
+            if merged_flags[j] or any(r in locked_refs for r in col_l):
+                continue
+            if any(group_of.get(r) != gid for r in col_l):
+                continue
+            if min(default_tiers[r] for r in col_l) < 4:
+                continue
+            l_nets = {n for r in col_l for n in inst_by_ref[r].terminals.values()} - rails
+            sh = len(u_nets & l_nets)
+            if sh > best_shared:
+                best_shared = sh
+                best_j = j
+        if best_j >= 0:
+            cols[i] = sorted(col_u + cols[best_j], key=lambda r: default_tiers[r])
+            merged_flags[best_j] = True
+            active_count -= 1
+
+    cols = [c for idx, c in enumerate(cols) if not merged_flags[idx]]
+    if len(cols) < 7:
+        return cols
+
+    # Pass 2: Fold wide single-tier 2-pin passive runs (`>= 5` singletons in same `(group, tier)`) into 2 rows
+    passive_buckets: dict[tuple[str, int], list[int]] = {}
+    for idx, col in enumerate(cols):
+        if len(col) == 1 and col[0] not in locked_refs:
+            inst = inst_by_ref[col[0]]
+            if inst.device_class not in {"mos", "subckt"}:
+                key = (group_of.get(col[0], ""), default_tiers[col[0]])
+                passive_buckets.setdefault(key, []).append(idx)
+
+    drop_indices: set[int] = set()
+    for _, idx_list in passive_buckets.items():
+        if len(idx_list) < 5:
+            continue
+        avail = list(idx_list)
+        while len(avail) >= 2:
+            i_a = avail.pop(0)
+            ra = cols[i_a][0]
+            na = set(inst_by_ref[ra].terminals.values()) - rails
+            # Pair with a passive sharing a net (e.g. REPG + CEPG on `ep`) if available, else next neighbor
+            partner_pos = next(
+                (
+                    pos
+                    for pos, i_b in enumerate(avail)
+                    if (set(inst_by_ref[cols[i_b][0]].terminals.values()) - rails) & na
+                ),
+                0,
+            )
+            i_b = avail.pop(partner_pos)
+            cols[i_a] = [ra, cols[i_b][0]]
+            drop_indices.add(i_b)
+
+    return [c for idx, c in enumerate(cols) if idx not in drop_indices]
+
+
 def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
     """Extract candidate analog motifs, potential tiers, ambiguities for LLM, and a clean draft intent."""
     supplies = set(circuit.supply_nets)
@@ -639,38 +795,36 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
                 }
             )
 
-    # Group E: Remaining gain / output stage branches & load passives
+    # Group E: Remaining gain / output stage branches & true output-port shunt loads
     remaining = [i.ref for i in circuit.instances if i.ref not in assigned]
     if remaining:
-        # Group vertically connected PMOS + NMOS sharing an output drain net into a single column!
-        rem_mos_p = [r for r in remaining if inst_by_ref[r].polarity == "pmos"]
-        rem_mos_n = [r for r in remaining if inst_by_ref[r].polarity == "nmos"]
-        paired_rem: set[str] = set()
-        out_stage_refs: list[str] = []
+        output_port_nets = {p.net for p in circuit.ports if p.direction == "output"}
         load_refs: list[str] = []
-
-        for pr in rem_mos_p:
-            pd = inst_by_ref[pr].terminals["D"]
-            nr = next((x for x in rem_mos_n if x not in paired_rem and inst_by_ref[x].terminals["D"] == pd), None)
-            if nr:
-                paired_rem.update({pr, nr})
-                out_stage_refs.extend([pr, nr])
-                column_hints.append([pr, nr])
-                orientations.setdefault(pr, "gate_left")
-                orientations.setdefault(nr, "gate_left")
+        branch_pool: list[str] = []
 
         for r in remaining:
-            if r in paired_rem:
-                continue
             inst = inst_by_ref[r]
-            if inst.device_class.startswith(("cap", "res")) and (
-                set(inst.terminals.values()) & grounds
+            terms_set = set(inst.terminals.values())
+            # Only isolate shunt RC to ground as `output_load` when its other terminal is an output port!
+            if (
+                inst.device_class.startswith(("cap", "res"))
+                and (terms_set & grounds)
+                and (terms_set & output_port_nets)
             ):
                 load_refs.append(r)
                 orientations.setdefault(r, "vertical")
             else:
+                branch_pool.append(r)
+
+        bundled_cols = _bundle_vertical_branches(
+            branch_pool, inst_by_ref, default_tiers, fanout, rails
+        )
+        out_stage_refs: list[str] = []
+        for col in bundled_cols:
+            column_hints.append(col)
+            for r in col:
                 out_stage_refs.append(r)
-                column_hints.append([r])
+                inst = inst_by_ref[r]
                 orientations.setdefault(
                     r, "gate_left" if inst.device_class == "mos" else "vertical"
                 )
@@ -697,6 +851,22 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
                     instances=load_refs,
                 )
             )
+
+    # Fold overly wide horizontal sheets (`>= 7` columns) into balanced 2D row/column grids
+    locked_for_folding: set[str] = set()
+    for m_item in intent_motifs:
+        for k_role in ("left", "right", "tail", "loadLeft", "loadRight"):
+            if m_item.get(k_role):
+                locked_for_folding.add(str(m_item[k_role]))
+        for r_m in m_item.get("instances", []):
+            locked_for_folding.add(str(r_m))
+        for r_m in m_item.get("leftColumn", []) + m_item.get("rightColumn", []):
+            locked_for_folding.add(str(r_m))
+    for r_comp in comp_members:
+        locked_for_folding.add(r_comp)
+    column_hints = _compact_wide_columns_for_aspect_ratio(
+        column_hints, groups, inst_by_ref, default_tiers, locked_for_folding, rails
+    )
 
     # Net classification policies
     net_policies: dict[str, str] = {}

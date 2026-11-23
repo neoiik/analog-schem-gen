@@ -26,20 +26,12 @@
         "NOUT",
         "PLND",
         "NSENSE",
+        "Rlimn",
+        "NCLAMP",
         "PSENSE",
         "NLREF",
-        "NCLAMP",
         "Rlimp",
         "PCLAMP"
-      ]
-    },
-    {
-      "id": "output_load",
-      "label": "输出负载",
-      "role": "output_stage",
-      "stage_order": 35,
-      "instances": [
-        "Rlimn"
       ]
     }
   ],
@@ -65,10 +57,10 @@
     "NOUT": "gate_left",
     "PLND": "gate_left",
     "NSENSE": "gate_left",
-    "PSENSE": "gate_left",
-    "NLREF": "gate_left",
     "Rlimn": "vertical",
     "NCLAMP": "gate_left",
+    "PSENSE": "gate_left",
+    "NLREF": "gate_left",
     "Rlimp": "vertical",
     "PCLAMP": "gate_left"
   },
@@ -91,20 +83,20 @@
       "NSENSE"
     ],
     [
-      "PSENSE",
-      "NLREF"
+      "Rlimn"
     ],
     [
       "NCLAMP"
+    ],
+    [
+      "PSENSE",
+      "NLREF"
     ],
     [
       "Rlimp"
     ],
     [
       "PCLAMP"
-    ],
-    [
-      "Rlimn"
     ]
   ],
   "netPolicies": {
@@ -115,7 +107,7 @@
     "vdd": "supply_local",
     "ns_mon": "full_wire",
     "lim_nm": "full_wire",
-    "lim_n": "perimeter_bus",
+    "lim_n": "full_wire",
     "vshd_p": "full_wire",
     "ps_mon": "full_wire",
     "lim_pm": "full_wire",
@@ -128,6 +120,7 @@
     "gp",
     "ns_mon",
     "lim_nm",
+    "lim_n",
     "vshd_p",
     "ps_mon",
     "lim_pm",
@@ -144,15 +137,15 @@
     "vshd_n": "local_repeat"
   },
   "spacing": {
-    "intra_group_gap_x": 8,
-    "inter_group_gap_x": 14,
-    "min_clearance_x": 5,
-    "intra_stack_gap_y": 8,
-    "inter_tier_gap_y": 10,
+    "intra_group_gap_x": 6,
+    "inter_group_gap_x": 10,
+    "min_clearance_x": 4,
+    "intra_stack_gap_y": 7,
+    "inter_tier_gap_y": 9,
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }

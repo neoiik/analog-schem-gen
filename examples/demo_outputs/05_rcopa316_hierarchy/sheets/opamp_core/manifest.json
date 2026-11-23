@@ -653,10 +653,10 @@
       "sourceGeometry": {
         "coordinateSystem": "source coordinates: x right, y down (1 unit = 1 Virtuoso gridUnit)",
         "bounds": {
-          "minX": 10,
+          "minX": 12,
           "minY": 18,
-          "maxX": 245,
-          "maxY": 171
+          "maxX": 243,
+          "maxY": 172
         },
         "portOccurrences": [
           {
@@ -666,8 +666,8 @@
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 16,
-              "y": 81
+              "x": 18,
+              "y": 78
             },
             "sourceTransform": {
               "rotation": 0,
@@ -681,8 +681,8 @@
             "direction": "input",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 16,
-              "y": 85
+              "x": 18,
+              "y": 87
             },
             "sourceTransform": {
               "rotation": 0,
@@ -696,8 +696,8 @@
             "direction": "output",
             "sourceSymbolId": "port",
             "sourcePosition": {
-              "x": 239,
-              "y": 150
+              "x": 237,
+              "y": 164
             },
             "sourceTransform": {
               "rotation": 0,
@@ -1007,12 +1007,12 @@
         ],
         "junctions": [
           {
-            "id": "J_vin_1",
-            "netName": "vin",
+            "id": "J_vip_1",
+            "netName": "vip",
             "role": "steiner",
             "sourcePosition": {
-              "x": 84,
-              "y": 94
+              "x": 136,
+              "y": 78
             }
           },
           {
@@ -1020,8 +1020,8 @@
             "netName": "vin",
             "role": "steiner",
             "sourcePosition": {
-              "x": 135,
-              "y": 123
+              "x": 138,
+              "y": 76
             }
           },
           {
@@ -1030,16 +1030,25 @@
             "role": "steiner",
             "sourcePosition": {
               "x": 90,
-              "y": 81
+              "y": 78
             }
           },
           {
-            "id": "J_vip_4",
-            "netName": "vip",
+            "id": "J_vin_4",
+            "netName": "vin",
             "role": "steiner",
             "sourcePosition": {
-              "x": 131,
-              "y": 74
+              "x": 96,
+              "y": 86
+            }
+          },
+          {
+            "id": "J_out_5",
+            "netName": "out",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 100,
+              "y": 164
             }
           }
         ],
@@ -1546,15 +1555,70 @@
             ]
           },
           {
-            "id": "R_lo_ref_21",
-            "netName": "lo_ref",
+            "id": "R_out_21_a",
+            "netName": "out",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
-              "pinName": "lo_ref",
+              "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+              "pinName": "out",
               "sourcePoint": {
-                "x": 112,
+                "x": 100,
+                "y": 150
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_out_5",
+                "sourcePoint": {
+                  "x": 100,
+                  "y": 164
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_out_21_b",
+            "netName": "out",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_out_5",
+              "sourcePoint": {
+                "x": 100,
+                "y": 164
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 57,
+                  "y": 164
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+                "pinName": "out",
+                "sourcePoint": {
+                  "x": 57,
+                  "y": 150
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_bn_22",
+            "netName": "bn",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+              "pinName": "bn",
+              "sourcePoint": {
+                "x": 143,
                 "y": 44
               }
             },
@@ -1562,84 +1626,24 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 121,
-                  "y": 44
+                  "x": 143,
+                  "y": 66
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 121,
-                  "y": 78
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 96,
-                  "y": 78
+                  "x": 37,
+                  "y": 66
                 }
               },
               {
                 "kind": "instance",
-                "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
-                "pinName": "lo_ref",
+                "instanceId": "source-U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+                "pinName": "bn",
                 "sourcePoint": {
-                  "x": 96,
-                  "y": 90
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_lo_sig_22",
-            "netName": "lo_sig",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
-              "pinName": "lo_sig",
-              "sourcePoint": {
-                "x": 112,
-                "y": 48
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 114,
-                  "y": 48
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 114,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 94,
-                  "y": 76
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 94,
-                  "y": 98
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
-                "pinName": "lo_sig",
-                "sourcePoint": {
-                  "x": 96,
-                  "y": 98
+                  "x": 37,
+                  "y": 46
                 }
               }
             ]
@@ -1716,7 +1720,106 @@
             ]
           },
           {
-            "id": "R_gn0_25",
+            "id": "R_lo_ref_25",
+            "netName": "lo_ref",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "lo_ref",
+              "sourcePoint": {
+                "x": 96,
+                "y": 98
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 94,
+                  "y": 98
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 94,
+                  "y": 68
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 114,
+                  "y": 68
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 114,
+                  "y": 48
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+                "pinName": "lo_ref",
+                "sourcePoint": {
+                  "x": 112,
+                  "y": 48
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lo_sig_26",
+            "netName": "lo_sig",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "lo_sig",
+              "sourcePoint": {
+                "x": 96,
+                "y": 102
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 92,
+                  "y": 102
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 92,
+                  "y": 70
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 112,
+                  "y": 70
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+                "pinName": "lo_sig",
+                "sourcePoint": {
+                  "x": 112,
+                  "y": 52
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn0_27",
             "netName": "gn0",
             "presentation": "wire",
             "start": {
@@ -1740,7 +1843,7 @@
                 "kind": "bend",
                 "position": {
                   "x": 174,
-                  "y": 44
+                  "y": 48
                 }
               },
               {
@@ -1749,73 +1852,13 @@
                 "pinName": "gn0",
                 "sourcePoint": {
                   "x": 159,
-                  "y": 44
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_gp0_26",
-            "netName": "gp0",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
-              "pinName": "gp0",
-              "sourcePoint": {
-                "x": 196,
-                "y": 100
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 157,
-                  "y": 100
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 157,
-                  "y": 115
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 137,
-                  "y": 115
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 137,
-                  "y": 61
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 159,
-                  "y": 61
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
-                "pinName": "gp0",
-                "sourcePoint": {
-                  "x": 159,
                   "y": 48
                 }
               }
             ]
           },
           {
-            "id": "R_iq_n_27",
+            "id": "R_iq_n_28",
             "netName": "iq_n",
             "presentation": "wire",
             "start": {
@@ -1839,7 +1882,7 @@
                 "kind": "bend",
                 "position": {
                   "x": 176,
-                  "y": 40
+                  "y": 44
                 }
               },
               {
@@ -1848,158 +1891,52 @@
                 "pinName": "iq_n",
                 "sourcePoint": {
                   "x": 159,
+                  "y": 44
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp0_29",
+            "netName": "gp0",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+              "pinName": "gp0",
+              "sourcePoint": {
+                "x": 196,
+                "y": 100
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 178,
+                  "y": 100
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 178,
+                  "y": 40
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+                "pinName": "gp0",
+                "sourcePoint": {
+                  "x": 159,
                   "y": 40
                 }
               }
             ]
           },
           {
-            "id": "R_bn_28",
-            "netName": "bn",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
-              "pinName": "bn",
-              "sourcePoint": {
-                "x": 143,
-                "y": 44
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 143,
-                  "y": 24
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 59,
-                  "y": 24
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 59,
-                  "y": 46
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-U1_P01_BETA_MULTIPLIER_AND_STARTUP",
-                "pinName": "bn",
-                "sourcePoint": {
-                  "x": 37,
-                  "y": 46
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vshd_p_29",
-            "netName": "vshd_p",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
-              "pinName": "vshd_p",
-              "sourcePoint": {
-                "x": 112,
-                "y": 40
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 133,
-                  "y": 40
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 133,
-                  "y": 138
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 80,
-                  "y": 138
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
-                "pinName": "vshd_p",
-                "sourcePoint": {
-                  "x": 80,
-                  "y": 150
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_ds_30",
-            "netName": "ds",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
-              "pinName": "ds",
-              "sourcePoint": {
-                "x": 155,
-                "y": 98
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 159,
-                  "y": 98
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 159,
-                  "y": 165
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 35,
-                  "y": 165
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 35,
-                  "y": 148
-                }
-              },
-              {
-                "kind": "instance",
-                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
-                "pinName": "ds",
-                "sourcePoint": {
-                  "x": 37,
-                  "y": 148
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_dr_31",
+            "id": "R_dr_30",
             "netName": "dr",
             "presentation": "wire",
             "start": {
@@ -2022,15 +1959,8 @@
               {
                 "kind": "bend",
                 "position": {
-                  "x": 33,
+                  "x": 37,
                   "y": 136
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 33,
-                  "y": 152
                 }
               },
               {
@@ -2039,71 +1969,169 @@
                 "pinName": "dr",
                 "sourcePoint": {
                   "x": 37,
-                  "y": 152
+                  "y": 148
                 }
               }
             ]
           },
           {
-            "id": "R_out_32",
-            "netName": "out",
+            "id": "R_vshd_p_31",
+            "netName": "vshd_p",
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
-              "pinName": "out",
+              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+              "pinName": "vshd_p",
               "sourcePoint": {
-                "x": 100,
-                "y": 150
+                "x": 112,
+                "y": 40
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 100,
-                  "y": 163
+                  "x": 134,
+                  "y": 40
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 57,
-                  "y": 163
+                  "x": 134,
+                  "y": 138
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 80,
+                  "y": 138
                 }
               },
               {
                 "kind": "instance",
-                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
-                "pinName": "out",
+                "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+                "pinName": "vshd_p",
                 "sourcePoint": {
-                  "x": 57,
+                  "x": 80,
                   "y": 150
                 }
               }
             ]
           },
           {
-            "id": "R_out_33",
-            "netName": "out",
+            "id": "R_vip_32_a",
+            "netName": "vip",
             "presentation": "wire",
             "start": {
-              "kind": "port",
-              "instanceId": "P_out",
-              "pinName": "out",
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "vip",
               "sourcePoint": {
-                "x": 239,
-                "y": 150
+                "x": 139,
+                "y": 102
               }
             },
             "steps": [
               {
-                "kind": "instance",
-                "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
-                "pinName": "out",
+                "kind": "bend",
+                "position": {
+                  "x": 136,
+                  "y": 102
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_1",
                 "sourcePoint": {
-                  "x": 100,
-                  "y": 150
+                  "x": 136,
+                  "y": 78
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_32_b_a",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vip_1",
+              "sourcePoint": {
+                "x": 136,
+                "y": 78
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_3",
+                "sourcePoint": {
+                  "x": 90,
+                  "y": 78
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_32_b_b",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vip_3",
+              "sourcePoint": {
+                "x": 90,
+                "y": 78
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 90,
+                  "y": 94
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+                "pinName": "vip",
+                "sourcePoint": {
+                  "x": 96,
+                  "y": 94
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_33",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+              "pinName": "vip",
+              "sourcePoint": {
+                "x": 184,
+                "y": 46
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 184,
+                  "y": 78
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_1",
+                "sourcePoint": {
+                  "x": 136,
+                  "y": 78
                 }
               }
             ]
@@ -2114,231 +2142,8 @@
             "presentation": "wire",
             "start": {
               "kind": "instance",
-              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
-              "pinName": "vin",
-              "sourcePoint": {
-                "x": 96,
-                "y": 94
-              }
-            },
-            "steps": [
-              {
-                "kind": "junction",
-                "junctionId": "J_vin_1",
-                "sourcePoint": {
-                  "x": 84,
-                  "y": 94
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vin_34_b",
-            "netName": "vin",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_vin_1",
-              "sourcePoint": {
-                "x": 84,
-                "y": 94
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 67,
-                  "y": 94
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 67,
-                  "y": 85
-                }
-              },
-              {
-                "kind": "port",
-                "instanceId": "P_vin",
-                "pinName": "vin",
-                "sourcePoint": {
-                  "x": 16,
-                  "y": 85
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vin_35_a",
-            "netName": "vin",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
               "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
               "pinName": "vin",
-              "sourcePoint": {
-                "x": 139,
-                "y": 102
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 139,
-                  "y": 123
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_vin_2",
-                "sourcePoint": {
-                  "x": 135,
-                  "y": 123
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vin_35_b",
-            "netName": "vin",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_vin_2",
-              "sourcePoint": {
-                "x": 135,
-                "y": 123
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 84,
-                  "y": 123
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_vin_1",
-                "sourcePoint": {
-                  "x": 84,
-                  "y": 94
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vin_36",
-            "netName": "vin",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
-              "pinName": "vin",
-              "sourcePoint": {
-                "x": 184,
-                "y": 46
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 178,
-                  "y": 46
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 178,
-                  "y": 28
-                }
-              },
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 135,
-                  "y": 28
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_vin_2",
-                "sourcePoint": {
-                  "x": 135,
-                  "y": 123
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vip_37_a",
-            "netName": "vip",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
-              "pinName": "vip",
-              "sourcePoint": {
-                "x": 96,
-                "y": 102
-              }
-            },
-            "steps": [
-              {
-                "kind": "bend",
-                "position": {
-                  "x": 90,
-                  "y": 102
-                }
-              },
-              {
-                "kind": "junction",
-                "junctionId": "J_vip_3",
-                "sourcePoint": {
-                  "x": 90,
-                  "y": 81
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vip_37_b",
-            "netName": "vip",
-            "presentation": "wire",
-            "start": {
-              "kind": "junction",
-              "junctionId": "J_vip_3",
-              "sourcePoint": {
-                "x": 90,
-                "y": 81
-              }
-            },
-            "steps": [
-              {
-                "kind": "port",
-                "instanceId": "P_vip",
-                "pinName": "vip",
-                "sourcePoint": {
-                  "x": 16,
-                  "y": 81
-                }
-              }
-            ]
-          },
-          {
-            "id": "R_vip_38_a",
-            "netName": "vip",
-            "presentation": "wire",
-            "start": {
-              "kind": "instance",
-              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
-              "pinName": "vip",
               "sourcePoint": {
                 "x": 139,
                 "y": 98
@@ -2349,57 +2154,81 @@
                 "kind": "bend",
                 "position": {
                   "x": 139,
-                  "y": 74
+                  "y": 76
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_vip_4",
+                "junctionId": "J_vin_2",
                 "sourcePoint": {
-                  "x": 131,
-                  "y": 74
+                  "x": 138,
+                  "y": 76
                 }
               }
             ]
           },
           {
-            "id": "R_vip_38_b",
-            "netName": "vip",
+            "id": "R_vin_34_b_a",
+            "netName": "vin",
             "presentation": "wire",
             "start": {
               "kind": "junction",
-              "junctionId": "J_vip_4",
+              "junctionId": "J_vin_2",
               "sourcePoint": {
-                "x": 131,
-                "y": 74
+                "x": 138,
+                "y": 76
               }
             },
             "steps": [
               {
                 "kind": "bend",
                 "position": {
-                  "x": 90,
-                  "y": 74
+                  "x": 96,
+                  "y": 76
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_vip_3",
+                "junctionId": "J_vin_4",
                 "sourcePoint": {
-                  "x": 90,
-                  "y": 81
+                  "x": 96,
+                  "y": 86
                 }
               }
             ]
           },
           {
-            "id": "R_vip_39",
-            "netName": "vip",
+            "id": "R_vin_34_b_b",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vin_4",
+              "sourcePoint": {
+                "x": 96,
+                "y": 86
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+                "pinName": "vin",
+                "sourcePoint": {
+                  "x": 96,
+                  "y": 90
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_35",
+            "netName": "vin",
             "presentation": "wire",
             "start": {
               "kind": "instance",
               "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
-              "pinName": "vip",
+              "pinName": "vin",
               "sourcePoint": {
                 "x": 184,
                 "y": 42
@@ -2410,22 +2239,154 @@
                 "kind": "bend",
                 "position": {
                   "x": 184,
-                  "y": 26
+                  "y": 28
                 }
               },
               {
                 "kind": "bend",
                 "position": {
-                  "x": 131,
-                  "y": 26
+                  "x": 138,
+                  "y": 28
                 }
               },
               {
                 "kind": "junction",
-                "junctionId": "J_vip_4",
+                "junctionId": "J_vin_2",
                 "sourcePoint": {
-                  "x": 131,
-                  "y": 74
+                  "x": 138,
+                  "y": 76
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ds_36",
+            "netName": "ds",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "ds",
+              "sourcePoint": {
+                "x": 155,
+                "y": 98
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 158,
+                  "y": 98
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 158,
+                  "y": 166
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 37,
+                  "y": 166
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+                "pinName": "ds",
+                "sourcePoint": {
+                  "x": 37,
+                  "y": 152
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_37",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_vip",
+              "pinName": "vip",
+              "sourcePoint": {
+                "x": 18,
+                "y": 78
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_3",
+                "sourcePoint": {
+                  "x": 90,
+                  "y": 78
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_38",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_vin",
+              "pinName": "vin",
+              "sourcePoint": {
+                "x": 18,
+                "y": 87
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 19,
+                  "y": 87
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 19,
+                  "y": 86
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vin_4",
+                "sourcePoint": {
+                  "x": 96,
+                  "y": 86
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_out_39",
+            "netName": "out",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_out",
+              "pinName": "out",
+              "sourcePoint": {
+                "x": 237,
+                "y": 164
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_out_5",
+                "sourcePoint": {
+                  "x": 100,
+                  "y": 164
                 }
               }
             ]

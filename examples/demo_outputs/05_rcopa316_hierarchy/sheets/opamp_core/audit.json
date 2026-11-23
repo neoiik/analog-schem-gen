@@ -9,8 +9,8 @@
   "metrics": {
     "instanceCount": 10,
     "netCount": 26,
-    "routeSegmentCount": 123,
-    "totalWireLengthGrids": 2455,
+    "routeSegmentCount": 114,
+    "totalWireLengthGrids": 2216,
     "symbolOverlapCount": 0,
     "labelOverlapCount": 0,
     "wireThroughBodyCount": 0,
@@ -18,29 +18,28 @@
     "collinearForeignWireOverlapCount": 0,
     "ambiguousCrossingCount": 0,
     "parallelCrowdGridPairs": 0,
-    "wireCrossingCount": 25,
+    "wireCrossingCount": 31,
     "crossingsByNet": {
-      "vin": 8,
-      "hi_sig": 3,
-      "gp0": 5,
-      "iq_n": 2,
-      "dr": 3,
-      "ds": 3,
-      "vip": 10,
+      "bn": 6,
+      "hi_ref": 4,
+      "vip": 13,
+      "vin": 9,
+      "gn0": 3,
+      "hi_sig": 4,
       "vshd_p": 4,
-      "hi_ref": 3,
-      "bn": 2,
-      "lo_sig": 3,
-      "gn0": 1,
+      "lo_sig": 6,
+      "lo_ref": 6,
       "out": 1,
-      "lo_ref": 1,
-      "gp": 1
+      "ds": 1,
+      "iq_n": 2,
+      "gp0": 2,
+      "dr": 1
     }
   },
   "findings": [],
   "llmRefinementSuggestions": [
-    "网络 'vip' 当前产生 10 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vip = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
-    "网络 'vin' 当前产生 8 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vin = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
-    "网络 'gp0' 当前产生 5 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.gp0 = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+    "网络 'vip' 当前产生 13 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vip = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'vin' 当前产生 9 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.vin = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'bn' 当前产生 6 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.bn = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
   ]
 }

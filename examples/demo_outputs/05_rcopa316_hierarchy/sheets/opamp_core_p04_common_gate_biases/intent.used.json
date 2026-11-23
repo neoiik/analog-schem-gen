@@ -22,25 +22,17 @@
       "instances": [
         "VNFEED",
         "VND",
-        "NCFEED",
-        "NCBLEED",
-        "RCP",
-        "BCP",
-        "RNtop",
         "RNCFEED",
+        "NCFEED",
+        "RNtop",
         "RCN",
+        "RNbot",
+        "NCBLEED",
         "VPD",
+        "RPbot",
+        "RCP",
         "RPtop",
-        "RPbot"
-      ]
-    },
-    {
-      "id": "output_load",
-      "label": "输出负载",
-      "role": "output_stage",
-      "stage_order": 35,
-      "instances": [
-        "RNbot"
+        "BCP"
       ]
     }
   ],
@@ -50,17 +42,17 @@
     "VPSINK": "gate_left",
     "VNFEED": "gate_left",
     "VND": "gate_left",
-    "NCFEED": "gate_left",
-    "NCBLEED": "gate_left",
-    "RCP": "gate_left",
-    "BCP": "gate_left",
-    "RNtop": "vertical",
-    "RNbot": "vertical",
     "RNCFEED": "vertical",
+    "NCFEED": "gate_left",
+    "RNtop": "vertical",
     "RCN": "gate_left",
+    "RNbot": "vertical",
+    "NCBLEED": "gate_left",
     "VPD": "gate_left",
+    "RPbot": "vertical",
+    "RCP": "gate_left",
     "RPtop": "vertical",
-    "RPbot": "vertical"
+    "BCP": "gate_left"
   },
   "tierOverrides": {},
   "columnOrderHints": [
@@ -73,33 +65,23 @@
       "VND"
     ],
     [
+      "RNCFEED",
       "NCFEED",
+      "RNtop",
+      "RCN",
+      "RNbot"
+    ],
+    [
       "NCBLEED"
-    ],
-    [
-      "RCP",
-      "BCP"
-    ],
-    [
-      "RNtop"
-    ],
-    [
-      "RNCFEED"
-    ],
-    [
-      "RCN"
     ],
     [
       "VPD"
     ],
     [
-      "RPtop"
-    ],
-    [
-      "RPbot"
-    ],
-    [
-      "RNbot"
+      "RPbot",
+      "RCP",
+      "RPtop",
+      "BCP"
     ]
   ],
   "netPolicies": {
@@ -143,15 +125,15 @@
     "pcas": "right"
   },
   "spacing": {
-    "intra_group_gap_x": 8,
-    "inter_group_gap_x": 14,
-    "min_clearance_x": 5,
-    "intra_stack_gap_y": 8,
-    "inter_tier_gap_y": 10,
+    "intra_group_gap_x": 6,
+    "inter_group_gap_x": 10,
+    "min_clearance_x": 4,
+    "intra_stack_gap_y": 7,
+    "inter_tier_gap_y": 9,
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }

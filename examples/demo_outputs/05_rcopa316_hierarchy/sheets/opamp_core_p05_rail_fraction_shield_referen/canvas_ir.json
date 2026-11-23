@@ -2,15 +2,13 @@
   "schema": "schem_gen.canvas_ir.v1",
   "cellName": "opamp_core_p05_rail_fraction_shield_referen",
   "bounds": {
-    "minX": 10,
-    "minY": 18,
-    "maxX": 479,
-    "maxY": 114
+    "minX": 12,
+    "minY": 10,
+    "maxX": 319,
+    "maxY": 100
   },
-  "congestionIterations": 2,
-  "corridorExpansions": [
-    "iter 1: expanded corridors by +4 grids due to congested nets ['lo_sig']"
-  ],
+  "congestionIterations": 1,
+  "corridorExpansions": [],
   "groups": [
     {
       "id": "cascode_stage",
@@ -30,34 +28,26 @@
       "role": "output_stage",
       "stage_order": 30,
       "instances": [
-        "CPR_SHD",
-        "CNR",
-        "CPGP",
-        "CNGP_SHD",
         "Rdiv_nhi",
+        "Rdiv_nlo",
+        "Cdiv_n",
         "SHDNP",
         "Rdiv_phi",
+        "Rdiv_plo",
         "Cdiv_p",
         "SHDPN",
         "CPR",
+        "CPR_SHD",
+        "CNR",
         "FNR",
-        "FNS",
-        "CNGP"
-      ]
-    },
-    {
-      "id": "output_load",
-      "label": "输出负载",
-      "role": "output_stage",
-      "stage_order": 35,
-      "instances": [
-        "Rdiv_nlo",
-        "Cdiv_n",
-        "Rdiv_plo",
         "RFNR",
+        "FNS",
         "RFNS",
         "CFNR",
-        "CFNS"
+        "CFNS",
+        "CPGP",
+        "CNGP_SHD",
+        "CNGP"
       ]
     }
   ],
@@ -69,31 +59,31 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 139,
+        "x": 87,
         "y": 35
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 139,
+          "x": 87,
           "y": 32
         },
         "M": {
-          "x": 139,
+          "x": 87,
           "y": 38
         }
       },
       "bodyBox": [
-        137,
+        85,
         32,
-        141,
+        89,
         38
       ],
       "labelBox": [
-        142,
+        90,
         33,
-        147,
+        95,
         37
       ],
       "labelLines": [
@@ -105,35 +95,35 @@
       "ref": "Rdiv_nlo",
       "deviceClass": "resistor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 329,
-        "y": 97
+        "x": 87,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 329,
-          "y": 94
+          "x": 87,
+          "y": 79
         },
         "M": {
-          "x": 329,
-          "y": 100
+          "x": 87,
+          "y": 85
         }
       },
       "bodyBox": [
-        327,
-        94,
-        331,
-        100
+        85,
+        79,
+        89,
+        85
       ],
       "labelBox": [
-        332,
+        90,
+        80,
         95,
-        337,
-        99
+        84
       ],
       "labelLines": [
         "Rdiv_nlo",
@@ -144,35 +134,35 @@
       "ref": "Cdiv_n",
       "deviceClass": "capacitor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 348,
-        "y": 97
+        "x": 101,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 348,
-          "y": 94
+          "x": 101,
+          "y": 79
         },
         "M": {
-          "x": 348,
-          "y": 100
+          "x": 101,
+          "y": 85
         }
       },
       "bodyBox": [
-        346,
-        94,
-        350,
-        100
+        99,
+        79,
+        103,
+        85
       ],
       "labelBox": [
-        351,
-        95,
-        356,
-        99
+        104,
+        80,
+        109,
+        84
       ],
       "labelLines": [
         "Cdiv_n",
@@ -186,39 +176,39 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 170,
+        "x": 127,
         "y": 35
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 171,
+          "x": 128,
           "y": 38
         },
         "G": {
-          "x": 167,
+          "x": 124,
           "y": 35
         },
         "S": {
-          "x": 171,
+          "x": 128,
           "y": 32
         },
         "B": {
-          "x": 171,
+          "x": 128,
           "y": 35
         }
       },
       "bodyBox": [
-        167,
+        124,
         32,
-        172,
+        129,
         38
       ],
       "labelBox": [
-        173,
+        130,
         33,
-        181,
+        138,
         37
       ],
       "labelLines": [
@@ -233,40 +223,40 @@
       "group": "cascode_stage",
       "tier": 4,
       "position": {
-        "x": 57,
-        "y": 77
+        "x": 69,
+        "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 58,
-          "y": 74
+          "x": 70,
+          "y": 64
         },
         "G": {
-          "x": 54,
-          "y": 77
+          "x": 66,
+          "y": 67
         },
         "S": {
-          "x": 58,
-          "y": 80
+          "x": 70,
+          "y": 70
         },
         "B": {
-          "x": 58,
-          "y": 77
+          "x": 70,
+          "y": 67
         }
       },
       "bodyBox": [
-        54,
-        74,
-        59,
-        80
+        66,
+        64,
+        71,
+        70
       ],
       "labelBox": [
-        60,
-        73,
-        68,
-        77
+        72,
+        63,
+        80,
+        67
       ],
       "labelLines": [
         "SHDN",
@@ -280,40 +270,40 @@
       "group": "cascode_stage",
       "tier": 5,
       "position": {
-        "x": 57,
-        "y": 97
+        "x": 69,
+        "y": 82
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 58,
-          "y": 94
+          "x": 70,
+          "y": 79
         },
         "G": {
-          "x": 54,
-          "y": 97
+          "x": 66,
+          "y": 82
         },
         "S": {
-          "x": 58,
-          "y": 100
+          "x": 70,
+          "y": 85
         },
         "B": {
-          "x": 58,
-          "y": 97
+          "x": 70,
+          "y": 82
         }
       },
       "bodyBox": [
-        54,
-        94,
-        59,
-        100
+        66,
+        79,
+        71,
+        85
       ],
       "labelBox": [
-        60,
-        95,
-        67,
-        99
+        72,
+        80,
+        79,
+        84
       ],
       "labelLines": [
         "DIVNS",
@@ -327,31 +317,31 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 192,
+        "x": 144,
         "y": 35
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 192,
+          "x": 144,
           "y": 32
         },
         "M": {
-          "x": 192,
+          "x": 144,
           "y": 38
         }
       },
       "bodyBox": [
-        190,
+        142,
         32,
-        194,
+        146,
         38
       ],
       "labelBox": [
-        195,
+        147,
         33,
-        200,
+        152,
         37
       ],
       "labelLines": [
@@ -363,35 +353,35 @@
       "ref": "Rdiv_plo",
       "deviceClass": "resistor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 367,
-        "y": 97
+        "x": 144,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 367,
-          "y": 94
+          "x": 144,
+          "y": 79
         },
         "M": {
-          "x": 367,
-          "y": 100
+          "x": 144,
+          "y": 85
         }
       },
       "bodyBox": [
-        365,
-        94,
-        369,
-        100
+        142,
+        79,
+        146,
+        85
       ],
       "labelBox": [
-        370,
-        95,
-        375,
-        99
+        147,
+        80,
+        152,
+        84
       ],
       "labelLines": [
         "Rdiv_plo",
@@ -405,31 +395,31 @@
       "group": "gain_output_stage",
       "tier": 1,
       "position": {
-        "x": 211,
+        "x": 158,
         "y": 35
       },
       "semanticOrient": "vertical_flipped",
       "cadenceOrient": "MX",
       "pins": {
         "P": {
-          "x": 211,
+          "x": 158,
           "y": 38
         },
         "M": {
-          "x": 211,
+          "x": 158,
           "y": 32
         }
       },
       "bodyBox": [
-        209,
+        156,
         32,
-        213,
+        160,
         38
       ],
       "labelBox": [
-        214,
+        161,
         33,
-        219,
+        166,
         37
       ],
       "labelLines": [
@@ -492,39 +482,39 @@
       "tier": 2,
       "position": {
         "x": 39,
-        "y": 56
+        "y": 51
       },
       "semanticOrient": "gate_right",
       "cadenceOrient": "MY",
       "pins": {
         "D": {
           "x": 38,
-          "y": 59
+          "y": 54
         },
         "G": {
           "x": 42,
-          "y": 56
+          "y": 51
         },
         "S": {
           "x": 38,
-          "y": 53
+          "y": 48
         },
         "B": {
           "x": 38,
-          "y": 56
+          "y": 51
         }
       },
       "bodyBox": [
         37,
-        53,
+        48,
         42,
-        59
+        54
       ],
       "labelBox": [
         28,
-        52,
+        47,
         36,
-        56
+        51
       ],
       "labelLines": [
         "SHDP",
@@ -538,40 +528,40 @@
       "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 223,
-        "y": 97
+        "x": 127,
+        "y": 82
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 224,
-          "y": 94
+          "x": 128,
+          "y": 79
         },
         "G": {
-          "x": 220,
-          "y": 97
+          "x": 124,
+          "y": 82
         },
         "S": {
-          "x": 224,
-          "y": 100
+          "x": 128,
+          "y": 85
         },
         "B": {
-          "x": 224,
-          "y": 97
+          "x": 128,
+          "y": 82
         }
       },
       "bodyBox": [
-        220,
-        94,
-        225,
-        100
+        124,
+        79,
+        129,
+        85
       ],
       "labelBox": [
-        226,
-        95,
-        233,
-        99
+        130,
+        80,
+        137,
+        84
       ],
       "labelLines": [
         "SHDPN",
@@ -585,40 +575,40 @@
       "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 235,
-        "y": 56
+        "x": 176,
+        "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 236,
-          "y": 59
+          "x": 177,
+          "y": 54
         },
         "G": {
-          "x": 232,
-          "y": 56
+          "x": 173,
+          "y": 51
         },
         "S": {
-          "x": 236,
-          "y": 53
+          "x": 177,
+          "y": 48
         },
         "B": {
-          "x": 236,
-          "y": 56
+          "x": 177,
+          "y": 51
         }
       },
       "bodyBox": [
-        232,
-        53,
-        237,
-        59
+        173,
+        48,
+        178,
+        54
       ],
       "labelBox": [
-        238,
-        52,
-        246,
-        56
+        179,
+        47,
+        187,
+        51
       ],
       "labelLines": [
         "CPR",
@@ -632,40 +622,40 @@
       "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 93,
-        "y": 56
+        "x": 206,
+        "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 94,
-          "y": 59
+          "x": 207,
+          "y": 54
         },
         "G": {
-          "x": 90,
-          "y": 56
+          "x": 203,
+          "y": 51
         },
         "S": {
-          "x": 94,
-          "y": 53
+          "x": 207,
+          "y": 48
         },
         "B": {
-          "x": 94,
-          "y": 56
+          "x": 207,
+          "y": 51
         }
       },
       "bodyBox": [
-        90,
-        53,
-        95,
-        59
+        203,
+        48,
+        208,
+        54
       ],
       "labelBox": [
-        96,
-        52,
-        104,
-        56
+        209,
+        47,
+        217,
+        51
       ],
       "labelLines": [
         "CPR_SHD",
@@ -679,40 +669,40 @@
       "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 93,
-        "y": 77
+        "x": 206,
+        "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 94,
-          "y": 74
+          "x": 207,
+          "y": 64
         },
         "G": {
-          "x": 90,
-          "y": 77
+          "x": 203,
+          "y": 67
         },
         "S": {
-          "x": 94,
-          "y": 80
+          "x": 207,
+          "y": 70
         },
         "B": {
-          "x": 94,
-          "y": 77
+          "x": 207,
+          "y": 67
         }
       },
       "bodyBox": [
-        90,
-        74,
-        95,
-        80
+        203,
+        64,
+        208,
+        70
       ],
       "labelBox": [
-        96,
-        73,
-        103,
-        77
+        209,
+        63,
+        216,
+        67
       ],
       "labelLines": [
         "CNR",
@@ -726,40 +716,40 @@
       "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 247,
-        "y": 77
+        "x": 157,
+        "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 248,
-          "y": 74
+          "x": 158,
+          "y": 64
         },
         "G": {
-          "x": 244,
-          "y": 77
+          "x": 154,
+          "y": 67
         },
         "S": {
-          "x": 248,
-          "y": 80
+          "x": 158,
+          "y": 70
         },
         "B": {
-          "x": 248,
-          "y": 77
+          "x": 158,
+          "y": 67
         }
       },
       "bodyBox": [
-        244,
-        74,
-        249,
-        80
+        154,
+        64,
+        159,
+        70
       ],
       "labelBox": [
-        250,
-        73,
-        259,
-        77
+        160,
+        63,
+        169,
+        67
       ],
       "labelLines": [
         "FNR",
@@ -773,40 +763,40 @@
       "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 271,
-        "y": 77
+        "x": 176,
+        "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 272,
-          "y": 74
+          "x": 177,
+          "y": 64
         },
         "G": {
-          "x": 268,
-          "y": 77
+          "x": 173,
+          "y": 67
         },
         "S": {
-          "x": 272,
-          "y": 80
+          "x": 177,
+          "y": 70
         },
         "B": {
-          "x": 272,
-          "y": 77
+          "x": 177,
+          "y": 67
         }
       },
       "bodyBox": [
-        268,
-        74,
-        273,
-        80
+        173,
+        64,
+        178,
+        70
       ],
       "labelBox": [
-        274,
-        73,
-        283,
-        77
+        179,
+        63,
+        188,
+        67
       ],
       "labelLines": [
         "FNS",
@@ -817,35 +807,35 @@
       "ref": "RFNR",
       "deviceClass": "resistor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 386,
-        "y": 97
+        "x": 158,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 386,
-          "y": 94
+          "x": 158,
+          "y": 79
         },
         "M": {
-          "x": 386,
-          "y": 100
+          "x": 158,
+          "y": 85
         }
       },
       "bodyBox": [
-        384,
-        94,
-        388,
-        100
+        156,
+        79,
+        160,
+        85
       ],
       "labelBox": [
-        389,
-        95,
-        394,
-        99
+        161,
+        80,
+        166,
+        84
       ],
       "labelLines": [
         "RFNR",
@@ -856,35 +846,35 @@
       "ref": "RFNS",
       "deviceClass": "resistor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 405,
-        "y": 97
+        "x": 177,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 405,
-          "y": 94
+          "x": 177,
+          "y": 79
         },
         "M": {
-          "x": 405,
-          "y": 100
+          "x": 177,
+          "y": 85
         }
       },
       "bodyBox": [
-        403,
-        94,
-        407,
-        100
+        175,
+        79,
+        179,
+        85
       ],
       "labelBox": [
-        408,
-        95,
-        413,
-        99
+        180,
+        80,
+        185,
+        84
       ],
       "labelLines": [
         "RFNS",
@@ -895,35 +885,35 @@
       "ref": "CFNR",
       "deviceClass": "capacitor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 424,
-        "y": 97
+        "x": 221,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 424,
-          "y": 94
+          "x": 221,
+          "y": 79
         },
         "M": {
-          "x": 424,
-          "y": 100
+          "x": 221,
+          "y": 85
         }
       },
       "bodyBox": [
-        422,
-        94,
-        426,
-        100
+        219,
+        79,
+        223,
+        85
       ],
       "labelBox": [
-        427,
-        95,
-        432,
-        99
+        224,
+        80,
+        229,
+        84
       ],
       "labelLines": [
         "CFNR",
@@ -934,35 +924,35 @@
       "ref": "CFNS",
       "deviceClass": "capacitor",
       "kind": null,
-      "group": "output_load",
+      "group": "gain_output_stage",
       "tier": 5,
       "position": {
-        "x": 443,
-        "y": 97
+        "x": 235,
+        "y": 82
       },
       "semanticOrient": "vertical",
       "cadenceOrient": "R0",
       "pins": {
         "P": {
-          "x": 443,
-          "y": 94
+          "x": 235,
+          "y": 79
         },
         "M": {
-          "x": 443,
-          "y": 100
+          "x": 235,
+          "y": 85
         }
       },
       "bodyBox": [
-        441,
-        94,
-        445,
-        100
+        233,
+        79,
+        237,
+        85
       ],
       "labelBox": [
-        446,
-        95,
-        451,
-        99
+        238,
+        80,
+        243,
+        84
       ],
       "labelLines": [
         "CFNS",
@@ -976,40 +966,40 @@
       "group": "gain_output_stage",
       "tier": 2,
       "position": {
-        "x": 127,
-        "y": 56
+        "x": 259,
+        "y": 51
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 128,
-          "y": 59
+          "x": 260,
+          "y": 54
         },
         "G": {
-          "x": 124,
-          "y": 56
+          "x": 256,
+          "y": 51
         },
         "S": {
-          "x": 128,
-          "y": 53
+          "x": 260,
+          "y": 48
         },
         "B": {
-          "x": 128,
-          "y": 56
+          "x": 260,
+          "y": 51
         }
       },
       "bodyBox": [
-        124,
-        53,
-        129,
-        59
+        256,
+        48,
+        261,
+        54
       ],
       "labelBox": [
-        130,
-        52,
-        138,
-        56
+        262,
+        47,
+        270,
+        51
       ],
       "labelLines": [
         "CPGP",
@@ -1023,40 +1013,40 @@
       "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 306,
-        "y": 77
+        "x": 287,
+        "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 307,
-          "y": 74
+          "x": 288,
+          "y": 64
         },
         "G": {
-          "x": 303,
-          "y": 77
+          "x": 284,
+          "y": 67
         },
         "S": {
-          "x": 307,
-          "y": 80
+          "x": 288,
+          "y": 70
         },
         "B": {
-          "x": 307,
-          "y": 77
+          "x": 288,
+          "y": 67
         }
       },
       "bodyBox": [
-        303,
-        74,
-        308,
-        80
+        284,
+        64,
+        289,
+        70
       ],
       "labelBox": [
-        309,
-        73,
-        316,
-        77
+        290,
+        63,
+        297,
+        67
       ],
       "labelLines": [
         "CNGP",
@@ -1070,40 +1060,40 @@
       "group": "gain_output_stage",
       "tier": 4,
       "position": {
-        "x": 127,
-        "y": 77
+        "x": 259,
+        "y": 67
       },
       "semanticOrient": "gate_left",
       "cadenceOrient": "R0",
       "pins": {
         "D": {
-          "x": 128,
-          "y": 74
+          "x": 260,
+          "y": 64
         },
         "G": {
-          "x": 124,
-          "y": 77
+          "x": 256,
+          "y": 67
         },
         "S": {
-          "x": 128,
-          "y": 80
+          "x": 260,
+          "y": 70
         },
         "B": {
-          "x": 128,
-          "y": 77
+          "x": 260,
+          "y": 67
         }
       },
       "bodyBox": [
-        124,
-        74,
-        129,
-        80
+        256,
+        64,
+        261,
+        70
       ],
       "labelBox": [
-        130,
-        73,
-        137,
-        77
+        262,
+        63,
+        269,
+        67
       ],
       "labelLines": [
         "CNGP_SHD",
@@ -1117,7 +1107,7 @@
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 139,
+      "x": 87,
       "y": 28
     },
     {
@@ -1125,7 +1115,7 @@
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 171,
+      "x": 128,
       "y": 28
     },
     {
@@ -1133,7 +1123,7 @@
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 192,
+      "x": 144,
       "y": 28
     },
     {
@@ -1141,7 +1131,7 @@
       "name": "vdd",
       "net": "vdd",
       "symbol": "vdd-port",
-      "x": 211,
+      "x": 158,
       "y": 28
     },
     {
@@ -1157,87 +1147,87 @@
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 329,
-      "y": 104
+      "x": 87,
+      "y": 89
     },
     {
       "id": "P_vss_2",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 348,
-      "y": 104
+      "x": 101,
+      "y": 89
     },
     {
       "id": "P_vss_3",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 58,
-      "y": 104
+      "x": 70,
+      "y": 89
     },
     {
       "id": "P_vss_4",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 367,
-      "y": 104
+      "x": 144,
+      "y": 89
     },
     {
       "id": "P_vss_5",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 224,
-      "y": 104
+      "x": 128,
+      "y": 89
     },
     {
       "id": "P_vss_6",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 386,
-      "y": 104
+      "x": 158,
+      "y": 89
     },
     {
       "id": "P_vss_7",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 405,
-      "y": 104
+      "x": 177,
+      "y": 89
     },
     {
       "id": "P_vss_8",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 424,
-      "y": 104
+      "x": 221,
+      "y": 89
     },
     {
       "id": "P_vss_9",
       "name": "vss",
       "net": "vss",
       "symbol": "ground",
-      "x": 443,
-      "y": 104
+      "x": 235,
+      "y": 89
     },
     {
       "id": "P_vshd_n",
       "name": "vshd_n",
       "net": "vshd_n",
       "symbol": "port",
-      "x": 463,
-      "y": 66
+      "x": 313,
+      "y": 40
     },
     {
       "id": "P_bp_1",
       "name": "bp",
       "net": "bp",
       "symbol": "port",
-      "x": 163,
+      "x": 120,
       "y": 35
     },
     {
@@ -1253,96 +1243,96 @@
       "name": "un",
       "net": "un",
       "symbol": "port",
-      "x": 50,
-      "y": 97
+      "x": 62,
+      "y": 82
     },
     {
       "id": "P_un_2",
       "name": "un",
       "net": "un",
       "symbol": "port",
-      "x": 216,
-      "y": 97
+      "x": 120,
+      "y": 82
     },
     {
       "id": "P_vshd_p",
       "name": "vshd_p",
       "net": "vshd_p",
       "symbol": "port",
-      "x": 463,
-      "y": 70
+      "x": 313,
+      "y": 42
     },
     {
       "id": "P_pcas_1",
       "name": "pcas",
       "net": "pcas",
       "symbol": "port",
-      "x": 228,
-      "y": 56
+      "x": 169,
+      "y": 51
     },
     {
       "id": "P_pcas_2",
       "name": "pcas",
       "net": "pcas",
       "symbol": "port",
-      "x": 120,
-      "y": 56
+      "x": 252,
+      "y": 51
     },
     {
       "id": "P_hi_ref",
       "name": "hi_ref",
       "net": "hi_ref",
       "symbol": "port",
-      "x": 16,
-      "y": 53
+      "x": 18,
+      "y": 47
     },
     {
       "id": "P_ncas_1",
       "name": "ncas",
       "net": "ncas",
       "symbol": "port",
-      "x": 86,
-      "y": 77
+      "x": 199,
+      "y": 67
     },
     {
       "id": "P_ncas_2",
       "name": "ncas",
       "net": "ncas",
       "symbol": "port",
-      "x": 299,
-      "y": 77
+      "x": 280,
+      "y": 67
     },
     {
       "id": "P_lo_ref",
       "name": "lo_ref",
       "net": "lo_ref",
       "symbol": "port",
-      "x": 463,
-      "y": 77
+      "x": 313,
+      "y": 70
     },
     {
       "id": "P_lo_sig",
       "name": "lo_sig",
       "net": "lo_sig",
       "symbol": "port",
-      "x": 463,
-      "y": 81
+      "x": 313,
+      "y": 94
     },
     {
       "id": "P_gp",
       "name": "gp",
       "net": "gp",
       "symbol": "port",
-      "x": 463,
-      "y": 86
+      "x": 313,
+      "y": 59
     },
     {
       "id": "P_hi_sig",
       "name": "hi_sig",
       "net": "hi_sig",
       "symbol": "port",
-      "x": 16,
-      "y": 57
+      "x": 18,
+      "y": 50
     }
   ],
   "routes": [
@@ -1351,11 +1341,11 @@
       "net": "vdd",
       "points": [
         {
-          "x": 139,
+          "x": 87,
           "y": 32
         },
         {
-          "x": 139,
+          "x": 87,
           "y": 28
         }
       ]
@@ -1365,11 +1355,11 @@
       "net": "vdd",
       "points": [
         {
-          "x": 171,
+          "x": 128,
           "y": 32
         },
         {
-          "x": 171,
+          "x": 128,
           "y": 28
         }
       ]
@@ -1379,11 +1369,11 @@
       "net": "vdd",
       "points": [
         {
-          "x": 192,
+          "x": 144,
           "y": 32
         },
         {
-          "x": 192,
+          "x": 144,
           "y": 28
         }
       ]
@@ -1393,11 +1383,11 @@
       "net": "vdd",
       "points": [
         {
-          "x": 211,
+          "x": 158,
           "y": 32
         },
         {
-          "x": 211,
+          "x": 158,
           "y": 28
         }
       ]
@@ -1421,12 +1411,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 329,
-          "y": 100
+          "x": 87,
+          "y": 85
         },
         {
-          "x": 329,
-          "y": 104
+          "x": 87,
+          "y": 89
         }
       ]
     },
@@ -1435,12 +1425,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 348,
-          "y": 100
+          "x": 101,
+          "y": 85
         },
         {
-          "x": 348,
-          "y": 104
+          "x": 101,
+          "y": 89
         }
       ]
     },
@@ -1449,12 +1439,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 58,
-          "y": 100
+          "x": 70,
+          "y": 85
         },
         {
-          "x": 58,
-          "y": 104
+          "x": 70,
+          "y": 89
         }
       ]
     },
@@ -1463,12 +1453,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 367,
-          "y": 100
+          "x": 144,
+          "y": 85
         },
         {
-          "x": 367,
-          "y": 104
+          "x": 144,
+          "y": 89
         }
       ]
     },
@@ -1477,12 +1467,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 224,
-          "y": 100
+          "x": 128,
+          "y": 85
         },
         {
-          "x": 224,
-          "y": 104
+          "x": 128,
+          "y": 89
         }
       ]
     },
@@ -1491,12 +1481,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 386,
-          "y": 100
+          "x": 158,
+          "y": 85
         },
         {
-          "x": 386,
-          "y": 104
+          "x": 158,
+          "y": 89
         }
       ]
     },
@@ -1505,12 +1495,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 405,
-          "y": 100
+          "x": 177,
+          "y": 85
         },
         {
-          "x": 405,
-          "y": 104
+          "x": 177,
+          "y": 89
         }
       ]
     },
@@ -1519,12 +1509,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 424,
-          "y": 100
+          "x": 221,
+          "y": 85
         },
         {
-          "x": 424,
-          "y": 104
+          "x": 221,
+          "y": 89
         }
       ]
     },
@@ -1533,12 +1523,12 @@
       "net": "vss",
       "points": [
         {
-          "x": 443,
-          "y": 100
+          "x": 235,
+          "y": 85
         },
         {
-          "x": 443,
-          "y": 104
+          "x": 235,
+          "y": 89
         }
       ]
     },
@@ -1547,11 +1537,11 @@
       "net": "bp",
       "points": [
         {
-          "x": 167,
+          "x": 124,
           "y": 35
         },
         {
-          "x": 163,
+          "x": 120,
           "y": 35
         }
       ]
@@ -1575,12 +1565,12 @@
       "net": "un",
       "points": [
         {
-          "x": 54,
-          "y": 97
+          "x": 66,
+          "y": 82
         },
         {
-          "x": 50,
-          "y": 97
+          "x": 62,
+          "y": 82
         }
       ]
     },
@@ -1589,12 +1579,12 @@
       "net": "un",
       "points": [
         {
-          "x": 220,
-          "y": 97
+          "x": 124,
+          "y": 82
         },
         {
-          "x": 216,
-          "y": 97
+          "x": 120,
+          "y": 82
         }
       ]
     },
@@ -1603,12 +1593,12 @@
       "net": "pcas",
       "points": [
         {
-          "x": 232,
-          "y": 56
+          "x": 173,
+          "y": 51
         },
         {
-          "x": 228,
-          "y": 56
+          "x": 169,
+          "y": 51
         }
       ]
     },
@@ -1617,12 +1607,12 @@
       "net": "pcas",
       "points": [
         {
-          "x": 124,
-          "y": 56
+          "x": 256,
+          "y": 51
         },
         {
-          "x": 120,
-          "y": 56
+          "x": 252,
+          "y": 51
         }
       ]
     },
@@ -1631,12 +1621,12 @@
       "net": "ncas",
       "points": [
         {
-          "x": 90,
-          "y": 77
+          "x": 203,
+          "y": 67
         },
         {
-          "x": 86,
-          "y": 77
+          "x": 199,
+          "y": 67
         }
       ]
     },
@@ -1645,42 +1635,56 @@
       "net": "ncas",
       "points": [
         {
-          "x": 303,
-          "y": 77
+          "x": 284,
+          "y": 67
         },
         {
-          "x": 299,
-          "y": 77
+          "x": 280,
+          "y": 67
         }
       ]
     },
     {
-      "id": "R_hi_sig_23",
-      "net": "hi_sig",
+      "id": "R_lo_ref_23_a",
+      "net": "lo_ref",
       "points": [
         {
-          "x": 128,
-          "y": 53
+          "x": 158,
+          "y": 64
         },
         {
-          "x": 128,
-          "y": 52
-        },
-        {
-          "x": 105,
-          "y": 52
-        },
-        {
-          "x": 105,
+          "x": 158,
           "y": 61
         },
         {
-          "x": 16,
+          "x": 190,
           "y": 61
         },
         {
-          "x": 16,
-          "y": 57
+          "x": 190,
+          "y": 73
+        },
+        {
+          "x": 207,
+          "y": 73
+        },
+        {
+          "x": 207,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_lo_ref_23_b",
+      "net": "lo_ref",
+      "points": [
+        {
+          "x": 207,
+          "y": 72
+        },
+        {
+          "x": 207,
+          "y": 70
         }
       ]
     },
@@ -1689,468 +1693,480 @@
       "net": "pr_m",
       "points": [
         {
-          "x": 236,
-          "y": 59
+          "x": 207,
+          "y": 48
         },
         {
-          "x": 236,
-          "y": 60
+          "x": 207,
+          "y": 45
         },
         {
-          "x": 139,
-          "y": 60
+          "x": 188,
+          "y": 45
         },
         {
-          "x": 139,
-          "y": 50
+          "x": 188,
+          "y": 57
         },
         {
-          "x": 94,
-          "y": 50
+          "x": 177,
+          "y": 57
         },
         {
-          "x": 94,
-          "y": 53
+          "x": 177,
+          "y": 54
         }
       ]
     },
     {
-      "id": "R_ngp_m_25",
+      "id": "R_gp_25_a",
+      "net": "gp",
+      "points": [
+        {
+          "x": 260,
+          "y": 64
+        },
+        {
+          "x": 260,
+          "y": 59
+        }
+      ]
+    },
+    {
+      "id": "R_gp_25_b",
+      "net": "gp",
+      "points": [
+        {
+          "x": 260,
+          "y": 59
+        },
+        {
+          "x": 260,
+          "y": 54
+        }
+      ]
+    },
+    {
+      "id": "R_ngp_m_26",
       "net": "ngp_m",
       "points": [
         {
-          "x": 307,
-          "y": 74
+          "x": 260,
+          "y": 70
         },
         {
-          "x": 307,
-          "y": 72
-        },
-        {
-          "x": 138,
-          "y": 72
-        },
-        {
-          "x": 138,
-          "y": 81
-        },
-        {
-          "x": 128,
-          "y": 81
-        },
-        {
-          "x": 128,
-          "y": 80
-        }
-      ]
-    },
-    {
-      "id": "R_fns_26_a",
-      "net": "fns",
-      "points": [
-        {
-          "x": 405,
-          "y": 94
-        },
-        {
-          "x": 405,
-          "y": 92
-        }
-      ]
-    },
-    {
-      "id": "R_fns_26_b",
-      "net": "fns",
-      "points": [
-        {
-          "x": 405,
-          "y": 92
-        },
-        {
-          "x": 405,
-          "y": 82
+          "x": 260,
+          "y": 73
         },
         {
           "x": 272,
-          "y": 82
+          "y": 73
         },
         {
           "x": 272,
-          "y": 80
+          "y": 61
+        },
+        {
+          "x": 288,
+          "y": 61
+        },
+        {
+          "x": 288,
+          "y": 64
         }
       ]
     },
     {
-      "id": "R_fns_27",
-      "net": "fns",
-      "points": [
-        {
-          "x": 443,
-          "y": 94
-        },
-        {
-          "x": 443,
-          "y": 92
-        },
-        {
-          "x": 405,
-          "y": 92
-        }
-      ]
-    },
-    {
-      "id": "R_fnr_28_a",
-      "net": "fnr",
-      "points": [
-        {
-          "x": 386,
-          "y": 94
-        },
-        {
-          "x": 386,
-          "y": 90
-        }
-      ]
-    },
-    {
-      "id": "R_fnr_28_b",
-      "net": "fnr",
-      "points": [
-        {
-          "x": 386,
-          "y": 90
-        },
-        {
-          "x": 386,
-          "y": 84
-        },
-        {
-          "x": 248,
-          "y": 84
-        },
-        {
-          "x": 248,
-          "y": 80
-        }
-      ]
-    },
-    {
-      "id": "R_fnr_29",
-      "net": "fnr",
-      "points": [
-        {
-          "x": 424,
-          "y": 94
-        },
-        {
-          "x": 424,
-          "y": 90
-        },
-        {
-          "x": 386,
-          "y": 90
-        }
-      ]
-    },
-    {
-      "id": "R_fold_ref_30_a",
+      "id": "R_fold_ref_27_a",
       "net": "fold_ref",
       "points": [
         {
-          "x": 94,
-          "y": 74
+          "x": 207,
+          "y": 64
         },
         {
-          "x": 94,
-          "y": 72
-        }
-      ]
-    },
-    {
-      "id": "R_fold_ref_30_b",
-      "net": "fold_ref",
-      "points": [
-        {
-          "x": 94,
-          "y": 72
-        },
-        {
-          "x": 94,
+          "x": 207,
           "y": 59
         }
       ]
     },
     {
-      "id": "R_fold_ref_31_a",
+      "id": "R_fold_ref_27_b",
       "net": "fold_ref",
       "points": [
         {
-          "x": 244,
-          "y": 77
+          "x": 207,
+          "y": 59
         },
         {
-          "x": 243,
-          "y": 77
+          "x": 207,
+          "y": 54
         }
       ]
     },
     {
-      "id": "R_fold_ref_31_b",
+      "id": "R_fold_ref_28_a",
       "net": "fold_ref",
       "points": [
         {
-          "x": 243,
-          "y": 77
+          "x": 173,
+          "y": 67
         },
         {
-          "x": 140,
-          "y": 77
+          "x": 172,
+          "y": 67
         },
         {
-          "x": 140,
-          "y": 83
-        },
-        {
-          "x": 104,
-          "y": 83
-        },
-        {
-          "x": 104,
-          "y": 72
-        },
-        {
-          "x": 94,
-          "y": 72
-        }
-      ]
-    },
-    {
-      "id": "R_fold_ref_32",
-      "net": "fold_ref",
-      "points": [
-        {
-          "x": 268,
-          "y": 77
-        },
-        {
-          "x": 260,
-          "y": 77
-        },
-        {
-          "x": 260,
-          "y": 82
-        },
-        {
-          "x": 243,
-          "y": 82
-        },
-        {
-          "x": 243,
-          "y": 77
-        }
-      ]
-    },
-    {
-      "id": "R_lo_sig_33_a",
-      "net": "lo_sig",
-      "points": [
-        {
-          "x": 307,
-          "y": 80
-        },
-        {
-          "x": 307,
-          "y": 86
-        },
-        {
-          "x": 317,
-          "y": 86
-        },
-        {
-          "x": 317,
-          "y": 80
-        }
-      ]
-    },
-    {
-      "id": "R_lo_sig_33_b",
-      "net": "lo_sig",
-      "points": [
-        {
-          "x": 317,
-          "y": 80
-        },
-        {
-          "x": 317,
-          "y": 70
-        },
-        {
-          "x": 272,
-          "y": 70
-        },
-        {
-          "x": 272,
-          "y": 74
-        }
-      ]
-    },
-    {
-      "id": "R_lo_sig_34",
-      "net": "lo_sig",
-      "points": [
-        {
-          "x": 463,
-          "y": 81
-        },
-        {
-          "x": 463,
-          "y": 80
-        },
-        {
-          "x": 317,
-          "y": 80
-        }
-      ]
-    },
-    {
-      "id": "R_hi_ref_35",
-      "net": "hi_ref",
-      "points": [
-        {
-          "x": 236,
-          "y": 53
-        },
-        {
-          "x": 236,
-          "y": 24
-        },
-        {
-          "x": 16,
-          "y": 24
-        },
-        {
-          "x": 16,
-          "y": 53
-        }
-      ]
-    },
-    {
-      "id": "R_gp_36_a",
-      "net": "gp",
-      "points": [
-        {
-          "x": 128,
-          "y": 74
-        },
-        {
-          "x": 128,
-          "y": 68
-        }
-      ]
-    },
-    {
-      "id": "R_gp_36_b",
-      "net": "gp",
-      "points": [
-        {
-          "x": 128,
-          "y": 68
-        },
-        {
-          "x": 128,
+          "x": 172,
           "y": 59
         }
       ]
     },
     {
-      "id": "R_gp_37",
-      "net": "gp",
+      "id": "R_fold_ref_28_b",
+      "net": "fold_ref",
       "points": [
         {
-          "x": 463,
-          "y": 86
+          "x": 172,
+          "y": 59
         },
         {
-          "x": 463,
-          "y": 83
-        },
-        {
-          "x": 471,
-          "y": 83
-        },
-        {
-          "x": 471,
-          "y": 68
-        },
-        {
-          "x": 128,
-          "y": 68
+          "x": 207,
+          "y": 59
         }
       ]
     },
     {
-      "id": "R_lo_ref_38_a",
-      "net": "lo_ref",
+      "id": "R_fold_ref_29",
+      "net": "fold_ref",
       "points": [
         {
-          "x": 248,
+          "x": 154,
+          "y": 67
+        },
+        {
+          "x": 153,
+          "y": 67
+        },
+        {
+          "x": 153,
+          "y": 59
+        },
+        {
+          "x": 172,
+          "y": 59
+        }
+      ]
+    },
+    {
+      "id": "R_fnr_30_a",
+      "net": "fnr",
+      "points": [
+        {
+          "x": 158,
+          "y": 79
+        },
+        {
+          "x": 158,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_fnr_30_b",
+      "net": "fnr",
+      "points": [
+        {
+          "x": 158,
+          "y": 76
+        },
+        {
+          "x": 158,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "id": "R_fnr_31",
+      "net": "fnr",
+      "points": [
+        {
+          "x": 221,
+          "y": 79
+        },
+        {
+          "x": 221,
+          "y": 76
+        },
+        {
+          "x": 158,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_fns_32_a",
+      "net": "fns",
+      "points": [
+        {
+          "x": 177,
+          "y": 79
+        },
+        {
+          "x": 177,
+          "y": 78
+        }
+      ]
+    },
+    {
+      "id": "R_fns_32_b",
+      "net": "fns",
+      "points": [
+        {
+          "x": 177,
+          "y": 78
+        },
+        {
+          "x": 177,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "id": "R_fns_33",
+      "net": "fns",
+      "points": [
+        {
+          "x": 235,
+          "y": 79
+        },
+        {
+          "x": 235,
           "y": 74
         },
         {
-          "x": 248,
-          "y": 70
+          "x": 208,
+          "y": 74
+        },
+        {
+          "x": 208,
+          "y": 78
+        },
+        {
+          "x": 177,
+          "y": 78
         }
       ]
     },
     {
-      "id": "R_lo_ref_38_b",
-      "net": "lo_ref",
+      "id": "R_lo_sig_34_a",
+      "net": "lo_sig",
       "points": [
         {
-          "x": 248,
+          "x": 288,
           "y": 70
         },
         {
-          "x": 106,
-          "y": 70
-        },
-        {
-          "x": 106,
-          "y": 81
-        },
-        {
-          "x": 94,
-          "y": 81
-        },
-        {
-          "x": 94,
-          "y": 80
+          "x": 288,
+          "y": 94
         }
       ]
     },
     {
-      "id": "R_lo_ref_39",
-      "net": "lo_ref",
+      "id": "R_lo_sig_34_b",
+      "net": "lo_sig",
       "points": [
         {
-          "x": 463,
-          "y": 77
+          "x": 288,
+          "y": 94
         },
         {
-          "x": 319,
-          "y": 77
+          "x": 170,
+          "y": 94
         },
         {
-          "x": 319,
-          "y": 66
+          "x": 170,
+          "y": 63
         },
         {
-          "x": 248,
-          "y": 66
+          "x": 177,
+          "y": 63
         },
         {
-          "x": 248,
-          "y": 70
+          "x": 177,
+          "y": 64
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_35_a_a",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 128,
+          "y": 79
+        },
+        {
+          "x": 128,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_35_a_b",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 128,
+          "y": 58
+        },
+        {
+          "x": 43,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_35_b",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 43,
+          "y": 58
+        },
+        {
+          "x": 38,
+          "y": 58
+        },
+        {
+          "x": 38,
+          "y": 54
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_36",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 42,
+          "y": 51
+        },
+        {
+          "x": 43,
+          "y": 51
+        },
+        {
+          "x": 43,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_37_a",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 203,
+          "y": 51
+        },
+        {
+          "x": 202,
+          "y": 51
+        },
+        {
+          "x": 202,
+          "y": 42
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_37_b",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 202,
+          "y": 42
+        },
+        {
+          "x": 128,
+          "y": 42
+        },
+        {
+          "x": 128,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_38_a_a",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 128,
+          "y": 38
+        },
+        {
+          "x": 128,
+          "y": 40
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_38_a_b",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 128,
+          "y": 40
+        },
+        {
+          "x": 128,
+          "y": 41
+        },
+        {
+          "x": 65,
+          "y": 41
+        },
+        {
+          "x": 65,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_38_b",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 65,
+          "y": 61
+        },
+        {
+          "x": 65,
+          "y": 67
+        },
+        {
+          "x": 66,
+          "y": 67
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_39",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 70,
+          "y": 64
+        },
+        {
+          "x": 70,
+          "y": 61
+        },
+        {
+          "x": 65,
+          "y": 61
         }
       ]
     },
@@ -2159,12 +2175,16 @@
       "net": "vshd_n",
       "points": [
         {
-          "x": 58,
-          "y": 74
+          "x": 256,
+          "y": 67
         },
         {
-          "x": 58,
-          "y": 73
+          "x": 244,
+          "y": 67
+        },
+        {
+          "x": 244,
+          "y": 40
         }
       ]
     },
@@ -2173,252 +2193,342 @@
       "net": "vshd_n",
       "points": [
         {
-          "x": 58,
-          "y": 73
+          "x": 244,
+          "y": 40
         },
         {
-          "x": 53,
-          "y": 73
-        },
-        {
-          "x": 53,
-          "y": 77
-        },
-        {
-          "x": 54,
-          "y": 77
+          "x": 128,
+          "y": 40
         }
       ]
     },
     {
-      "id": "R_vshd_n_41_a",
-      "net": "vshd_n",
+      "id": "R_vdiv_p_41_a",
+      "net": "vdiv_p",
       "points": [
         {
-          "x": 124,
-          "y": 77
+          "x": 38,
+          "y": 48
         },
         {
-          "x": 108,
-          "y": 77
-        },
-        {
-          "x": 108,
-          "y": 85
-        },
-        {
-          "x": 69,
-          "y": 85
-        },
-        {
-          "x": 69,
-          "y": 72
+          "x": 38,
+          "y": 41
         }
       ]
     },
     {
-      "id": "R_vshd_n_41_b",
-      "net": "vshd_n",
+      "id": "R_vdiv_p_41_b",
+      "net": "vdiv_p",
       "points": [
         {
-          "x": 69,
-          "y": 72
+          "x": 38,
+          "y": 41
         },
         {
-          "x": 58,
-          "y": 72
-        },
-        {
-          "x": 58,
-          "y": 73
+          "x": 38,
+          "y": 38
         }
       ]
     },
     {
-      "id": "R_vshd_n_42_a",
-      "net": "vshd_n",
+      "id": "R_vdiv_p_42_a",
+      "net": "vdiv_p",
       "points": [
         {
-          "x": 171,
+          "x": 144,
           "y": 38
         },
         {
-          "x": 171,
-          "y": 48
+          "x": 144,
+          "y": 44
         }
       ]
     },
     {
-      "id": "R_vshd_n_42_b",
-      "net": "vshd_n",
+      "id": "R_vdiv_p_42_b",
+      "net": "vdiv_p",
       "points": [
         {
-          "x": 171,
-          "y": 48
+          "x": 144,
+          "y": 44
         },
         {
-          "x": 69,
-          "y": 48
+          "x": 141,
+          "y": 44
         },
         {
-          "x": 69,
-          "y": 72
-        }
-      ]
-    },
-    {
-      "id": "R_vshd_n_43",
-      "net": "vshd_n",
-      "points": [
-        {
-          "x": 463,
-          "y": 66
+          "x": 141,
+          "y": 20
         },
         {
-          "x": 463,
-          "y": 48
+          "x": 54,
+          "y": 20
         },
         {
-          "x": 171,
-          "y": 48
-        }
-      ]
-    },
-    {
-      "id": "R_vshd_p_44_a",
-      "net": "vshd_p",
-      "points": [
-        {
-          "x": 42,
-          "y": 56
-        },
-        {
-          "x": 43,
-          "y": 56
-        }
-      ]
-    },
-    {
-      "id": "R_vshd_p_44_b_a",
-      "net": "vshd_p",
-      "points": [
-        {
-          "x": 43,
-          "y": 56
-        },
-        {
-          "x": 43,
-          "y": 63
-        },
-        {
-          "x": 42,
-          "y": 63
-        }
-      ]
-    },
-    {
-      "id": "R_vshd_p_44_b_b",
-      "net": "vshd_p",
-      "points": [
-        {
-          "x": 42,
-          "y": 63
+          "x": 54,
+          "y": 41
         },
         {
           "x": 38,
-          "y": 63
+          "y": 41
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_p_43",
+      "net": "vdiv_p",
+      "points": [
+        {
+          "x": 158,
+          "y": 38
         },
         {
-          "x": 38,
+          "x": 158,
+          "y": 44
+        },
+        {
+          "x": 144,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_p_44",
+      "net": "vdiv_p",
+      "points": [
+        {
+          "x": 144,
+          "y": 79
+        },
+        {
+          "x": 144,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_n_45_a",
+      "net": "vdiv_n",
+      "points": [
+        {
+          "x": 70,
+          "y": 79
+        },
+        {
+          "x": 70,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_n_45_b",
+      "net": "vdiv_n",
+      "points": [
+        {
+          "x": 70,
+          "y": 76
+        },
+        {
+          "x": 70,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_n_46_a",
+      "net": "vdiv_n",
+      "points": [
+        {
+          "x": 87,
+          "y": 79
+        },
+        {
+          "x": 87,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_n_46_b",
+      "net": "vdiv_n",
+      "points": [
+        {
+          "x": 87,
+          "y": 76
+        },
+        {
+          "x": 70,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_n_47",
+      "net": "vdiv_n",
+      "points": [
+        {
+          "x": 101,
+          "y": 79
+        },
+        {
+          "x": 101,
+          "y": 76
+        },
+        {
+          "x": 87,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_vdiv_n_48",
+      "net": "vdiv_n",
+      "points": [
+        {
+          "x": 87,
+          "y": 38
+        },
+        {
+          "x": 87,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "R_hi_ref_49",
+      "net": "hi_ref",
+      "points": [
+        {
+          "x": 18,
+          "y": 47
+        },
+        {
+          "x": 20,
+          "y": 47
+        },
+        {
+          "x": 20,
+          "y": 18
+        },
+        {
+          "x": 177,
+          "y": 18
+        },
+        {
+          "x": 177,
+          "y": 48
+        }
+      ]
+    },
+    {
+      "id": "R_hi_sig_50",
+      "net": "hi_sig",
+      "points": [
+        {
+          "x": 18,
+          "y": 50
+        },
+        {
+          "x": 26,
+          "y": 50
+        },
+        {
+          "x": 26,
+          "y": 16
+        },
+        {
+          "x": 260,
+          "y": 16
+        },
+        {
+          "x": 260,
+          "y": 48
+        }
+      ]
+    },
+    {
+      "id": "R_lo_sig_51",
+      "net": "lo_sig",
+      "points": [
+        {
+          "x": 313,
+          "y": 94
+        },
+        {
+          "x": 288,
+          "y": 94
+        }
+      ]
+    },
+    {
+      "id": "R_gp_52",
+      "net": "gp",
+      "points": [
+        {
+          "x": 313,
+          "y": 59
+        },
+        {
+          "x": 260,
           "y": 59
         }
       ]
     },
     {
-      "id": "R_vshd_p_45",
-      "net": "vshd_p",
+      "id": "R_vshd_n_53",
+      "net": "vshd_n",
       "points": [
         {
-          "x": 90,
-          "y": 56
+          "x": 313,
+          "y": 40
         },
         {
-          "x": 43,
-          "y": 56
+          "x": 244,
+          "y": 40
         }
       ]
     },
     {
-      "id": "R_vshd_p_46_a",
+      "id": "R_vshd_p_54",
       "net": "vshd_p",
       "points": [
         {
-          "x": 224,
-          "y": 94
+          "x": 313,
+          "y": 42
         },
         {
-          "x": 224,
-          "y": 93
+          "x": 202,
+          "y": 42
         }
       ]
     },
     {
-      "id": "R_vshd_p_46_b",
-      "net": "vshd_p",
+      "id": "R_lo_ref_55",
+      "net": "lo_ref",
       "points": [
         {
-          "x": 224,
-          "y": 93
-        },
-        {
-          "x": 68,
-          "y": 93
-        },
-        {
-          "x": 68,
-          "y": 108
-        },
-        {
-          "x": 42,
-          "y": 108
-        },
-        {
-          "x": 42,
-          "y": 63
-        }
-      ]
-    },
-    {
-      "id": "R_vshd_p_47",
-      "net": "vshd_p",
-      "points": [
-        {
-          "x": 463,
+          "x": 313,
           "y": 70
         },
         {
-          "x": 463,
+          "x": 290,
+          "y": 70
+        },
+        {
+          "x": 290,
           "y": 75
         },
         {
-          "x": 473,
+          "x": 254,
           "y": 75
         },
         {
-          "x": 473,
-          "y": 108
+          "x": 254,
+          "y": 72
         },
         {
-          "x": 234,
-          "y": 108
-        },
-        {
-          "x": 234,
-          "y": 93
-        },
-        {
-          "x": 224,
-          "y": 93
+          "x": 207,
+          "y": 72
         }
       ]
     }

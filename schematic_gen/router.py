@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 import heapq
+from itertools import permutations
 import math
 from typing import Any
 
@@ -179,6 +180,11 @@ class _GridOccupancy:
         self.pin_owner: dict[Point, str] = {}
         self.pin_escape: dict[Point, Point] = {}
         self.pin_escape_owner: dict[Point, set[str]] = defaultdict(set)
+        self.horiz_pin_escape_pts: dict[Point, str] = {}
+        self.pin_apron_y: set[Point] = set()
+        self.edge_wall_xs: set[int] = set()
+        self.left_port_nets: set[str] = set()
+        self.right_port_nets: set[str] = set()
 
         for pl in placements.values():
             bx0, by0, bx1, by1 = pl.body_box
@@ -229,42 +235,45 @@ class _GridOccupancy:
             self.wire_corners[(sx, sy)].add(net)
 
         for pt_port in ports:
-            self.pin_owner[(pt_port.x, pt_port.y)] = pt_port.net_name
-            self.wire_corners[(pt_port.x, pt_port.y)].add(pt_port.net_name)
-            # Reserve port text area behind the port pin so wires don't overwrite port names!
-            if pt_port.symbol_id == "port":
-                if pt_port.rotation == 90:
-                    for ty in range(pt_port.y - 5, pt_port.y):
-                        for tx in range(pt_port.x - 1, pt_port.x + 2):
-                            self.label_blocked.add((tx, ty))
-                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y + 1)
-                    self.pin_escape_owner[(pt_port.x, pt_port.y + 1)].add(pt_port.net_name)
-                elif pt_port.rotation == 270:
-                    for ty in range(pt_port.y + 1, pt_port.y + 6):
-                        for tx in range(pt_port.x - 1, pt_port.x + 2):
-                            self.label_blocked.add((tx, ty))
-                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y - 1)
-                    self.pin_escape_owner[(pt_port.x, pt_port.y - 1)].add(pt_port.net_name)
-                elif pt_port.mirror == "horizontal":
-                    # Right-side port: text extends right of pt_port.x
-                    for tx in range(pt_port.x + 1, pt_port.x + 8):
-                        for ty in range(pt_port.y - 1, pt_port.y + 2):
-                            self.label_blocked.add((tx, ty))
-                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x - 1, pt_port.y)
-                    self.pin_escape_owner[(pt_port.x - 1, pt_port.y)].add(pt_port.net_name)
-                else:
-                    # Left-side port: text extends left of pt_port.x
-                    for tx in range(pt_port.x - 7, pt_port.x):
-                        for ty in range(pt_port.y - 1, pt_port.y + 2):
-                            self.label_blocked.add((tx, ty))
-                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x + 1, pt_port.y)
-                    self.pin_escape_owner[(pt_port.x + 1, pt_port.y)].add(pt_port.net_name)
-            elif pt_port.symbol_id == "vdd-port":
-                for ty in range(pt_port.y - 3, pt_port.y):
-                    self.body_blocked.add((pt_port.x, ty))
-            elif pt_port.symbol_id == "ground":
-                for ty in range(pt_port.y + 1, pt_port.y + 4):
-                    self.body_blocked.add((pt_port.x, ty))
+            self.register_port(pt_port)
+
+    def register_port(self, pt_port: PortOccurrencePlaced) -> None:
+        self.pin_owner[(pt_port.x, pt_port.y)] = pt_port.net_name
+        self.wire_corners[(pt_port.x, pt_port.y)].add(pt_port.net_name)
+        # Reserve port text area behind the port pin so wires don't overwrite port names!
+        if pt_port.symbol_id == "port":
+            if pt_port.rotation == 90:
+                for ty in range(pt_port.y - 5, pt_port.y):
+                    for tx in range(pt_port.x - 1, pt_port.x + 2):
+                        self.label_blocked.add((tx, ty))
+                self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y + 1)
+                self.pin_escape_owner[(pt_port.x, pt_port.y + 1)].add(pt_port.net_name)
+            elif pt_port.rotation == 270:
+                for ty in range(pt_port.y + 1, pt_port.y + 6):
+                    for tx in range(pt_port.x - 1, pt_port.x + 2):
+                        self.label_blocked.add((tx, ty))
+                self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y - 1)
+                self.pin_escape_owner[(pt_port.x, pt_port.y - 1)].add(pt_port.net_name)
+            elif pt_port.mirror == "horizontal":
+                # Right-side port: text extends right of pt_port.x
+                for tx in range(pt_port.x + 1, pt_port.x + 8):
+                    for ty in range(pt_port.y - 1, pt_port.y + 2):
+                        self.label_blocked.add((tx, ty))
+                self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x - 1, pt_port.y)
+                self.pin_escape_owner[(pt_port.x - 1, pt_port.y)].add(pt_port.net_name)
+            else:
+                # Left-side port: text extends left of pt_port.x
+                for tx in range(pt_port.x - 7, pt_port.x):
+                    for ty in range(pt_port.y - 1, pt_port.y + 2):
+                        self.label_blocked.add((tx, ty))
+                self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x + 1, pt_port.y)
+                self.pin_escape_owner[(pt_port.x + 1, pt_port.y)].add(pt_port.net_name)
+        elif pt_port.symbol_id == "vdd-port":
+            for ty in range(pt_port.y - 3, pt_port.y):
+                self.body_blocked.add((pt_port.x, ty))
+        elif pt_port.symbol_id == "ground":
+            for ty in range(pt_port.y + 1, pt_port.y + 4):
+                self.body_blocked.add((pt_port.x, ty))
 
     def register_instance_pins(
         self, circuit: NetlistCircuit, bulk_handled: set[tuple[str, str]] | None = None
@@ -280,12 +289,24 @@ class _GridOccupancy:
                 # Outward escape step from symbol boundary
                 if py <= by0:
                     esc = (px, py - 1)
+                    if (inst.ref, pin) not in bulk_handled:
+                        for ax in range(bx0 - 1, bx1 + 2):
+                            self.pin_apron_y.add((ax, by0 - 1))
+                            self.pin_apron_y.add((ax, by0 - 2))
                 elif py >= by1:
                     esc = (px, py + 1)
+                    if (inst.ref, pin) not in bulk_handled:
+                        for ax in range(bx0 - 1, bx1 + 2):
+                            self.pin_apron_y.add((ax, by1 + 1))
+                            self.pin_apron_y.add((ax, by1 + 2))
                 elif px <= bx0:
                     esc = (px - 1, py)
+                    if (inst.ref, pin) not in bulk_handled:
+                        self.horiz_pin_escape_pts[esc] = net
                 else:
                     esc = (px + 1, py)
+                    if (inst.ref, pin) not in bulk_handled:
+                        self.horiz_pin_escape_pts[esc] = net
                 self.pin_escape[(px, py)] = esc
                 if (inst.ref, pin) not in bulk_handled and esc not in self.body_blocked:
                     self.pin_escape_owner[esc].add(net)
@@ -319,9 +340,9 @@ class _GridOccupancy:
         bus_y_target: int | None = None,
     ) -> float | None:
         """Return step cost from `u` to adjacent grid point `v`, or `None` if illegal."""
-        # 1. Never enter symbol bodies or text labels (except exact start/goal pin itself)
+        # 1. Never enter symbol bodies, text labels, or edge-port outer walls (except exact goal pin itself)
         if v not in goal_set:
-            if v in self.body_blocked or v in self.label_blocked:
+            if v in self.body_blocked or v in self.label_blocked or v[0] in self.edge_wall_xs:
                 return None
         owner = self.pin_owner.get(v)
         if owner is not None and owner != net:
@@ -371,24 +392,37 @@ class _GridOccupancy:
             if (self.wire_h.get(u, set()) - {net}) or (self.wire_v.get(u, set()) - {net}):
                 return None
 
-        # 6. Compute cost (reward reusing same-net trunk -> Steiner tree!)
+        # 6. Compute cost (reward reusing same-net trunk -> Steiner tree, row/column grid alignment, & apron clearance!)
         reusing_same_net = (net in same_dir_map.get(v, set())) and (net in same_dir_map.get(u, set()))
         cost = 0.08 if reusing_same_net else 1.0
 
         if prev_dir is not None and prev_dir != new_dir:
-            cost += 7.0
+            if self.horiz_pin_escape_pts.get(u) == net:
+                cost += 5.2
+            else:
+                cost += 6.5
 
-        # Perpendicular crossing over foreign wire: legal at interior point, high penalty
+        if not reusing_same_net and v not in goal_set and not allow_tight_parallel:
+            if is_horiz:
+                if v in self.pin_apron_y:
+                    cost += 3.0
+                if v[1] % 2 != 0 and u not in self.pin_owner:
+                    cost += 0.05
+            else:
+                if v[0] % 2 != 0 and u not in self.pin_owner and self.horiz_pin_escape_pts.get(u) != net:
+                    cost += 0.03
+
+        # Perpendicular crossing over foreign wire: legal at interior point, calibrated against ~20-grid detour
         if perp_dir_map.get(v, set()) - {net}:
             if v in goal_set:
                 return None
-            cost += 55.0
+            cost += 22.0
         if u_perp_foreign and False:
             pass
 
-        # Soft guide toward perimeter bus Y for global bias nets
+        # Soft guide toward top/bottom perimeter bus Y for multi-group bias nets
         if bus_y_target is not None and is_horiz:
-            cost += min(1.8, abs(v[1] - bus_y_target) * 0.06)
+            cost += min(1.1, abs(v[1] - bus_y_target) * 0.045)
 
         return cost
 
@@ -545,6 +579,322 @@ def _split_segment_at_point(
     return False
 
 
+def _pair_port_cross_cost(
+    px: int,
+    ya: int,
+    txa: int,
+    tya: int,
+    yb: int,
+    txb: int,
+    tyb: int,
+) -> float:
+    """Analytical crossing penalty between two same-side edge-port L-routes `(ya < yb)`."""
+    pen = 0.0
+    # Does upper port A's vertical leg at `txa` cross lower port B's horizontal ray at `yb`?
+    if min(ya, tya) <= yb <= max(ya, tya) and min(px, txb) <= txa <= max(px, txb):
+        pen += 28.0
+    # Does lower port B's vertical leg at `txb` cross upper port A's horizontal ray at `ya`?
+    if min(yb, tyb) <= ya <= max(yb, tyb) and min(px, txa) <= txb <= max(px, txa):
+        pen += 28.0
+    return pen
+
+
+def _optimize_side_edge_ports(
+    side_ports: list[PortOccurrencePlaced],
+    *,
+    go_right: bool,
+    tree_points_by_net: dict[str, set[Point]],
+    occ: _GridOccupancy,
+    y_lo: int,
+    y_hi: int,
+    x_limit: int,
+) -> list[tuple[PortOccurrencePlaced, int, int, int]]:
+    """Choose optimal vertical ordering and integer Y coordinates for left/right edge ports.
+
+    Snaps ports onto 0-bend straight horizontal rays onto internal Steiner trunks whenever
+    unobstructed, and nests 1-bend L-routes (river routing) to avoid hook-arounds and crossings.
+    Returns ordered list of `(port_occ, kind_rank, ref_tx, ref_ty)` ready for registration & routing.
+    """
+    k = len(side_ports)
+    if k == 0:
+        return []
+
+    px = side_ports[0].x
+    dx = 1 if go_right else -1
+    dir_h = 0 if go_right else 1
+    span_needed = 6 * k + 14
+    if y_hi - y_lo < span_needed:
+        extra = (span_needed - (y_hi - y_lo)) // 2 + 2
+        y_lo -= extra
+        y_hi += extra
+
+    # Precompute candidate `(y, u_cost, kind_rank, ref_tx, ref_ty)` per port
+    cands_per_port: list[list[tuple[int, float, int, int, int]]] = []
+    init_sort_keys: list[tuple[float, float, int]] = []
+
+    for idx, po in enumerate(side_ports):
+        net = po.net_name
+        t_pts = tree_points_by_net.get(net, set())
+        raw_cands: list[tuple[int, float, int, int, int]] = []
+
+        if not t_pts:
+            for y in range(y_lo, y_hi + 1):
+                if (px, y) in occ.pin_owner or (px + dx, y) in occ.body_blocked:
+                    continue
+                raw_cands.append((y, abs(y - po.y) * 0.8, 2, px + dx * 10, y))
+        else:
+            sorted_t = sorted(t_pts, key=lambda pt: (pt[0] if go_right else -pt[0], pt[1]))
+            nearest_tx = sorted_t[0][0]
+            # Representative facing anchor points (closest vertical trunk(s) + distinct X columns)
+            anchor_pts: list[Point] = []
+            seen_cols: set[int] = set()
+            for tx, ty in sorted_t:
+                if abs(tx - nearest_tx) <= 32 or len(seen_cols) < 4:
+                    if tx not in seen_cols or len(anchor_pts) < 8:
+                        anchor_pts.append((tx, ty))
+                        seen_cols.add(tx)
+                if len(anchor_pts) >= 10:
+                    break
+            t_ys = [pt[1] for pt in t_pts]
+            t_y_min, t_y_max = min(t_ys), max(t_ys)
+            # Find horizontal trunk Ys of `net` so edge ports align collinearly with existing horizontal bars!
+            horiz_ys = [pt[1] for pt, owners in occ.wire_h.items() if net in owners]
+            t_y_pref = (
+                (max(set(horiz_ys), key=horiz_ys.count))
+                if horiz_ys
+                else (0.5 * (t_y_min + t_y_max))
+            )
+
+            for y in range(y_lo, y_hi + 1):
+                if (px, y) in occ.pin_owner or (px, y) in occ.body_blocked or (px, y) in occ.label_blocked:
+                    continue
+                # Penalize plunging outside the net's vertical span `[t_y_min - 2 .. t_y_max + 2]`
+                span_over = max(0, (t_y_min - 2) - y, y - (t_y_max + 2))
+                out_of_span_pen = (24.0 + 1.6 * span_over) if span_over > 0 else 0.0
+
+                # Cast straight horizontal ray from `(px, y)` inward
+                v_cross_at_x: dict[int, int] = {}
+                v_cross = 0
+                hit_x: int | None = None
+                max_reach_x = px
+                cx = px
+                while (cx < x_limit) if go_right else (cx > x_limit):
+                    nx = cx + dx
+                    sc = occ.step_cost(
+                        net,
+                        (cx, y),
+                        (nx, y),
+                        None if cx == px else dir_h,
+                        dir_h,
+                        t_pts,
+                        allow_tight_parallel=False,
+                    )
+                    if sc is None:
+                        break
+                    max_reach_x = nx
+                    if occ.wire_v.get((nx, y), set()) - {net}:
+                        v_cross += 1
+                    v_cross_at_x[nx] = v_cross
+                    if (nx, y) in t_pts:
+                        if not (
+                            (occ.wire_h.get((nx, y), set()) - {net})
+                            or (occ.wire_v.get((nx, y), set()) - {net})
+                        ):
+                            hit_x = nx
+                            break
+                    cx = nx
+
+                if max_reach_x == px:
+                    continue
+
+                if hit_x is not None:
+                    # 0-bend straight horizontal hit right onto `net`'s Steiner trunk!
+                    # Strongly reward collinear continuation of an existing horizontal trunk segment!
+                    collinear_trunk = net in occ.wire_h.get((hit_x + dx, y), set())
+                    u_cost = (
+                        0.16 * abs(hit_x - px)
+                        + 9.5 * v_cross
+                        + 0.32 * abs(y - t_y_pref)
+                        + out_of_span_pen
+                        - (7.0 if collinear_trunk else 0.0)
+                    )
+                    raw_cands.append((y, u_cost, 0, hit_x, y))
+                    continue
+
+                # Check 1-bend L-route `(px, y) -> (tx, y) -> (tx, ty)` to facing anchors
+                best_l: tuple[float, int, int] | None = None
+                for tx, ty in anchor_pts:
+                    if (tx - px) * dx < 1 or abs(tx - px) > abs(max_reach_x - px):
+                        continue
+                    if ty == y:
+                        continue
+                    # `(tx, y)` is a bend, so no foreign wire may pass through `(tx, y)`
+                    if (occ.wire_h.get((tx, y), set()) - {net}) or (occ.wire_v.get((tx, y), set()) - {net}):
+                        continue
+                    step_vy = 1 if ty > y else -1
+                    dir_v = 2 if step_vy > 0 else 3
+                    leg_ok = True
+                    leg_cross = 0
+                    cy = y
+                    while cy != ty:
+                        ny = cy + step_vy
+                        # Respect pin outward escape if `(tx, ty)` is a pin with escape away from `cy`
+                        if ny == ty:
+                            esc = occ.pin_escape.get((tx, ty))
+                            if esc is not None and esc != (tx, cy) and (tx, cy) in occ.body_blocked:
+                                leg_ok = False
+                                break
+                        sc_v = occ.step_cost(
+                            net,
+                            (tx, cy),
+                            (tx, ny),
+                            dir_h if cy == y else dir_v,
+                            dir_v,
+                            t_pts,
+                            allow_tight_parallel=False,
+                        )
+                        if sc_v is None:
+                            leg_ok = False
+                            break
+                        if occ.wire_h.get((tx, ny), set()) - {net}:
+                            leg_cross += 1
+                        cy = ny
+                    if leg_ok:
+                        l_cost = (
+                            9.0
+                            + 0.20 * abs(tx - px)
+                            + 0.55 * abs(ty - y)
+                            + 16.0 * (v_cross_at_x.get(tx, 0) + leg_cross)
+                            + out_of_span_pen
+                        )
+                        if best_l is None or l_cost < best_l[0]:
+                            best_l = (l_cost, tx, ty)
+
+                if best_l is not None:
+                    raw_cands.append((y, best_l[0], 1, best_l[1], best_l[2]))
+                elif abs(max_reach_x - px) >= 2:
+                    tx0, ty0 = min(anchor_pts, key=lambda pt: abs(pt[1] - y) + 0.25 * abs(pt[0] - px))
+                    u_cost = 36.0 + 1.15 * abs(y - ty0) + 0.20 * abs(tx0 - px) + out_of_span_pen
+                    raw_cands.append((y, u_cost, 2, tx0, ty0))
+
+        if not raw_cands:
+            for y in range(y_lo, y_hi + 1, 2):
+                if (px, y) not in occ.pin_owner:
+                    raw_cands.append((y, 50.0 + abs(y - po.y), 2, px + dx * 8, po.y))
+
+        # Prune to top 20 by cost + 12 evenly spaced across range for fast exact DP
+        by_cost = sorted(raw_cands, key=lambda c: (c[1], c[0]))
+        keep_map: dict[int, tuple[int, float, int, int, int]] = {c[0]: c for c in by_cost[:20]}
+        stride = max(1, len(raw_cands) // 12)
+        for c in raw_cands[::stride]:
+            keep_map.setdefault(c[0], c)
+        pruned = sorted(keep_map.values(), key=lambda c: c[0])
+        cands_per_port.append(pruned)
+
+        best_c = by_cost[0]
+        init_sort_keys.append((float(best_c[0]), float(best_c[3] if go_right else -best_c[3]), idx))
+
+    def _solve_for_order(order: tuple[int, ...]) -> tuple[float, list[tuple[int, float, int, int, int]]] | None:
+        dp: list[list[float]] = []
+        parent_idx: list[list[int]] = []
+        for r, p_idx in enumerate(order):
+            c_list = cands_per_port[p_idx]
+            row_dp = [float("inf")] * len(c_list)
+            row_par = [-1] * len(c_list)
+            if r == 0:
+                for m, c in enumerate(c_list):
+                    row_dp[m] = c[1]
+            else:
+                prev_list = cands_per_port[order[r - 1]]
+                prev_dp = dp[r - 1]
+                for m, (yc, uc, _, txc, tyc) in enumerate(c_list):
+                    best_v = float("inf")
+                    best_p = -1
+                    for mp, (yp, _, _, txp, typ) in enumerate(prev_list):
+                        dy_ports = yc - yp
+                        if dy_ports < 2:
+                            break
+                        if prev_dp[mp] == float("inf"):
+                            continue
+                        tight_port_pen = 3.0 if dy_ports == 2 else (0.8 if dy_ports == 3 else 0.0)
+                        cand_v = (
+                            prev_dp[mp]
+                            + uc
+                            + tight_port_pen
+                            + _pair_port_cross_cost(px, yp, txp, typ, yc, txc, tyc)
+                        )
+                        if cand_v < best_v:
+                            best_v = cand_v
+                            best_p = mp
+                    row_dp[m] = best_v
+                    row_par[m] = best_p
+            dp.append(row_dp)
+            parent_idx.append(row_par)
+
+        last_dp = dp[-1]
+        best_last = min(range(len(last_dp)), key=lambda m: last_dp[m])
+        if last_dp[best_last] == float("inf"):
+            return None
+
+        chosen: list[tuple[int, float, int, int, int]] = [cands_per_port[order[-1]][best_last]]
+        cur_m = best_last
+        for r in range(k - 1, 0, -1):
+            cur_m = parent_idx[r][cur_m]
+            chosen.append(cands_per_port[order[r - 1]][cur_m])
+        chosen.reverse()
+
+        # Evaluate exact objective including non-adjacent pairwise crossings
+        exact_cost = sum(c[1] for c in chosen)
+        for a in range(k):
+            ya, _, _, txa, tya = chosen[a]
+            for b in range(a + 1, k):
+                yb, _, _, txb, tyb = chosen[b]
+                exact_cost += _pair_port_cross_cost(px, ya, txa, tya, yb, txb, tyb)
+        return exact_cost, chosen
+
+    best_overall_cost = float("inf")
+    best_perm: tuple[int, ...] = tuple(x[2] for x in sorted(init_sort_keys))
+    best_chosen: list[tuple[int, float, int, int, int]] | None = None
+
+    if k <= 5:
+        for perm in permutations(range(k)):
+            res_p = _solve_for_order(perm)
+            if res_p is not None and res_p[0] < best_overall_cost:
+                best_overall_cost, best_chosen = res_p
+                best_perm = perm
+    else:
+        cur_perm = list(best_perm)
+        res_init = _solve_for_order(tuple(cur_perm))
+        if res_init is not None:
+            best_overall_cost, best_chosen = res_init
+        improved = True
+        while improved:
+            improved = False
+            for a in range(k):
+                for b in range(a + 1, k):
+                    trial = list(cur_perm)
+                    trial[a], trial[b] = trial[b], trial[a]
+                    res_t = _solve_for_order(tuple(trial))
+                    if res_t is not None and res_t[0] + 1e-6 < best_overall_cost:
+                        best_overall_cost, best_chosen = res_t
+                        cur_perm = trial
+                        best_perm = tuple(trial)
+                        improved = True
+
+    out_assigned: list[tuple[PortOccurrencePlaced, int, int, int]] = []
+    if best_chosen is not None:
+        for p_idx, (yc, _, krank, rtx, rty) in zip(best_perm, best_chosen):
+            po = side_ports[p_idx]
+            po.y = yc
+            out_assigned.append((po, krank, rtx, rty))
+    else:
+        for rank_i, p_idx in enumerate(best_perm):
+            po = side_ports[p_idx]
+            po.y = y_lo + 4 + rank_i * 4
+            out_assigned.append((po, 2, px + dx * 8, po.y))
+    return out_assigned
+
+
 def route_placed_schematic(
     circuit: NetlistCircuit,
     intent: SchematicIntent,
@@ -556,7 +906,7 @@ def route_placed_schematic(
     *,
     allow_wire_labels: bool = False,
 ) -> tuple[dict[str, JunctionPlaced], list[RoutePlaced], list[str], list[WireLabelStubPlaced], list[BusRipperPlaced]]:
-    """Route all nets into exact orthogonal Steiner trees with corridor track separation."""
+    """Route all nets into exact orthogonal Steiner trees with post-trunk edge-port alignment."""
     supplies = set(circuit.supply_nets)
     grounds = set(circuit.ground_nets)
     rails = supplies | grounds
@@ -567,32 +917,83 @@ def route_placed_schematic(
     for item in local_bulk_shorts:
         bulk_handled.add((item["reference"], item["bulkPinName"]))
 
+    repeated_port_nets = set(rails) | {
+        po.net_name
+        for po in ports
+        if intent.port_sides.get(po.port_name) == "local_repeat"
+    }
+    label_stub_nets_pre: set[str] = (
+        {
+            net
+            for net in circuit.nets
+            if net not in repeated_port_nets and intent.net_policies.get(net) == "label_stub"
+        }
+        if allow_wire_labels
+        else set()
+    )
+
+    min_inst_x = min(p.full_envelope[0] for p in placements.values())
+    max_inst_x = max(p.full_envelope[2] for p in placements.values())
+    min_inst_y = min(p.full_envelope[1] for p in placements.values())
+    max_inst_y = max(p.full_envelope[3] for p in placements.values())
+    mid_inst_y = 0.5 * (min_inst_y + max_inst_y)
+
+    edge_left_ports = [
+        po
+        for po in ports
+        if po.symbol_id == "port"
+        and po.rotation == 0
+        and po.mirror == "none"
+        and po.x <= min_inst_x - 4
+        and po.net_name not in repeated_port_nets
+        and po.net_name not in label_stub_nets_pre
+    ]
+    edge_right_ports = [
+        po
+        for po in ports
+        if po.symbol_id == "port"
+        and po.rotation == 0
+        and po.mirror == "horizontal"
+        and po.x >= max_inst_x + 4
+        and po.net_name not in repeated_port_nets
+        and po.net_name not in label_stub_nets_pre
+    ]
+    edge_occ_ids = {po.occurrence_id for po in edge_left_ports + edge_right_ports}
+    fixed_ports = [po for po in ports if po.occurrence_id not in edge_occ_ids]
+
     occ = _GridOccupancy(
         placements=placements,
-        ports=ports,
+        ports=fixed_ports,
         local_bulk_labels=local_bulk_labels,
         local_bulk_shorts=local_bulk_shorts,
         pdk=pdk,
         track_pitch=intent.spacing.wire_track_pitch,
     )
     occ.register_instance_pins(circuit, bulk_handled)
+    if edge_left_ports:
+        occ.edge_wall_xs.add(min(po.x for po in edge_left_ports))
+        occ.left_port_nets = {po.net_name for po in edge_left_ports}
+    if edge_right_ports:
+        occ.edge_wall_xs.add(max(po.x for po in edge_right_ports))
+        occ.right_port_nets = {po.net_name for po in edge_right_ports}
 
-    all_xs = [p.full_envelope[0] for p in placements.values()] + [
-        p.full_envelope[2] for p in placements.values()
-    ] + [pt.x for pt in ports]
-    all_ys = [p.full_envelope[1] for p in placements.values()] + [
-        p.full_envelope[3] for p in placements.values()
-    ] + [pt.y for pt in ports]
-    min_x, max_x = min(all_xs) - 14, max(all_xs) + 14
-    min_y, max_y = min(all_ys) - 12, max(all_ys) + 14
+    all_xs = [min_inst_x, max_inst_x] + [pt.x for pt in ports]
+    all_ys = [min_inst_y, max_inst_y] + [pt.y for pt in fixed_ports]
+    min_x = min(po.x for po in edge_left_ports) if edge_left_ports else (min(all_xs) - 14)
+    max_x = max(po.x for po in edge_right_ports) if edge_right_ports else (max(all_xs) + 14)
+    min_y, max_y = min(all_ys) - 14, max(all_ys) + 14
     search_bounds: BBox = (min_x, min_y, max_x, max_y)
-    bottom_bus_y = max(p.full_envelope[3] for p in placements.values()) + 6
+    top_bus_y = min_inst_y - 5
+    bottom_bus_y = max_inst_y + 5
 
     # Map every routable endpoint per net: point -> RouteStepPlaced
     endpoints_by_net: dict[str, list[RouteStepPlaced]] = defaultdict(list)
     port_occs_by_net: dict[str, list[PortOccurrencePlaced]] = defaultdict(list)
+    fixed_port_occs_by_net: dict[str, list[PortOccurrencePlaced]] = defaultdict(list)
     for pt_occ in ports:
         port_occs_by_net[pt_occ.net_name].append(pt_occ)
+        if pt_occ.occurrence_id not in edge_occ_ids:
+            fixed_port_occs_by_net[pt_occ.net_name].append(pt_occ)
 
     for inst in circuit.instances:
         pl = placements[inst.ref]
@@ -756,68 +1157,81 @@ def route_placed_schematic(
     ]
     crit_set = set(intent.critical_nets)
 
-    def _net_priority(n: str) -> tuple[int, int, int]:
+    def _net_priority(n: str) -> tuple[int, int, int, int]:
         pol = intent.net_policies.get(n, "full_wire")
         if pol == "label_stub" and not allow_wire_labels:
             pol = "perimeter_bus"
-        eps = endpoints_by_net.get(n, []) + [
+        inst_eps_n = endpoints_by_net.get(n, [])
+        eps = inst_eps_n + [
             RouteStepPlaced(kind="port", x=po.x, y=po.y, instance_id=po.occurrence_id, pin_name=po.port_name)
             for po in port_occs_by_net.get(n, [])
         ]
-        xs = [e.x for e in eps] or [0]
-        ys = [e.y for e in eps] or [0]
+        xs = [e.x for e in (inst_eps_n or eps)] or [0]
+        ys = [e.y for e in (inst_eps_n or eps)] or [0]
         span = (max(xs) - min(xs)) + (max(ys) - min(ys))
+        # Coarse span band + left-to-right `min(xs)` ordering prevents braided cross-group diagonals!
         if pol == "perimeter_bus":
-            return (2, len(eps), span)
+            return (2, len(eps), min(xs), span)
         if n in crit_set:
-            return (0, span, len(eps))
-        return (1, span, len(eps))
+            return (0, span // 56, min(xs), span)
+        return (1, span // 56, min(xs), span)
 
     non_rail_nets.sort(key=_net_priority)
 
-    for net in non_rail_nets:
-        all_eps: list[RouteStepPlaced] = list(endpoints_by_net.get(net, []))
-        for po in port_occs_by_net.get(net, []):
-            all_eps.append(
-                RouteStepPlaced(
-                    kind="port",
-                    x=po.x,
-                    y=po.y,
-                    instance_id=po.occurrence_id,
-                    pin_name=po.port_name,
-                )
-            )
-        if len(all_eps) < 2:
-            continue
+    ep_at_point_by_net: dict[str, dict[Point, RouteStepPlaced]] = defaultdict(dict)
+    junction_at_point_by_net: dict[str, dict[Point, str]] = defaultdict(dict)
+    tree_points_by_net: dict[str, set[Point]] = defaultdict(set)
 
-        # Sort terminals left-to-right, top-to-bottom for clean Steiner trunk growth
-        all_eps.sort(key=lambda e: (e.x, e.y))
-        ep_at_point: dict[Point, RouteStepPlaced] = {(e.x, e.y): e for e in all_eps}
-        junction_at_point: dict[Point, str] = {}
-        tree_points: set[Point] = {(all_eps[0].x, all_eps[0].y)}
-
+    def _bus_target_for_net(net: str) -> int | None:
         pol = intent.net_policies.get(net, "full_wire")
         if pol == "label_stub" and not allow_wire_labels:
             pol = "perimeter_bus"
-        bus_y = bottom_bus_y if pol == "perimeter_bus" else None
+        if pol != "perimeter_bus":
+            return None
+        inst_ys = [e.y for e in endpoints_by_net.get(net, [])]
+        avg_y = (sum(inst_ys) / len(inst_ys)) if inst_ys else mid_inst_y
+        return top_bus_y if avg_y <= mid_inst_y else bottom_bus_y
 
-        for target_ep in all_eps[1:]:
-            start_pt = (target_ep.x, target_ep.y)
-            if start_pt in tree_points:
-                continue
+    def _connect_ep_to_net_tree(net: str, target_ep: RouteStepPlaced) -> None:
+        nonlocal junc_counter, route_counter
+        tree_points = tree_points_by_net[net]
+        ep_at_point = ep_at_point_by_net[net]
+        junction_at_point = junction_at_point_by_net[net]
 
+        start_pt = (target_ep.x, target_ep.y)
+        if not tree_points:
+            tree_points.add(start_pt)
+            return
+        if start_pt in tree_points:
+            return
+
+        bus_y = _bus_target_for_net(net)
+        path = _astar_connect_to_tree(
+            net,
+            start_pt,
+            tree_points,
+            occ,
+            search_bounds,
+            allow_tight_parallel=False,
+            bus_y_target=bus_y,
+        )
+        if path is None:
+            # Fallback 1: relax parallel pitch to 1 grid while keeping strict edge-port walls intact!
+            tight_nets.append(net)
             path = _astar_connect_to_tree(
                 net,
                 start_pt,
                 tree_points,
                 occ,
-                search_bounds,
-                allow_tight_parallel=False,
+                (min_x, min_y - 10, max_x, max_y + 10),
+                allow_tight_parallel=True,
                 bus_y_target=bus_y,
             )
-            if path is None:
-                # Fallback 1: relax parallel pitch to 1 grid and mark net as congested for feedback loop!
-                tight_nets.append(net)
+        if path is None:
+            # Fallback 2: emergency outer relaxation (triggers congestion corridor expansion on retry)
+            saved_walls = set(occ.edge_wall_xs)
+            occ.edge_wall_xs.clear()
+            try:
                 path = _astar_connect_to_tree(
                     net,
                     start_pt,
@@ -827,54 +1241,190 @@ def route_placed_schematic(
                     allow_tight_parallel=True,
                     bus_y_target=bus_y,
                 )
-            if path is None:
-                raise RuntimeError(f"Orthogonal router could not find obstacle-free route for net {net!r}")
+            finally:
+                occ.edge_wall_xs.update(saved_walls)
+        if path is None:
+            raise RuntimeError(f"Orthogonal router could not find obstacle-free route for net {net!r}")
 
-            join_pt = path[-1]
-            # Determine endpoint representation at `join_pt`
-            if join_pt in ep_at_point:
-                end_step = ep_at_point[join_pt]
-            elif join_pt in junction_at_point:
-                end_step = RouteStepPlaced(
-                    kind="junction",
-                    x=join_pt[0],
-                    y=join_pt[1],
-                    junction_id=junction_at_point[join_pt],
-                )
+        join_pt = path[-1]
+        if join_pt in ep_at_point:
+            end_step = ep_at_point[join_pt]
+        elif join_pt in junction_at_point:
+            end_step = RouteStepPlaced(
+                kind="junction",
+                x=join_pt[0],
+                y=join_pt[1],
+                junction_id=junction_at_point[join_pt],
+            )
+        else:
+            junc_counter += 1
+            jid = f"J_{net}_{junc_counter}"
+            junctions[jid] = JunctionPlaced(
+                id=jid, net_name=net, x=join_pt[0], y=join_pt[1], role="steiner"
+            )
+            junction_at_point[join_pt] = jid
+            _split_segment_at_point(routes, net, join_pt, jid)
+            end_step = RouteStepPlaced(kind="junction", x=join_pt[0], y=join_pt[1], junction_id=jid)
+
+        steps: list[RouteStepPlaced] = [
+            RouteStepPlaced(kind="bend", x=bx, y=by) for (bx, by) in path[1:-1]
+        ]
+        steps.append(end_step)
+
+        route_counter += 1
+        routes.append(
+            RoutePlaced(
+                id=f"R_{net}_{route_counter}",
+                net_name=net,
+                start=target_ep,
+                steps=steps,
+            )
+        )
+        occ.add_polyline(net, path)
+
+        for a, b in zip(path, path[1:]):
+            if a[0] == b[0]:
+                for y in range(min(a[1], b[1]), max(a[1], b[1]) + 1):
+                    tree_points.add((a[0], y))
             else:
-                junc_counter += 1
-                jid = f"J_{net}_{junc_counter}"
-                junctions[jid] = JunctionPlaced(
-                    id=jid, net_name=net, x=join_pt[0], y=join_pt[1], role="steiner"
-                )
-                junction_at_point[join_pt] = jid
-                _split_segment_at_point(routes, net, join_pt, jid)
-                end_step = RouteStepPlaced(kind="junction", x=join_pt[0], y=join_pt[1], junction_id=jid)
+                for x in range(min(a[0], b[0]), max(a[0], b[0]) + 1):
+                    tree_points.add((x, a[1]))
 
-            steps: list[RouteStepPlaced] = [
-                RouteStepPlaced(kind="bend", x=bx, y=by) for (bx, by) in path[1:-1]
-            ]
-            steps.append(end_step)
-
-            route_counter += 1
-            routes.append(
-                RoutePlaced(
-                    id=f"R_{net}_{route_counter}",
-                    net_name=net,
-                    start=target_ep,
-                    steps=steps,
+    # 2a. Route all internal device-to-device trunks FIRST using Prim's nearest-collinear-first order!
+    for net in non_rail_nets:
+        internal_eps: list[RouteStepPlaced] = list(endpoints_by_net.get(net, []))
+        for po in fixed_port_occs_by_net.get(net, []):
+            internal_eps.append(
+                RouteStepPlaced(
+                    kind="port",
+                    x=po.x,
+                    y=po.y,
+                    instance_id=po.occurrence_id,
+                    pin_name=po.port_name,
                 )
             )
-            occ.add_polyline(net, path)
+        if not internal_eps:
+            continue
 
-            # Every grid point along `path` is now part of `net`'s Steiner tree!
-            for a, b in zip(path, path[1:]):
-                if a[0] == b[0]:
-                    for y in range(min(a[1], b[1]), max(a[1], b[1]) + 1):
-                        tree_points.add((a[0], y))
-                else:
-                    for x in range(min(a[0], b[0]), max(a[0], b[0]) + 1):
-                        tree_points.add((x, a[1]))
+        ep_map = ep_at_point_by_net[net]
+        for e in internal_eps:
+            ep_map[(e.x, e.y)] = e
+
+        unique_eps = list(ep_map.values())
+        if len(unique_eps) == 1:
+            tree_points_by_net[net].add((unique_eps[0].x, unique_eps[0].y))
+            continue
+
+        def _is_unobstructed_collinear(ea: RouteStepPlaced, eb: RouteStepPlaced) -> bool:
+            if ea.x == eb.x:
+                return all(
+                    (ea.x, cy) not in occ.body_blocked and (ea.x, cy) not in occ.label_blocked
+                    for cy in range(min(ea.y, eb.y) + 1, max(ea.y, eb.y))
+                )
+            if ea.y == eb.y:
+                return all(
+                    (cx, ea.y) not in occ.body_blocked and (cx, ea.y) not in occ.label_blocked
+                    for cx in range(min(ea.x, eb.x) + 1, max(ea.x, eb.x))
+                )
+            return False
+
+        collinear_pairs = [
+            (abs(ea.x - eb.x) + abs(ea.y - eb.y), ea, eb)
+            for i_a, ea in enumerate(unique_eps)
+            for eb in unique_eps[i_a + 1 :]
+            if _is_unobstructed_collinear(ea, eb)
+        ]
+
+        ep_xs = [e.x for e in unique_eps]
+        ep_ys = [e.y for e in unique_eps]
+        if collinear_pairs:
+            # 1) Lock unobstructed collinear stacks/mirrors (e.g. APR.D - INR.D) as straight 0-bend trunks first!
+            _, seed_ep, second_ep = min(collinear_pairs, key=lambda item: item[0])
+            tree_points_by_net[net].add((seed_ep.x, seed_ep.y))
+            _connect_ep_to_net_tree(net, second_ep)
+            remaining = [
+                e
+                for e in unique_eps
+                if (e.x, e.y) not in {(seed_ep.x, seed_ep.y), (second_ep.x, second_ep.y)}
+            ]
+        elif (max(ep_xs) - min(ep_xs) > 24) and (max(ep_ys) - min(ep_ys) > 12):
+            # 2) Cross-group & cross-tier net: establish main cross-group horizontal trunk FIRST
+            # so local diode/mirror cluster pins drop cleanly onto one shared horizontal bar!
+            seed_ep = min(unique_eps, key=lambda e: (e.x, e.y))
+            far_cands = [
+                e
+                for e in unique_eps
+                if (e.x, e.y) != (seed_ep.x, seed_ep.y)
+                and (abs(e.x - seed_ep.x) > 16 or abs(e.y - seed_ep.y) > 10)
+            ] or [e for e in unique_eps if (e.x, e.y) != (seed_ep.x, seed_ep.y)]
+            second_ep = min(
+                far_cands,
+                key=lambda e: abs(e.x - seed_ep.x) + abs(e.y - seed_ep.y),
+            )
+            tree_points_by_net[net].add((seed_ep.x, seed_ep.y))
+            _connect_ep_to_net_tree(net, second_ep)
+            remaining = [
+                e
+                for e in unique_eps
+                if (e.x, e.y) not in {(seed_ep.x, seed_ep.y), (second_ep.x, second_ep.y)}
+            ]
+        else:
+            # 3) Compact local net: seed from closest pair
+            best_pair_score = float("inf")
+            seed_ep = unique_eps[0]
+            for i_a, ea in enumerate(unique_eps):
+                for eb in unique_eps[i_a + 1 :]:
+                    sc_p = abs(ea.x - eb.x) + abs(ea.y - eb.y)
+                    if sc_p < best_pair_score:
+                        best_pair_score = sc_p
+                        seed_ep = ea
+            tree_points_by_net[net].add((seed_ep.x, seed_ep.y))
+            remaining = [e for e in unique_eps if (e.x, e.y) != (seed_ep.x, seed_ep.y)]
+
+        while remaining:
+            t_cur = tree_points_by_net[net]
+            nxt_ep = min(
+                remaining,
+                key=lambda e: min(
+                    abs(e.x - tx) + abs(e.y - ty) - (6 if (e.x == tx or e.y == ty) else 0)
+                    for tx, ty in t_cur
+                ),
+            )
+            remaining.remove(nxt_ep)
+            _connect_ep_to_net_tree(net, nxt_ep)
+
+    # 2b. Optimally order & snap left/right edge ports onto straight horizontal rays / nested L-routes!
+    for side_ports, go_right, x_lim in (
+        (edge_left_ports, True, max_x - 1),
+        (edge_right_ports, False, min_x + 1),
+    ):
+        if not side_ports:
+            continue
+        assigned = _optimize_side_edge_ports(
+            side_ports,
+            go_right=go_right,
+            tree_points_by_net=tree_points_by_net,
+            occ=occ,
+            y_lo=min_inst_y - 6,
+            y_hi=max_inst_y + 6,
+            x_limit=x_lim,
+        )
+        for po, _, _, _ in assigned:
+            occ.register_port(po)
+            ep_at_point_by_net[po.net_name][(po.x, po.y)] = RouteStepPlaced(
+                kind="port",
+                x=po.x,
+                y=po.y,
+                instance_id=po.occurrence_id,
+                pin_name=po.port_name,
+            )
+
+        # Route 0-bend direct hits first, then inner nested L-routes before outer nested L-routes!
+        for po, krank, rtx, _ in sorted(
+            assigned, key=lambda item: (item[1], abs(item[2] - item[0].x), item[0].y)
+        ):
+            p_step = ep_at_point_by_net[po.net_name][(po.x, po.y)]
+            _connect_ep_to_net_tree(po.net_name, p_step)
 
     return junctions, routes, tight_nets, wire_label_stubs, bus_rippers
 

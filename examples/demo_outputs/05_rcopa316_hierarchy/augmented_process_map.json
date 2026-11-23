@@ -691,9 +691,9 @@
             "hi_sig": "hi_sig",
             "vshd_n": "vshd_n",
             "vshd_p": "vshd_p",
+            "gp": "gp",
             "lo_ref": "lo_ref",
             "lo_sig": "lo_sig",
-            "gp": "gp",
             "vdd": "vdd",
             "vss": "vss",
             "bp": "bp",
@@ -718,15 +718,15 @@
               12,
               4
             ],
-            "lo_ref": [
+            "gp": [
               12,
               0
             ],
-            "lo_sig": [
+            "lo_ref": [
               12,
               -4
             ],
-            "gp": [
+            "lo_sig": [
               12,
               -8
             ],
@@ -770,9 +770,9 @@
           "view": "symbol",
           "pinMap": {
             "bn": "bn",
+            "gp0": "gp0",
             "iq_n": "iq_n",
             "gn0": "gn0",
-            "gp0": "gp0",
             "vdd": "vdd",
             "vss": "vss",
             "pcas": "pcas",
@@ -783,15 +783,15 @@
               -8,
               0
             ],
-            "iq_n": [
+            "gp0": [
               8,
               4
             ],
-            "gn0": [
+            "iq_n": [
               8,
               0
             ],
-            "gp0": [
+            "gn0": [
               8,
               -4
             ],
@@ -826,27 +826,27 @@
           "cell": "opamp_core_p02_unit_copies_and_continuous",
           "view": "symbol",
           "pinMap": {
-            "vip": "vip",
             "vin": "vin",
-            "un": "un",
-            "up": "up",
-            "hn": "hn",
+            "vip": "vip",
             "pctl": "pctl",
+            "up": "up",
+            "un": "un",
+            "hn": "hn",
             "vdd": "vdd",
             "bp": "bp",
             "vss": "vss",
             "vshd_n": "vshd_n"
           },
           "pinOffsets": {
-            "vip": [
+            "vin": [
               -8,
               2
             ],
-            "vin": [
+            "vip": [
               -8,
               -2
             ],
-            "un": [
+            "pctl": [
               8,
               6
             ],
@@ -854,11 +854,11 @@
               8,
               2
             ],
-            "hn": [
+            "un": [
               8,
               -2
             ],
-            "pctl": [
+            "hn": [
               8,
               -6
             ],
@@ -893,8 +893,8 @@
           "cell": "opamp_core_p04_common_gate_biases",
           "view": "symbol",
           "pinMap": {
-            "ncas": "ncas",
             "pcas": "pcas",
+            "ncas": "ncas",
             "vdd": "vdd",
             "bp": "bp",
             "vss": "vss",
@@ -903,11 +903,11 @@
             "vshd_n": "vshd_n"
           },
           "pinOffsets": {
-            "ncas": [
+            "pcas": [
               12,
               2
             ],
-            "pcas": [
+            "ncas": [
               12,
               -2
             ],
@@ -950,10 +950,10 @@
           "cell": "opamp_core_p03_matched_complementary_input_",
           "view": "symbol",
           "pinMap": {
-            "lo_ref": "lo_ref",
             "vin": "vin",
-            "lo_sig": "lo_sig",
             "vip": "vip",
+            "lo_ref": "lo_ref",
+            "lo_sig": "lo_sig",
             "hi_ref": "hi_ref",
             "hi_sig": "hi_sig",
             "vdd": "vdd",
@@ -963,19 +963,19 @@
             "up": "up"
           },
           "pinOffsets": {
-            "lo_ref": [
+            "vin": [
               -10,
               10
             ],
-            "vin": [
+            "vip": [
               -10,
               6
             ],
-            "lo_sig": [
+            "lo_ref": [
               -10,
               2
             ],
-            "vip": [
+            "lo_sig": [
               -10,
               -2
             ],
@@ -1022,8 +1022,8 @@
           "cell": "opamp_core_p08_differential_overdrive_detec",
           "view": "symbol",
           "pinMap": {
-            "vip": "vip",
             "vin": "vin",
+            "vip": "vip",
             "ds": "ds",
             "dr": "dr",
             "vdd": "vdd",
@@ -1032,11 +1032,11 @@
             "hn": "hn"
           },
           "pinOffsets": {
-            "vip": [
+            "vin": [
               -8,
               2
             ],
-            "vin": [
+            "vip": [
               -8,
               -2
             ],
@@ -1131,8 +1131,8 @@
           "cell": "opamp_core_p09_pedestal_subtraction_and_two",
           "view": "symbol",
           "pinMap": {
-            "ds": "ds",
             "dr": "dr",
+            "ds": "ds",
             "out": "out",
             "vdd": "vdd",
             "vss": "vss",
@@ -1141,11 +1141,11 @@
             "gn": "gn"
           },
           "pinOffsets": {
-            "ds": [
+            "dr": [
               -10,
               2
             ],
-            "dr": [
+            "ds": [
               -10,
               -2
             ],

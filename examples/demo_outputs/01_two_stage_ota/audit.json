@@ -9,8 +9,8 @@
   "metrics": {
     "instanceCount": 12,
     "netCount": 10,
-    "routeSegmentCount": 56,
-    "totalWireLengthGrids": 617,
+    "routeSegmentCount": 55,
+    "totalWireLengthGrids": 599,
     "symbolOverlapCount": 0,
     "labelOverlapCount": 0,
     "wireThroughBodyCount": 0,

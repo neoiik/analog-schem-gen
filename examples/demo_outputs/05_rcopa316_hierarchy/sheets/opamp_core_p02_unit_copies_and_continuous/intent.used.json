@@ -36,8 +36,8 @@
       "stage_order": 30,
       "instances": [
         "UNFEED",
-        "UP",
         "Rup",
+        "UP",
         "HREF",
         "Rhand",
         "HBIAS",
@@ -68,17 +68,17 @@
     "UPSET": "gate_left",
     "HPCS": "gate_left",
     "HPC": "gate_left",
+    "Rnoff": "vertical",
     "UNFEED": "gate_left",
-    "UP": "gate_left",
     "Rup": "vertical",
+    "UP": "gate_left",
     "HREF": "gate_left",
     "Rhand": "vertical",
     "HBIAS": "gate_left",
     "HPD": "gate_left",
     "HND": "gate_left",
     "PTREF": "gate_left",
-    "Rpoff": "vertical",
-    "Rnoff": "vertical"
+    "Rpoff": "vertical"
   },
   "tierOverrides": {},
   "columnOrderHints": [
@@ -87,47 +87,33 @@
     ],
     [
       "HUNIT",
-      "HPLUS"
+      "HPLUS",
+      "HPCS",
+      "HPC"
     ],
     [
       "HUNIT",
-      "HMIN"
+      "HMIN",
+      "UPSH",
+      "UPSET"
     ],
     [
       "HUNIT",
       "HDIV"
     ],
     [
-      "UPSH",
-      "UPSET"
-    ],
-    [
-      "HPCS",
-      "HPC"
-    ],
-    [
-      "UNFEED"
-    ],
-    [
-      "UP"
-    ],
-    [
-      "Rup"
-    ],
-    [
-      "HREF"
-    ],
-    [
-      "Rhand"
-    ],
-    [
-      "HBIAS"
-    ],
-    [
+      "UNFEED",
       "HPD"
     ],
     [
+      "Rup",
+      "UP",
       "HND"
+    ],
+    [
+      "HREF",
+      "Rhand",
+      "HBIAS"
     ],
     [
       "PTREF"
@@ -151,7 +137,7 @@
     "hd": "full_wire",
     "vh": "full_wire",
     "hs": "full_wire",
-    "hp": "label_stub",
+    "hp": "perimeter_bus",
     "vip": "full_wire",
     "vin": "full_wire",
     "hn": "perimeter_bus",
@@ -186,15 +172,15 @@
     "pctl": "right"
   },
   "spacing": {
-    "intra_group_gap_x": 8,
-    "inter_group_gap_x": 14,
-    "min_clearance_x": 5,
-    "intra_stack_gap_y": 8,
-    "inter_tier_gap_y": 10,
+    "intra_group_gap_x": 6,
+    "inter_group_gap_x": 10,
+    "min_clearance_x": 4,
+    "intra_stack_gap_y": 7,
+    "inter_tier_gap_y": 9,
     "min_clearance_y": 6,
     "wire_track_pitch": 2,
     "shape_buffer": 2,
-    "port_margin_x": 12,
+    "port_margin_x": 10,
     "port_margin_y": 8
   }
 }
