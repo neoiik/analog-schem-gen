@@ -1,0 +1,1483 @@
+{
+  "schema": "virtuoso-bridge-exact-schematic-v1",
+  "circuits": [
+    {
+      "cellName": "sky130_cdac_and_ladder",
+      "instances": [
+        {
+          "id": "source-RR1",
+          "reference": "RR1",
+          "deviceClass": "resistor",
+          "sourceTarget": "R",
+          "sourcePosition": {
+            "x": 133,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VREFH"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "n1"
+            }
+          ],
+          "sourceParameters": {
+            "nf": "1",
+            "m": "1",
+            "r": "2k"
+          }
+        },
+        {
+          "id": "source-RR2",
+          "reference": "RR2",
+          "deviceClass": "resistor",
+          "sourceTarget": "R",
+          "sourcePosition": {
+            "x": 133,
+            "y": 41
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "n1"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "n2"
+            }
+          ],
+          "sourceParameters": {
+            "nf": "1",
+            "m": "1",
+            "r": "2k"
+          }
+        },
+        {
+          "id": "source-RR3",
+          "reference": "RR3",
+          "deviceClass": "resistor",
+          "sourceTarget": "R",
+          "sourcePosition": {
+            "x": 133,
+            "y": 55
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "n2"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "Vtap3"
+            }
+          ],
+          "sourceParameters": {
+            "nf": "1",
+            "m": "1",
+            "r": "2k"
+          }
+        },
+        {
+          "id": "source-RR4",
+          "reference": "RR4",
+          "deviceClass": "resistor",
+          "sourceTarget": "R",
+          "sourcePosition": {
+            "x": 133,
+            "y": 69
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "Vtap3"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "n4"
+            }
+          ],
+          "sourceParameters": {
+            "nf": "1",
+            "m": "1",
+            "r": "2k"
+          }
+        },
+        {
+          "id": "source-RR5",
+          "reference": "RR5",
+          "deviceClass": "resistor",
+          "sourceTarget": "R",
+          "sourcePosition": {
+            "x": 150,
+            "y": 41
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "vertical"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "n4"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "n5"
+            }
+          ],
+          "sourceParameters": {
+            "nf": "1",
+            "m": "1",
+            "r": "2k"
+          }
+        },
+        {
+          "id": "source-RR6",
+          "reference": "RR6",
+          "deviceClass": "resistor",
+          "sourceTarget": "R",
+          "sourcePosition": {
+            "x": 150,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "vertical"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "n5"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "VREFL"
+            }
+          ],
+          "sourceParameters": {
+            "nf": "1",
+            "m": "1",
+            "r": "2k"
+          }
+        },
+        {
+          "id": "source-CDUM",
+          "reference": "CDUM",
+          "deviceClass": "cap_mim",
+          "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
+          "sourcePosition": {
+            "x": 30,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VDAC"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "BDUM"
+            }
+          ],
+          "sourceParameters": {
+            "w": "4u",
+            "l": "4u",
+            "nf": "1",
+            "mf": "1",
+            "m": "1"
+          }
+        },
+        {
+          "id": "source-C0",
+          "reference": "C0",
+          "deviceClass": "cap_mim",
+          "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
+          "sourcePosition": {
+            "x": 46,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VDAC"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "B0"
+            }
+          ],
+          "sourceParameters": {
+            "w": "4u",
+            "l": "4u",
+            "nf": "1",
+            "mf": "1",
+            "m": "1"
+          }
+        },
+        {
+          "id": "source-C1",
+          "reference": "C1",
+          "deviceClass": "cap_mim",
+          "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
+          "sourcePosition": {
+            "x": 62,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VDAC"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "B1"
+            }
+          ],
+          "sourceParameters": {
+            "w": "4u",
+            "l": "4u",
+            "nf": "1",
+            "mf": "2",
+            "m": "2"
+          }
+        },
+        {
+          "id": "source-C2",
+          "reference": "C2",
+          "deviceClass": "cap_mim",
+          "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
+          "sourcePosition": {
+            "x": 78,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VDAC"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "B2"
+            }
+          ],
+          "sourceParameters": {
+            "w": "8u",
+            "l": "8u",
+            "nf": "1",
+            "mf": "1",
+            "m": "1"
+          }
+        },
+        {
+          "id": "source-C3",
+          "reference": "C3",
+          "deviceClass": "cap_mim",
+          "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
+          "sourcePosition": {
+            "x": 94,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VDAC"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "B3"
+            }
+          ],
+          "sourceParameters": {
+            "w": "8u",
+            "l": "8u",
+            "nf": "1",
+            "mf": "2",
+            "m": "2"
+          }
+        },
+        {
+          "id": "source-C4",
+          "reference": "C4",
+          "deviceClass": "cap_mim",
+          "sourceTarget": "sky130_fd_pr__cap_mim_m3_1",
+          "sourcePosition": {
+            "x": 110,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "P",
+              "pinName": "P",
+              "netName": "VDAC"
+            },
+            {
+              "sourcePinName": "M",
+              "pinName": "M",
+              "netName": "B4"
+            }
+          ],
+          "sourceParameters": {
+            "w": "16u",
+            "l": "8u",
+            "nf": "1",
+            "mf": "2",
+            "m": "2"
+          }
+        }
+      ],
+      "ports": [
+        {
+          "name": "VREFH",
+          "netName": "VREFH",
+          "direction": "input"
+        },
+        {
+          "name": "VREFL",
+          "netName": "VREFL",
+          "direction": "input"
+        },
+        {
+          "name": "B0",
+          "netName": "B0",
+          "direction": "input"
+        },
+        {
+          "name": "B1",
+          "netName": "B1",
+          "direction": "input"
+        },
+        {
+          "name": "B2",
+          "netName": "B2",
+          "direction": "input"
+        },
+        {
+          "name": "B3",
+          "netName": "B3",
+          "direction": "input"
+        },
+        {
+          "name": "B4",
+          "netName": "B4",
+          "direction": "input"
+        },
+        {
+          "name": "BDUM",
+          "netName": "BDUM",
+          "direction": "input"
+        },
+        {
+          "name": "VDAC",
+          "netName": "VDAC",
+          "direction": "output"
+        },
+        {
+          "name": "Vtap3",
+          "netName": "Vtap3",
+          "direction": "output"
+        },
+        {
+          "name": "VDD",
+          "netName": "VDD",
+          "direction": "inout"
+        },
+        {
+          "name": "VSS",
+          "netName": "VSS",
+          "direction": "inout"
+        }
+      ],
+      "nets": [
+        "VREFH",
+        "VREFL",
+        "B0",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "BDUM",
+        "VDAC",
+        "Vtap3",
+        "VDD",
+        "VSS",
+        "n1",
+        "n2",
+        "n4",
+        "n5"
+      ],
+      "sourceGeometry": {
+        "coordinateSystem": "source coordinates: x right, y down (1 unit = 1 Virtuoso gridUnit)",
+        "bounds": {
+          "minX": 2,
+          "minY": 12,
+          "maxX": 176,
+          "maxY": 81
+        },
+        "portOccurrences": [
+          {
+            "occurrenceId": "P_VREFH",
+            "name": "VREFH",
+            "netName": "VREFH",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 24
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_VREFL",
+            "name": "VREFL",
+            "netName": "VREFL",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 28
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_B0",
+            "name": "B0",
+            "netName": "B0",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 34
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_B1",
+            "name": "B1",
+            "netName": "B1",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 38
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_B2",
+            "name": "B2",
+            "netName": "B2",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 42
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_B3",
+            "name": "B3",
+            "netName": "B3",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 46
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_B4",
+            "name": "B4",
+            "netName": "B4",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 50
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_BDUM",
+            "name": "BDUM",
+            "netName": "BDUM",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 54
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_VDAC",
+            "name": "VDAC",
+            "netName": "VDAC",
+            "direction": "output",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 170,
+              "y": 24
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "horizontal"
+            }
+          },
+          {
+            "occurrenceId": "P_Vtap3",
+            "name": "Vtap3",
+            "netName": "Vtap3",
+            "direction": "output",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 170,
+              "y": 62
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "horizontal"
+            }
+          }
+        ],
+        "junctions": [
+          {
+            "id": "J_Vtap3_1",
+            "netName": "Vtap3",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 133,
+              "y": 65
+            }
+          },
+          {
+            "id": "J_VDAC_2",
+            "netName": "VDAC",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 46,
+              "y": 18
+            }
+          },
+          {
+            "id": "J_VDAC_3",
+            "netName": "VDAC",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 62,
+              "y": 18
+            }
+          },
+          {
+            "id": "J_VDAC_4",
+            "netName": "VDAC",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 78,
+              "y": 18
+            }
+          },
+          {
+            "id": "J_VDAC_5",
+            "netName": "VDAC",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 94,
+              "y": 18
+            }
+          },
+          {
+            "id": "J_VDAC_6",
+            "netName": "VDAC",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 110,
+              "y": 18
+            }
+          }
+        ],
+        "contacts": [],
+        "routes": [
+          {
+            "id": "R_n1_1",
+            "netName": "n1",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR2",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 133,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-RR1",
+                "pinName": "M",
+                "sourcePoint": {
+                  "x": 133,
+                  "y": 30
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_n2_2",
+            "netName": "n2",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR3",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 133,
+                "y": 52
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-RR2",
+                "pinName": "M",
+                "sourcePoint": {
+                  "x": 133,
+                  "y": 44
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_n5_3",
+            "netName": "n5",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR5",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 150,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-RR6",
+                "pinName": "P",
+                "sourcePoint": {
+                  "x": 150,
+                  "y": 30
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_B0_4",
+            "netName": "B0",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C0",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 46,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 46,
+                  "y": 34
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_B0",
+                "pinName": "B0",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 34
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_BDUM_5",
+            "netName": "BDUM",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-CDUM",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 30,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 30,
+                  "y": 32
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 8,
+                  "y": 32
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 8,
+                  "y": 52
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 16,
+                  "y": 52
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_BDUM",
+                "pinName": "BDUM",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 54
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_n4_6",
+            "netName": "n4",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR5",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 150,
+                "y": 44
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 150,
+                  "y": 73
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 133,
+                  "y": 73
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-RR4",
+                "pinName": "M",
+                "sourcePoint": {
+                  "x": 133,
+                  "y": 72
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_Vtap3_7_a",
+            "netName": "Vtap3",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR4",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 133,
+                "y": 66
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_Vtap3_1",
+                "sourcePoint": {
+                  "x": 133,
+                  "y": 65
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_Vtap3_7_b",
+            "netName": "Vtap3",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_Vtap3_1",
+              "sourcePoint": {
+                "x": 133,
+                "y": 65
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-RR3",
+                "pinName": "M",
+                "sourcePoint": {
+                  "x": 133,
+                  "y": 58
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_Vtap3_8",
+            "netName": "Vtap3",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_Vtap3",
+              "pinName": "Vtap3",
+              "sourcePoint": {
+                "x": 170,
+                "y": 62
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 170,
+                  "y": 75
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 130,
+                  "y": 75
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 130,
+                  "y": 65
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_Vtap3_1",
+                "sourcePoint": {
+                  "x": 133,
+                  "y": 65
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_B1_9",
+            "netName": "B1",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C1",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 62,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 62,
+                  "y": 38
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_B1",
+                "pinName": "B1",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 38
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_B2_10",
+            "netName": "B2",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C2",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 78,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 78,
+                  "y": 42
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_B2",
+                "pinName": "B2",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 42
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_B3_11",
+            "netName": "B3",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C3",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 94,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 94,
+                  "y": 46
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_B3",
+                "pinName": "B3",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 46
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_B4_12",
+            "netName": "B4",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C4",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 110,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 110,
+                  "y": 50
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_B4",
+                "pinName": "B4",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 50
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VREFH_13",
+            "netName": "VREFH",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR1",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 133,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 133,
+                  "y": 22
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 16,
+                  "y": 22
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_VREFH",
+                "pinName": "VREFH",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 24
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VREFL_14",
+            "netName": "VREFL",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-RR6",
+              "pinName": "M",
+              "sourcePoint": {
+                "x": 150,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 150,
+                  "y": 20
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 8,
+                  "y": 20
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 8,
+                  "y": 26
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 16,
+                  "y": 26
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_VREFL",
+                "pinName": "VREFL",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 28
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_15_a",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C0",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 46,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_2",
+                "sourcePoint": {
+                  "x": 46,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_15_b",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_VDAC_2",
+              "sourcePoint": {
+                "x": 46,
+                "y": 18
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 30,
+                  "y": 18
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-CDUM",
+                "pinName": "P",
+                "sourcePoint": {
+                  "x": 30,
+                  "y": 24
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_16_a",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C1",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 62,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_3",
+                "sourcePoint": {
+                  "x": 62,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_16_b",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_VDAC_3",
+              "sourcePoint": {
+                "x": 62,
+                "y": 18
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_2",
+                "sourcePoint": {
+                  "x": 46,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_17_a",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C2",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 78,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_4",
+                "sourcePoint": {
+                  "x": 78,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_17_b",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_VDAC_4",
+              "sourcePoint": {
+                "x": 78,
+                "y": 18
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_3",
+                "sourcePoint": {
+                  "x": 62,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_18_a",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C3",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 94,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_5",
+                "sourcePoint": {
+                  "x": 94,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_18_b",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_VDAC_5",
+              "sourcePoint": {
+                "x": 94,
+                "y": 18
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_4",
+                "sourcePoint": {
+                  "x": 78,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_19_a",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-C4",
+              "pinName": "P",
+              "sourcePoint": {
+                "x": 110,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_6",
+                "sourcePoint": {
+                  "x": 110,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_19_b",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_VDAC_6",
+              "sourcePoint": {
+                "x": 110,
+                "y": 18
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_5",
+                "sourcePoint": {
+                  "x": 94,
+                  "y": 18
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VDAC_20",
+            "netName": "VDAC",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_VDAC",
+              "pinName": "VDAC",
+              "sourcePoint": {
+                "x": 170,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 170,
+                  "y": 18
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_VDAC_6",
+                "sourcePoint": {
+                  "x": 110,
+                  "y": 18
+                }
+              }
+            ]
+          }
+        ],
+        "localBulkLabels": [],
+        "localBulkShorts": [],
+        "annotationStubs": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core_p06_resistor_referenced_idle_cur",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "bias_gen",
+      "label": "偏置产生电路",
+      "role": "bias",
+      "stage_order": 0,
+      "instances": [
+        "IQN"
+      ]
+    },
+    {
+      "id": "cascode_stage",
+      "label": "共源共栅叠层支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "IGN",
+        "IGN_SHD",
+        "IGP_SHD",
+        "IGP"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "IQP",
+        "IQSET",
+        "IQNFEED",
+        "NID",
+        "PID"
+      ]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 35,
+      "instances": [
+        "Riqset"
+      ]
+    }
+  ],
+  "motifs": [
+    {
+      "type": "symmetric_columns",
+      "leftColumn": [
+        "IGN",
+        "IGN_SHD"
+      ],
+      "rightColumn": [
+        "IGP_SHD",
+        "IGP"
+      ]
+    }
+  ],
+  "orientations": {
+    "IQN": "gate_right",
+    "IGN": "gate_right",
+    "IGN_SHD": "gate_right",
+    "IGP_SHD": "gate_left",
+    "IGP": "gate_left",
+    "IQP": "gate_left",
+    "IQSET": "gate_left",
+    "Riqset": "vertical",
+    "IQNFEED": "gate_left",
+    "NID": "gate_left",
+    "PID": "gate_left"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "IQN"
+    ],
+    [
+      "IGN",
+      "IGN_SHD"
+    ],
+    [
+      "IGP_SHD",
+      "IGP"
+    ],
+    [
+      "IQP",
+      "IQSET"
+    ],
+    [
+      "IQNFEED"
+    ],
+    [
+      "NID"
+    ],
+    [
+      "PID"
+    ],
+    [
+      "Riqset"
+    ]
+  ],
+  "netPolicies": {
+    "iq_p": "label_stub",
+    "bn": "full_wire",
+    "iq_src": "full_wire",
+    "vss": "supply_local",
+    "vdd": "supply_local",
+    "iq_n": "perimeter_bus",
+    "ign_m": "full_wire",
+    "gn0": "full_wire",
+    "pcas": "supply_local",
+    "igp_m": "full_wire",
+    "gp0": "full_wire",
+    "ncas": "supply_local"
+  },
+  "criticalNets": [
+    "iq_p",
+    "bn",
+    "iq_src",
+    "ign_m",
+    "gn0",
+    "pcas",
+    "igp_m",
+    "gp0",
+    "ncas"
+  ],
+  "portSides": {
+    "bn": "local_repeat",
+    "vss": "local_repeat",
+    "vdd": "local_repeat",
+    "iq_n": "right",
+    "gn0": "right",
+    "pcas": "local_repeat",
+    "gp0": "right",
+    "ncas": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

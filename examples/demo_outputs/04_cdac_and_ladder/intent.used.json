@@ -1,0 +1,169 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "sky130_cdac_and_ladder",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "bank_VDAC",
+      "label": "规整并联阵列",
+      "role": "array_bank",
+      "stage_order": 26,
+      "instances": [
+        "CDUM",
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ]
+    },
+    {
+      "id": "ladder_RR1_RR6",
+      "label": "串联电阻梯阵列",
+      "role": "resistor_ladder",
+      "stage_order": 27,
+      "instances": [
+        "RR1",
+        "RR2",
+        "RR3",
+        "RR4",
+        "RR5",
+        "RR6"
+      ]
+    }
+  ],
+  "motifs": [
+    {
+      "type": "parallel_bank",
+      "id": "bank_VDAC",
+      "instances": [
+        "CDUM",
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "commonTopNet": "VDAC"
+    },
+    {
+      "type": "serpentine_chain",
+      "id": "ladder_RR1_RR6",
+      "instances": [
+        "RR1",
+        "RR2",
+        "RR3",
+        "RR4",
+        "RR5",
+        "RR6"
+      ],
+      "rowsPerColumn": 4
+    }
+  ],
+  "orientations": {
+    "CDUM": "vertical",
+    "C0": "vertical",
+    "C1": "vertical",
+    "C2": "vertical",
+    "C3": "vertical",
+    "C4": "vertical",
+    "RR1": "vertical",
+    "RR2": "vertical",
+    "RR3": "vertical",
+    "RR4": "vertical",
+    "RR6": "vertical_flipped",
+    "RR5": "vertical_flipped"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "CDUM"
+    ],
+    [
+      "C0"
+    ],
+    [
+      "C1"
+    ],
+    [
+      "C2"
+    ],
+    [
+      "C3"
+    ],
+    [
+      "C4"
+    ],
+    [
+      "RR1",
+      "RR2",
+      "RR3",
+      "RR4"
+    ],
+    [
+      "RR6",
+      "RR5"
+    ]
+  ],
+  "netPolicies": {
+    "VREFH": "full_wire",
+    "VREFL": "full_wire",
+    "B0": "full_wire",
+    "B1": "full_wire",
+    "B2": "full_wire",
+    "B3": "full_wire",
+    "B4": "full_wire",
+    "BDUM": "full_wire",
+    "VDAC": "full_wire",
+    "Vtap3": "full_wire",
+    "VDD": "supply_local",
+    "VSS": "supply_local",
+    "n1": "full_wire",
+    "n2": "full_wire",
+    "n4": "full_wire",
+    "n5": "full_wire"
+  },
+  "criticalNets": [
+    "VREFH",
+    "VREFL",
+    "B0",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "BDUM",
+    "VDAC",
+    "Vtap3",
+    "n1",
+    "n2",
+    "n4",
+    "n5"
+  ],
+  "portSides": {
+    "VREFH": "left",
+    "VREFL": "left",
+    "B0": "left",
+    "B1": "left",
+    "B2": "left",
+    "B3": "left",
+    "B4": "left",
+    "BDUM": "left",
+    "VDAC": "right",
+    "Vtap3": "right",
+    "VDD": "local_repeat",
+    "VSS": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

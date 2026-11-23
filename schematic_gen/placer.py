@@ -308,6 +308,7 @@ def place_schematic(
     *,
     extra_col_gaps: dict[tuple[int, int], int] | None = None,
     extra_tier_gaps: dict[tuple[int, int], int] | None = None,
+    allow_wire_labels: bool = False,
 ) -> tuple[dict[str, PlacedInstance], list[PortOccurrencePlaced], list[dict[str, str]], list[dict[str, str]]]:
     """Place all instances and top-level/local supply ports using Micro-templates + Convex QP."""
     inst_map = circuit.instance_map()
@@ -374,12 +375,47 @@ def place_schematic(
         pside = intent.port_sides.get(p.name, "")
         if pside in {"near_pin", "local_repeat"}:
             local_port_nets.add(p.net)
+    if allow_wire_labels:
+        for net, pol in intent.net_policies.items():
+            if pol == "label_stub" and net not in rails:
+                local_port_nets.add(net)
+
+    # Pre-process `serpentine_chain` orientation overrides if not explicitly set
+    for m in intent.motifs:
+        if m.get("type") == "serpentine_chain":
+            s_insts = [str(x) for x in m.get("instances", []) if str(x) in inst_map]
+            rpc = max(1, int(m.get("rowsPerColumn", 4)))
+            for ci_s in range(0, len(s_insts), rpc):
+                chunk = s_insts[ci_s : ci_s + rpc]
+                c_idx = ci_s // rpc
+                for r in chunk:
+                    intent.orientations.setdefault(
+                        r, "vertical_flipped" if (c_idx % 2 == 1) else "vertical"
+                    )
 
     for inst in circuit.instances:
-        sem = intent.orientations.get(
-            inst.ref,
-            "gate_left" if inst.device_class == "mos" else "vertical",
-        )
+        if inst.device_class == "subckt":
+            default_sem = "R0"
+        elif inst.device_class == "mos":
+            default_sem = "gate_left"
+        else:
+            p_net = inst.terminals.get("P", "")
+            m_net = inst.terminals.get("M", "")
+            if (m_net in supplies and p_net not in supplies) or (
+                p_net in grounds and m_net not in grounds
+            ):
+                default_sem = "vertical_flipped"
+            else:
+                default_sem = "vertical"
+        sem = intent.orientations.get(inst.ref, default_sem)
+        # Auto-correct upside-down vertical passives where M=VDD or P=VSS
+        if sem == "vertical" and inst.device_class not in {"mos", "subckt"}:
+            p_net = inst.terminals.get("P", "")
+            m_net = inst.terminals.get("M", "")
+            if (m_net in supplies and p_net not in supplies) or (
+                p_net in grounds and m_net not in grounds
+            ):
+                sem = "vertical_flipped"
         rot, mir, cad = semantic_to_transform(sem)
         transforms[inst.ref] = (rot, mir, cad, sem)
         rel_pins[inst.ref] = pdk.source_pin_offsets(inst.device_key, rot, mir)
@@ -395,6 +431,16 @@ def place_schematic(
                 ex0 = min(ex0, gx - 11)
             else:
                 ex1 = max(ex1, gx + 11)
+        # Reserve vertical clearance for local VDD/VSS tap + symbol so stacked rows never seal off pins
+        for pin_n, net_n in inst.terminals.items():
+            if pin_n != "B" and net_n in rails and pin_n in rel_pins[inst.ref]:
+                _, ry = rel_pins[inst.ref][pin_n]
+                is_vdd_pin = net_n in supplies
+                go_up_pin = is_vdd_pin if (ry <= 0) else False
+                if go_up_pin:
+                    ey0 = min(ey0, ry - 8)
+                else:
+                    ey1 = max(ey1, ry + 8)
         rel_label[inst.ref] = lbox
         rel_env[inst.ref] = (ex0, ey0, ex1, ey1)
         label_lines_map[inst.ref] = lines
@@ -429,9 +475,10 @@ def place_schematic(
                 # x[other] + other_dx == x[anchor] + anchor_dx  =>  x[other] - x[anchor] == anchor_dx - other_dx
                 eq_x.append(({other_ref: 1.0, anchor_ref: -1.0}, float(anchor_dx - other_dx)))
 
-    # Add symmetric triples for diff pairs!
+    # Add symmetric triples for diff pairs AND rigid uniform-pitch equalities for regular array motifs!
     for m in intent.motifs:
-        if m.get("type") == "diff_pair":
+        mtype = m.get("type")
+        if mtype == "diff_pair":
             l_ref = m.get("left")
             r_ref = m.get("right")
             t_ref = m.get("tail")
@@ -440,6 +487,43 @@ def place_schematic(
                 dr = rel_pins[r_ref]["S"][0]
                 dt = rel_pins[t_ref]["D"][0]
                 sym_x.append((l_ref, t_ref, r_ref, dl, dt, dr))
+        elif mtype == "parallel_bank":
+            b_insts = [str(x) for x in m.get("instances", []) if str(x) in inst_map]
+            if len(b_insts) >= 2:
+                # Force uniform row alignment and exact rigid integer pitch across the entire bank!
+                common_tier = tiers[b_insts[0]]
+                for r in b_insts:
+                    tiers[r] = common_tier
+                    effective_row_key[r] = (common_tier, 0)
+                min_auto_pitch = max(
+                    extents_x[u][1] + extents_x[v][0] + intent.spacing.min_clearance_x + 1
+                    for u, v in zip(b_insts, b_insts[1:])
+                )
+                pitch = max(int(m.get("pitchX", 0)), min_auto_pitch)
+                for u, v in zip(b_insts, b_insts[1:]):
+                    eq_x.append(({v: 1.0, u: -1.0}, float(pitch)))
+        elif mtype == "serpentine_chain":
+            s_insts = [str(x) for x in m.get("instances", []) if str(x) in inst_map]
+            rpc = max(1, int(m.get("rowsPerColumn", 4)))
+            col_anchors: list[str] = []
+            base_tier = tiers[s_insts[0]] if s_insts else 3
+            for ci_s in range(0, len(s_insts), rpc):
+                chunk = s_insts[ci_s : ci_s + rpc]
+                c_idx = ci_s // rpc
+                ordered_top_down = list(reversed(chunk)) if (c_idx % 2 == 1) else list(chunk)
+                col_anchors.append(ordered_top_down[0])
+                for sub_r, r in enumerate(ordered_top_down):
+                    tiers[r] = base_tier
+                    effective_row_key[r] = (base_tier, sub_r)
+                    if sub_r > 0:
+                        eq_x.append(({r: 1.0, ordered_top_down[0]: -1.0}, 0.0))
+            if len(col_anchors) >= 2:
+                s_pitch = max(
+                    extents_x[u][1] + extents_x[v][0] + intent.spacing.min_clearance_x + 2
+                    for u, v in zip(col_anchors, col_anchors[1:])
+                )
+                for u, v in zip(col_anchors, col_anchors[1:]):
+                    eq_x.append(({v: 1.0, u: -1.0}, float(s_pitch)))
 
     extra_col_gaps = extra_col_gaps or {}
     # Column-to-column separation & group compaction springs
@@ -595,7 +679,11 @@ def place_schematic(
     right_port_x = max_env_x + intent.spacing.port_margin_x
     used_left_ys: set[int] = set()
     used_right_ys: set[int] = set()
-    used_supply_xy: set[tuple[str, int, int]] = set()
+    used_port_owner: dict[Point, str] = {
+        pt: inst.terminals[pin]
+        for inst in circuit.instances
+        for pin, pt in placements[inst.ref].pin_points.items()
+    }
 
     for port in circuit.ports:
         side = intent.port_sides.get(
@@ -614,17 +702,19 @@ def place_schematic(
                     if net != port.net or pin == "B":
                         continue
                     ax, ay = pl.pin_points[pin]
-                    ty = (ay - 4) if is_vdd else (ay + 4)
+                    go_up = is_vdd if (ay <= pl.y) else (False if ay > pl.y else is_vdd)
+                    ty = (ay - 4) if go_up else (ay + 4)
                     while any(
                         b.full_envelope[0] - 1 <= ax <= b.full_envelope[2] + 1
-                        and b.full_envelope[1] - 1 <= ty <= b.full_envelope[3] + 1
-                        for b in placements.values()
-                    ):
-                        ty += -2 if is_vdd else 2
-                    key = (port.name, ax, ty)
-                    if key in used_supply_xy:
+                        and max((ty - 3) if is_vdd else ty, b.full_envelope[1] - 1)
+                        <= min(ty if is_vdd else (ty + 3), b.full_envelope[3] + 1)
+                        for r_other, b in placements.items()
+                        if r_other != inst.ref
+                    ) or (used_port_owner.get((ax, ty)) not in (None, port.net)):
+                        ty += -2 if go_up else 2
+                    if used_port_owner.get((ax, ty)) == port.net:
                         continue
-                    used_supply_xy.add(key)
+                    used_port_owner[(ax, ty)] = port.net
                     occ_idx += 1
                     placed_ports.append(
                         PortOccurrencePlaced(
@@ -642,21 +732,34 @@ def place_schematic(
             continue
 
         if side in {"near_pin", "local_repeat"}:
-            # Place clean horizontal port flag directly adjacent to each connected terminal (e.g. diff pair VINP/VINN or cascode bias!)
+            # Place clean port flag adjacent to each connected terminal without crossing `label_box` or foreign ports!
             occ_idx = 0
             for inst in circuit.instances:
                 pl = placements[inst.ref]
+                bx0, by0, bx1, by1 = pl.body_box
                 for pin, net in inst.terminals.items():
                     if net != port.net or pin == "B":
                         continue
                     ax, ay = pl.pin_points[pin]
-                    faces_right = ax > pl.x
-                    tx = (ax + 4) if faces_right else (ax - 4)
-                    mir_flag = "horizontal" if faces_right else "none"
-                    key = (port.name, tx, ay)
-                    if key in used_supply_xy:
+                    if ax <= bx0:
+                        tx, ty, step_dx, step_dy, rot_p, mir_flag = ax - 4, ay, -2, 0, 0, "none"
+                    elif ax >= bx1:
+                        tx, ty, step_dx, step_dy, rot_p, mir_flag = ax + 4, ay, 2, 0, 0, "horizontal"
+                    elif ay <= by0:
+                        tx, ty, step_dx, step_dy, rot_p, mir_flag = ax, ay - 4, 0, -2, 90, "none"
+                    else:
+                        tx, ty, step_dx, step_dy, rot_p, mir_flag = ax, ay + 4, 0, 2, 270, "none"
+                    while (used_port_owner.get((tx, ty)) not in (None, port.net)) or any(
+                        b.full_envelope[0] - 1 <= tx <= b.full_envelope[2] + 1
+                        and b.full_envelope[1] - 1 <= ty <= b.full_envelope[3] + 1
+                        for r_other, b in placements.items()
+                        if r_other != inst.ref
+                    ):
+                        tx += step_dx
+                        ty += step_dy
+                    if used_port_owner.get((tx, ty)) == port.net:
                         continue
-                    used_supply_xy.add(key)
+                    used_port_owner[(tx, ty)] = port.net
                     occ_idx += 1
                     occ_id = f"P_{port.name}" if side == "near_pin" and occ_idx == 1 else f"P_{port.name}_{occ_idx}"
                     placed_ports.append(
@@ -667,8 +770,8 @@ def place_schematic(
                             direction=port.direction,
                             symbol_id="port",
                             x=tx,
-                            y=ay,
-                            rotation=0,
+                            y=ty,
+                            rotation=rot_p,
                             mirror=mir_flag,
                         )
                     )

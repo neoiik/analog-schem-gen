@@ -1,0 +1,167 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core_p07_signed_bridge_drives_gn",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "TRPD",
+        "EBP",
+        "TRUP",
+        "TRDN",
+        "TRND",
+        "EBN",
+        "TRTURN",
+        "TRBD",
+        "REPG",
+        "REPR",
+        "RENG",
+        "RENR",
+        "CEPG",
+        "CEPR",
+        "CENG",
+        "CENR",
+        "ETAIL",
+        "REBP",
+        "REBN",
+        "Cgate"
+      ]
+    }
+  ],
+  "motifs": [],
+  "orientations": {
+    "TRPD": "gate_left",
+    "EBP": "gate_left",
+    "TRUP": "gate_left",
+    "TRDN": "gate_left",
+    "TRND": "gate_left",
+    "EBN": "gate_left",
+    "TRTURN": "gate_left",
+    "TRBD": "gate_left",
+    "REPG": "vertical",
+    "REPR": "vertical",
+    "RENG": "vertical",
+    "RENR": "vertical",
+    "CEPG": "vertical",
+    "CEPR": "vertical",
+    "CENG": "vertical",
+    "CENR": "vertical",
+    "ETAIL": "gate_left",
+    "REBP": "vertical",
+    "REBN": "vertical",
+    "Cgate": "vertical"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "TRPD",
+      "EBP"
+    ],
+    [
+      "TRUP",
+      "TRDN"
+    ],
+    [
+      "TRND",
+      "EBN"
+    ],
+    [
+      "TRTURN",
+      "TRBD"
+    ],
+    [
+      "REPG"
+    ],
+    [
+      "REPR"
+    ],
+    [
+      "RENG"
+    ],
+    [
+      "RENR"
+    ],
+    [
+      "CEPG"
+    ],
+    [
+      "CEPR"
+    ],
+    [
+      "CENG"
+    ],
+    [
+      "CENR"
+    ],
+    [
+      "ETAIL"
+    ],
+    [
+      "REBP"
+    ],
+    [
+      "REBN"
+    ],
+    [
+      "Cgate"
+    ]
+  ],
+  "netPolicies": {
+    "gp": "full_wire",
+    "ep": "label_stub",
+    "gn0": "full_wire",
+    "gn": "full_wire",
+    "en": "label_stub",
+    "gp0": "full_wire",
+    "et": "full_wire",
+    "iq_n": "full_wire",
+    "vss": "supply_local",
+    "trp": "full_wire",
+    "ebp_s": "full_wire",
+    "trn": "full_wire",
+    "ebn_s": "full_wire",
+    "vdd": "supply_local",
+    "trb": "full_wire"
+  },
+  "criticalNets": [
+    "gp",
+    "ep",
+    "gn0",
+    "gn",
+    "en",
+    "gp0",
+    "et",
+    "iq_n",
+    "trp",
+    "ebp_s",
+    "trn",
+    "ebn_s",
+    "trb"
+  ],
+  "portSides": {
+    "gp": "left",
+    "gn0": "left",
+    "gn": "left",
+    "gp0": "left",
+    "iq_n": "local_repeat",
+    "vss": "local_repeat",
+    "vdd": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

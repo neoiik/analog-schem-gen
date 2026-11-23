@@ -12,6 +12,7 @@ from scipy.optimize import minimize
 
 from schematic_gen.models import (
     BBox,
+    BusRipperPlaced,
     JunctionPlaced,
     NetlistCircuit,
     PlacedInstance,
@@ -21,6 +22,7 @@ from schematic_gen.models import (
     RouteStepPlaced,
     SchematicIntent,
     SolvedSchematic,
+    WireLabelStubPlaced,
 )
 from schematic_gen.pdk import PdkRegistry
 from schematic_gen.placer import place_schematic
@@ -176,6 +178,7 @@ class _GridOccupancy:
         # Pin ownership: point -> net_name
         self.pin_owner: dict[Point, str] = {}
         self.pin_escape: dict[Point, Point] = {}
+        self.pin_escape_owner: dict[Point, set[str]] = defaultdict(set)
 
         for pl in placements.values():
             bx0, by0, bx1, by1 = pl.body_box
@@ -230,16 +233,32 @@ class _GridOccupancy:
             self.wire_corners[(pt_port.x, pt_port.y)].add(pt_port.net_name)
             # Reserve port text area behind the port pin so wires don't overwrite port names!
             if pt_port.symbol_id == "port":
-                if pt_port.mirror == "horizontal":
+                if pt_port.rotation == 90:
+                    for ty in range(pt_port.y - 5, pt_port.y):
+                        for tx in range(pt_port.x - 1, pt_port.x + 2):
+                            self.label_blocked.add((tx, ty))
+                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y + 1)
+                    self.pin_escape_owner[(pt_port.x, pt_port.y + 1)].add(pt_port.net_name)
+                elif pt_port.rotation == 270:
+                    for ty in range(pt_port.y + 1, pt_port.y + 6):
+                        for tx in range(pt_port.x - 1, pt_port.x + 2):
+                            self.label_blocked.add((tx, ty))
+                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x, pt_port.y - 1)
+                    self.pin_escape_owner[(pt_port.x, pt_port.y - 1)].add(pt_port.net_name)
+                elif pt_port.mirror == "horizontal":
                     # Right-side port: text extends right of pt_port.x
                     for tx in range(pt_port.x + 1, pt_port.x + 8):
                         for ty in range(pt_port.y - 1, pt_port.y + 2):
                             self.label_blocked.add((tx, ty))
+                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x - 1, pt_port.y)
+                    self.pin_escape_owner[(pt_port.x - 1, pt_port.y)].add(pt_port.net_name)
                 else:
                     # Left-side port: text extends left of pt_port.x
                     for tx in range(pt_port.x - 7, pt_port.x):
                         for ty in range(pt_port.y - 1, pt_port.y + 2):
                             self.label_blocked.add((tx, ty))
+                    self.pin_escape[(pt_port.x, pt_port.y)] = (pt_port.x + 1, pt_port.y)
+                    self.pin_escape_owner[(pt_port.x + 1, pt_port.y)].add(pt_port.net_name)
             elif pt_port.symbol_id == "vdd-port":
                 for ty in range(pt_port.y - 3, pt_port.y):
                     self.body_blocked.add((pt_port.x, ty))
@@ -247,7 +266,10 @@ class _GridOccupancy:
                 for ty in range(pt_port.y + 1, pt_port.y + 4):
                     self.body_blocked.add((pt_port.x, ty))
 
-    def register_instance_pins(self, circuit: NetlistCircuit) -> None:
+    def register_instance_pins(
+        self, circuit: NetlistCircuit, bulk_handled: set[tuple[str, str]] | None = None
+    ) -> None:
+        bulk_handled = bulk_handled or set()
         for inst in circuit.instances:
             pl = self.placements[inst.ref]
             bx0, by0, bx1, by1 = pl.body_box
@@ -257,13 +279,16 @@ class _GridOccupancy:
                 self.wire_corners[(px, py)].add(net)
                 # Outward escape step from symbol boundary
                 if py <= by0:
-                    self.pin_escape[(px, py)] = (px, py - 1)
+                    esc = (px, py - 1)
                 elif py >= by1:
-                    self.pin_escape[(px, py)] = (px, py + 1)
+                    esc = (px, py + 1)
                 elif px <= bx0:
-                    self.pin_escape[(px, py)] = (px - 1, py)
+                    esc = (px - 1, py)
                 else:
-                    self.pin_escape[(px, py)] = (px + 1, py)
+                    esc = (px + 1, py)
+                self.pin_escape[(px, py)] = esc
+                if (inst.ref, pin) not in bulk_handled and esc not in self.body_blocked:
+                    self.pin_escape_owner[esc].add(net)
 
     def add_polyline(self, net: str, pts: list[Point]) -> None:
         if len(pts) < 2:
@@ -300,6 +325,9 @@ class _GridOccupancy:
                 return None
         owner = self.pin_owner.get(v)
         if owner is not None and owner != net:
+            return None
+        esc_owners = self.pin_escape_owner.get(v)
+        if esc_owners and net not in esc_owners:
             return None
 
         # 2. Never step onto a foreign bend/junction/pin corner!
@@ -525,11 +553,19 @@ def route_placed_schematic(
     ports: list[PortOccurrencePlaced],
     local_bulk_labels: list[dict[str, str]],
     local_bulk_shorts: list[dict[str, str]],
-) -> tuple[dict[str, JunctionPlaced], list[RoutePlaced], list[str]]:
+    *,
+    allow_wire_labels: bool = False,
+) -> tuple[dict[str, JunctionPlaced], list[RoutePlaced], list[str], list[WireLabelStubPlaced], list[BusRipperPlaced]]:
     """Route all nets into exact orthogonal Steiner trees with corridor track separation."""
     supplies = set(circuit.supply_nets)
     grounds = set(circuit.ground_nets)
     rails = supplies | grounds
+
+    bulk_handled: set[tuple[str, str]] = set()
+    for item in local_bulk_labels:
+        bulk_handled.add((item["reference"], "B"))
+    for item in local_bulk_shorts:
+        bulk_handled.add((item["reference"], item["bulkPinName"]))
 
     occ = _GridOccupancy(
         placements=placements,
@@ -539,7 +575,7 @@ def route_placed_schematic(
         pdk=pdk,
         track_pitch=intent.spacing.wire_track_pitch,
     )
-    occ.register_instance_pins(circuit)
+    occ.register_instance_pins(circuit, bulk_handled)
 
     all_xs = [p.full_envelope[0] for p in placements.values()] + [
         p.full_envelope[2] for p in placements.values()
@@ -551,12 +587,6 @@ def route_placed_schematic(
     min_y, max_y = min(all_ys) - 12, max(all_ys) + 14
     search_bounds: BBox = (min_x, min_y, max_x, max_y)
     bottom_bus_y = max(p.full_envelope[3] for p in placements.values()) + 6
-
-    bulk_handled: set[tuple[str, str]] = set()
-    for item in local_bulk_labels:
-        bulk_handled.add((item["reference"], "B"))
-    for item in local_bulk_shorts:
-        bulk_handled.add((item["reference"], item["bulkPinName"]))
 
     # Map every routable endpoint per net: point -> RouteStepPlaced
     endpoints_by_net: dict[str, list[RouteStepPlaced]] = defaultdict(list)
@@ -582,9 +612,61 @@ def route_placed_schematic(
 
     routes: list[RoutePlaced] = []
     junctions: dict[str, JunctionPlaced] = {}
+    wire_label_stubs: list[WireLabelStubPlaced] = []
+    bus_rippers: list[BusRipperPlaced] = []
     tight_nets: list[str] = []
     route_counter = 0
     junc_counter = 0
+    stub_counter = 0
+
+    # Optional Bus Ripper synthesis for `parallel_bank` motifs with `bottomTapStyle == "bus_ripper"`
+    inst_map = circuit.instance_map()
+    bus_handled_nets: set[str] = set()
+    for m_idx, m in enumerate(intent.motifs):
+        if m.get("type") == "parallel_bank" and m.get("bottomTapStyle") == "bus_ripper":
+            b_refs = [str(x) for x in m.get("instances", []) if str(x) in placements]
+            cnet = str(m.get("commonTopNet", ""))
+            taps: list[tuple[str, int, int]] = []
+            for r in b_refs:
+                inst = inst_map[r]
+                pl = placements[r]
+                for pin, pnet in inst.terminals.items():
+                    if pnet != cnet and pin != "B":
+                        px, py = pl.pin_points[pin]
+                        taps.append((pnet, px, py))
+            if len(taps) >= 2:
+                trunk_y = max(t[2] for t in taps) + 5
+                x_s = min(t[1] for t in taps) - 3
+                x_e = max(t[1] for t in taps) + 5
+                bus_rippers.append(
+                    BusRipperPlaced(
+                        id=str(m.get("id", f"bus_{m_idx + 1}")),
+                        bus_name=str(m.get("busName", "BUS")),
+                        trunk_y=trunk_y,
+                        x_start=x_s,
+                        x_end=x_e,
+                        taps=taps,
+                    )
+                )
+                if allow_wire_labels:
+                    for t_net, tx, ty in taps:
+                        stub_counter += 1
+                        wire_label_stubs.append(
+                            WireLabelStubPlaced(
+                                id=f"WL_BUS_{stub_counter}",
+                                net_name=t_net,
+                                ref="BUS",
+                                pin_name=t_net,
+                                x1=tx,
+                                y1=ty,
+                                x2=tx,
+                                y2=trunk_y - 1,
+                            )
+                        )
+                        occ.add_polyline(t_net, [(tx, ty), (tx, trunk_y - 1)])
+                        # If t_net only connects to this tap + port, mark handled
+                        if len(endpoints_by_net.get(t_net, [])) <= 1:
+                            bus_handled_nets.add(t_net)
 
     # 1. Route local supply / ground / repeated-port taps first (short straight stubs!)
     repeated_port_nets = set(rails) | {
@@ -592,28 +674,69 @@ def route_placed_schematic(
         for po in ports
         if intent.port_sides.get(po.port_name) == "local_repeat"
     }
+    # Handle explicit `label_stub` nets when `allow_wire_labels=True`
+    label_stub_nets: set[str] = set()
+    if allow_wire_labels:
+        for net in circuit.nets:
+            if net not in repeated_port_nets and intent.net_policies.get(net) == "label_stub":
+                label_stub_nets.add(net)
+                for ep in endpoints_by_net.get(net, []):
+                    esc = occ.pin_escape.get((ep.x, ep.y), (ep.x - 1, ep.y))
+                    dx = esc[0] - ep.x
+                    dy = esc[1] - ep.y
+                    ex = ep.x + dx * 4
+                    ey = ep.y + dy * 4
+                    ref_name = str(ep.instance_id or "").replace("source-", "")
+                    stub_counter += 1
+                    wire_label_stubs.append(
+                        WireLabelStubPlaced(
+                            id=f"WL_{net}_{stub_counter}",
+                            net_name=net,
+                            ref=ref_name,
+                            pin_name=str(ep.pin_name or ""),
+                            x1=ep.x,
+                            y1=ep.y,
+                            x2=ex,
+                            y2=ey,
+                        )
+                    )
+                    occ.add_polyline(net, [(ep.x, ep.y), (ex, ey)])
+                    for step_k in range(1, 5):
+                        occ.label_blocked.add((ep.x + dx * (4 + step_k), ep.y + dy * (4 + step_k)))
     for rail_net in [n for n in circuit.nets if n in repeated_port_nets]:
         rail_ports = port_occs_by_net.get(rail_net, [])
         if not rail_ports:
             continue
-        for ep in endpoints_by_net.get(rail_net, []):
-            nearest = min(rail_ports, key=lambda po: abs(po.x - ep.x) + abs(po.y - ep.y))
-            p_step = RouteStepPlaced(
+        port_step_by_pt = {
+            (po.x, po.y): RouteStepPlaced(
                 kind="port",
-                x=nearest.x,
-                y=nearest.y,
-                instance_id=nearest.occurrence_id,
-                pin_name=nearest.port_name,
+                x=po.x,
+                y=po.y,
+                instance_id=po.occurrence_id,
+                pin_name=po.port_name,
             )
-            pts: list[Point]
-            steps: list[RouteStepPlaced]
-            if ep.x == p_step.x or ep.y == p_step.y:
-                pts = [(ep.x, ep.y), (p_step.x, p_step.y)]
-                steps = [p_step]
-            else:
-                mid = (ep.x, p_step.y)
-                pts = [(ep.x, ep.y), mid, (p_step.x, p_step.y)]
-                steps = [RouteStepPlaced(kind="bend", x=mid[0], y=mid[1]), p_step]
+            for po in rail_ports
+        }
+        rail_goals = set(port_step_by_pt)
+        for ep in endpoints_by_net.get(rail_net, []):
+            path_r = _astar_connect_to_tree(
+                rail_net,
+                (ep.x, ep.y),
+                rail_goals,
+                occ,
+                search_bounds,
+                allow_tight_parallel=True,
+            )
+            if path_r is None:
+                nearest = min(rail_ports, key=lambda po: abs(po.x - ep.x) + abs(po.y - ep.y))
+                p_step = port_step_by_pt[(nearest.x, nearest.y)]
+                path_r = (
+                    [(ep.x, ep.y), (p_step.x, p_step.y)]
+                    if (ep.x == p_step.x or ep.y == p_step.y)
+                    else [(ep.x, ep.y), (ep.x, p_step.y), (p_step.x, p_step.y)]
+                )
+            p_step = port_step_by_pt[path_r[-1]]
+            steps = [RouteStepPlaced(kind="bend", x=bx, y=by) for (bx, by) in path_r[1:-1]] + [p_step]
             route_counter += 1
             routes.append(
                 RoutePlaced(
@@ -623,14 +746,20 @@ def route_placed_schematic(
                     steps=steps,
                 )
             )
-            occ.add_polyline(rail_net, pts)
+            occ.add_polyline(rail_net, path_r)
 
     # 2. Order non-rail nets: critical short local nets first, then general full_wire, then perimeter_bus!
-    non_rail_nets = [n for n in circuit.nets if n not in repeated_port_nets]
+    non_rail_nets = [
+        n
+        for n in circuit.nets
+        if n not in repeated_port_nets and n not in label_stub_nets and n not in bus_handled_nets
+    ]
     crit_set = set(intent.critical_nets)
 
     def _net_priority(n: str) -> tuple[int, int, int]:
         pol = intent.net_policies.get(n, "full_wire")
+        if pol == "label_stub" and not allow_wire_labels:
+            pol = "perimeter_bus"
         eps = endpoints_by_net.get(n, []) + [
             RouteStepPlaced(kind="port", x=po.x, y=po.y, instance_id=po.occurrence_id, pin_name=po.port_name)
             for po in port_occs_by_net.get(n, [])
@@ -668,6 +797,8 @@ def route_placed_schematic(
         tree_points: set[Point] = {(all_eps[0].x, all_eps[0].y)}
 
         pol = intent.net_policies.get(net, "full_wire")
+        if pol == "label_stub" and not allow_wire_labels:
+            pol = "perimeter_bus"
         bus_y = bottom_bus_y if pol == "perimeter_bus" else None
 
         for target_ep in all_eps[1:]:
@@ -745,7 +876,7 @@ def route_placed_schematic(
                     for x in range(min(a[0], b[0]), max(a[0], b[0]) + 1):
                         tree_points.add((x, a[1]))
 
-    return junctions, routes, tight_nets
+    return junctions, routes, tight_nets, wire_label_stubs, bus_rippers
 
 
 def compile_schematic(
@@ -754,6 +885,7 @@ def compile_schematic(
     pdk: PdkRegistry | None = None,
     *,
     max_congestion_iters: int = 3,
+    allow_wire_labels: bool = False,
 ) -> SolvedSchematic:
     """Run closed-loop placement + routing + corridor congestion expansion."""
     pdk = pdk or PdkRegistry()
@@ -767,6 +899,8 @@ def compile_schematic(
     bulk_shorts: list[dict[str, str]] = []
     junctions: dict[str, JunctionPlaced] = {}
     routes: list[RoutePlaced] = []
+    wl_stubs: list[WireLabelStubPlaced] = []
+    bus_rippers: list[BusRipperPlaced] = []
     used_iters = 1
 
     for it in range(1, max_congestion_iters + 1):
@@ -777,21 +911,40 @@ def compile_schematic(
             pdk,
             extra_col_gaps=extra_col_gaps,
             extra_tier_gaps=extra_tier_gaps,
+            allow_wire_labels=allow_wire_labels,
         )
-        junctions, routes, tight_nets = route_placed_schematic(
-            circuit,
-            intent,
-            pdk,
-            placements,
-            ports,
-            bulk_labels,
-            bulk_shorts,
-        )
+        try:
+            junctions, routes, tight_nets, wl_stubs, bus_rippers = route_placed_schematic(
+                circuit,
+                intent,
+                pdk,
+                placements,
+                ports,
+                bulk_labels,
+                bulk_shorts,
+                allow_wire_labels=allow_wire_labels,
+            )
+        except RuntimeError as exc:
+            if it == max_congestion_iters:
+                raise
+            tiers_present = sorted({p.tier for p in placements.values()})
+            for ta in tiers_present:
+                extra_tier_gaps[(ta, ta)] += 6
+            for ta, tb in zip(tiers_present, tiers_present[1:]):
+                extra_tier_gaps[(ta, tb)] += 6
+            num_cols = max(1, len({p.x for p in placements.values()}))
+            for ci in range(num_cols + 2):
+                extra_col_gaps[(ci, ci + 1)] += 6
+            expansions.append(f"iter {it}: expanded corridors by +6 grids after routing block ({exc})")
+            continue
+
         if not tight_nets or it == max_congestion_iters:
             break
 
         # Congestion feedback: widen inter-column and inter-tier channels by +4 grids and re-solve!
         tiers_present = sorted({p.tier for p in placements.values()})
+        for ta in tiers_present:
+            extra_tier_gaps[(ta, ta)] += 4
         for ta, tb in zip(tiers_present, tiers_present[1:]):
             extra_tier_gaps[(ta, tb)] += 4
         num_cols = max(1, len({p.x for p in placements.values()}))
@@ -814,6 +967,12 @@ def compile_schematic(
         for px, py in rt.points():
             xs.append(px)
             ys.append(py)
+    for wl in wl_stubs:
+        xs.extend([wl.x1, wl.x2])
+        ys.extend([wl.y1, wl.y2])
+    for br in bus_rippers:
+        xs.extend([br.x_start, br.x_end])
+        ys.append(br.trunk_y + 2)
 
     bounds: BBox = (min(xs) - 6, min(ys) - 6, max(xs) + 6, max(ys) + 6)
     return SolvedSchematic(
@@ -828,4 +987,6 @@ def compile_schematic(
         bounds=bounds,
         congestion_iterations=used_iters,
         corridor_expansions=expansions,
+        wire_label_stubs=wl_stubs,
+        bus_rippers=bus_rippers,
     )

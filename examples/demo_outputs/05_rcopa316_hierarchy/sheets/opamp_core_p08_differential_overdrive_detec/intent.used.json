@@ -1,0 +1,158 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core_p08_differential_overdrive_detec",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "cascode_stage",
+      "label": "共源共栅叠层支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "BSTS",
+        "BSDET",
+        "BSDUMP",
+        "BSTR",
+        "BRDET",
+        "BRDUMP",
+        "BNDS",
+        "BNTS",
+        "BNXS",
+        "BNDR",
+        "BNTR",
+        "BNXR"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "BNPS",
+        "BNCS",
+        "BNPR",
+        "BNCR"
+      ]
+    }
+  ],
+  "motifs": [],
+  "orientations": {
+    "BSTS": "gate_left",
+    "BSDET": "gate_left",
+    "BSDUMP": "gate_left",
+    "BSTR": "gate_left",
+    "BRDET": "gate_left",
+    "BRDUMP": "gate_left",
+    "BNDS": "gate_left",
+    "BNTS": "gate_left",
+    "BNXS": "gate_left",
+    "BNDR": "gate_left",
+    "BNTR": "gate_left",
+    "BNXR": "gate_left",
+    "BNPS": "gate_left",
+    "BNCS": "gate_left",
+    "BNPR": "gate_left",
+    "BNCR": "gate_left"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "BSTS",
+      "BSDET"
+    ],
+    [
+      "BSTS",
+      "BSDUMP"
+    ],
+    [
+      "BSTR",
+      "BRDET"
+    ],
+    [
+      "BSTR",
+      "BRDUMP"
+    ],
+    [
+      "BNDS",
+      "BNTS"
+    ],
+    [
+      "BNXS",
+      "BNTS"
+    ],
+    [
+      "BNDR",
+      "BNTR"
+    ],
+    [
+      "BNXR",
+      "BNTR"
+    ],
+    [
+      "BNPS"
+    ],
+    [
+      "BNCS"
+    ],
+    [
+      "BNPR"
+    ],
+    [
+      "BNCR"
+    ]
+  ],
+  "netPolicies": {
+    "bs": "full_wire",
+    "pctl": "supply_local",
+    "vdd": "supply_local",
+    "ds": "full_wire",
+    "vip": "full_wire",
+    "vss": "supply_local",
+    "vin": "full_wire",
+    "br": "full_wire",
+    "dr": "full_wire",
+    "bns": "full_wire",
+    "hn": "supply_local",
+    "dns": "full_wire",
+    "bnr": "full_wire",
+    "dnr": "full_wire"
+  },
+  "criticalNets": [
+    "bs",
+    "pctl",
+    "ds",
+    "vip",
+    "vin",
+    "br",
+    "dr",
+    "bns",
+    "hn",
+    "dns",
+    "bnr",
+    "dnr"
+  ],
+  "portSides": {
+    "pctl": "local_repeat",
+    "vdd": "local_repeat",
+    "ds": "right",
+    "vip": "local_repeat",
+    "vss": "local_repeat",
+    "vin": "local_repeat",
+    "dr": "right",
+    "hn": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

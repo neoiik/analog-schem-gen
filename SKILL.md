@@ -50,14 +50,31 @@ python -B schem_gen.py compile <netlist.spice> --intent <work_dir>/intent.json -
 1. Check `<work_dir>/02_compile/audit.md`: ensure `overallPassed = PASS` (0 symbol/label overlaps, 0 body/pin collisions, 0 collinear foreign wires, 0 split internal nets) and inspect `wireCrossingCount` + `llmRefinementSuggestions`.
 2. Inspect `<work_dir>/02_compile/preview.svg` visually. If an orientation flip or `perimeter_bus` toggle can eliminate remaining crossings, update `intent.json` and re-run Step 3.
 
-## 3. Structure-Preserving Draft Cleanup (`refine`)
+## 3. Structure-Preserving Draft Cleanup & Interactive Browser Micro-Editing
 
-To clean up an existing cramped or over-stretched `virtuoso-bridge-exact-schematic-v1` manifest while keeping its row/column structure:
+- Clean up an existing cramped or over-stretched `virtuoso-bridge-exact-schematic-v1` manifest while keeping its row/column structure:
+  ```bash
+  python -B schem_gen.py refine <draft_manifest.json> --pdk-map pdk/<pdk>_process_map.json --process <pdk> --out <work_dir>/refined
+  ```
+- Export a standalone zero-dependency browser drag/flip editor (`editor.html`), adjust device positions/orientations visually, download `edited_manifest.json`, and run `refine` to re-route obstacle-free Steiner wires:
+  ```bash
+  python -B schem_gen.py export-editor <netlist.spice> --intent <work_dir>/intent.json --out <work_dir>/editor.html
+  ```
+
+## 4. Multi-Sheet Hierarchical Compilation for Large Netlists (`>= 40` Instances)
+
+Never cram 50–200+ transistors onto a single flat sheet. Use atomic-cluster-protected hierarchical outlining and bottom-up compilation:
 ```bash
-python -B schem_gen.py refine <draft_manifest.json> --pdk-map pdk/<pdk>_process_map.json --process <pdk> --out <work_dir>/refined
-```
+# Optional Step A: Propose & review/edit coordinate-free page partition intent
+python -B schem_gen.py partition <large_netlist.spice> --out <work_dir>/01_partition
 
-## 4. Target PDK Plug-in & Live Virtuoso Gate
+# Step B: Compile all child sheets + TOP block diagram, verify Flatten-Back LVS, and emit index.html Schematic Book
+python -B schem_gen.py hierarchy <large_netlist.spice> --hierarchy-intent <work_dir>/01_partition/hierarchy_intent.draft.json --out <work_dir>/02_hierarchy
+```
+Always check that `flattenLvsPassed = PASS` and every sheet in `hierarchy_summary.json` passes readability DRC (`0` violations).
+
+## 5. Target PDK Plug-in, Profiler & Live Virtuoso Gate
 
 - Switch target PDKs by supplying `--pdk-map pdk/<name>_process_map.json --process <name> --rules pdk/<name>_netlist_rules.json` (`sky130` is bundled as an open-source Apache-2.0 reference profile).
+- Extract a new PDK profile read-only from Xschem `.sym` files or an authorized live Virtuoso session via `python -B schem_gen.py extract-pdk ...`.
 - Before importing into a live Cadence Virtuoso OA library, run `python -B schem_gen.py probe-pdk --pdk-map <map.json> --process <name> --live` in an authorized session to verify live symbol `pinOffsets` and CDF parameter names.

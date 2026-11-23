@@ -7,7 +7,7 @@
         "instanceCount": 12,
         "netCount": 10,
         "routeSegmentCount": 56,
-        "totalWireLengthGrids": 605,
+        "totalWireLengthGrids": 617,
         "symbolOverlapCount": 0,
         "labelOverlapCount": 0,
         "wireThroughBodyCount": 0,
@@ -77,6 +77,29 @@
         "parallelCrowdGridPairs": 0,
         "wireCrossingCount": 0,
         "crossingsByNet": {}
+      }
+    },
+    {
+      "case": "04_cdac_and_ladder",
+      "passed": true,
+      "metrics": {
+        "instanceCount": 12,
+        "netCount": 16,
+        "routeSegmentCount": 48,
+        "totalWireLengthGrids": 1034,
+        "symbolOverlapCount": 0,
+        "labelOverlapCount": 0,
+        "wireThroughBodyCount": 0,
+        "wireOverForeignPinCount": 0,
+        "collinearForeignWireOverlapCount": 0,
+        "ambiguousCrossingCount": 0,
+        "parallelCrowdGridPairs": 0,
+        "wireCrossingCount": 12,
+        "crossingsByNet": {
+          "VREFL": 6,
+          "VDAC": 12,
+          "VREFH": 6
+        }
       }
     }
   ]

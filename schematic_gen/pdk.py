@@ -115,7 +115,61 @@ class PdkRegistry:
         self.devices: dict[str, dict[str, Any]] = {}
         self.devices.update(self.raw_map.get("sharedDevices") or {})
         proc_cfg = processes[process_name]
+        self.output_library = str(proc_cfg.get("outputLibrary", "generated_schem"))
         self.devices.update(proc_cfg.get("devices") or {})
+
+    def register_block_symbol(
+        self,
+        cell_name: str,
+        *,
+        left_pins: list[str],
+        right_pins: list[str],
+        top_pins: list[str],
+        bottom_pins: list[str],
+        pin_pitch: int = 4,
+    ) -> dict[str, Any]:
+        """Synthesize a clean integer-grid rectangular symbol spec for a hierarchical subcircuit."""
+        n_side = max(len(left_pins), len(right_pins), 1)
+        n_tb = max(len(top_pins), len(bottom_pins), 1)
+        half_w = max(5, ((n_tb + 1) * pin_pitch) // 2)
+        half_h = max(4, ((n_side + 1) * pin_pitch) // 2)
+
+        pin_offsets: dict[str, list[int]] = {}
+        pin_map: dict[str, str] = {}
+
+        def _spread(count: int, step: int) -> list[int]:
+            if count <= 0:
+                return []
+            start = ((count - 1) * step) // 2
+            return [start - idx * step for idx in range(count)]
+
+        for p, vy in zip(left_pins, _spread(len(left_pins), pin_pitch)):
+            pin_offsets[p] = [-half_w, vy]
+            pin_map[p] = p
+        for p, vy in zip(right_pins, _spread(len(right_pins), pin_pitch)):
+            pin_offsets[p] = [half_w, vy]
+            pin_map[p] = p
+        for p, vx in zip(top_pins, list(reversed(_spread(len(top_pins), pin_pitch)))):
+            pin_offsets[p] = [vx, half_h]
+            pin_map[p] = p
+        for p, vx in zip(bottom_pins, list(reversed(_spread(len(bottom_pins), pin_pitch)))):
+            pin_offsets[p] = [vx, -half_h]
+            pin_map[p] = p
+
+        dev_key = f"subckt:{cell_name}"
+        spec: dict[str, Any] = {
+            "library": self.output_library,
+            "cell": cell_name,
+            "view": "symbol",
+            "pinMap": pin_map,
+            "pinOffsets": pin_offsets,
+            "parameterMap": {},
+            "bodyBox": [-(half_w - 1), -(half_h - 1), half_w - 1, half_h - 1],
+            "defaultLabelSide": "top",
+        }
+        self.devices[dev_key] = spec
+        self.raw_map["processes"][self.process_name].setdefault("devices", {})[dev_key] = spec
+        return spec
 
     def device_spec(self, device_key: str) -> dict[str, Any]:
         if device_key not in self.devices:
@@ -181,6 +235,8 @@ class PdkRegistry:
         """Format compact human-readable instance & parameter text lines."""
         lines = [inst.ref]
         p = inst.params
+        if inst.device_class == "subckt":
+            return [inst.ref, inst.subckt_cell or inst.source_model]
         if inst.device_class == "mos":
             w = p.get("w", "")
             l = p.get("l", "")
@@ -234,7 +290,12 @@ class PdkRegistry:
         text_h = max(3, len(lines) * 2)
 
         cadence_orient = source_orientation(rotation, mirror)
-        if inst.device_class == "mos":
+        if inst.device_class == "subckt":
+            # Place subckt block title offset to the right of x=0 so top/bottom center supply pins never cross it!
+            lx0 = 2
+            ly1 = body[1] - 1
+            label_box: BBox = (lx0, ly1 - text_h, lx0 + text_w, ly1)
+        elif inst.device_class == "mos":
             # Gate side has horizontal gate wire; place text on opposite (channel) side.
             gx, _ = pins["G"]
             if gx < 0:

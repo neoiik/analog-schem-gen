@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""CLI entry point for `analog-schem-gen`: PDK-agnostic high-readability analog schematic generator.
+"""CLI entry point for `analog-schem-gen` v0.2.0.
 
-Supports fine-grained LLM + Algorithm Co-Execution (`analyze` -> LLM edits `intent.json`
--> `compile` -> LLM critiques `preview.svg` + `audit.json`) and standalone modes (`auto`,
-`refine`, `audit`, `demo`). Offline and pure-data by default; zero solver/simulation entry.
+Supports single-sheet LLM + Algorithm Co-Execution (`analyze`, `compile`, `auto`, `refine`, `audit`),
+large-netlist multi-sheet hierarchical partitioning & flatten-back LVS (`partition`, `hierarchy`),
+read-only PDK profiling (`extract-pdk`), and interactive browser drag-refinement (`export-editor`).
+Offline and pure-data by default; zero solver/simulation entry.
 """
 
 from __future__ import annotations
@@ -15,17 +16,30 @@ from typing import Any
 
 from schematic_gen.analyzer import analyze_circuit
 from schematic_gen.auditor import audit_manifest_and_solved, audit_solved_schematic
+from schematic_gen.hierarchy import (
+    HierarchyIntent,
+    compile_hierarchical_circuit,
+    propose_flat_partition,
+    render_hierarchy_book_html,
+)
+from schematic_gen.interactive_editor import render_interactive_editor_html
 from schematic_gen.manifest_builder import (
     build_bridge_manifest,
     build_canvas_ir,
+    build_virtuoso_wire_label_skill,
     ensure_virtuoso_bridge_on_path,
 )
 from schematic_gen.models import AuditReport, SchematicIntent
-from schematic_gen.parser import parse_netlist_file
+from schematic_gen.optimizer import optimize_schematic_crossings
+from schematic_gen.parser import parse_netlist_design_file, parse_netlist_file
 from schematic_gen.pdk import (
     DEFAULT_NETLIST_RULES_PATH,
     DEFAULT_PROCESS_MAP_PATH,
     PdkRegistry,
+)
+from schematic_gen.pdk_extractor import (
+    extract_process_map_from_virtuoso_live,
+    extract_process_map_from_xschem_dir,
 )
 from schematic_gen.refiner import circuit_and_intent_from_manifest, refine_existing_manifest
 from schematic_gen.router import compile_schematic
@@ -93,6 +107,9 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     _write_json(out_dir / "analysis.json", analysis.to_dict())
     _write_json(out_dir / "intent.draft.json", analysis.draft_intent)
+    if len(circuit.instances) > 32:
+        part = propose_flat_partition(circuit)
+        _write_json(out_dir / "hierarchy_intent.draft.json", part.to_dict())
     print(f"[analyze] cell={circuit.cell_name} instances={len(circuit.instances)} nets={len(circuit.nets)}")
     print(f"[analyze] motifs={len(analysis.motifs)} llm_ambiguities={len(analysis.ambiguities_for_llm)}")
     print(f"[analyze] wrote {out_dir / 'analysis.json'} and {out_dir / 'intent.draft.json'}")
@@ -116,6 +133,10 @@ def _emit_solved_bundle(
     _write_json(out_dir / "manifest.json", manifest)
     _write_json(out_dir / "canvas_ir.json", canvas_ir)
     (out_dir / "preview.svg").write_text(svg_text + "\n", encoding="utf-8")
+    if solved.wire_label_stubs:
+        (out_dir / "wire_labels.il").write_text(
+            build_virtuoso_wire_label_skill(solved, pdk), encoding="utf-8"
+        )
     _write_json(out_dir / "audit.json", report.to_dict())
     (out_dir / "audit.md").write_text(_format_audit_markdown(report) + "\n", encoding="utf-8")
     return report
@@ -132,14 +153,20 @@ def cmd_compile(args: argparse.Namespace) -> int:
     if args.cell_name:
         intent.cell_name = args.cell_name
     pdk = PdkRegistry(args.pdk_map, args.process)
-    solved = compile_schematic(circuit, intent, pdk=pdk)
+    if args.optimize_crossings:
+        solved = optimize_schematic_crossings(
+            circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
+        )
+    else:
+        solved = compile_schematic(
+            circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
+        )
     out_dir = Path(args.out)
     report = _emit_solved_bundle(solved, pdk, out_dir, debug_boxes=args.debug_boxes)
     print(
         f"[compile] cell={circuit.cell_name} overall={'PASS' if report.overall_passed else 'FAIL'} "
-        f"crossings={report.metrics['wireCrossingCount']} iters={solved.congestion_iterations}"
+        f"crossings={report.metrics['wireCrossingCount']} opt_moves={len(solved.optimization_moves)}"
     )
-    print(f"[compile] wrote manifest, preview.svg, and audit report to {out_dir}")
     return 0 if report.overall_passed else 2
 
 
@@ -152,16 +179,148 @@ def cmd_auto(args: argparse.Namespace) -> int:
     analysis = analyze_circuit(circuit)
     intent = SchematicIntent.from_dict(analysis.draft_intent)
     pdk = PdkRegistry(args.pdk_map, args.process)
-    solved = compile_schematic(circuit, intent, pdk=pdk)
+    if args.optimize_crossings:
+        solved = optimize_schematic_crossings(
+            circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
+        )
+    else:
+        solved = compile_schematic(
+            circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
+        )
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     _write_json(out_dir / "analysis.json", analysis.to_dict())
     report = _emit_solved_bundle(solved, pdk, out_dir, debug_boxes=args.debug_boxes)
     print(
         f"[auto] cell={circuit.cell_name} overall={'PASS' if report.overall_passed else 'FAIL'} "
-        f"crossings={report.metrics['wireCrossingCount']}"
+        f"crossings={report.metrics['wireCrossingCount']} opt_moves={len(solved.optimization_moves)}"
     )
     return 0 if report.overall_passed else 2
+
+
+def cmd_partition(args: argparse.Namespace) -> int:
+    circuit = parse_netlist_file(args.netlist, rules_path=args.rules, cell_name_override=args.cell_name)
+    h_intent = propose_flat_partition(circuit, max_page_size=args.max_page_size)
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    _write_json(out_dir / "hierarchy_intent.draft.json", h_intent.to_dict())
+    print(
+        f"[partition] cell={circuit.cell_name} instances={len(circuit.instances)} "
+        f"-> {len(h_intent.pages)} pages (global_bias_nets={len(h_intent.global_bias_nets)})"
+    )
+    return 0
+
+
+def cmd_hierarchy(args: argparse.Namespace) -> int:
+    design = parse_netlist_design_file(
+        args.netlist, rules_path=args.rules, top_cell_override=args.cell_name
+    )
+    pdk = PdkRegistry(args.pdk_map, args.process)
+    h_intent = (
+        HierarchyIntent.from_dict(json.loads(Path(args.hierarchy_intent).read_text(encoding="utf-8")))
+        if args.hierarchy_intent
+        else None
+    )
+    target: Any = design.cells[design.top_cell] if len(design.cells) == 1 else design
+    res = compile_hierarchical_circuit(
+        target,
+        pdk=pdk,
+        hierarchy_intent=h_intent,
+        max_page_size=args.max_page_size,
+        allow_wire_labels=not args.no_wire_labels,
+        optimize_crossings=not args.no_optimize_crossings,
+    )
+
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if res.hierarchy_intent is not None:
+        _write_json(out_dir / "hierarchy_intent.used.json", res.hierarchy_intent.to_dict())
+    _write_json(out_dir / "combined_manifest.json", res.combined_manifest)
+    _write_json(out_dir / "augmented_process_map.json", res.augmented_process_map)
+
+    pdk_aug = PdkRegistry(args.pdk_map, args.process)
+    pdk_aug.raw_map = res.augmented_process_map
+    pdk_aug.devices.update(res.augmented_process_map["processes"][args.process].get("devices", {}))
+
+    pages_summary: list[dict[str, Any]] = []
+    for cname, solved in res.solved_pages.items():
+        page_dir = out_dir / "sheets" / cname
+        rep = _emit_solved_bundle(solved, pdk_aug, page_dir)
+        pages_summary.append(
+            {
+                "cellName": cname,
+                "passed": rep.overall_passed,
+                "instances": rep.metrics["instanceCount"],
+                "crossings": rep.metrics["wireCrossingCount"],
+            }
+        )
+
+    book_html = render_hierarchy_book_html(res, pdk_aug)
+    (out_dir / "index.html").write_text(book_html, encoding="utf-8")
+    summary = {
+        "schema": "schem_gen.hierarchy_summary.v1",
+        "topCell": res.design.top_cell,
+        "overallPassed": res.overall_passed,
+        "flattenLvsPassed": res.flatten_lvs_passed,
+        "flattenLvsDiffs": res.flatten_lvs_Diffs,
+        "sheetCount": len(res.solved_pages),
+        "sheets": pages_summary,
+    }
+    _write_json(out_dir / "hierarchy_summary.json", summary)
+    print(
+        f"[hierarchy] top={res.design.top_cell} sheets={len(res.solved_pages)} "
+        f"flatten_lvs={'PASS' if res.flatten_lvs_passed else 'FAIL'} "
+        f"overall={'PASS' if res.overall_passed else 'FAIL'}"
+    )
+    return 0 if res.overall_passed else 2
+
+
+def cmd_extract_pdk(args: argparse.Namespace) -> int:
+    if args.from_xschem:
+        pmap = extract_process_map_from_xschem_dir(
+            args.from_xschem,
+            process_name=args.process,
+            target_library=args.target_library,
+            output_library=args.output_library,
+        )
+        _write_json(Path(args.out), pmap)
+        print(
+            f"[extract-pdk] extracted {len(pmap['processes'][args.process]['devices'])} "
+            f"symbols from Xschem -> {args.out}"
+        )
+        return 0
+    if args.from_virtuoso:
+        if not args.live:
+            print("[extract-pdk] Pass `--live` when authorized to probe live Virtuoso symbol masters.")
+            return 0
+        spec = json.loads(Path(args.from_virtuoso).read_text(encoding="utf-8"))
+        masters = {str(k): (str(v[0]), str(v[1])) for k, v in spec.items()}
+        pmap = extract_process_map_from_virtuoso_live(
+            masters,
+            process_name=args.process,
+            output_library=args.output_library,
+            profile=args.profile,
+        )
+        _write_json(Path(args.out), pmap)
+        print(f"[extract-pdk] probed {len(masters)} Virtuoso masters -> {args.out}")
+        return 0
+    raise ValueError("Specify either `--from-xschem <sym_dir>` or `--from-virtuoso <masters.json>`")
+
+
+def cmd_export_editor(args: argparse.Namespace) -> int:
+    circuit = parse_netlist_file(args.netlist, rules_path=args.rules)
+    pdk = PdkRegistry(args.pdk_map, args.process)
+    if args.intent:
+        intent = SchematicIntent.from_dict(json.loads(Path(args.intent).read_text(encoding="utf-8")))
+    else:
+        intent = SchematicIntent.from_dict(analyze_circuit(circuit).draft_intent)
+    solved = compile_schematic(circuit, intent, pdk=pdk)
+    html_str = render_interactive_editor_html(solved, pdk)
+    out_file = Path(args.out)
+    out_file.parent.mkdir(parents=True, exist_ok=True)
+    out_file.write_text(html_str, encoding="utf-8")
+    print(f"[export-editor] wrote standalone interactive drag editor -> {out_file}")
+    return 0
 
 
 def cmd_refine(args: argparse.Namespace) -> int:
@@ -230,7 +389,7 @@ def cmd_demo(args: argparse.Namespace) -> int:
 
     summary: dict[str, Any] = {"demos": []}
 
-    # 1. SKY130 Two-Stage Miller Op-Amp (LLM-refined intent)
+    # 1. SKY130 Two-Stage Miller Op-Amp
     c1 = parse_netlist_file(examples_dir / "sky130_two_stage_ota.spice")
     i1 = SchematicIntent.from_dict(
         json.loads((examples_dir / "sky130_two_stage_intent.json").read_text(encoding="utf-8"))
@@ -239,7 +398,7 @@ def cmd_demo(args: argparse.Namespace) -> int:
     r1 = _emit_solved_bundle(s1, pdk, out_root / "01_two_stage_ota")
     summary["demos"].append({"case": "01_two_stage_ota", "passed": r1.overall_passed, "metrics": r1.metrics})
 
-    # 2. SKY130 Folded-Cascode OTA (LLM-refined intent)
+    # 2. SKY130 Folded-Cascode OTA
     c2 = parse_netlist_file(examples_dir / "sky130_folded_cascode.spice")
     i2 = SchematicIntent.from_dict(
         json.loads((examples_dir / "sky130_folded_cascode_intent.json").read_text(encoding="utf-8"))
@@ -268,72 +427,130 @@ def cmd_demo(args: argparse.Namespace) -> int:
         }
     )
 
+    # 4. Regular Array Bank (CDAC + Serpentine Resistor Ladder)
+    cdac_path = examples_dir / "sky130_cdac_and_ladder.spice"
+    r4_ok = True
+    if cdac_path.is_file():
+        c4 = parse_netlist_file(cdac_path)
+        i4 = SchematicIntent.from_dict(analyze_circuit(c4).draft_intent)
+        s4 = optimize_schematic_crossings(c4, i4, pdk=pdk)
+        r4 = _emit_solved_bundle(s4, pdk, out_root / "04_cdac_and_ladder")
+        r4_ok = r4.overall_passed
+        summary["demos"].append({"case": "04_cdac_and_ladder", "passed": r4.overall_passed, "metrics": r4.metrics})
+
     _write_json(out_root / "demo_summary.json", summary)
-    all_ok = r1.overall_passed and r2.overall_passed and (not r3_before.readability_passed) and r3_after.overall_passed
-    print(f"[demo] completed 3 SKY130 cases -> {out_root} (all_ok={all_ok})")
+    all_ok = (
+        r1.overall_passed
+        and r2.overall_passed
+        and (not r3_before.readability_passed)
+        and r3_after.overall_passed
+        and r4_ok
+    )
+    print(f"[demo] completed {len(summary['demos'])} SKY130 cases -> {out_root} (all_ok={all_ok})")
     return 0 if all_ok else 2
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="analog-schem-gen",
-        description="PDK-agnostic high-readability analog circuit schematic generator (LLM + Algorithm co-execution)",
+        description="PDK-agnostic high-readability analog circuit schematic generator v0.2.0",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
     def _add_common_pdk(p: argparse.ArgumentParser) -> None:
-        p.add_argument("--pdk-map", type=Path, default=DEFAULT_PROCESS_MAP_PATH, help="PDK process-map JSON 路径")
-        p.add_argument("--process", default="sky130", help="目标工艺名（默认 sky130）")
-        p.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH, help="网表原语识别规则 JSON")
+        p.add_argument("--pdk-map", type=Path, default=DEFAULT_PROCESS_MAP_PATH, help="PDK process-map JSON")
+        p.add_argument("--process", default="sky130", help="Target process key (default: sky130)")
+        p.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH, help="Netlist primitive rules JSON")
 
-    p_an = sub.add_parser("analyze", help="步骤1（算法）：解析网表、提取基元候选并生成供大模型审阅的草案 Intent")
-    p_an.add_argument("netlist", type=Path, help="输入 SPICE/CDL/Spectre 网表路径")
-    p_an.add_argument("--out", type=Path, required=True, help="输出目录")
-    p_an.add_argument("--cell-name", default=None, help="可选覆盖单元名")
+    p_an = sub.add_parser("analyze", help="Step 1 (Algo): parse netlist, detect motifs, and emit draft intent")
+    p_an.add_argument("netlist", type=Path)
+    p_an.add_argument("--out", type=Path, required=True)
+    p_an.add_argument("--cell-name", default=None)
     p_an.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH)
     p_an.set_defaults(func=cmd_analyze)
 
-    p_co = sub.add_parser("compile", help="步骤2（算法）：按大模型确认的 Intent 求解约束间距、正交分轨走线、SVG 与签核报告")
-    p_co.add_argument("netlist", type=Path, help="输入基准网表路径")
-    p_co.add_argument("--intent", type=Path, required=True, help="大模型确认/精修后的 intent.json")
-    p_co.add_argument("--out", type=Path, required=True, help="输出目录")
+    p_co = sub.add_parser("compile", help="Step 2 (Algo): solve QP placement, orthogonal routing, SVG, and DRC")
+    p_co.add_argument("netlist", type=Path)
+    p_co.add_argument("--intent", type=Path, required=True)
+    p_co.add_argument("--out", type=Path, required=True)
     p_co.add_argument("--cell-name", default=None)
-    p_co.add_argument("--debug-boxes", action="store_true", help="在 SVG 中叠加显示符号框与参数文字包络框")
+    p_co.add_argument("--optimize-crossings", action="store_true", help="Run bounded local flip/swap crossing search")
+    p_co.add_argument("--allow-wire-labels", action="store_true", help="Allow native Wire-Label stubs (+ wire_labels.il)")
+    p_co.add_argument("--debug-boxes", action="store_true")
     _add_common_pdk(p_co)
     p_co.set_defaults(func=cmd_compile)
 
-    p_au = sub.add_parser("auto", help="零样本全自动生成（使用确定性草案 Intent 直接编译）")
-    p_au.add_argument("netlist", type=Path, help="输入基准网表路径")
-    p_au.add_argument("--out", type=Path, required=True, help="输出目录")
+    p_au = sub.add_parser("auto", help="Zero-shot automatic schematic generation")
+    p_au.add_argument("netlist", type=Path)
+    p_au.add_argument("--out", type=Path, required=True)
     p_au.add_argument("--cell-name", default=None)
+    p_au.add_argument("--optimize-crossings", action="store_true")
+    p_au.add_argument("--allow-wire-labels", action="store_true")
     p_au.add_argument("--debug-boxes", action="store_true")
     _add_common_pdk(p_au)
     p_au.set_defaults(func=cmd_auto)
 
-    p_rf = sub.add_parser("refine", help="保结构整理既有原理图清单（撑开过挤压字、收紧过大空隙、重走正交分轨线）")
-    p_rf.add_argument("manifest", type=Path, help="既有草图 manifest.json")
-    p_rf.add_argument("--out", type=Path, required=True, help="输出目录")
+    p_pt = sub.add_parser("partition", help="Propose Atomic-Cluster-protected multi-sheet partition for large netlists")
+    p_pt.add_argument("netlist", type=Path)
+    p_pt.add_argument("--out", type=Path, required=True)
+    p_pt.add_argument("--cell-name", default=None)
+    p_pt.add_argument("--max-page-size", type=int, default=24)
+    p_pt.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH)
+    p_pt.set_defaults(func=cmd_partition)
+
+    p_hi = sub.add_parser("hierarchy", help="Compile multi-sheet hierarchical schematic book + flatten-back LVS")
+    p_hi.add_argument("netlist", type=Path)
+    p_hi.add_argument("--hierarchy-intent", type=Path, default=None, help="Optional LLM-refined hierarchy_intent.json")
+    p_hi.add_argument("--out", type=Path, required=True)
+    p_hi.add_argument("--cell-name", default=None)
+    p_hi.add_argument("--max-page-size", type=int, default=24)
+    p_hi.add_argument("--no-wire-labels", action="store_true", help="Disable Wire-Label stubs (strict physical perimeter bus)")
+    p_hi.add_argument("--no-optimize-crossings", action="store_true")
+    _add_common_pdk(p_hi)
+    p_hi.set_defaults(func=cmd_hierarchy)
+
+    p_ex = sub.add_parser("extract-pdk", help="Read-only extract process-map from Xschem .sym dir or live Virtuoso")
+    p_ex.add_argument("--from-xschem", type=Path, default=None, help="Directory containing Xschem .sym files")
+    p_ex.add_argument("--from-virtuoso", type=Path, default=None, help="JSON mapping device keys to [lib, cell]")
+    p_ex.add_argument("--process", default="custom_pdk")
+    p_ex.add_argument("--target-library", default="pdk_primitives")
+    p_ex.add_argument("--output-library", default="generated_schem")
+    p_ex.add_argument("--profile", default=None)
+    p_ex.add_argument("--live", action="store_true")
+    p_ex.add_argument("--out", type=Path, required=True)
+    p_ex.set_defaults(func=cmd_extract_pdk)
+
+    p_ed = sub.add_parser("export-editor", help="Export zero-dependency interactive HTML drag/flip schematic editor")
+    p_ed.add_argument("netlist", type=Path)
+    p_ed.add_argument("--intent", type=Path, default=None)
+    p_ed.add_argument("--out", type=Path, required=True)
+    _add_common_pdk(p_ed)
+    p_ed.set_defaults(func=cmd_export_editor)
+
+    p_rf = sub.add_parser("refine", help="Structure-preserving cleanup of existing draft manifest")
+    p_rf.add_argument("manifest", type=Path)
+    p_rf.add_argument("--out", type=Path, required=True)
     p_rf.add_argument("--debug-boxes", action="store_true")
     _add_common_pdk(p_rf)
     p_rf.set_defaults(func=cmd_refine)
 
-    p_ck = sub.add_parser("audit", help="独立对任意 Manifest 执行 LVS 电气等价 + Bridge 几何 + 可读性 DRC 检查")
-    p_ck.add_argument("manifest", type=Path, help="待检查 manifest.json")
-    p_ck.add_argument("--netlist", type=Path, default=None, help="基准网表路径（省略则检查内部连通与几何 DRC）")
-    p_ck.add_argument("--out", type=Path, required=True, help="输出目录")
+    p_ck = sub.add_parser("audit", help="Standalone LVS + Bridge preflight + readability DRC audit")
+    p_ck.add_argument("manifest", type=Path)
+    p_ck.add_argument("--netlist", type=Path, default=None)
+    p_ck.add_argument("--out", type=Path, required=True)
     _add_common_pdk(p_ck)
     p_ck.set_defaults(func=cmd_audit)
 
-    p_pr = sub.add_parser("probe-pdk", help="核对实时 Virtuoso 会话中目标 PDK 符号引脚偏移（默认离线提示，需显式 --live）")
+    p_pr = sub.add_parser("probe-pdk", help="Verify live Virtuoso symbol pinOffsets against process-map")
     p_pr.add_argument("--pdk-map", type=Path, default=DEFAULT_PROCESS_MAP_PATH)
     p_pr.add_argument("--process", default="sky130")
     p_pr.add_argument("--profile", default=None)
     p_pr.add_argument("--out", type=Path, default=None)
-    p_pr.add_argument("--live", action="store_true", help="显式确认连接已授权运行的 Virtuoso Bridge")
+    p_pr.add_argument("--live", action="store_true")
     p_pr.set_defaults(func=cmd_probe_pdk)
 
-    p_dm = sub.add_parser("demo", help="离线运行 3 组 SKY130 代表性基准示例（两级运放、折叠共源共栅、缺陷草图整理）")
-    p_dm.add_argument("--out", type=Path, required=True, help="演示输出目录")
+    p_dm = sub.add_parser("demo", help="Run built-in SKY130 benchmark cases offline")
+    p_dm.add_argument("--out", type=Path, required=True)
     p_dm.set_defaults(func=cmd_demo)
 
     return parser

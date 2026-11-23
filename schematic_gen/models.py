@@ -12,19 +12,24 @@ BBox = tuple[int, int, int, int]  # (min_x, min_y, max_x, max_y) in source y-dow
 
 @dataclass
 class InstanceIR:
-    """Normalized circuit primitive instance."""
+    """Normalized circuit primitive or hierarchical subcircuit instance."""
 
     ref: str
     raw_name: str
-    device_class: str  # e.g. "mos", "res_poly_3t", "cap_mim", "resistor", "capacitor", "isource", "vsource", "diode"
+    device_class: str  # e.g. "mos", "res_poly_3t", "cap_mim", "resistor", "capacitor", "isource", "vsource", "diode", "subckt"
     kind: str | None   # for mos: "nmos", "pmos", "nmos_lvt", "pmos_hvt", etc.
-    polarity: str      # "nmos", "pmos", "passive", "source"
+    polarity: str      # "nmos", "pmos", "passive", "source", "block"
     source_model: str
-    terminals: dict[str, str]       # canonical pin ("D","G","S","B" or "P","M","B") -> net_name
+    terminals: dict[str, str]       # canonical pin ("D","G","S","B" or "P","M","B" or subckt pin) -> net_name
     params: dict[str, str] = field(default_factory=dict)
+    param_expressions: dict[str, str] = field(default_factory=dict)
+    section_hint: str = ""
+    subckt_cell: str | None = None
 
     @property
     def device_key(self) -> str:
+        if self.device_class == "subckt" and self.subckt_cell:
+            return f"subckt:{self.subckt_cell}"
         return str(self.kind if self.device_class == "mos" else self.device_class)
 
     def to_dict(self) -> dict[str, Any]:
@@ -68,6 +73,22 @@ class NetlistCircuit:
             "nets": list(self.nets),
             "supplyNets": list(self.supply_nets),
             "groundNets": list(self.ground_nets),
+        }
+
+
+@dataclass
+class NetlistDesign:
+    """Multi-subcircuit hierarchical netlist collection."""
+
+    cells: dict[str, NetlistCircuit]
+    top_cell: str
+    global_params: dict[str, float] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "topCell": self.top_cell,
+            "globalParams": dict(self.global_params),
+            "cells": {k: v.to_dict() for k, v in self.cells.items()},
         }
 
 
@@ -314,6 +335,32 @@ class RoutePlaced:
 
 
 @dataclass
+class WireLabelStubPlaced:
+    """Short directional wire stub carrying a Virtuoso/Xschem net label (`schCreateWireLabel`)."""
+
+    id: str
+    net_name: str
+    ref: str
+    pin_name: str
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+
+
+@dataclass
+class BusRipperPlaced:
+    """Visual bus trunk with angled ripper taps for regular arrays (`SW<7:0>`)."""
+
+    id: str
+    bus_name: str
+    trunk_y: int
+    x_start: int
+    x_end: int
+    taps: list[tuple[str, int, int]] = field(default_factory=list)  # (net_name, tap_x, pin_y)
+
+
+@dataclass
 class SolvedSchematic:
     """Complete solved schematic geometry prior to Manifest/SVG serialization."""
 
@@ -328,6 +375,9 @@ class SolvedSchematic:
     bounds: BBox
     congestion_iterations: int = 1
     corridor_expansions: list[str] = field(default_factory=list)
+    wire_label_stubs: list[WireLabelStubPlaced] = field(default_factory=list)
+    bus_rippers: list[BusRipperPlaced] = field(default_factory=list)
+    optimization_moves: list[str] = field(default_factory=list)
 
 
 @dataclass

@@ -1,0 +1,157 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core_p04_common_gate_biases",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "cascode_stage",
+      "label": "共源共栅叠层支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "VPSH",
+        "VPSINK"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "VNFEED",
+        "VND",
+        "NCFEED",
+        "NCBLEED",
+        "RCP",
+        "BCP",
+        "RNtop",
+        "RNCFEED",
+        "RCN",
+        "VPD",
+        "RPtop",
+        "RPbot"
+      ]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 35,
+      "instances": [
+        "RNbot"
+      ]
+    }
+  ],
+  "motifs": [],
+  "orientations": {
+    "VPSH": "gate_left",
+    "VPSINK": "gate_left",
+    "VNFEED": "gate_left",
+    "VND": "gate_left",
+    "NCFEED": "gate_left",
+    "NCBLEED": "gate_left",
+    "RCP": "gate_left",
+    "BCP": "gate_left",
+    "RNtop": "vertical",
+    "RNbot": "vertical",
+    "RNCFEED": "vertical",
+    "RCN": "gate_left",
+    "VPD": "gate_left",
+    "RPtop": "vertical",
+    "RPbot": "vertical"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "VPSH",
+      "VPSINK"
+    ],
+    [
+      "VNFEED",
+      "VND"
+    ],
+    [
+      "NCFEED",
+      "NCBLEED"
+    ],
+    [
+      "RCP",
+      "BCP"
+    ],
+    [
+      "RNtop"
+    ],
+    [
+      "RNCFEED"
+    ],
+    [
+      "RCN"
+    ],
+    [
+      "VPD"
+    ],
+    [
+      "RPtop"
+    ],
+    [
+      "RPbot"
+    ],
+    [
+      "RNbot"
+    ]
+  ],
+  "netPolicies": {
+    "nd": "full_wire",
+    "bp": "supply_local",
+    "vdd": "supply_local",
+    "vss": "supply_local",
+    "nf0": "full_wire",
+    "fnc": "full_wire",
+    "ncas": "full_wire",
+    "up": "supply_local",
+    "un": "supply_local",
+    "pd_m": "full_wire",
+    "pd": "full_wire",
+    "vshd_n": "supply_local",
+    "pf0": "full_wire",
+    "pcas": "full_wire"
+  },
+  "criticalNets": [
+    "nd",
+    "bp",
+    "nf0",
+    "fnc",
+    "ncas",
+    "up",
+    "un",
+    "pd_m",
+    "pd",
+    "vshd_n",
+    "pf0",
+    "pcas"
+  ],
+  "portSides": {
+    "bp": "local_repeat",
+    "vdd": "local_repeat",
+    "vss": "local_repeat",
+    "ncas": "right",
+    "up": "local_repeat",
+    "un": "local_repeat",
+    "vshd_n": "local_repeat",
+    "pcas": "right"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

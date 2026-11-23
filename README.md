@@ -36,11 +36,27 @@ When AI agents try to draw analog circuit schematics directly from SPICE/Spectre
 
 ![Folded-Cascode OTA](examples/demo_outputs/02_folded_cascode_ota/preview.svg)
 
+**3. Binary CDAC Capacitor Array & Serpentine Resistor Ladder (`v0.2` Array Micro-Templates · 0 DRC violations)**
+
+![CDAC and Serpentine Resistor Ladder](examples/demo_outputs/04_cdac_and_ladder/preview.svg)
+
+**4. 162-Instance Rail-to-Rail Class-AB Op-Amp (`OPA316` Core · Multi-Sheet Hierarchy: 1 Top + 10 Subsheets · Flatten-Back LVS 100% PASS)**
+
+![OPA316 Hierarchical Top Sheet](examples/demo_outputs/05_rcopa316_hierarchy/sheets/opamp_core/preview.svg)
+
 ### PDK-Agnostic Design
 
 `analog-schem-gen` is **not tied to any single foundry PDK**. Target symbol pin offsets, bounding boxes, and CDF parameter names are decoupled into JSON profiles under [`pdk/`](pdk/):
 - `sky130` ([`pdk/sky130_process_map.json`](pdk/sky130_process_map.json) + [`pdk/sky130_netlist_rules.json`](pdk/sky130_netlist_rules.json)) is bundled out-of-the-box as an open-source Apache-2.0 reference profile.
 - Bring any custom or commercial PDK (e.g., 180nm, 65nm, 28nm) by adding a `<pdk>_process_map.json` (`virtuoso-bridge-process-map-v1`) and `<pdk>_netlist_rules.json` without changing engine code.
+
+### What's New in `v0.2.0`
+
+- **Multi-Sheet Hierarchical Compilation & Flatten-Back LVS (`partition` / `hierarchy`)**: Scales cleanly to **40–160+ instance** industrial analog blocks (validated on the 162-instance SKY130 rail-to-rail Class-AB `OPA316` core) by protecting atomic analog clusters (diff pairs, mirrors, cascodes, Miller RC), synthesizing block symbols, compiling bottom-up into a standalone multi-sheet HTML **Schematic Book (`index.html`)**, and proving **100% 1-to-1 leaf-device & net equivalence** back against the flat netlist.
+- **Regular Array Micro-Templates**: Automatic detection and rigid equal-pitch / serpentine placement for binary/thermometer **capacitor & current banks (`parallel_bank`)** and **resistor ladders (`serpentine_chain`)**, with optional **Bus Ripper** rendering.
+- **Bounded Crossing Minimization (`optimizer.py`)**: Equivalence-preserving local device flip / symmetric-pair swap search driven by a lexicographic readability objective ($10^5 N_{\text{DRC}} + 100 N_{\text{cross}} + 8 N_{\text{bend}} + L_{\text{wire}}$).
+- **`.param` Expression Evaluation & Dual-Mode Wire Labels**: Safe AST evaluation of SPICE algebraic `.param` formulas (e.g., `{48*a2_tail}`, `9.1meg`), plus optional native short-stub wire labels (`--allow-wire-labels` + Virtuoso SKILL helper `wire_labels.il`).
+- **Read-Only PDK Profiler & Browser Drag/Flip Editor (`extract-pdk` / `export-editor`)**: Extract `process_map.json` directly from Xschem `.sym` files or live Virtuoso sessions, and interactively drag/flip devices in a zero-dependency `editor.html` before re-running `refine`.
 
 ### Quick Start
 
@@ -58,11 +74,18 @@ python -B schem_gen.py compile examples/sky130_two_stage_ota.spice \
   --pdk-map pdk/sky130_process_map.json --process sky130 \
   --out work/02_compile
 
-# Zero-shot automatic mode & existing-draft structure-preserving cleanup
-python -B schem_gen.py auto examples/sky130_folded_cascode.spice --out work/fc_auto
+# Multi-sheet hierarchical schematic book for large netlists (e.g., 162-instance OPA316 core)
+python -B schem_gen.py hierarchy examples/sky130_rcopa316_core.spice --out work/opa316_book
+
+# Zero-shot automatic mode, interactive browser editor, and structure-preserving draft cleanup
+python -B schem_gen.py auto examples/sky130_cdac_and_ladder.spice --out work/cdac_auto
+python -B schem_gen.py export-editor examples/sky130_two_stage_ota.spice --intent examples/sky130_two_stage_intent.json --out work/02_compile/editor.html
 python -B schem_gen.py refine examples/cramped_draft_manifest.json --out work/refined
 
-# Run all 17 analytical known-solution, counterexample, and Bridge compatibility tests
+# Read-only PDK symbol profiler (offline Xschem .sym directory or live Virtuoso Bridge)
+python -B schem_gen.py extract-pdk --from-xschem /path/to/xschem/symbols --process my_pdk --out pdk/my_pdk_map.json
+
+# Run all 24 analytical known-solution, counterexample, hierarchy LVS, and Bridge tests
 python -B -m unittest discover -s tests -v
 ```
 
@@ -91,13 +114,20 @@ python -B -m unittest discover -s tests -v
 - 仓库默认随附开源 Apache-2.0 **SKY130** 参考配置（[`pdk/sky130_process_map.json`](pdk/sky130_process_map.json)），克隆即可直接运行演示与回归测试；
 - 接入其他工艺（如 180nm / 65nm / 28nm 原厂库）时，仅需在本地提供对应的 `<process>_process_map.json` 与 `<process>_netlist_rules.json`（向真实 Virtuoso OA 库导入前可通过 `probe-pdk --live` 校验符号引脚坐标），通用引擎代码无需修改。
 
-### 三、文档与目录导航
+### 三、`v0.2.0` 新增核心能力
+
+1. **大图（40～160+ 管）多页层次化拆分与展平还原 LVS 签核（`partition` / `hierarchy`）**：自动识别并锁死差分对、电流镜、共源共栅与 RC 补偿等**不可切分原子簇**，按功能段切分子页、自动合成 `TOP` 框图符号并生成单文件交互式原理图册 `index.html`，最后递归展平与原始平坦网表做 100% 端子网络等价核对（已在 162 实例轨到轨 Class-AB 运放 `OPA316` 核心网表上全流程通过）。
+2. **规则阵列微模板与局部翻转消交叉优化**：原生识别并刚性排布 CDAC/电流源并联排（`parallel_bank` + 可选 `BusRipper`）与蛇形分压电阻串（`serpentine_chain`）；内置保等价局部离散翻转搜索（[optimizer.py](schematic_gen/optimizer.py)）自动压降非必要跨线。
+3. **代数 `.param` 表达式解析与双模 Wire Label 贴标**：安全求值 `{48*a2_tail}`、`9.1meg` 等公式参数；支持 `--allow-wire-labels` 生成原生短桩网络标签及 Virtuoso `wire_labels.il` 辅助脚本。
+4. **只读 PDK 符号自动提取与零依赖浏览器微调器**：`extract-pdk` 支持从 Xschem `.sym` 或在线 Virtuoso 只读提取 `process_map.json`；`export-editor` 导出单文件 `editor.html` 支持拖拽/翻转器件后回灌 `refine` 自动重连线。
+
+### 四、文档与目录导航
 
 - **AI Agent 技能指令**：[SKILL.md](SKILL.md)
 - **模算协同分工详解**：[docs/模算协同颗粒度规范.md](docs/模算协同颗粒度规范.md)
 - **CLI 与 JSON 接口契约**：[docs/接口与数据结构.md](docs/接口与数据结构.md)
-- **后续演进路线图（v0.2+）**：[docs/演进路线图.md](docs/演进路线图.md)
-- **17 项已知解/反例与基准测试记录**：[VALIDATION.md](VALIDATION.md)
+- **演进路线图与 `v0.2` 详细方案**：[docs/演进路线图.md](docs/演进路线图.md) · [docs/v0.2_详细方案设计.md](docs/v0.2_详细方案设计.md)
+- **24 项已知解/反例与 5 组基准电路实测记录**：[VALIDATION.md](VALIDATION.md)
 - **维护与边界约定**：[AGENTS.md](AGENTS.md)
 
 ## License

@@ -1,0 +1,1654 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "opamp_core",
+  "bounds": {
+    "minX": 10,
+    "minY": 18,
+    "maxX": 245,
+    "maxY": 171
+  },
+  "congestionIterations": 1,
+  "corridorExpansions": [],
+  "groups": [
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+        "U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+        "U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+        "U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+        "U5_P04_COMMON_GATE_BIASES",
+        "U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+        "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+        "U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+        "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+        "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 32,
+        "y": 44
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "bp": {
+          "x": 37,
+          "y": 42
+        },
+        "bn": {
+          "x": 37,
+          "y": 46
+        },
+        "vdd": {
+          "x": 32,
+          "y": 38
+        },
+        "vss": {
+          "x": 32,
+          "y": 50
+        }
+      },
+      "bodyBox": [
+        28,
+        39,
+        36,
+        49
+      ],
+      "labelBox": [
+        34,
+        34,
+        58,
+        38
+      ],
+      "labelLines": [
+        "U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+        "opamp_core_p01_beta_multiplier_and_startup"
+      ]
+    },
+    {
+      "ref": "U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 100,
+        "y": 44
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "hi_ref": {
+          "x": 88,
+          "y": 42
+        },
+        "hi_sig": {
+          "x": 88,
+          "y": 46
+        },
+        "vshd_n": {
+          "x": 112,
+          "y": 36
+        },
+        "vshd_p": {
+          "x": 112,
+          "y": 40
+        },
+        "lo_ref": {
+          "x": 112,
+          "y": 44
+        },
+        "lo_sig": {
+          "x": 112,
+          "y": 48
+        },
+        "gp": {
+          "x": 112,
+          "y": 52
+        },
+        "vdd": {
+          "x": 100,
+          "y": 32
+        },
+        "vss": {
+          "x": 92,
+          "y": 56
+        },
+        "bp": {
+          "x": 96,
+          "y": 56
+        },
+        "un": {
+          "x": 100,
+          "y": 56
+        },
+        "pcas": {
+          "x": 104,
+          "y": 56
+        },
+        "ncas": {
+          "x": 108,
+          "y": 56
+        }
+      },
+      "bodyBox": [
+        89,
+        33,
+        111,
+        55
+      ],
+      "labelBox": [
+        102,
+        28,
+        126,
+        32
+      ],
+      "labelLines": [
+        "U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+        "opamp_core_p05_rail_fraction_shield_referen"
+      ]
+    },
+    {
+      "ref": "U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 151,
+        "y": 44
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "bn": {
+          "x": 143,
+          "y": 44
+        },
+        "iq_n": {
+          "x": 159,
+          "y": 40
+        },
+        "gn0": {
+          "x": 159,
+          "y": 44
+        },
+        "gp0": {
+          "x": 159,
+          "y": 48
+        },
+        "vdd": {
+          "x": 151,
+          "y": 36
+        },
+        "vss": {
+          "x": 147,
+          "y": 52
+        },
+        "pcas": {
+          "x": 151,
+          "y": 52
+        },
+        "ncas": {
+          "x": 155,
+          "y": 52
+        }
+      },
+      "bodyBox": [
+        144,
+        37,
+        158,
+        51
+      ],
+      "labelBox": [
+        153,
+        32,
+        177,
+        36
+      ],
+      "labelLines": [
+        "U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+        "opamp_core_p06_resistor_referenced_idle_cur"
+      ]
+    },
+    {
+      "ref": "U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 192,
+        "y": 44
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "vip": {
+          "x": 184,
+          "y": 42
+        },
+        "vin": {
+          "x": 184,
+          "y": 46
+        },
+        "un": {
+          "x": 200,
+          "y": 38
+        },
+        "up": {
+          "x": 200,
+          "y": 42
+        },
+        "hn": {
+          "x": 200,
+          "y": 46
+        },
+        "pctl": {
+          "x": 200,
+          "y": 50
+        },
+        "vdd": {
+          "x": 192,
+          "y": 34
+        },
+        "bp": {
+          "x": 188,
+          "y": 54
+        },
+        "vss": {
+          "x": 192,
+          "y": 54
+        },
+        "vshd_n": {
+          "x": 196,
+          "y": 54
+        }
+      },
+      "bodyBox": [
+        185,
+        35,
+        199,
+        53
+      ],
+      "labelBox": [
+        194,
+        30,
+        217,
+        34
+      ],
+      "labelLines": [
+        "U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+        "opamp_core_p02_unit_copies_and_continuous"
+      ]
+    },
+    {
+      "ref": "U5_P04_COMMON_GATE_BIASES",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 45,
+        "y": 100
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "ncas": {
+          "x": 57,
+          "y": 98
+        },
+        "pcas": {
+          "x": 57,
+          "y": 102
+        },
+        "vdd": {
+          "x": 45,
+          "y": 94
+        },
+        "bp": {
+          "x": 37,
+          "y": 106
+        },
+        "vss": {
+          "x": 41,
+          "y": 106
+        },
+        "up": {
+          "x": 45,
+          "y": 106
+        },
+        "un": {
+          "x": 49,
+          "y": 106
+        },
+        "vshd_n": {
+          "x": 53,
+          "y": 106
+        }
+      },
+      "bodyBox": [
+        34,
+        95,
+        56,
+        105
+      ],
+      "labelBox": [
+        47,
+        90,
+        66,
+        94
+      ],
+      "labelLines": [
+        "U5_P04_COMMON_GATE_BIASES",
+        "opamp_core_p04_common_gate_biases"
+      ]
+    },
+    {
+      "ref": "U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 106,
+        "y": 100
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "lo_ref": {
+          "x": 96,
+          "y": 90
+        },
+        "vin": {
+          "x": 96,
+          "y": 94
+        },
+        "lo_sig": {
+          "x": 96,
+          "y": 98
+        },
+        "vip": {
+          "x": 96,
+          "y": 102
+        },
+        "hi_ref": {
+          "x": 96,
+          "y": 106
+        },
+        "hi_sig": {
+          "x": 96,
+          "y": 110
+        },
+        "vdd": {
+          "x": 106,
+          "y": 86
+        },
+        "pctl": {
+          "x": 100,
+          "y": 114
+        },
+        "hn": {
+          "x": 104,
+          "y": 114
+        },
+        "vss": {
+          "x": 108,
+          "y": 114
+        },
+        "up": {
+          "x": 112,
+          "y": 114
+        }
+      },
+      "bodyBox": [
+        97,
+        87,
+        115,
+        113
+      ],
+      "labelBox": [
+        108,
+        82,
+        132,
+        86
+      ],
+      "labelLines": [
+        "U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+        "opamp_core_p03_matched_complementary_input_"
+      ]
+    },
+    {
+      "ref": "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 147,
+        "y": 100
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "vip": {
+          "x": 139,
+          "y": 98
+        },
+        "vin": {
+          "x": 139,
+          "y": 102
+        },
+        "ds": {
+          "x": 155,
+          "y": 98
+        },
+        "dr": {
+          "x": 155,
+          "y": 102
+        },
+        "vdd": {
+          "x": 147,
+          "y": 94
+        },
+        "pctl": {
+          "x": 143,
+          "y": 106
+        },
+        "vss": {
+          "x": 147,
+          "y": 106
+        },
+        "hn": {
+          "x": 151,
+          "y": 106
+        }
+      },
+      "bodyBox": [
+        140,
+        95,
+        154,
+        105
+      ],
+      "labelBox": [
+        149,
+        90,
+        173,
+        94
+      ],
+      "labelLines": [
+        "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+        "opamp_core_p08_differential_overdrive_detec"
+      ]
+    },
+    {
+      "ref": "U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 204,
+        "y": 100
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "gn0": {
+          "x": 196,
+          "y": 96
+        },
+        "gp0": {
+          "x": 196,
+          "y": 100
+        },
+        "iq_n": {
+          "x": 196,
+          "y": 104
+        },
+        "vdd": {
+          "x": 204,
+          "y": 92
+        },
+        "gp": {
+          "x": 200,
+          "y": 108
+        },
+        "gn": {
+          "x": 204,
+          "y": 108
+        },
+        "vss": {
+          "x": 208,
+          "y": 108
+        }
+      },
+      "bodyBox": [
+        197,
+        93,
+        211,
+        107
+      ],
+      "labelBox": [
+        206,
+        88,
+        227,
+        92
+      ],
+      "labelLines": [
+        "U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+        "opamp_core_p07_signed_bridge_drives_gn"
+      ]
+    },
+    {
+      "ref": "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 6,
+      "position": {
+        "x": 47,
+        "y": 150
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "ds": {
+          "x": 37,
+          "y": 148
+        },
+        "dr": {
+          "x": 37,
+          "y": 152
+        },
+        "out": {
+          "x": 57,
+          "y": 150
+        },
+        "vdd": {
+          "x": 47,
+          "y": 144
+        },
+        "vss": {
+          "x": 41,
+          "y": 156
+        },
+        "bp": {
+          "x": 45,
+          "y": 156
+        },
+        "gp": {
+          "x": 49,
+          "y": 156
+        },
+        "gn": {
+          "x": 53,
+          "y": 156
+        }
+      },
+      "bodyBox": [
+        38,
+        145,
+        56,
+        155
+      ],
+      "labelBox": [
+        49,
+        140,
+        73,
+        144
+      ],
+      "labelLines": [
+        "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+        "opamp_core_p09_pedestal_subtraction_and_two"
+      ]
+    },
+    {
+      "ref": "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+      "deviceClass": "subckt",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 6,
+      "position": {
+        "x": 90,
+        "y": 150
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "vshd_p": {
+          "x": 80,
+          "y": 150
+        },
+        "out": {
+          "x": 100,
+          "y": 150
+        },
+        "vdd": {
+          "x": 90,
+          "y": 146
+        },
+        "gn": {
+          "x": 84,
+          "y": 154
+        },
+        "vss": {
+          "x": 88,
+          "y": 154
+        },
+        "gp": {
+          "x": 92,
+          "y": 154
+        },
+        "vshd_n": {
+          "x": 96,
+          "y": 154
+        }
+      },
+      "bodyBox": [
+        81,
+        147,
+        99,
+        153
+      ],
+      "labelBox": [
+        92,
+        142,
+        116,
+        146
+      ],
+      "labelLines": [
+        "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+        "opamp_core_p10_output_stage_and_bidirection"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_vip",
+      "name": "vip",
+      "net": "vip",
+      "symbol": "port",
+      "x": 16,
+      "y": 81
+    },
+    {
+      "id": "P_vin",
+      "name": "vin",
+      "net": "vin",
+      "symbol": "port",
+      "x": 16,
+      "y": 85
+    },
+    {
+      "id": "P_out",
+      "name": "out",
+      "net": "out",
+      "symbol": "port",
+      "x": 239,
+      "y": 150
+    },
+    {
+      "id": "P_vdd_1",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 32,
+      "y": 34
+    },
+    {
+      "id": "P_vdd_2",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 100,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_3",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 151,
+      "y": 32
+    },
+    {
+      "id": "P_vdd_4",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 192,
+      "y": 30
+    },
+    {
+      "id": "P_vdd_5",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 45,
+      "y": 90
+    },
+    {
+      "id": "P_vdd_6",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 106,
+      "y": 82
+    },
+    {
+      "id": "P_vdd_7",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 147,
+      "y": 90
+    },
+    {
+      "id": "P_vdd_8",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 204,
+      "y": 88
+    },
+    {
+      "id": "P_vdd_9",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 47,
+      "y": 140
+    },
+    {
+      "id": "P_vdd_10",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 90,
+      "y": 142
+    },
+    {
+      "id": "P_vss_1",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 32,
+      "y": 54
+    },
+    {
+      "id": "P_vss_2",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 92,
+      "y": 60
+    },
+    {
+      "id": "P_vss_3",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 147,
+      "y": 56
+    },
+    {
+      "id": "P_vss_4",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 192,
+      "y": 58
+    },
+    {
+      "id": "P_vss_5",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 41,
+      "y": 110
+    },
+    {
+      "id": "P_vss_6",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 108,
+      "y": 118
+    },
+    {
+      "id": "P_vss_7",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 147,
+      "y": 110
+    },
+    {
+      "id": "P_vss_8",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 208,
+      "y": 112
+    },
+    {
+      "id": "P_vss_9",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 41,
+      "y": 160
+    },
+    {
+      "id": "P_vss_10",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 88,
+      "y": 158
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_vdd_1",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 32,
+          "y": 38
+        },
+        {
+          "x": 32,
+          "y": 34
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_2",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 100,
+          "y": 32
+        },
+        {
+          "x": 100,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_3",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 151,
+          "y": 36
+        },
+        {
+          "x": 151,
+          "y": 32
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_4",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 192,
+          "y": 34
+        },
+        {
+          "x": 192,
+          "y": 30
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_5",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 45,
+          "y": 94
+        },
+        {
+          "x": 45,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_6",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 106,
+          "y": 86
+        },
+        {
+          "x": 106,
+          "y": 82
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_7",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 147,
+          "y": 94
+        },
+        {
+          "x": 147,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_8",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 204,
+          "y": 92
+        },
+        {
+          "x": 204,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_9",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 47,
+          "y": 144
+        },
+        {
+          "x": 47,
+          "y": 140
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_10",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 90,
+          "y": 146
+        },
+        {
+          "x": 90,
+          "y": 142
+        }
+      ]
+    },
+    {
+      "id": "R_vss_11",
+      "net": "vss",
+      "points": [
+        {
+          "x": 32,
+          "y": 50
+        },
+        {
+          "x": 32,
+          "y": 54
+        }
+      ]
+    },
+    {
+      "id": "R_vss_12",
+      "net": "vss",
+      "points": [
+        {
+          "x": 92,
+          "y": 56
+        },
+        {
+          "x": 92,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "id": "R_vss_13",
+      "net": "vss",
+      "points": [
+        {
+          "x": 147,
+          "y": 52
+        },
+        {
+          "x": 147,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_vss_14",
+      "net": "vss",
+      "points": [
+        {
+          "x": 192,
+          "y": 54
+        },
+        {
+          "x": 192,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vss_15",
+      "net": "vss",
+      "points": [
+        {
+          "x": 41,
+          "y": 106
+        },
+        {
+          "x": 41,
+          "y": 110
+        }
+      ]
+    },
+    {
+      "id": "R_vss_16",
+      "net": "vss",
+      "points": [
+        {
+          "x": 108,
+          "y": 114
+        },
+        {
+          "x": 108,
+          "y": 118
+        }
+      ]
+    },
+    {
+      "id": "R_vss_17",
+      "net": "vss",
+      "points": [
+        {
+          "x": 147,
+          "y": 106
+        },
+        {
+          "x": 147,
+          "y": 110
+        }
+      ]
+    },
+    {
+      "id": "R_vss_18",
+      "net": "vss",
+      "points": [
+        {
+          "x": 208,
+          "y": 108
+        },
+        {
+          "x": 208,
+          "y": 112
+        }
+      ]
+    },
+    {
+      "id": "R_vss_19",
+      "net": "vss",
+      "points": [
+        {
+          "x": 41,
+          "y": 156
+        },
+        {
+          "x": 41,
+          "y": 160
+        }
+      ]
+    },
+    {
+      "id": "R_vss_20",
+      "net": "vss",
+      "points": [
+        {
+          "x": 88,
+          "y": 154
+        },
+        {
+          "x": 88,
+          "y": 158
+        }
+      ]
+    },
+    {
+      "id": "R_lo_ref_21",
+      "net": "lo_ref",
+      "points": [
+        {
+          "x": 112,
+          "y": 44
+        },
+        {
+          "x": 121,
+          "y": 44
+        },
+        {
+          "x": 121,
+          "y": 78
+        },
+        {
+          "x": 96,
+          "y": 78
+        },
+        {
+          "x": 96,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_lo_sig_22",
+      "net": "lo_sig",
+      "points": [
+        {
+          "x": 112,
+          "y": 48
+        },
+        {
+          "x": 114,
+          "y": 48
+        },
+        {
+          "x": 114,
+          "y": 76
+        },
+        {
+          "x": 94,
+          "y": 76
+        },
+        {
+          "x": 94,
+          "y": 98
+        },
+        {
+          "x": 96,
+          "y": 98
+        }
+      ]
+    },
+    {
+      "id": "R_hi_ref_23",
+      "net": "hi_ref",
+      "points": [
+        {
+          "x": 96,
+          "y": 106
+        },
+        {
+          "x": 86,
+          "y": 106
+        },
+        {
+          "x": 86,
+          "y": 42
+        },
+        {
+          "x": 88,
+          "y": 42
+        }
+      ]
+    },
+    {
+      "id": "R_hi_sig_24",
+      "net": "hi_sig",
+      "points": [
+        {
+          "x": 96,
+          "y": 110
+        },
+        {
+          "x": 88,
+          "y": 110
+        },
+        {
+          "x": 88,
+          "y": 46
+        }
+      ]
+    },
+    {
+      "id": "R_gn0_25",
+      "net": "gn0",
+      "points": [
+        {
+          "x": 196,
+          "y": 96
+        },
+        {
+          "x": 174,
+          "y": 96
+        },
+        {
+          "x": 174,
+          "y": 44
+        },
+        {
+          "x": 159,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_gp0_26",
+      "net": "gp0",
+      "points": [
+        {
+          "x": 196,
+          "y": 100
+        },
+        {
+          "x": 157,
+          "y": 100
+        },
+        {
+          "x": 157,
+          "y": 115
+        },
+        {
+          "x": 137,
+          "y": 115
+        },
+        {
+          "x": 137,
+          "y": 61
+        },
+        {
+          "x": 159,
+          "y": 61
+        },
+        {
+          "x": 159,
+          "y": 48
+        }
+      ]
+    },
+    {
+      "id": "R_iq_n_27",
+      "net": "iq_n",
+      "points": [
+        {
+          "x": 196,
+          "y": 104
+        },
+        {
+          "x": 176,
+          "y": 104
+        },
+        {
+          "x": 176,
+          "y": 40
+        },
+        {
+          "x": 159,
+          "y": 40
+        }
+      ]
+    },
+    {
+      "id": "R_bn_28",
+      "net": "bn",
+      "points": [
+        {
+          "x": 143,
+          "y": 44
+        },
+        {
+          "x": 143,
+          "y": 24
+        },
+        {
+          "x": 59,
+          "y": 24
+        },
+        {
+          "x": 59,
+          "y": 46
+        },
+        {
+          "x": 37,
+          "y": 46
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_29",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 112,
+          "y": 40
+        },
+        {
+          "x": 133,
+          "y": 40
+        },
+        {
+          "x": 133,
+          "y": 138
+        },
+        {
+          "x": 80,
+          "y": 138
+        },
+        {
+          "x": 80,
+          "y": 150
+        }
+      ]
+    },
+    {
+      "id": "R_ds_30",
+      "net": "ds",
+      "points": [
+        {
+          "x": 155,
+          "y": 98
+        },
+        {
+          "x": 159,
+          "y": 98
+        },
+        {
+          "x": 159,
+          "y": 165
+        },
+        {
+          "x": 35,
+          "y": 165
+        },
+        {
+          "x": 35,
+          "y": 148
+        },
+        {
+          "x": 37,
+          "y": 148
+        }
+      ]
+    },
+    {
+      "id": "R_dr_31",
+      "net": "dr",
+      "points": [
+        {
+          "x": 155,
+          "y": 102
+        },
+        {
+          "x": 155,
+          "y": 136
+        },
+        {
+          "x": 33,
+          "y": 136
+        },
+        {
+          "x": 33,
+          "y": 152
+        },
+        {
+          "x": 37,
+          "y": 152
+        }
+      ]
+    },
+    {
+      "id": "R_out_32",
+      "net": "out",
+      "points": [
+        {
+          "x": 100,
+          "y": 150
+        },
+        {
+          "x": 100,
+          "y": 163
+        },
+        {
+          "x": 57,
+          "y": 163
+        },
+        {
+          "x": 57,
+          "y": 150
+        }
+      ]
+    },
+    {
+      "id": "R_out_33",
+      "net": "out",
+      "points": [
+        {
+          "x": 239,
+          "y": 150
+        },
+        {
+          "x": 100,
+          "y": 150
+        }
+      ]
+    },
+    {
+      "id": "R_vin_34_a",
+      "net": "vin",
+      "points": [
+        {
+          "x": 96,
+          "y": 94
+        },
+        {
+          "x": 84,
+          "y": 94
+        }
+      ]
+    },
+    {
+      "id": "R_vin_34_b",
+      "net": "vin",
+      "points": [
+        {
+          "x": 84,
+          "y": 94
+        },
+        {
+          "x": 67,
+          "y": 94
+        },
+        {
+          "x": 67,
+          "y": 85
+        },
+        {
+          "x": 16,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "id": "R_vin_35_a",
+      "net": "vin",
+      "points": [
+        {
+          "x": 139,
+          "y": 102
+        },
+        {
+          "x": 139,
+          "y": 123
+        },
+        {
+          "x": 135,
+          "y": 123
+        }
+      ]
+    },
+    {
+      "id": "R_vin_35_b",
+      "net": "vin",
+      "points": [
+        {
+          "x": 135,
+          "y": 123
+        },
+        {
+          "x": 84,
+          "y": 123
+        },
+        {
+          "x": 84,
+          "y": 94
+        }
+      ]
+    },
+    {
+      "id": "R_vin_36",
+      "net": "vin",
+      "points": [
+        {
+          "x": 184,
+          "y": 46
+        },
+        {
+          "x": 178,
+          "y": 46
+        },
+        {
+          "x": 178,
+          "y": 28
+        },
+        {
+          "x": 135,
+          "y": 28
+        },
+        {
+          "x": 135,
+          "y": 123
+        }
+      ]
+    },
+    {
+      "id": "R_vip_37_a",
+      "net": "vip",
+      "points": [
+        {
+          "x": 96,
+          "y": 102
+        },
+        {
+          "x": 90,
+          "y": 102
+        },
+        {
+          "x": 90,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_vip_37_b",
+      "net": "vip",
+      "points": [
+        {
+          "x": 90,
+          "y": 81
+        },
+        {
+          "x": 16,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_vip_38_a",
+      "net": "vip",
+      "points": [
+        {
+          "x": 139,
+          "y": 98
+        },
+        {
+          "x": 139,
+          "y": 74
+        },
+        {
+          "x": 131,
+          "y": 74
+        }
+      ]
+    },
+    {
+      "id": "R_vip_38_b",
+      "net": "vip",
+      "points": [
+        {
+          "x": 131,
+          "y": 74
+        },
+        {
+          "x": 90,
+          "y": 74
+        },
+        {
+          "x": 90,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_vip_39",
+      "net": "vip",
+      "points": [
+        {
+          "x": 184,
+          "y": 42
+        },
+        {
+          "x": 184,
+          "y": 26
+        },
+        {
+          "x": 131,
+          "y": 26
+        },
+        {
+          "x": 131,
+          "y": 74
+        }
+      ]
+    }
+  ]
+}

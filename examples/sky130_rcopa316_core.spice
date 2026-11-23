@@ -1,0 +1,197 @@
+.param a2_rbeta=21500
+.param a2_tail=23
+.param a2_rhand=68000
+.param a2_fold_ratio=5.5
+.param a2_rdeg_pu=13500
+.param a2_rdeg_fn=2400
+.param a2_cfn=8.5e-11
+.param a2_cas_nbot=520000
+.param a2_cas_pbot=235000
+.param a2_idle_ratio=9.0
+.param a2_ridle=128000
+.param a2_track=2
+.param a2_cgate=3.5e-12
+.param a2_slew_ratio=50
+.param a2_cc=1.02e-11
+.param a2_rz=1050
+.param a2_rpick=1250
+.param a2_rlim_n=6800
+.param a2_rlim_p=7800
+* EVO12-derived core, supplied EVO15 nominal point
+.subckt opamp_core vip vin out vdd vss
+* Beta multiplier and startup
+Rstart bp vss 9.1meg
+XBP0 bp bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+XBP1 bn bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+XBN0 bn bn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=12 l=3.5 nf=2
+XBN1 bp bn bsrc vss sky130_fd_pr__nfet_g5v0d10v5 w=33 l=3.5 nf=4
+Rbeta bsrc vss {a2_rbeta}
+* Unit copies and continuous common-mode handoff
+XUNFEED un bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+XUN un un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=64 l=5 nf=4
+XUPSET up_m un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=64 l=5 nf=4
+XUPSH up vshd_n up_m vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=1.5 nf=2
+XUP up up upr vdd sky130_fd_pr__pfet_g5v0d10v5 w=64 l=5 nf=4
+Rup vdd upr {a2_rdeg_pu}
+XHREF hd hd vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+Rhand hd vh {a2_rhand}
+XHBIAS vh un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=64 l=5 nf=4
+XHUNIT hs bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+XHPLUS hp vip hs vdd sky130_fd_pr__pfet_g5v0d10v5 w=96 l=3 nf=4
+XHMIN hp vin hs vdd sky130_fd_pr__pfet_g5v0d10v5 w=96 l=3 nf=4
+XHDIV hn vh hs vdd sky130_fd_pr__pfet_g5v0d10v5 w=192 l=3 nf=8
+XHPD hp hp vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=4 nf=2
+XHND hn hn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=4 nf=2
+XHPC hp_m hp vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=4 nf=2
+XHPCS pctl vshd_n hp_m vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=1.5 nf=2
+XPTREF pctl pctl vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+Rpoff pctl vdd 200meg
+Rnoff hn vss 200meg
+* Matched complementary input pairs
+XPTAIL pt pctl vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={48*a2_tail} l=3.5 nf=32
+XIPR lo_ref vin pt vdd sky130_fd_pr__pfet_g5v0d10v5 w=3000 l=3.5 nf=75
+XIPS lo_sig vip pt vdd sky130_fd_pr__pfet_g5v0d10v5 w=3000 l=3.5 nf=75
+XNTAIL nt hn vss vss sky130_fd_pr__nfet_g5v0d10v5 w={20*a2_tail} l=4 nf=16
+XINR hi_ref vin nt vss sky130_fd_pr__nfet_05v0_nvt w=240 l=1.5 nf=8
+XINS hi_sig vip nt vss sky130_fd_pr__nfet_05v0_nvt w=240 l=1.5 nf=8
+* Upper fold and native input tail-current return
+RFPR vdd fpr {a2_rdeg_pu/a2_fold_ratio}
+RFPS vdd fps {a2_rdeg_pu/a2_fold_ratio}
+XFPR hi_ref up fpr vdd sky130_fd_pr__pfet_g5v0d10v5 w={64*a2_fold_ratio} l=5 nf=16
+XFPS hi_sig up fps vdd sky130_fd_pr__pfet_g5v0d10v5 w={64*a2_fold_ratio} l=5 nf=16
+XACOPY ap hn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=4 nf=2
+XAPREF ap ap vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=1.8 nf=4
+Rapoff ap vdd 200meg
+XAPR hi_ref ap vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={24*a2_tail} l=1.8 nf=16
+XAPS hi_sig ap vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={24*a2_tail} l=1.8 nf=16
+* Common-gate biases
+XVNFEED nd bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=3.5 nf=4
+XVND nd nd vss vss sky130_fd_pr__nfet_g5v0d10v5 w=16 l=4 nf=2
+RNtop nd nf0 560k
+RNbot nf0 vss {a2_cas_nbot}
+RNCFEED vdd fnc {64*a2_rdeg_pu/a2_fold_ratio}
+XNCFEED ncas up fnc vdd sky130_fd_pr__pfet_g5v0d10v5 w={a2_fold_ratio} l=5 nf=1
+XNCBLEED ncas un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=0.8 l=5 nf=1
+XRCN ncas ncas nf0 vss sky130_fd_pr__nfet_g5v0d10v5 w=2.5 l=1 nf=1
+XVPSINK pd_m un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=64 l=5 nf=4
+XVPSH pd vshd_n pd_m vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=1.5 nf=2
+XVPD pd pd vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=4 nf=4
+RPtop pf0 pd 750k
+RPbot vdd pf0 {a2_cas_pbot}
+XBCP pcas un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=8 l=5 nf=1
+XRCP pcas pcas pf0 vdd sky130_fd_pr__pfet_g5v0d10v5 w=2.5 l=1 nf=1
+* Rail-fraction shield references
+Rdiv_nhi vdd vdiv_n 1.92meg
+Rdiv_nlo vdiv_n vss 1.08meg
+Cdiv_n vdiv_n vss 0.4p
+XSHDNP vshd_n bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=12 l=3.5 nf=2
+XSHDN vshd_n vshd_n vdiv_n vss sky130_fd_pr__nfet_g5v0d10v5 w=16 l=1.5 nf=2
+XDIVNS vdiv_n un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=16 l=5 nf=2
+Rdiv_phi vdd vdiv_p 1.08meg
+Rdiv_plo vdiv_p vss 1.92meg
+Cdiv_p vdiv_p vdd 0.4p
+XDIVPF vdiv_p bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=12 l=3.5 nf=2
+XSHDP vshd_p vshd_p vdiv_p vdd sky130_fd_pr__pfet_g5v0d10v5 w=32 l=1.5 nf=2
+XSHDPN vshd_p un vss vss sky130_fd_pr__nfet_g5v0d10v5 w=16 l=5 nf=2
+* Direct fold reference and matched frequency-dependent source degeneration
+XCPR pr_m pcas hi_ref vdd sky130_fd_pr__pfet_g5v0d10v5 w=320 l=1 nf=16
+XCPR_SHD fold_ref vshd_p pr_m vdd sky130_fd_pr__pfet_g5v0d10v5 w=320 l=1 nf=16
+XCNR fold_ref ncas lo_ref vss sky130_fd_pr__nfet_g5v0d10v5 w=160 l=1 nf=8
+XFNR lo_ref fold_ref fnr vss sky130_fd_pr__nfet_g5v0d10v5 w=300 l=5.5 nf=20
+XFNS lo_sig fold_ref fns vss sky130_fd_pr__nfet_g5v0d10v5 w=300 l=5.5 nf=20
+RFNR fnr vss {a2_rdeg_fn}
+RFNS fns vss {a2_rdeg_fn}
+CFNR fnr vss {a2_cfn}
+CFNS fns vss {a2_cfn}
+XCPGP gp pcas hi_sig vdd sky130_fd_pr__pfet_g5v0d10v5 w=320 l=1 nf=16
+XCNGP ngp_m ncas lo_sig vss sky130_fd_pr__nfet_g5v0d10v5 w=160 l=1 nf=8
+XCNGP_SHD gp vshd_n ngp_m vss sky130_fd_pr__nfet_g5v0d10v5 w=192 l=1 nf=8
+* Resistor-referenced idle current and separate gate replicas
+XIQSET iq_p bn iq_src vss sky130_fd_pr__nfet_05v0_nvt w=80 l=2.5 nf=4
+Riqset iq_src vss {a2_ridle}
+XIQP iq_p iq_p vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=4 nf=4
+XIQNFEED iq_n iq_p vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=4 nf=4
+XIQN iq_n iq_n vss vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=4 nf=2
+XIGN ign_m iq_p vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=48 l=4 nf=4
+XIGN_SHD gn0 pcas ign_m vdd sky130_fd_pr__pfet_g5v0d10v5 w=32 l=1 nf=2
+XIGP igp_m iq_n vss vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=4 nf=2
+XIGP_SHD gp0 ncas igp_m vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=1 nf=2
+XNID gn0 gn0 vss vss sky130_fd_pr__nfet_g5v0d10v5 w={1536/a2_idle_ratio} l=0.55 nf=6
+XPID gp0 gp0 vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={3072/a2_idle_ratio} l=0.55 nf=12
+* Signed bridge drives gn toward gp + gn0 - gp0
+REPG gp ep 500meg
+REPR gn0 ep 500meg
+RENG gn en 500meg
+RENR gp0 en 500meg
+CEPG gp ep 0.45p
+CEPR gn0 ep 0.45p
+CENG gn en 0.45p
+CENR gp0 en 0.45p
+XETAIL et iq_n vss vss sky130_fd_pr__nfet_g5v0d10v5 w=48 l=4 nf=4
+XEBP trp ep ebp_s vss sky130_fd_pr__nfet_05v0_nvt w=48 l=2 nf=4
+XEBN trn en ebn_s vss sky130_fd_pr__nfet_05v0_nvt w=48 l=2 nf=4
+REBP ebp_s et 4.7k
+REBN ebn_s et 4.7k
+XTRPD trp trp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=24 l=2 nf=2
+XTRND trn trn vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=24 l=2 nf=2
+XTRUP gn trp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={24*a2_track} l=2 nf=4
+XTRTURN trb trn vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={24*a2_track} l=2 nf=4
+XTRBD trb trb vss vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=2 nf=2
+XTRDN gn trb vss vss sky130_fd_pr__nfet_g5v0d10v5 w=24 l=2 nf=2
+Cgate gp gn {a2_cgate}
+* Differential overdrive detectors for both input common-mode ranges
+XBSTS bs pctl vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=64 l=3.5 nf=4
+XBSDET ds vip bs vdd sky130_fd_pr__pfet_g5v0d10v5 w=4 l=3 nf=1
+XBSDUMP vss vin bs vdd sky130_fd_pr__pfet_g5v0d10v5 w=192 l=3 nf=8
+XBSTR br pctl vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=64 l=3.5 nf=4
+XBRDET dr vin br vdd sky130_fd_pr__pfet_g5v0d10v5 w=4 l=3 nf=1
+XBRDUMP vss vip br vdd sky130_fd_pr__pfet_g5v0d10v5 w=192 l=3 nf=8
+XBNTS bns hn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=4 nf=2
+XBNDS dns vin bns vss sky130_fd_pr__nfet_05v0_nvt w=4 l=1.5 nf=1
+XBNXS vdd vip bns vss sky130_fd_pr__nfet_05v0_nvt w=192 l=1.5 nf=8
+XBNPS dns dns vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=8 l=2 nf=1
+XBNCS ds dns vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=8 l=2 nf=1
+XBNTR bnr hn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=4 nf=2
+XBNDR dnr vip bnr vss sky130_fd_pr__nfet_05v0_nvt w=4 l=1.5 nf=1
+XBNXR vdd vin bnr vss sky130_fd_pr__nfet_05v0_nvt w=192 l=1.5 nf=8
+XBNPR dnr dnr vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=8 l=2 nf=1
+XBNCR dr dnr vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=8 l=2 nf=1
+* Pedestal subtraction and two-quadrant gate drive
+XBSND ds ds vss vss sky130_fd_pr__nfet_g5v0d10v5 w=8 l=2 nf=1
+XBSNC ps ds vss vss sky130_fd_pr__nfet_g5v0d10v5 w=8 l=2 nf=1
+XBSOFF ps bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=3 l=3.5 nf=1
+XBSPD ps ps vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=16 l=2 nf=2
+XBSGP gp ps vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={16*a2_slew_ratio} l=2 nf=16
+XBSGN gn ps vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w={5*a2_slew_ratio} l=2 nf=8
+XBRND dr dr vss vss sky130_fd_pr__nfet_g5v0d10v5 w=8 l=2 nf=1
+XBRNC pr dr vss vss sky130_fd_pr__nfet_g5v0d10v5 w=8 l=2 nf=1
+XBROFF pr bp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=3 l=3.5 nf=1
+XBRPD pr pr vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=16 l=2 nf=2
+XBRTURN brn pr vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=16 l=2 nf=2
+XBRD brn brn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=12 l=2 nf=2
+XBRGP gp brn vss vss sky130_fd_pr__nfet_g5v0d10v5 w={12*a2_slew_ratio} l=2 nf=16
+XBRGN gn brn vss vss sky130_fd_pr__nfet_g5v0d10v5 w={3.75*a2_slew_ratio} l=2 nf=8
+* Auxiliary output pickoff and split Miller compensation
+XNAUX os gn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=153.6 l=0.55 nf=6
+XPAUX os gp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=307.2 l=0.55 nf=12
+Rpick os out {a2_rpick}
+Rzp os mzp {a2_rz}
+Ccp mzp gp {0.8*a2_cc}
+Rzn os mzn {2*a2_rz}
+Ccn mzn gn {0.2*a2_cc}
+* Output stage and bidirectional active current clamps
+XNOUT out gn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=1536 l=0.55 nf=48
+XPOUT out gp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=3072 l=0.55 nf=96
+XNSENSE ns_mon gn vss vss sky130_fd_pr__nfet_g5v0d10v5 w=6 l=0.55 nf=1
+XPLND ns_mon ns_mon vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=40 l=0.75 nf=4
+XPLNC lim_nm ns_mon vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=40 l=0.75 nf=4
+XPLSH lim_n vshd_p lim_nm vdd sky130_fd_pr__pfet_g5v0d10v5 w=64 l=1 nf=4
+Rlimn lim_n vss {a2_rlim_n}
+XNCLAMP gn lim_n vss vss sky130_fd_pr__nfet_g5v0d10v5 w=64 l=0.5 nf=8
+XPSENSE ps_mon gp vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=12 l=0.55 nf=1
+XNLREF ps_mon ps_mon vss vss sky130_fd_pr__nfet_g5v0d10v5 w=16 l=0.75 nf=4
+XNLM lim_pm ps_mon vss vss sky130_fd_pr__nfet_g5v0d10v5 w=16 l=0.75 nf=4
+XNLSH lim_p vshd_n lim_pm vss sky130_fd_pr__nfet_g5v0d10v5 w=48 l=1 nf=4
+Rlimp vdd lim_p {a2_rlim_p}
+XPCLAMP gp lim_p vdd vdd sky130_fd_pr__pfet_g5v0d10v5 w=128 l=0.5 nf=16
+.ends opamp_core

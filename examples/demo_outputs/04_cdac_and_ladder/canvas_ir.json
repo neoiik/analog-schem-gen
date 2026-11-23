@@ -1,0 +1,1048 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "sky130_cdac_and_ladder",
+  "bounds": {
+    "minX": 2,
+    "minY": 12,
+    "maxX": 176,
+    "maxY": 81
+  },
+  "congestionIterations": 1,
+  "corridorExpansions": [],
+  "groups": [
+    {
+      "id": "bank_VDAC",
+      "label": "规整并联阵列",
+      "role": "array_bank",
+      "stage_order": 26,
+      "instances": [
+        "CDUM",
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ]
+    },
+    {
+      "id": "ladder_RR1_RR6",
+      "label": "串联电阻梯阵列",
+      "role": "resistor_ladder",
+      "stage_order": 27,
+      "instances": [
+        "RR1",
+        "RR2",
+        "RR3",
+        "RR4",
+        "RR5",
+        "RR6"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "RR1",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "ladder_RR1_RR6",
+      "tier": 3,
+      "position": {
+        "x": 133,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 133,
+          "y": 24
+        },
+        "M": {
+          "x": 133,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        131,
+        24,
+        135,
+        30
+      ],
+      "labelBox": [
+        136,
+        25,
+        141,
+        29
+      ],
+      "labelLines": [
+        "RR1",
+        "2k"
+      ]
+    },
+    {
+      "ref": "RR2",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "ladder_RR1_RR6",
+      "tier": 3,
+      "position": {
+        "x": 133,
+        "y": 41
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 133,
+          "y": 38
+        },
+        "M": {
+          "x": 133,
+          "y": 44
+        }
+      },
+      "bodyBox": [
+        131,
+        38,
+        135,
+        44
+      ],
+      "labelBox": [
+        136,
+        39,
+        141,
+        43
+      ],
+      "labelLines": [
+        "RR2",
+        "2k"
+      ]
+    },
+    {
+      "ref": "RR3",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "ladder_RR1_RR6",
+      "tier": 3,
+      "position": {
+        "x": 133,
+        "y": 55
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 133,
+          "y": 52
+        },
+        "M": {
+          "x": 133,
+          "y": 58
+        }
+      },
+      "bodyBox": [
+        131,
+        52,
+        135,
+        58
+      ],
+      "labelBox": [
+        136,
+        53,
+        141,
+        57
+      ],
+      "labelLines": [
+        "RR3",
+        "2k"
+      ]
+    },
+    {
+      "ref": "RR4",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "ladder_RR1_RR6",
+      "tier": 3,
+      "position": {
+        "x": 133,
+        "y": 69
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 133,
+          "y": 66
+        },
+        "M": {
+          "x": 133,
+          "y": 72
+        }
+      },
+      "bodyBox": [
+        131,
+        66,
+        135,
+        72
+      ],
+      "labelBox": [
+        136,
+        67,
+        141,
+        71
+      ],
+      "labelLines": [
+        "RR4",
+        "2k"
+      ]
+    },
+    {
+      "ref": "RR5",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "ladder_RR1_RR6",
+      "tier": 3,
+      "position": {
+        "x": 150,
+        "y": 41
+      },
+      "semanticOrient": "vertical_flipped",
+      "cadenceOrient": "MX",
+      "pins": {
+        "P": {
+          "x": 150,
+          "y": 44
+        },
+        "M": {
+          "x": 150,
+          "y": 38
+        }
+      },
+      "bodyBox": [
+        148,
+        38,
+        152,
+        44
+      ],
+      "labelBox": [
+        153,
+        39,
+        158,
+        43
+      ],
+      "labelLines": [
+        "RR5",
+        "2k"
+      ]
+    },
+    {
+      "ref": "RR6",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "ladder_RR1_RR6",
+      "tier": 3,
+      "position": {
+        "x": 150,
+        "y": 27
+      },
+      "semanticOrient": "vertical_flipped",
+      "cadenceOrient": "MX",
+      "pins": {
+        "P": {
+          "x": 150,
+          "y": 30
+        },
+        "M": {
+          "x": 150,
+          "y": 24
+        }
+      },
+      "bodyBox": [
+        148,
+        24,
+        152,
+        30
+      ],
+      "labelBox": [
+        153,
+        25,
+        158,
+        29
+      ],
+      "labelLines": [
+        "RR6",
+        "2k"
+      ]
+    },
+    {
+      "ref": "CDUM",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "bank_VDAC",
+      "tier": 3,
+      "position": {
+        "x": 30,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 30,
+          "y": 24
+        },
+        "M": {
+          "x": 30,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        28,
+        24,
+        32,
+        30
+      ],
+      "labelBox": [
+        33,
+        25,
+        38,
+        29
+      ],
+      "labelLines": [
+        "CDUM",
+        "4u/4u"
+      ]
+    },
+    {
+      "ref": "C0",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "bank_VDAC",
+      "tier": 3,
+      "position": {
+        "x": 46,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 46,
+          "y": 24
+        },
+        "M": {
+          "x": 46,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        44,
+        24,
+        48,
+        30
+      ],
+      "labelBox": [
+        49,
+        25,
+        54,
+        29
+      ],
+      "labelLines": [
+        "C0",
+        "4u/4u"
+      ]
+    },
+    {
+      "ref": "C1",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "bank_VDAC",
+      "tier": 3,
+      "position": {
+        "x": 62,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 62,
+          "y": 24
+        },
+        "M": {
+          "x": 62,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        60,
+        24,
+        64,
+        30
+      ],
+      "labelBox": [
+        65,
+        25,
+        70,
+        29
+      ],
+      "labelLines": [
+        "C1",
+        "4u/4u m=2"
+      ]
+    },
+    {
+      "ref": "C2",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "bank_VDAC",
+      "tier": 3,
+      "position": {
+        "x": 78,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 78,
+          "y": 24
+        },
+        "M": {
+          "x": 78,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        76,
+        24,
+        80,
+        30
+      ],
+      "labelBox": [
+        81,
+        25,
+        86,
+        29
+      ],
+      "labelLines": [
+        "C2",
+        "8u/8u"
+      ]
+    },
+    {
+      "ref": "C3",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "bank_VDAC",
+      "tier": 3,
+      "position": {
+        "x": 94,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 94,
+          "y": 24
+        },
+        "M": {
+          "x": 94,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        92,
+        24,
+        96,
+        30
+      ],
+      "labelBox": [
+        97,
+        25,
+        102,
+        29
+      ],
+      "labelLines": [
+        "C3",
+        "8u/8u m=2"
+      ]
+    },
+    {
+      "ref": "C4",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "bank_VDAC",
+      "tier": 3,
+      "position": {
+        "x": 110,
+        "y": 27
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 110,
+          "y": 24
+        },
+        "M": {
+          "x": 110,
+          "y": 30
+        }
+      },
+      "bodyBox": [
+        108,
+        24,
+        112,
+        30
+      ],
+      "labelBox": [
+        113,
+        25,
+        119,
+        29
+      ],
+      "labelLines": [
+        "C4",
+        "16u/8u m=2"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_VREFH",
+      "name": "VREFH",
+      "net": "VREFH",
+      "symbol": "port",
+      "x": 16,
+      "y": 24
+    },
+    {
+      "id": "P_VREFL",
+      "name": "VREFL",
+      "net": "VREFL",
+      "symbol": "port",
+      "x": 16,
+      "y": 28
+    },
+    {
+      "id": "P_B0",
+      "name": "B0",
+      "net": "B0",
+      "symbol": "port",
+      "x": 16,
+      "y": 34
+    },
+    {
+      "id": "P_B1",
+      "name": "B1",
+      "net": "B1",
+      "symbol": "port",
+      "x": 16,
+      "y": 38
+    },
+    {
+      "id": "P_B2",
+      "name": "B2",
+      "net": "B2",
+      "symbol": "port",
+      "x": 16,
+      "y": 42
+    },
+    {
+      "id": "P_B3",
+      "name": "B3",
+      "net": "B3",
+      "symbol": "port",
+      "x": 16,
+      "y": 46
+    },
+    {
+      "id": "P_B4",
+      "name": "B4",
+      "net": "B4",
+      "symbol": "port",
+      "x": 16,
+      "y": 50
+    },
+    {
+      "id": "P_BDUM",
+      "name": "BDUM",
+      "net": "BDUM",
+      "symbol": "port",
+      "x": 16,
+      "y": 54
+    },
+    {
+      "id": "P_VDAC",
+      "name": "VDAC",
+      "net": "VDAC",
+      "symbol": "port",
+      "x": 170,
+      "y": 24
+    },
+    {
+      "id": "P_Vtap3",
+      "name": "Vtap3",
+      "net": "Vtap3",
+      "symbol": "port",
+      "x": 170,
+      "y": 62
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_n1_1",
+      "net": "n1",
+      "points": [
+        {
+          "x": 133,
+          "y": 38
+        },
+        {
+          "x": 133,
+          "y": 30
+        }
+      ]
+    },
+    {
+      "id": "R_n2_2",
+      "net": "n2",
+      "points": [
+        {
+          "x": 133,
+          "y": 52
+        },
+        {
+          "x": 133,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_n5_3",
+      "net": "n5",
+      "points": [
+        {
+          "x": 150,
+          "y": 38
+        },
+        {
+          "x": 150,
+          "y": 30
+        }
+      ]
+    },
+    {
+      "id": "R_B0_4",
+      "net": "B0",
+      "points": [
+        {
+          "x": 46,
+          "y": 30
+        },
+        {
+          "x": 46,
+          "y": 34
+        },
+        {
+          "x": 16,
+          "y": 34
+        }
+      ]
+    },
+    {
+      "id": "R_BDUM_5",
+      "net": "BDUM",
+      "points": [
+        {
+          "x": 30,
+          "y": 30
+        },
+        {
+          "x": 30,
+          "y": 32
+        },
+        {
+          "x": 8,
+          "y": 32
+        },
+        {
+          "x": 8,
+          "y": 52
+        },
+        {
+          "x": 16,
+          "y": 52
+        },
+        {
+          "x": 16,
+          "y": 54
+        }
+      ]
+    },
+    {
+      "id": "R_n4_6",
+      "net": "n4",
+      "points": [
+        {
+          "x": 150,
+          "y": 44
+        },
+        {
+          "x": 150,
+          "y": 73
+        },
+        {
+          "x": 133,
+          "y": 73
+        },
+        {
+          "x": 133,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_Vtap3_7_a",
+      "net": "Vtap3",
+      "points": [
+        {
+          "x": 133,
+          "y": 66
+        },
+        {
+          "x": 133,
+          "y": 65
+        }
+      ]
+    },
+    {
+      "id": "R_Vtap3_7_b",
+      "net": "Vtap3",
+      "points": [
+        {
+          "x": 133,
+          "y": 65
+        },
+        {
+          "x": 133,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_Vtap3_8",
+      "net": "Vtap3",
+      "points": [
+        {
+          "x": 170,
+          "y": 62
+        },
+        {
+          "x": 170,
+          "y": 75
+        },
+        {
+          "x": 130,
+          "y": 75
+        },
+        {
+          "x": 130,
+          "y": 65
+        },
+        {
+          "x": 133,
+          "y": 65
+        }
+      ]
+    },
+    {
+      "id": "R_B1_9",
+      "net": "B1",
+      "points": [
+        {
+          "x": 62,
+          "y": 30
+        },
+        {
+          "x": 62,
+          "y": 38
+        },
+        {
+          "x": 16,
+          "y": 38
+        }
+      ]
+    },
+    {
+      "id": "R_B2_10",
+      "net": "B2",
+      "points": [
+        {
+          "x": 78,
+          "y": 30
+        },
+        {
+          "x": 78,
+          "y": 42
+        },
+        {
+          "x": 16,
+          "y": 42
+        }
+      ]
+    },
+    {
+      "id": "R_B3_11",
+      "net": "B3",
+      "points": [
+        {
+          "x": 94,
+          "y": 30
+        },
+        {
+          "x": 94,
+          "y": 46
+        },
+        {
+          "x": 16,
+          "y": 46
+        }
+      ]
+    },
+    {
+      "id": "R_B4_12",
+      "net": "B4",
+      "points": [
+        {
+          "x": 110,
+          "y": 30
+        },
+        {
+          "x": 110,
+          "y": 50
+        },
+        {
+          "x": 16,
+          "y": 50
+        }
+      ]
+    },
+    {
+      "id": "R_VREFH_13",
+      "net": "VREFH",
+      "points": [
+        {
+          "x": 133,
+          "y": 24
+        },
+        {
+          "x": 133,
+          "y": 22
+        },
+        {
+          "x": 16,
+          "y": 22
+        },
+        {
+          "x": 16,
+          "y": 24
+        }
+      ]
+    },
+    {
+      "id": "R_VREFL_14",
+      "net": "VREFL",
+      "points": [
+        {
+          "x": 150,
+          "y": 24
+        },
+        {
+          "x": 150,
+          "y": 20
+        },
+        {
+          "x": 8,
+          "y": 20
+        },
+        {
+          "x": 8,
+          "y": 26
+        },
+        {
+          "x": 16,
+          "y": 26
+        },
+        {
+          "x": 16,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_15_a",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 46,
+          "y": 24
+        },
+        {
+          "x": 46,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_15_b",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 46,
+          "y": 18
+        },
+        {
+          "x": 30,
+          "y": 18
+        },
+        {
+          "x": 30,
+          "y": 24
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_16_a",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 62,
+          "y": 24
+        },
+        {
+          "x": 62,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_16_b",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 62,
+          "y": 18
+        },
+        {
+          "x": 46,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_17_a",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 78,
+          "y": 24
+        },
+        {
+          "x": 78,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_17_b",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 78,
+          "y": 18
+        },
+        {
+          "x": 62,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_18_a",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 94,
+          "y": 24
+        },
+        {
+          "x": 94,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_18_b",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 94,
+          "y": 18
+        },
+        {
+          "x": 78,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_19_a",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 110,
+          "y": 24
+        },
+        {
+          "x": 110,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_19_b",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 110,
+          "y": 18
+        },
+        {
+          "x": 94,
+          "y": 18
+        }
+      ]
+    },
+    {
+      "id": "R_VDAC_20",
+      "net": "VDAC",
+      "points": [
+        {
+          "x": 170,
+          "y": 24
+        },
+        {
+          "x": 170,
+          "y": 18
+        },
+        {
+          "x": 110,
+          "y": 18
+        }
+      ]
+    }
+  ]
+}

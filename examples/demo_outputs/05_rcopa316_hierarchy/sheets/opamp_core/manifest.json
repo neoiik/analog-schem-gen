@@ -1,0 +1,2440 @@
+{
+  "schema": "virtuoso-bridge-exact-schematic-v1",
+  "circuits": [
+    {
+      "cellName": "opamp_core",
+      "instances": [
+        {
+          "id": "source-U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+          "reference": "U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+          "deviceClass": "subckt:opamp_core_p01_beta_multiplier_and_startup",
+          "sourceTarget": "opamp_core_p01_beta_multiplier_and_startup",
+          "sourcePosition": {
+            "x": 32,
+            "y": 44
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "bp",
+              "pinName": "bp",
+              "netName": "bp"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "bn",
+              "pinName": "bn",
+              "netName": "bn"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+          "reference": "U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+          "deviceClass": "subckt:opamp_core_p05_rail_fraction_shield_referen",
+          "sourceTarget": "opamp_core_p05_rail_fraction_shield_referen",
+          "sourcePosition": {
+            "x": 100,
+            "y": 44
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "vshd_n",
+              "pinName": "vshd_n",
+              "netName": "vshd_n"
+            },
+            {
+              "sourcePinName": "bp",
+              "pinName": "bp",
+              "netName": "bp"
+            },
+            {
+              "sourcePinName": "un",
+              "pinName": "un",
+              "netName": "un"
+            },
+            {
+              "sourcePinName": "vshd_p",
+              "pinName": "vshd_p",
+              "netName": "vshd_p"
+            },
+            {
+              "sourcePinName": "pcas",
+              "pinName": "pcas",
+              "netName": "pcas"
+            },
+            {
+              "sourcePinName": "hi_ref",
+              "pinName": "hi_ref",
+              "netName": "hi_ref"
+            },
+            {
+              "sourcePinName": "ncas",
+              "pinName": "ncas",
+              "netName": "ncas"
+            },
+            {
+              "sourcePinName": "lo_ref",
+              "pinName": "lo_ref",
+              "netName": "lo_ref"
+            },
+            {
+              "sourcePinName": "lo_sig",
+              "pinName": "lo_sig",
+              "netName": "lo_sig"
+            },
+            {
+              "sourcePinName": "gp",
+              "pinName": "gp",
+              "netName": "gp"
+            },
+            {
+              "sourcePinName": "hi_sig",
+              "pinName": "hi_sig",
+              "netName": "hi_sig"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+          "reference": "U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+          "deviceClass": "subckt:opamp_core_p06_resistor_referenced_idle_cur",
+          "sourceTarget": "opamp_core_p06_resistor_referenced_idle_cur",
+          "sourcePosition": {
+            "x": 151,
+            "y": 44
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "bn",
+              "pinName": "bn",
+              "netName": "bn"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "iq_n",
+              "pinName": "iq_n",
+              "netName": "iq_n"
+            },
+            {
+              "sourcePinName": "gn0",
+              "pinName": "gn0",
+              "netName": "gn0"
+            },
+            {
+              "sourcePinName": "pcas",
+              "pinName": "pcas",
+              "netName": "pcas"
+            },
+            {
+              "sourcePinName": "gp0",
+              "pinName": "gp0",
+              "netName": "gp0"
+            },
+            {
+              "sourcePinName": "ncas",
+              "pinName": "ncas",
+              "netName": "ncas"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+          "reference": "U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+          "deviceClass": "subckt:opamp_core_p02_unit_copies_and_continuous",
+          "sourceTarget": "opamp_core_p02_unit_copies_and_continuous",
+          "sourcePosition": {
+            "x": 192,
+            "y": 44
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "un",
+              "pinName": "un",
+              "netName": "un"
+            },
+            {
+              "sourcePinName": "bp",
+              "pinName": "bp",
+              "netName": "bp"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "up",
+              "pinName": "up",
+              "netName": "up"
+            },
+            {
+              "sourcePinName": "vshd_n",
+              "pinName": "vshd_n",
+              "netName": "vshd_n"
+            },
+            {
+              "sourcePinName": "vip",
+              "pinName": "vip",
+              "netName": "vip"
+            },
+            {
+              "sourcePinName": "vin",
+              "pinName": "vin",
+              "netName": "vin"
+            },
+            {
+              "sourcePinName": "hn",
+              "pinName": "hn",
+              "netName": "hn"
+            },
+            {
+              "sourcePinName": "pctl",
+              "pinName": "pctl",
+              "netName": "pctl"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U5_P04_COMMON_GATE_BIASES",
+          "reference": "U5_P04_COMMON_GATE_BIASES",
+          "deviceClass": "subckt:opamp_core_p04_common_gate_biases",
+          "sourceTarget": "opamp_core_p04_common_gate_biases",
+          "sourcePosition": {
+            "x": 45,
+            "y": 100
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "bp",
+              "pinName": "bp",
+              "netName": "bp"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "ncas",
+              "pinName": "ncas",
+              "netName": "ncas"
+            },
+            {
+              "sourcePinName": "up",
+              "pinName": "up",
+              "netName": "up"
+            },
+            {
+              "sourcePinName": "un",
+              "pinName": "un",
+              "netName": "un"
+            },
+            {
+              "sourcePinName": "vshd_n",
+              "pinName": "vshd_n",
+              "netName": "vshd_n"
+            },
+            {
+              "sourcePinName": "pcas",
+              "pinName": "pcas",
+              "netName": "pcas"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+          "reference": "U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+          "deviceClass": "subckt:opamp_core_p03_matched_complementary_input_",
+          "sourceTarget": "opamp_core_p03_matched_complementary_input_",
+          "sourcePosition": {
+            "x": 106,
+            "y": 100
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "pctl",
+              "pinName": "pctl",
+              "netName": "pctl"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "lo_ref",
+              "pinName": "lo_ref",
+              "netName": "lo_ref"
+            },
+            {
+              "sourcePinName": "vin",
+              "pinName": "vin",
+              "netName": "vin"
+            },
+            {
+              "sourcePinName": "lo_sig",
+              "pinName": "lo_sig",
+              "netName": "lo_sig"
+            },
+            {
+              "sourcePinName": "vip",
+              "pinName": "vip",
+              "netName": "vip"
+            },
+            {
+              "sourcePinName": "hn",
+              "pinName": "hn",
+              "netName": "hn"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "hi_ref",
+              "pinName": "hi_ref",
+              "netName": "hi_ref"
+            },
+            {
+              "sourcePinName": "hi_sig",
+              "pinName": "hi_sig",
+              "netName": "hi_sig"
+            },
+            {
+              "sourcePinName": "up",
+              "pinName": "up",
+              "netName": "up"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+          "reference": "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+          "deviceClass": "subckt:opamp_core_p08_differential_overdrive_detec",
+          "sourceTarget": "opamp_core_p08_differential_overdrive_detec",
+          "sourcePosition": {
+            "x": 147,
+            "y": 100
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "pctl",
+              "pinName": "pctl",
+              "netName": "pctl"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "ds",
+              "pinName": "ds",
+              "netName": "ds"
+            },
+            {
+              "sourcePinName": "vip",
+              "pinName": "vip",
+              "netName": "vip"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "vin",
+              "pinName": "vin",
+              "netName": "vin"
+            },
+            {
+              "sourcePinName": "dr",
+              "pinName": "dr",
+              "netName": "dr"
+            },
+            {
+              "sourcePinName": "hn",
+              "pinName": "hn",
+              "netName": "hn"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+          "reference": "U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+          "deviceClass": "subckt:opamp_core_p07_signed_bridge_drives_gn",
+          "sourceTarget": "opamp_core_p07_signed_bridge_drives_gn",
+          "sourcePosition": {
+            "x": 204,
+            "y": 100
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "gp",
+              "pinName": "gp",
+              "netName": "gp"
+            },
+            {
+              "sourcePinName": "gn0",
+              "pinName": "gn0",
+              "netName": "gn0"
+            },
+            {
+              "sourcePinName": "gn",
+              "pinName": "gn",
+              "netName": "gn"
+            },
+            {
+              "sourcePinName": "gp0",
+              "pinName": "gp0",
+              "netName": "gp0"
+            },
+            {
+              "sourcePinName": "iq_n",
+              "pinName": "iq_n",
+              "netName": "iq_n"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+          "reference": "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+          "deviceClass": "subckt:opamp_core_p09_pedestal_subtraction_and_two",
+          "sourceTarget": "opamp_core_p09_pedestal_subtraction_and_two",
+          "sourcePosition": {
+            "x": 47,
+            "y": 150
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "ds",
+              "pinName": "ds",
+              "netName": "ds"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "bp",
+              "pinName": "bp",
+              "netName": "bp"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "gp",
+              "pinName": "gp",
+              "netName": "gp"
+            },
+            {
+              "sourcePinName": "gn",
+              "pinName": "gn",
+              "netName": "gn"
+            },
+            {
+              "sourcePinName": "dr",
+              "pinName": "dr",
+              "netName": "dr"
+            },
+            {
+              "sourcePinName": "out",
+              "pinName": "out",
+              "netName": "out"
+            }
+          ],
+          "sourceParameters": {}
+        },
+        {
+          "id": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+          "reference": "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+          "deviceClass": "subckt:opamp_core_p10_output_stage_and_bidirection",
+          "sourceTarget": "opamp_core_p10_output_stage_and_bidirection",
+          "sourcePosition": {
+            "x": 90,
+            "y": 150
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "out",
+              "pinName": "out",
+              "netName": "out"
+            },
+            {
+              "sourcePinName": "gn",
+              "pinName": "gn",
+              "netName": "gn"
+            },
+            {
+              "sourcePinName": "vss",
+              "pinName": "vss",
+              "netName": "vss"
+            },
+            {
+              "sourcePinName": "gp",
+              "pinName": "gp",
+              "netName": "gp"
+            },
+            {
+              "sourcePinName": "vdd",
+              "pinName": "vdd",
+              "netName": "vdd"
+            },
+            {
+              "sourcePinName": "vshd_p",
+              "pinName": "vshd_p",
+              "netName": "vshd_p"
+            },
+            {
+              "sourcePinName": "vshd_n",
+              "pinName": "vshd_n",
+              "netName": "vshd_n"
+            }
+          ],
+          "sourceParameters": {}
+        }
+      ],
+      "ports": [
+        {
+          "name": "vip",
+          "netName": "vip",
+          "direction": "input"
+        },
+        {
+          "name": "vin",
+          "netName": "vin",
+          "direction": "input"
+        },
+        {
+          "name": "out",
+          "netName": "out",
+          "direction": "output"
+        },
+        {
+          "name": "vdd",
+          "netName": "vdd",
+          "direction": "inout"
+        },
+        {
+          "name": "vss",
+          "netName": "vss",
+          "direction": "inout"
+        }
+      ],
+      "nets": [
+        "vip",
+        "vin",
+        "out",
+        "vdd",
+        "vss",
+        "bp",
+        "bn",
+        "vshd_n",
+        "un",
+        "vshd_p",
+        "pcas",
+        "hi_ref",
+        "ncas",
+        "lo_ref",
+        "lo_sig",
+        "gp",
+        "hi_sig",
+        "iq_n",
+        "gn0",
+        "gp0",
+        "up",
+        "hn",
+        "pctl",
+        "ds",
+        "dr",
+        "gn"
+      ],
+      "sourceGeometry": {
+        "coordinateSystem": "source coordinates: x right, y down (1 unit = 1 Virtuoso gridUnit)",
+        "bounds": {
+          "minX": 10,
+          "minY": 18,
+          "maxX": 245,
+          "maxY": 171
+        },
+        "portOccurrences": [
+          {
+            "occurrenceId": "P_vip",
+            "name": "vip",
+            "netName": "vip",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 81
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vin",
+            "name": "vin",
+            "netName": "vin",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 85
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_out",
+            "name": "out",
+            "netName": "out",
+            "direction": "output",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 239,
+              "y": 150
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "horizontal"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_1",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 32,
+              "y": 34
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_2",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 100,
+              "y": 28
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_3",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 151,
+              "y": 32
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_4",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 192,
+              "y": 30
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_5",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 45,
+              "y": 90
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_6",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 106,
+              "y": 82
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_7",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 147,
+              "y": 90
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_8",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 204,
+              "y": 88
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_9",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 47,
+              "y": 140
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vdd_10",
+            "name": "vdd",
+            "netName": "vdd",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 90,
+              "y": 142
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_1",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 32,
+              "y": 54
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_2",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 92,
+              "y": 60
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_3",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 147,
+              "y": 56
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_4",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 192,
+              "y": 58
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_5",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 41,
+              "y": 110
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_6",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 108,
+              "y": 118
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_7",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 147,
+              "y": 110
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_8",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 208,
+              "y": 112
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_9",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 41,
+              "y": 160
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_vss_10",
+            "name": "vss",
+            "netName": "vss",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 88,
+              "y": 158
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          }
+        ],
+        "junctions": [
+          {
+            "id": "J_vin_1",
+            "netName": "vin",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 84,
+              "y": 94
+            }
+          },
+          {
+            "id": "J_vin_2",
+            "netName": "vin",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 135,
+              "y": 123
+            }
+          },
+          {
+            "id": "J_vip_3",
+            "netName": "vip",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 90,
+              "y": 81
+            }
+          },
+          {
+            "id": "J_vip_4",
+            "netName": "vip",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 131,
+              "y": 74
+            }
+          }
+        ],
+        "contacts": [],
+        "routes": [
+          {
+            "id": "R_vdd_1",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 32,
+                "y": 38
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_1",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 32,
+                  "y": 34
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_2",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 100,
+                "y": 32
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_2",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 100,
+                  "y": 28
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_3",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 151,
+                "y": 36
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_3",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 151,
+                  "y": 32
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_4",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 192,
+                "y": 34
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_4",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 192,
+                  "y": 30
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_5",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U5_P04_COMMON_GATE_BIASES",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 45,
+                "y": 94
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_5",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 45,
+                  "y": 90
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_6",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 106,
+                "y": 86
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_6",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 106,
+                  "y": 82
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_7",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 147,
+                "y": 94
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_7",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 147,
+                  "y": 90
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_8",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 204,
+                "y": 92
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_8",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 204,
+                  "y": 88
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_9",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 47,
+                "y": 144
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_9",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 47,
+                  "y": 140
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vdd_10",
+            "netName": "vdd",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+              "pinName": "vdd",
+              "sourcePoint": {
+                "x": 90,
+                "y": 146
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vdd_10",
+                "pinName": "vdd",
+                "sourcePoint": {
+                  "x": 90,
+                  "y": 142
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_11",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 32,
+                "y": 50
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_1",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 32,
+                  "y": 54
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_12",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 92,
+                "y": 56
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_2",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 92,
+                  "y": 60
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_13",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 147,
+                "y": 52
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_3",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 147,
+                  "y": 56
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_14",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 192,
+                "y": 54
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_4",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 192,
+                  "y": 58
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_15",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U5_P04_COMMON_GATE_BIASES",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 41,
+                "y": 106
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_5",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 41,
+                  "y": 110
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_16",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 108,
+                "y": 114
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_6",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 108,
+                  "y": 118
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_17",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 147,
+                "y": 106
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_7",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 147,
+                  "y": 110
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_18",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 208,
+                "y": 108
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_8",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 208,
+                  "y": 112
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_19",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 41,
+                "y": 156
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_9",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 41,
+                  "y": 160
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vss_20",
+            "netName": "vss",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+              "pinName": "vss",
+              "sourcePoint": {
+                "x": 88,
+                "y": 154
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vss_10",
+                "pinName": "vss",
+                "sourcePoint": {
+                  "x": 88,
+                  "y": 158
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lo_ref_21",
+            "netName": "lo_ref",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+              "pinName": "lo_ref",
+              "sourcePoint": {
+                "x": 112,
+                "y": 44
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 121,
+                  "y": 44
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 121,
+                  "y": 78
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 96,
+                  "y": 78
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+                "pinName": "lo_ref",
+                "sourcePoint": {
+                  "x": 96,
+                  "y": 90
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_lo_sig_22",
+            "netName": "lo_sig",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+              "pinName": "lo_sig",
+              "sourcePoint": {
+                "x": 112,
+                "y": 48
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 114,
+                  "y": 48
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 114,
+                  "y": 76
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 94,
+                  "y": 76
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 94,
+                  "y": 98
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+                "pinName": "lo_sig",
+                "sourcePoint": {
+                  "x": 96,
+                  "y": 98
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_hi_ref_23",
+            "netName": "hi_ref",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "hi_ref",
+              "sourcePoint": {
+                "x": 96,
+                "y": 106
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 86,
+                  "y": 106
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 86,
+                  "y": 42
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+                "pinName": "hi_ref",
+                "sourcePoint": {
+                  "x": 88,
+                  "y": 42
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_hi_sig_24",
+            "netName": "hi_sig",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "hi_sig",
+              "sourcePoint": {
+                "x": 96,
+                "y": 110
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 88,
+                  "y": 110
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+                "pinName": "hi_sig",
+                "sourcePoint": {
+                  "x": 88,
+                  "y": 46
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gn0_25",
+            "netName": "gn0",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+              "pinName": "gn0",
+              "sourcePoint": {
+                "x": 196,
+                "y": 96
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 174,
+                  "y": 96
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 174,
+                  "y": 44
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+                "pinName": "gn0",
+                "sourcePoint": {
+                  "x": 159,
+                  "y": 44
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_gp0_26",
+            "netName": "gp0",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+              "pinName": "gp0",
+              "sourcePoint": {
+                "x": 196,
+                "y": 100
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 157,
+                  "y": 100
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 157,
+                  "y": 115
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 137,
+                  "y": 115
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 137,
+                  "y": 61
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 159,
+                  "y": 61
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+                "pinName": "gp0",
+                "sourcePoint": {
+                  "x": 159,
+                  "y": 48
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_iq_n_27",
+            "netName": "iq_n",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+              "pinName": "iq_n",
+              "sourcePoint": {
+                "x": 196,
+                "y": 104
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 176,
+                  "y": 104
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 176,
+                  "y": 40
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+                "pinName": "iq_n",
+                "sourcePoint": {
+                  "x": 159,
+                  "y": 40
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_bn_28",
+            "netName": "bn",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+              "pinName": "bn",
+              "sourcePoint": {
+                "x": 143,
+                "y": 44
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 143,
+                  "y": 24
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 59,
+                  "y": 24
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 59,
+                  "y": 46
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+                "pinName": "bn",
+                "sourcePoint": {
+                  "x": 37,
+                  "y": 46
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vshd_p_29",
+            "netName": "vshd_p",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+              "pinName": "vshd_p",
+              "sourcePoint": {
+                "x": 112,
+                "y": 40
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 133,
+                  "y": 40
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 133,
+                  "y": 138
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 80,
+                  "y": 138
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+                "pinName": "vshd_p",
+                "sourcePoint": {
+                  "x": 80,
+                  "y": 150
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_ds_30",
+            "netName": "ds",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "ds",
+              "sourcePoint": {
+                "x": 155,
+                "y": 98
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 159,
+                  "y": 98
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 159,
+                  "y": 165
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 35,
+                  "y": 165
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 35,
+                  "y": 148
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+                "pinName": "ds",
+                "sourcePoint": {
+                  "x": 37,
+                  "y": 148
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_dr_31",
+            "netName": "dr",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "dr",
+              "sourcePoint": {
+                "x": 155,
+                "y": 102
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 155,
+                  "y": 136
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 33,
+                  "y": 136
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 33,
+                  "y": 152
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+                "pinName": "dr",
+                "sourcePoint": {
+                  "x": 37,
+                  "y": 152
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_out_32",
+            "netName": "out",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+              "pinName": "out",
+              "sourcePoint": {
+                "x": 100,
+                "y": 150
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 100,
+                  "y": 163
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 57,
+                  "y": 163
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+                "pinName": "out",
+                "sourcePoint": {
+                  "x": 57,
+                  "y": 150
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_out_33",
+            "netName": "out",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_out",
+              "pinName": "out",
+              "sourcePoint": {
+                "x": 239,
+                "y": 150
+              }
+            },
+            "steps": [
+              {
+                "kind": "instance",
+                "instanceId": "source-U10_P10_OUTPUT_STAGE_AND_BIDIRECTION",
+                "pinName": "out",
+                "sourcePoint": {
+                  "x": 100,
+                  "y": 150
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_34_a",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "vin",
+              "sourcePoint": {
+                "x": 96,
+                "y": 94
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vin_1",
+                "sourcePoint": {
+                  "x": 84,
+                  "y": 94
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_34_b",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vin_1",
+              "sourcePoint": {
+                "x": 84,
+                "y": 94
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 67,
+                  "y": 94
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 67,
+                  "y": 85
+                }
+              },
+              {
+                "kind": "port",
+                "instanceId": "P_vin",
+                "pinName": "vin",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 85
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_35_a",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "vin",
+              "sourcePoint": {
+                "x": 139,
+                "y": 102
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 139,
+                  "y": 123
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vin_2",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 123
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_35_b",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vin_2",
+              "sourcePoint": {
+                "x": 135,
+                "y": 123
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 84,
+                  "y": 123
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vin_1",
+                "sourcePoint": {
+                  "x": 84,
+                  "y": 94
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vin_36",
+            "netName": "vin",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+              "pinName": "vin",
+              "sourcePoint": {
+                "x": 184,
+                "y": 46
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 178,
+                  "y": 46
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 178,
+                  "y": 28
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 135,
+                  "y": 28
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vin_2",
+                "sourcePoint": {
+                  "x": 135,
+                  "y": 123
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_37_a",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+              "pinName": "vip",
+              "sourcePoint": {
+                "x": 96,
+                "y": 102
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 90,
+                  "y": 102
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_3",
+                "sourcePoint": {
+                  "x": 90,
+                  "y": 81
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_37_b",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vip_3",
+              "sourcePoint": {
+                "x": 90,
+                "y": 81
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_vip",
+                "pinName": "vip",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 81
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_38_a",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+              "pinName": "vip",
+              "sourcePoint": {
+                "x": 139,
+                "y": 98
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 139,
+                  "y": 74
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_4",
+                "sourcePoint": {
+                  "x": 131,
+                  "y": 74
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_38_b",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vip_4",
+              "sourcePoint": {
+                "x": 131,
+                "y": 74
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 90,
+                  "y": 74
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_3",
+                "sourcePoint": {
+                  "x": 90,
+                  "y": 81
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vip_39",
+            "netName": "vip",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+              "pinName": "vip",
+              "sourcePoint": {
+                "x": 184,
+                "y": 42
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 184,
+                  "y": 26
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 131,
+                  "y": 26
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vip_4",
+                "sourcePoint": {
+                  "x": 131,
+                  "y": 74
+                }
+              }
+            ]
+          }
+        ],
+        "localBulkLabels": [],
+        "localBulkShorts": [],
+        "annotationStubs": []
+      }
+    }
+  ]
+}

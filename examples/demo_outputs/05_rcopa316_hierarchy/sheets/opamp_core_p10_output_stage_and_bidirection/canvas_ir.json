@@ -1,0 +1,1618 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "opamp_core_p10_output_stage_and_bidirection",
+  "bounds": {
+    "minX": 10,
+    "minY": 16,
+    "maxX": 215,
+    "maxY": 108
+  },
+  "congestionIterations": 1,
+  "corridorExpansions": [],
+  "groups": [
+    {
+      "id": "cascode_stage",
+      "label": "共源共栅叠层支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "PLNC",
+        "PLSH",
+        "NLSH",
+        "NLM"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "POUT",
+        "NOUT",
+        "PLND",
+        "NSENSE",
+        "PSENSE",
+        "NLREF",
+        "NCLAMP",
+        "Rlimp",
+        "PCLAMP"
+      ]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 35,
+      "instances": [
+        "Rlimn"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "NOUT",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 5,
+      "position": {
+        "x": 75,
+        "y": 85
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 76,
+          "y": 82
+        },
+        "G": {
+          "x": 72,
+          "y": 85
+        },
+        "S": {
+          "x": 76,
+          "y": 88
+        },
+        "B": {
+          "x": 76,
+          "y": 85
+        }
+      },
+      "bodyBox": [
+        72,
+        82,
+        77,
+        88
+      ],
+      "labelBox": [
+        78,
+        83,
+        88,
+        87
+      ],
+      "labelLines": [
+        "NOUT",
+        "1536u/0.55u nf=48"
+      ]
+    },
+    {
+      "ref": "POUT",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 75,
+        "y": 35
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 76,
+          "y": 38
+        },
+        "G": {
+          "x": 72,
+          "y": 35
+        },
+        "S": {
+          "x": 76,
+          "y": 32
+        },
+        "B": {
+          "x": 76,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        72,
+        32,
+        77,
+        38
+      ],
+      "labelBox": [
+        78,
+        33,
+        88,
+        37
+      ],
+      "labelLines": [
+        "POUT",
+        "3072u/0.55u nf=96"
+      ]
+    },
+    {
+      "ref": "NSENSE",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 5,
+      "position": {
+        "x": 96,
+        "y": 85
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 97,
+          "y": 82
+        },
+        "G": {
+          "x": 93,
+          "y": 85
+        },
+        "S": {
+          "x": 97,
+          "y": 88
+        },
+        "B": {
+          "x": 97,
+          "y": 85
+        }
+      },
+      "bodyBox": [
+        93,
+        82,
+        98,
+        88
+      ],
+      "labelBox": [
+        99,
+        83,
+        104,
+        87
+      ],
+      "labelLines": [
+        "NSENSE",
+        "6u/0.55u"
+      ]
+    },
+    {
+      "ref": "PLND",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 96,
+        "y": 35
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 97,
+          "y": 38
+        },
+        "G": {
+          "x": 93,
+          "y": 35
+        },
+        "S": {
+          "x": 97,
+          "y": 32
+        },
+        "B": {
+          "x": 97,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        93,
+        32,
+        98,
+        38
+      ],
+      "labelBox": [
+        99,
+        33,
+        107,
+        37
+      ],
+      "labelLines": [
+        "PLND",
+        "40u/0.75u nf=4"
+      ]
+    },
+    {
+      "ref": "PLNC",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "cascode_stage",
+      "tier": 1,
+      "position": {
+        "x": 39,
+        "y": 35
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 38,
+          "y": 38
+        },
+        "G": {
+          "x": 42,
+          "y": 35
+        },
+        "S": {
+          "x": 38,
+          "y": 32
+        },
+        "B": {
+          "x": 38,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        37,
+        32,
+        42,
+        38
+      ],
+      "labelBox": [
+        28,
+        33,
+        36,
+        37
+      ],
+      "labelLines": [
+        "PLNC",
+        "40u/0.75u nf=4"
+      ]
+    },
+    {
+      "ref": "PLSH",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "cascode_stage",
+      "tier": 2,
+      "position": {
+        "x": 39,
+        "y": 52
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 38,
+          "y": 55
+        },
+        "G": {
+          "x": 42,
+          "y": 52
+        },
+        "S": {
+          "x": 38,
+          "y": 49
+        },
+        "B": {
+          "x": 38,
+          "y": 52
+        }
+      },
+      "bodyBox": [
+        37,
+        49,
+        42,
+        55
+      ],
+      "labelBox": [
+        29,
+        48,
+        36,
+        52
+      ],
+      "labelLines": [
+        "PLSH",
+        "64u/1u nf=4"
+      ]
+    },
+    {
+      "ref": "Rlimn",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 189,
+        "y": 85
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 189,
+          "y": 82
+        },
+        "M": {
+          "x": 189,
+          "y": 88
+        }
+      },
+      "bodyBox": [
+        187,
+        82,
+        191,
+        88
+      ],
+      "labelBox": [
+        192,
+        83,
+        197,
+        87
+      ],
+      "labelLines": [
+        "Rlimn",
+        "6.8k"
+      ]
+    },
+    {
+      "ref": "NCLAMP",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 5,
+      "position": {
+        "x": 134,
+        "y": 85
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 135,
+          "y": 82
+        },
+        "G": {
+          "x": 131,
+          "y": 85
+        },
+        "S": {
+          "x": 135,
+          "y": 88
+        },
+        "B": {
+          "x": 135,
+          "y": 85
+        }
+      },
+      "bodyBox": [
+        131,
+        82,
+        136,
+        88
+      ],
+      "labelBox": [
+        137,
+        83,
+        145,
+        87
+      ],
+      "labelLines": [
+        "NCLAMP",
+        "64u/0.5u nf=8"
+      ]
+    },
+    {
+      "ref": "PSENSE",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 115,
+        "y": 35
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 116,
+          "y": 38
+        },
+        "G": {
+          "x": 112,
+          "y": 35
+        },
+        "S": {
+          "x": 116,
+          "y": 32
+        },
+        "B": {
+          "x": 116,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        112,
+        32,
+        117,
+        38
+      ],
+      "labelBox": [
+        118,
+        33,
+        123,
+        37
+      ],
+      "labelLines": [
+        "PSENSE",
+        "12u/0.55u"
+      ]
+    },
+    {
+      "ref": "NLREF",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 5,
+      "position": {
+        "x": 115,
+        "y": 85
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 116,
+          "y": 82
+        },
+        "G": {
+          "x": 112,
+          "y": 85
+        },
+        "S": {
+          "x": 116,
+          "y": 88
+        },
+        "B": {
+          "x": 116,
+          "y": 85
+        }
+      },
+      "bodyBox": [
+        112,
+        82,
+        117,
+        88
+      ],
+      "labelBox": [
+        118,
+        83,
+        126,
+        87
+      ],
+      "labelLines": [
+        "NLREF",
+        "16u/0.75u nf=4"
+      ]
+    },
+    {
+      "ref": "NLM",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "cascode_stage",
+      "tier": 5,
+      "position": {
+        "x": 48,
+        "y": 85
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 49,
+          "y": 82
+        },
+        "G": {
+          "x": 45,
+          "y": 85
+        },
+        "S": {
+          "x": 49,
+          "y": 88
+        },
+        "B": {
+          "x": 49,
+          "y": 85
+        }
+      },
+      "bodyBox": [
+        45,
+        82,
+        50,
+        88
+      ],
+      "labelBox": [
+        51,
+        83,
+        59,
+        87
+      ],
+      "labelLines": [
+        "NLM",
+        "16u/0.75u nf=4"
+      ]
+    },
+    {
+      "ref": "NLSH",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "cascode_stage",
+      "tier": 4,
+      "position": {
+        "x": 48,
+        "y": 69
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 49,
+          "y": 66
+        },
+        "G": {
+          "x": 45,
+          "y": 69
+        },
+        "S": {
+          "x": 49,
+          "y": 72
+        },
+        "B": {
+          "x": 49,
+          "y": 69
+        }
+      },
+      "bodyBox": [
+        45,
+        66,
+        50,
+        72
+      ],
+      "labelBox": [
+        51,
+        65,
+        58,
+        69
+      ],
+      "labelLines": [
+        "NLSH",
+        "48u/1u nf=4"
+      ]
+    },
+    {
+      "ref": "Rlimp",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 142,
+        "y": 35
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 142,
+          "y": 32
+        },
+        "M": {
+          "x": 142,
+          "y": 38
+        }
+      },
+      "bodyBox": [
+        140,
+        32,
+        144,
+        38
+      ],
+      "labelBox": [
+        145,
+        33,
+        150,
+        37
+      ],
+      "labelLines": [
+        "Rlimp",
+        "7.8k"
+      ]
+    },
+    {
+      "ref": "PCLAMP",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 161,
+        "y": 35
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 162,
+          "y": 38
+        },
+        "G": {
+          "x": 158,
+          "y": 35
+        },
+        "S": {
+          "x": 162,
+          "y": 32
+        },
+        "B": {
+          "x": 162,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        158,
+        32,
+        163,
+        38
+      ],
+      "labelBox": [
+        164,
+        33,
+        173,
+        37
+      ],
+      "labelLines": [
+        "PCLAMP",
+        "128u/0.5u nf=16"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_out",
+      "name": "out",
+      "net": "out",
+      "symbol": "port",
+      "x": 209,
+      "y": 60
+    },
+    {
+      "id": "P_gn",
+      "name": "gn",
+      "net": "gn",
+      "symbol": "port",
+      "x": 16,
+      "y": 84
+    },
+    {
+      "id": "P_vss_1",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 76,
+      "y": 92
+    },
+    {
+      "id": "P_vss_2",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 97,
+      "y": 92
+    },
+    {
+      "id": "P_vss_3",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 189,
+      "y": 92
+    },
+    {
+      "id": "P_vss_4",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 135,
+      "y": 92
+    },
+    {
+      "id": "P_vss_5",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 116,
+      "y": 92
+    },
+    {
+      "id": "P_vss_6",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 49,
+      "y": 92
+    },
+    {
+      "id": "P_gp",
+      "name": "gp",
+      "net": "gp",
+      "symbol": "port",
+      "x": 16,
+      "y": 36
+    },
+    {
+      "id": "P_vdd_1",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 76,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_2",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 97,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_3",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 38,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_4",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 116,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_5",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 142,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_6",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 162,
+      "y": 28
+    },
+    {
+      "id": "P_vshd_p_1",
+      "name": "vshd_p",
+      "net": "vshd_p",
+      "symbol": "port",
+      "x": 46,
+      "y": 52
+    },
+    {
+      "id": "P_vshd_n_1",
+      "name": "vshd_n",
+      "net": "vshd_n",
+      "symbol": "port",
+      "x": 41,
+      "y": 69
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_vss_1",
+      "net": "vss",
+      "points": [
+        {
+          "x": 76,
+          "y": 88
+        },
+        {
+          "x": 76,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vss_2",
+      "net": "vss",
+      "points": [
+        {
+          "x": 97,
+          "y": 88
+        },
+        {
+          "x": 97,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vss_3",
+      "net": "vss",
+      "points": [
+        {
+          "x": 189,
+          "y": 88
+        },
+        {
+          "x": 189,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vss_4",
+      "net": "vss",
+      "points": [
+        {
+          "x": 135,
+          "y": 88
+        },
+        {
+          "x": 135,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vss_5",
+      "net": "vss",
+      "points": [
+        {
+          "x": 116,
+          "y": 88
+        },
+        {
+          "x": 116,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vss_6",
+      "net": "vss",
+      "points": [
+        {
+          "x": 49,
+          "y": 88
+        },
+        {
+          "x": 49,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_7",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 76,
+          "y": 32
+        },
+        {
+          "x": 76,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_8",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 97,
+          "y": 32
+        },
+        {
+          "x": 97,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_9",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 38,
+          "y": 32
+        },
+        {
+          "x": 38,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_10",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 116,
+          "y": 32
+        },
+        {
+          "x": 116,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_11",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 142,
+          "y": 32
+        },
+        {
+          "x": 142,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_12",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 162,
+          "y": 32
+        },
+        {
+          "x": 162,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_13",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 42,
+          "y": 52
+        },
+        {
+          "x": 46,
+          "y": 52
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_14",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 45,
+          "y": 69
+        },
+        {
+          "x": 41,
+          "y": 69
+        }
+      ]
+    },
+    {
+      "id": "R_lim_pm_15",
+      "net": "lim_pm",
+      "points": [
+        {
+          "x": 49,
+          "y": 82
+        },
+        {
+          "x": 49,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_lim_nm_16",
+      "net": "lim_nm",
+      "points": [
+        {
+          "x": 38,
+          "y": 49
+        },
+        {
+          "x": 38,
+          "y": 38
+        }
+      ]
+    },
+    {
+      "id": "R_ns_mon_17_a",
+      "net": "ns_mon",
+      "points": [
+        {
+          "x": 93,
+          "y": 35
+        },
+        {
+          "x": 89,
+          "y": 35
+        },
+        {
+          "x": 89,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_ns_mon_17_b",
+      "net": "ns_mon",
+      "points": [
+        {
+          "x": 89,
+          "y": 39
+        },
+        {
+          "x": 89,
+          "y": 40
+        },
+        {
+          "x": 43,
+          "y": 40
+        },
+        {
+          "x": 43,
+          "y": 35
+        },
+        {
+          "x": 42,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_ns_mon_18_a",
+      "net": "ns_mon",
+      "points": [
+        {
+          "x": 97,
+          "y": 38
+        },
+        {
+          "x": 97,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_ns_mon_18_b",
+      "net": "ns_mon",
+      "points": [
+        {
+          "x": 97,
+          "y": 39
+        },
+        {
+          "x": 89,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_ns_mon_19",
+      "net": "ns_mon",
+      "points": [
+        {
+          "x": 97,
+          "y": 82
+        },
+        {
+          "x": 97,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_ps_mon_20_a",
+      "net": "ps_mon",
+      "points": [
+        {
+          "x": 112,
+          "y": 85
+        },
+        {
+          "x": 111,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "id": "R_ps_mon_20_b",
+      "net": "ps_mon",
+      "points": [
+        {
+          "x": 111,
+          "y": 85
+        },
+        {
+          "x": 105,
+          "y": 85
+        },
+        {
+          "x": 105,
+          "y": 96
+        },
+        {
+          "x": 44,
+          "y": 96
+        },
+        {
+          "x": 44,
+          "y": 85
+        },
+        {
+          "x": 45,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "id": "R_ps_mon_21_a",
+      "net": "ps_mon",
+      "points": [
+        {
+          "x": 116,
+          "y": 38
+        },
+        {
+          "x": 116,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_ps_mon_21_b",
+      "net": "ps_mon",
+      "points": [
+        {
+          "x": 116,
+          "y": 81
+        },
+        {
+          "x": 111,
+          "y": 81
+        },
+        {
+          "x": 111,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "id": "R_ps_mon_22",
+      "net": "ps_mon",
+      "points": [
+        {
+          "x": 116,
+          "y": 82
+        },
+        {
+          "x": 116,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_gn_23_a",
+      "net": "gn",
+      "points": [
+        {
+          "x": 72,
+          "y": 85
+        },
+        {
+          "x": 60,
+          "y": 85
+        },
+        {
+          "x": 60,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_gn_23_b",
+      "net": "gn",
+      "points": [
+        {
+          "x": 60,
+          "y": 80
+        },
+        {
+          "x": 60,
+          "y": 64
+        },
+        {
+          "x": 16,
+          "y": 64
+        },
+        {
+          "x": 16,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "R_gn_24_a",
+      "net": "gn",
+      "points": [
+        {
+          "x": 93,
+          "y": 85
+        },
+        {
+          "x": 92,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "id": "R_gn_24_b",
+      "net": "gn",
+      "points": [
+        {
+          "x": 92,
+          "y": 85
+        },
+        {
+          "x": 89,
+          "y": 85
+        },
+        {
+          "x": 89,
+          "y": 80
+        },
+        {
+          "x": 60,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_gn_25",
+      "net": "gn",
+      "points": [
+        {
+          "x": 135,
+          "y": 82
+        },
+        {
+          "x": 135,
+          "y": 81
+        },
+        {
+          "x": 127,
+          "y": 81
+        },
+        {
+          "x": 127,
+          "y": 98
+        },
+        {
+          "x": 92,
+          "y": 98
+        },
+        {
+          "x": 92,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "id": "R_lim_p_26_a",
+      "net": "lim_p",
+      "points": [
+        {
+          "x": 142,
+          "y": 38
+        },
+        {
+          "x": 142,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_lim_p_26_b",
+      "net": "lim_p",
+      "points": [
+        {
+          "x": 142,
+          "y": 39
+        },
+        {
+          "x": 124,
+          "y": 39
+        },
+        {
+          "x": 124,
+          "y": 24
+        },
+        {
+          "x": 27,
+          "y": 24
+        },
+        {
+          "x": 27,
+          "y": 62
+        },
+        {
+          "x": 49,
+          "y": 62
+        },
+        {
+          "x": 49,
+          "y": 66
+        }
+      ]
+    },
+    {
+      "id": "R_lim_p_27",
+      "net": "lim_p",
+      "points": [
+        {
+          "x": 158,
+          "y": 35
+        },
+        {
+          "x": 151,
+          "y": 35
+        },
+        {
+          "x": 151,
+          "y": 39
+        },
+        {
+          "x": 142,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_gp_28_a",
+      "net": "gp",
+      "points": [
+        {
+          "x": 72,
+          "y": 35
+        },
+        {
+          "x": 44,
+          "y": 35
+        },
+        {
+          "x": 44,
+          "y": 22
+        }
+      ]
+    },
+    {
+      "id": "R_gp_28_b",
+      "net": "gp",
+      "points": [
+        {
+          "x": 44,
+          "y": 22
+        },
+        {
+          "x": 16,
+          "y": 22
+        },
+        {
+          "x": 16,
+          "y": 36
+        }
+      ]
+    },
+    {
+      "id": "R_gp_29_a",
+      "net": "gp",
+      "points": [
+        {
+          "x": 112,
+          "y": 35
+        },
+        {
+          "x": 108,
+          "y": 35
+        },
+        {
+          "x": 108,
+          "y": 22
+        }
+      ]
+    },
+    {
+      "id": "R_gp_29_b",
+      "net": "gp",
+      "points": [
+        {
+          "x": 108,
+          "y": 22
+        },
+        {
+          "x": 44,
+          "y": 22
+        }
+      ]
+    },
+    {
+      "id": "R_gp_30",
+      "net": "gp",
+      "points": [
+        {
+          "x": 162,
+          "y": 38
+        },
+        {
+          "x": 162,
+          "y": 39
+        },
+        {
+          "x": 174,
+          "y": 39
+        },
+        {
+          "x": 174,
+          "y": 22
+        },
+        {
+          "x": 108,
+          "y": 22
+        }
+      ]
+    },
+    {
+      "id": "R_out_31_a",
+      "net": "out",
+      "points": [
+        {
+          "x": 76,
+          "y": 82
+        },
+        {
+          "x": 76,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "id": "R_out_31_b",
+      "net": "out",
+      "points": [
+        {
+          "x": 76,
+          "y": 60
+        },
+        {
+          "x": 76,
+          "y": 38
+        }
+      ]
+    },
+    {
+      "id": "R_out_32",
+      "net": "out",
+      "points": [
+        {
+          "x": 209,
+          "y": 60
+        },
+        {
+          "x": 76,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "id": "R_lim_n_33_a",
+      "net": "lim_n",
+      "points": [
+        {
+          "x": 131,
+          "y": 85
+        },
+        {
+          "x": 130,
+          "y": 85
+        },
+        {
+          "x": 130,
+          "y": 102
+        }
+      ]
+    },
+    {
+      "id": "R_lim_n_33_b",
+      "net": "lim_n",
+      "points": [
+        {
+          "x": 130,
+          "y": 102
+        },
+        {
+          "x": 33,
+          "y": 102
+        },
+        {
+          "x": 33,
+          "y": 56
+        },
+        {
+          "x": 38,
+          "y": 56
+        },
+        {
+          "x": 38,
+          "y": 55
+        }
+      ]
+    },
+    {
+      "id": "R_lim_n_34",
+      "net": "lim_n",
+      "points": [
+        {
+          "x": 189,
+          "y": 82
+        },
+        {
+          "x": 189,
+          "y": 81
+        },
+        {
+          "x": 186,
+          "y": 81
+        },
+        {
+          "x": 186,
+          "y": 102
+        },
+        {
+          "x": 130,
+          "y": 102
+        }
+      ]
+    }
+  ]
+}

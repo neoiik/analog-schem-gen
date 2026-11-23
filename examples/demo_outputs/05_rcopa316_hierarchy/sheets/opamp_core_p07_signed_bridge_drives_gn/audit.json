@@ -1,0 +1,40 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "opamp_core_p07_signed_bridge_drives_gn",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 20,
+    "netCount": 15,
+    "routeSegmentCount": 107,
+    "totalWireLengthGrids": 2233,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 20,
+    "crossingsByNet": {
+      "gn0": 5,
+      "gn": 11,
+      "ebn_s": 4,
+      "gp0": 7,
+      "trp": 1,
+      "gp": 7,
+      "trn": 1,
+      "trb": 3,
+      "ebp_s": 1
+    }
+  },
+  "findings": [],
+  "llmRefinementSuggestions": [
+    "网络 'gn' 当前产生 11 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.gn = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'gp0' 当前产生 7 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.gp0 = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'gp' 当前产生 7 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.gp = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+  ]
+}

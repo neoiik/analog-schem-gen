@@ -2,7 +2,7 @@
   "schema": "schem_gen.index.v1",
   "name": "analog-schem-gen",
   "title": "PDK-Agnostic High-Readability Analog Schematic Generator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "bundled_reference_pdks": ["sky130"],
   "entry": "schem_gen.py",
@@ -14,6 +14,7 @@
     "docs/模算协同颗粒度规范.md",
     "docs/接口与数据结构.md",
     "docs/演进路线图.md",
+    "docs/v0.2_详细方案设计.md",
     "VALIDATION.md"
   ],
   "pdk_configs": [
@@ -24,6 +25,10 @@
     "analyze",
     "compile",
     "auto",
+    "partition",
+    "hierarchy",
+    "extract-pdk",
+    "export-editor",
     "refine",
     "audit",
     "probe-pdk",

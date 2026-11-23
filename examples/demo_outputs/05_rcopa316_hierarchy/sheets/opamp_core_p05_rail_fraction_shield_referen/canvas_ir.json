@@ -1,0 +1,2426 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "opamp_core_p05_rail_fraction_shield_referen",
+  "bounds": {
+    "minX": 10,
+    "minY": 18,
+    "maxX": 479,
+    "maxY": 114
+  },
+  "congestionIterations": 2,
+  "corridorExpansions": [
+    "iter 1: expanded corridors by +4 grids due to congested nets ['lo_sig']"
+  ],
+  "groups": [
+    {
+      "id": "cascode_stage",
+      "label": "共源共栅叠层支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "SHDN",
+        "DIVNS",
+        "DIVPF",
+        "SHDP"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "CPR_SHD",
+        "CNR",
+        "CPGP",
+        "CNGP_SHD",
+        "Rdiv_nhi",
+        "SHDNP",
+        "Rdiv_phi",
+        "Cdiv_p",
+        "SHDPN",
+        "CPR",
+        "FNR",
+        "FNS",
+        "CNGP"
+      ]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 35,
+      "instances": [
+        "Rdiv_nlo",
+        "Cdiv_n",
+        "Rdiv_plo",
+        "RFNR",
+        "RFNS",
+        "CFNR",
+        "CFNS"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "Rdiv_nhi",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 139,
+        "y": 35
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 139,
+          "y": 32
+        },
+        "M": {
+          "x": 139,
+          "y": 38
+        }
+      },
+      "bodyBox": [
+        137,
+        32,
+        141,
+        38
+      ],
+      "labelBox": [
+        142,
+        33,
+        147,
+        37
+      ],
+      "labelLines": [
+        "Rdiv_nhi",
+        "1.92M"
+      ]
+    },
+    {
+      "ref": "Rdiv_nlo",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 329,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 329,
+          "y": 94
+        },
+        "M": {
+          "x": 329,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        327,
+        94,
+        331,
+        100
+      ],
+      "labelBox": [
+        332,
+        95,
+        337,
+        99
+      ],
+      "labelLines": [
+        "Rdiv_nlo",
+        "1.08M"
+      ]
+    },
+    {
+      "ref": "Cdiv_n",
+      "deviceClass": "capacitor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 348,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 348,
+          "y": 94
+        },
+        "M": {
+          "x": 348,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        346,
+        94,
+        350,
+        100
+      ],
+      "labelBox": [
+        351,
+        95,
+        356,
+        99
+      ],
+      "labelLines": [
+        "Cdiv_n",
+        "400f"
+      ]
+    },
+    {
+      "ref": "SHDNP",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 170,
+        "y": 35
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 171,
+          "y": 38
+        },
+        "G": {
+          "x": 167,
+          "y": 35
+        },
+        "S": {
+          "x": 171,
+          "y": 32
+        },
+        "B": {
+          "x": 171,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        167,
+        32,
+        172,
+        38
+      ],
+      "labelBox": [
+        173,
+        33,
+        181,
+        37
+      ],
+      "labelLines": [
+        "SHDNP",
+        "12u/3.5u nf=2"
+      ]
+    },
+    {
+      "ref": "SHDN",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "cascode_stage",
+      "tier": 4,
+      "position": {
+        "x": 57,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 58,
+          "y": 74
+        },
+        "G": {
+          "x": 54,
+          "y": 77
+        },
+        "S": {
+          "x": 58,
+          "y": 80
+        },
+        "B": {
+          "x": 58,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        54,
+        74,
+        59,
+        80
+      ],
+      "labelBox": [
+        60,
+        73,
+        68,
+        77
+      ],
+      "labelLines": [
+        "SHDN",
+        "16u/1.5u nf=2"
+      ]
+    },
+    {
+      "ref": "DIVNS",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "cascode_stage",
+      "tier": 5,
+      "position": {
+        "x": 57,
+        "y": 97
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 58,
+          "y": 94
+        },
+        "G": {
+          "x": 54,
+          "y": 97
+        },
+        "S": {
+          "x": 58,
+          "y": 100
+        },
+        "B": {
+          "x": 58,
+          "y": 97
+        }
+      },
+      "bodyBox": [
+        54,
+        94,
+        59,
+        100
+      ],
+      "labelBox": [
+        60,
+        95,
+        67,
+        99
+      ],
+      "labelLines": [
+        "DIVNS",
+        "16u/5u nf=2"
+      ]
+    },
+    {
+      "ref": "Rdiv_phi",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 192,
+        "y": 35
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 192,
+          "y": 32
+        },
+        "M": {
+          "x": 192,
+          "y": 38
+        }
+      },
+      "bodyBox": [
+        190,
+        32,
+        194,
+        38
+      ],
+      "labelBox": [
+        195,
+        33,
+        200,
+        37
+      ],
+      "labelLines": [
+        "Rdiv_phi",
+        "1.08M"
+      ]
+    },
+    {
+      "ref": "Rdiv_plo",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 367,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 367,
+          "y": 94
+        },
+        "M": {
+          "x": 367,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        365,
+        94,
+        369,
+        100
+      ],
+      "labelBox": [
+        370,
+        95,
+        375,
+        99
+      ],
+      "labelLines": [
+        "Rdiv_plo",
+        "1.92M"
+      ]
+    },
+    {
+      "ref": "Cdiv_p",
+      "deviceClass": "capacitor",
+      "kind": null,
+      "group": "gain_output_stage",
+      "tier": 1,
+      "position": {
+        "x": 211,
+        "y": 35
+      },
+      "semanticOrient": "vertical_flipped",
+      "cadenceOrient": "MX",
+      "pins": {
+        "P": {
+          "x": 211,
+          "y": 38
+        },
+        "M": {
+          "x": 211,
+          "y": 32
+        }
+      },
+      "bodyBox": [
+        209,
+        32,
+        213,
+        38
+      ],
+      "labelBox": [
+        214,
+        33,
+        219,
+        37
+      ],
+      "labelLines": [
+        "Cdiv_p",
+        "400f"
+      ]
+    },
+    {
+      "ref": "DIVPF",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "cascode_stage",
+      "tier": 1,
+      "position": {
+        "x": 39,
+        "y": 35
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 38,
+          "y": 38
+        },
+        "G": {
+          "x": 42,
+          "y": 35
+        },
+        "S": {
+          "x": 38,
+          "y": 32
+        },
+        "B": {
+          "x": 38,
+          "y": 35
+        }
+      },
+      "bodyBox": [
+        37,
+        32,
+        42,
+        38
+      ],
+      "labelBox": [
+        28,
+        33,
+        36,
+        37
+      ],
+      "labelLines": [
+        "DIVPF",
+        "12u/3.5u nf=2"
+      ]
+    },
+    {
+      "ref": "SHDP",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "cascode_stage",
+      "tier": 2,
+      "position": {
+        "x": 39,
+        "y": 56
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 38,
+          "y": 59
+        },
+        "G": {
+          "x": 42,
+          "y": 56
+        },
+        "S": {
+          "x": 38,
+          "y": 53
+        },
+        "B": {
+          "x": 38,
+          "y": 56
+        }
+      },
+      "bodyBox": [
+        37,
+        53,
+        42,
+        59
+      ],
+      "labelBox": [
+        28,
+        52,
+        36,
+        56
+      ],
+      "labelLines": [
+        "SHDP",
+        "32u/1.5u nf=2"
+      ]
+    },
+    {
+      "ref": "SHDPN",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 5,
+      "position": {
+        "x": 223,
+        "y": 97
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 224,
+          "y": 94
+        },
+        "G": {
+          "x": 220,
+          "y": 97
+        },
+        "S": {
+          "x": 224,
+          "y": 100
+        },
+        "B": {
+          "x": 224,
+          "y": 97
+        }
+      },
+      "bodyBox": [
+        220,
+        94,
+        225,
+        100
+      ],
+      "labelBox": [
+        226,
+        95,
+        233,
+        99
+      ],
+      "labelLines": [
+        "SHDPN",
+        "16u/5u nf=2"
+      ]
+    },
+    {
+      "ref": "CPR",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 235,
+        "y": 56
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 236,
+          "y": 59
+        },
+        "G": {
+          "x": 232,
+          "y": 56
+        },
+        "S": {
+          "x": 236,
+          "y": 53
+        },
+        "B": {
+          "x": 236,
+          "y": 56
+        }
+      },
+      "bodyBox": [
+        232,
+        53,
+        237,
+        59
+      ],
+      "labelBox": [
+        238,
+        52,
+        246,
+        56
+      ],
+      "labelLines": [
+        "CPR",
+        "320u/1u nf=16"
+      ]
+    },
+    {
+      "ref": "CPR_SHD",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 93,
+        "y": 56
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 94,
+          "y": 59
+        },
+        "G": {
+          "x": 90,
+          "y": 56
+        },
+        "S": {
+          "x": 94,
+          "y": 53
+        },
+        "B": {
+          "x": 94,
+          "y": 56
+        }
+      },
+      "bodyBox": [
+        90,
+        53,
+        95,
+        59
+      ],
+      "labelBox": [
+        96,
+        52,
+        104,
+        56
+      ],
+      "labelLines": [
+        "CPR_SHD",
+        "320u/1u nf=16"
+      ]
+    },
+    {
+      "ref": "CNR",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 93,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 94,
+          "y": 74
+        },
+        "G": {
+          "x": 90,
+          "y": 77
+        },
+        "S": {
+          "x": 94,
+          "y": 80
+        },
+        "B": {
+          "x": 94,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        90,
+        74,
+        95,
+        80
+      ],
+      "labelBox": [
+        96,
+        73,
+        103,
+        77
+      ],
+      "labelLines": [
+        "CNR",
+        "160u/1u nf=8"
+      ]
+    },
+    {
+      "ref": "FNR",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 247,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 248,
+          "y": 74
+        },
+        "G": {
+          "x": 244,
+          "y": 77
+        },
+        "S": {
+          "x": 248,
+          "y": 80
+        },
+        "B": {
+          "x": 248,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        244,
+        74,
+        249,
+        80
+      ],
+      "labelBox": [
+        250,
+        73,
+        259,
+        77
+      ],
+      "labelLines": [
+        "FNR",
+        "300u/5.5u nf=20"
+      ]
+    },
+    {
+      "ref": "FNS",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 271,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 272,
+          "y": 74
+        },
+        "G": {
+          "x": 268,
+          "y": 77
+        },
+        "S": {
+          "x": 272,
+          "y": 80
+        },
+        "B": {
+          "x": 272,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        268,
+        74,
+        273,
+        80
+      ],
+      "labelBox": [
+        274,
+        73,
+        283,
+        77
+      ],
+      "labelLines": [
+        "FNS",
+        "300u/5.5u nf=20"
+      ]
+    },
+    {
+      "ref": "RFNR",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 386,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 386,
+          "y": 94
+        },
+        "M": {
+          "x": 386,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        384,
+        94,
+        388,
+        100
+      ],
+      "labelBox": [
+        389,
+        95,
+        394,
+        99
+      ],
+      "labelLines": [
+        "RFNR",
+        "2.4k"
+      ]
+    },
+    {
+      "ref": "RFNS",
+      "deviceClass": "resistor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 405,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 405,
+          "y": 94
+        },
+        "M": {
+          "x": 405,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        403,
+        94,
+        407,
+        100
+      ],
+      "labelBox": [
+        408,
+        95,
+        413,
+        99
+      ],
+      "labelLines": [
+        "RFNS",
+        "2.4k"
+      ]
+    },
+    {
+      "ref": "CFNR",
+      "deviceClass": "capacitor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 424,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 424,
+          "y": 94
+        },
+        "M": {
+          "x": 424,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        422,
+        94,
+        426,
+        100
+      ],
+      "labelBox": [
+        427,
+        95,
+        432,
+        99
+      ],
+      "labelLines": [
+        "CFNR",
+        "85p"
+      ]
+    },
+    {
+      "ref": "CFNS",
+      "deviceClass": "capacitor",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 443,
+        "y": 97
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 443,
+          "y": 94
+        },
+        "M": {
+          "x": 443,
+          "y": 100
+        }
+      },
+      "bodyBox": [
+        441,
+        94,
+        445,
+        100
+      ],
+      "labelBox": [
+        446,
+        95,
+        451,
+        99
+      ],
+      "labelLines": [
+        "CFNS",
+        "85p"
+      ]
+    },
+    {
+      "ref": "CPGP",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "group": "gain_output_stage",
+      "tier": 2,
+      "position": {
+        "x": 127,
+        "y": 56
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 128,
+          "y": 59
+        },
+        "G": {
+          "x": 124,
+          "y": 56
+        },
+        "S": {
+          "x": 128,
+          "y": 53
+        },
+        "B": {
+          "x": 128,
+          "y": 56
+        }
+      },
+      "bodyBox": [
+        124,
+        53,
+        129,
+        59
+      ],
+      "labelBox": [
+        130,
+        52,
+        138,
+        56
+      ],
+      "labelLines": [
+        "CPGP",
+        "320u/1u nf=16"
+      ]
+    },
+    {
+      "ref": "CNGP",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 306,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 307,
+          "y": 74
+        },
+        "G": {
+          "x": 303,
+          "y": 77
+        },
+        "S": {
+          "x": 307,
+          "y": 80
+        },
+        "B": {
+          "x": 307,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        303,
+        74,
+        308,
+        80
+      ],
+      "labelBox": [
+        309,
+        73,
+        316,
+        77
+      ],
+      "labelLines": [
+        "CNGP",
+        "160u/1u nf=8"
+      ]
+    },
+    {
+      "ref": "CNGP_SHD",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "group": "gain_output_stage",
+      "tier": 4,
+      "position": {
+        "x": 127,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 128,
+          "y": 74
+        },
+        "G": {
+          "x": 124,
+          "y": 77
+        },
+        "S": {
+          "x": 128,
+          "y": 80
+        },
+        "B": {
+          "x": 128,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        124,
+        74,
+        129,
+        80
+      ],
+      "labelBox": [
+        130,
+        73,
+        137,
+        77
+      ],
+      "labelLines": [
+        "CNGP_SHD",
+        "192u/1u nf=8"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_vdd_1",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 139,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_2",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 171,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_3",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 192,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_4",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 211,
+      "y": 28
+    },
+    {
+      "id": "P_vdd_5",
+      "name": "vdd",
+      "net": "vdd",
+      "symbol": "vdd-port",
+      "x": 38,
+      "y": 28
+    },
+    {
+      "id": "P_vss_1",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 329,
+      "y": 104
+    },
+    {
+      "id": "P_vss_2",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 348,
+      "y": 104
+    },
+    {
+      "id": "P_vss_3",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 58,
+      "y": 104
+    },
+    {
+      "id": "P_vss_4",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 367,
+      "y": 104
+    },
+    {
+      "id": "P_vss_5",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 224,
+      "y": 104
+    },
+    {
+      "id": "P_vss_6",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 386,
+      "y": 104
+    },
+    {
+      "id": "P_vss_7",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 405,
+      "y": 104
+    },
+    {
+      "id": "P_vss_8",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 424,
+      "y": 104
+    },
+    {
+      "id": "P_vss_9",
+      "name": "vss",
+      "net": "vss",
+      "symbol": "ground",
+      "x": 443,
+      "y": 104
+    },
+    {
+      "id": "P_vshd_n",
+      "name": "vshd_n",
+      "net": "vshd_n",
+      "symbol": "port",
+      "x": 463,
+      "y": 66
+    },
+    {
+      "id": "P_bp_1",
+      "name": "bp",
+      "net": "bp",
+      "symbol": "port",
+      "x": 163,
+      "y": 35
+    },
+    {
+      "id": "P_bp_2",
+      "name": "bp",
+      "net": "bp",
+      "symbol": "port",
+      "x": 46,
+      "y": 35
+    },
+    {
+      "id": "P_un_1",
+      "name": "un",
+      "net": "un",
+      "symbol": "port",
+      "x": 50,
+      "y": 97
+    },
+    {
+      "id": "P_un_2",
+      "name": "un",
+      "net": "un",
+      "symbol": "port",
+      "x": 216,
+      "y": 97
+    },
+    {
+      "id": "P_vshd_p",
+      "name": "vshd_p",
+      "net": "vshd_p",
+      "symbol": "port",
+      "x": 463,
+      "y": 70
+    },
+    {
+      "id": "P_pcas_1",
+      "name": "pcas",
+      "net": "pcas",
+      "symbol": "port",
+      "x": 228,
+      "y": 56
+    },
+    {
+      "id": "P_pcas_2",
+      "name": "pcas",
+      "net": "pcas",
+      "symbol": "port",
+      "x": 120,
+      "y": 56
+    },
+    {
+      "id": "P_hi_ref",
+      "name": "hi_ref",
+      "net": "hi_ref",
+      "symbol": "port",
+      "x": 16,
+      "y": 53
+    },
+    {
+      "id": "P_ncas_1",
+      "name": "ncas",
+      "net": "ncas",
+      "symbol": "port",
+      "x": 86,
+      "y": 77
+    },
+    {
+      "id": "P_ncas_2",
+      "name": "ncas",
+      "net": "ncas",
+      "symbol": "port",
+      "x": 299,
+      "y": 77
+    },
+    {
+      "id": "P_lo_ref",
+      "name": "lo_ref",
+      "net": "lo_ref",
+      "symbol": "port",
+      "x": 463,
+      "y": 77
+    },
+    {
+      "id": "P_lo_sig",
+      "name": "lo_sig",
+      "net": "lo_sig",
+      "symbol": "port",
+      "x": 463,
+      "y": 81
+    },
+    {
+      "id": "P_gp",
+      "name": "gp",
+      "net": "gp",
+      "symbol": "port",
+      "x": 463,
+      "y": 86
+    },
+    {
+      "id": "P_hi_sig",
+      "name": "hi_sig",
+      "net": "hi_sig",
+      "symbol": "port",
+      "x": 16,
+      "y": 57
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_vdd_1",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 139,
+          "y": 32
+        },
+        {
+          "x": 139,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_2",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 171,
+          "y": 32
+        },
+        {
+          "x": 171,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_3",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 192,
+          "y": 32
+        },
+        {
+          "x": 192,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_4",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 211,
+          "y": 32
+        },
+        {
+          "x": 211,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vdd_5",
+      "net": "vdd",
+      "points": [
+        {
+          "x": 38,
+          "y": 32
+        },
+        {
+          "x": 38,
+          "y": 28
+        }
+      ]
+    },
+    {
+      "id": "R_vss_6",
+      "net": "vss",
+      "points": [
+        {
+          "x": 329,
+          "y": 100
+        },
+        {
+          "x": 329,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_7",
+      "net": "vss",
+      "points": [
+        {
+          "x": 348,
+          "y": 100
+        },
+        {
+          "x": 348,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_8",
+      "net": "vss",
+      "points": [
+        {
+          "x": 58,
+          "y": 100
+        },
+        {
+          "x": 58,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_9",
+      "net": "vss",
+      "points": [
+        {
+          "x": 367,
+          "y": 100
+        },
+        {
+          "x": 367,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_10",
+      "net": "vss",
+      "points": [
+        {
+          "x": 224,
+          "y": 100
+        },
+        {
+          "x": 224,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_11",
+      "net": "vss",
+      "points": [
+        {
+          "x": 386,
+          "y": 100
+        },
+        {
+          "x": 386,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_12",
+      "net": "vss",
+      "points": [
+        {
+          "x": 405,
+          "y": 100
+        },
+        {
+          "x": 405,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_13",
+      "net": "vss",
+      "points": [
+        {
+          "x": 424,
+          "y": 100
+        },
+        {
+          "x": 424,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_vss_14",
+      "net": "vss",
+      "points": [
+        {
+          "x": 443,
+          "y": 100
+        },
+        {
+          "x": 443,
+          "y": 104
+        }
+      ]
+    },
+    {
+      "id": "R_bp_15",
+      "net": "bp",
+      "points": [
+        {
+          "x": 167,
+          "y": 35
+        },
+        {
+          "x": 163,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_bp_16",
+      "net": "bp",
+      "points": [
+        {
+          "x": 42,
+          "y": 35
+        },
+        {
+          "x": 46,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_un_17",
+      "net": "un",
+      "points": [
+        {
+          "x": 54,
+          "y": 97
+        },
+        {
+          "x": 50,
+          "y": 97
+        }
+      ]
+    },
+    {
+      "id": "R_un_18",
+      "net": "un",
+      "points": [
+        {
+          "x": 220,
+          "y": 97
+        },
+        {
+          "x": 216,
+          "y": 97
+        }
+      ]
+    },
+    {
+      "id": "R_pcas_19",
+      "net": "pcas",
+      "points": [
+        {
+          "x": 232,
+          "y": 56
+        },
+        {
+          "x": 228,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_pcas_20",
+      "net": "pcas",
+      "points": [
+        {
+          "x": 124,
+          "y": 56
+        },
+        {
+          "x": 120,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_ncas_21",
+      "net": "ncas",
+      "points": [
+        {
+          "x": 90,
+          "y": 77
+        },
+        {
+          "x": 86,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_ncas_22",
+      "net": "ncas",
+      "points": [
+        {
+          "x": 303,
+          "y": 77
+        },
+        {
+          "x": 299,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_hi_sig_23",
+      "net": "hi_sig",
+      "points": [
+        {
+          "x": 128,
+          "y": 53
+        },
+        {
+          "x": 128,
+          "y": 52
+        },
+        {
+          "x": 105,
+          "y": 52
+        },
+        {
+          "x": 105,
+          "y": 61
+        },
+        {
+          "x": 16,
+          "y": 61
+        },
+        {
+          "x": 16,
+          "y": 57
+        }
+      ]
+    },
+    {
+      "id": "R_pr_m_24",
+      "net": "pr_m",
+      "points": [
+        {
+          "x": 236,
+          "y": 59
+        },
+        {
+          "x": 236,
+          "y": 60
+        },
+        {
+          "x": 139,
+          "y": 60
+        },
+        {
+          "x": 139,
+          "y": 50
+        },
+        {
+          "x": 94,
+          "y": 50
+        },
+        {
+          "x": 94,
+          "y": 53
+        }
+      ]
+    },
+    {
+      "id": "R_ngp_m_25",
+      "net": "ngp_m",
+      "points": [
+        {
+          "x": 307,
+          "y": 74
+        },
+        {
+          "x": 307,
+          "y": 72
+        },
+        {
+          "x": 138,
+          "y": 72
+        },
+        {
+          "x": 138,
+          "y": 81
+        },
+        {
+          "x": 128,
+          "y": 81
+        },
+        {
+          "x": 128,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_fns_26_a",
+      "net": "fns",
+      "points": [
+        {
+          "x": 405,
+          "y": 94
+        },
+        {
+          "x": 405,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_fns_26_b",
+      "net": "fns",
+      "points": [
+        {
+          "x": 405,
+          "y": 92
+        },
+        {
+          "x": 405,
+          "y": 82
+        },
+        {
+          "x": 272,
+          "y": 82
+        },
+        {
+          "x": 272,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_fns_27",
+      "net": "fns",
+      "points": [
+        {
+          "x": 443,
+          "y": 94
+        },
+        {
+          "x": 443,
+          "y": 92
+        },
+        {
+          "x": 405,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_fnr_28_a",
+      "net": "fnr",
+      "points": [
+        {
+          "x": 386,
+          "y": 94
+        },
+        {
+          "x": 386,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_fnr_28_b",
+      "net": "fnr",
+      "points": [
+        {
+          "x": 386,
+          "y": 90
+        },
+        {
+          "x": 386,
+          "y": 84
+        },
+        {
+          "x": 248,
+          "y": 84
+        },
+        {
+          "x": 248,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_fnr_29",
+      "net": "fnr",
+      "points": [
+        {
+          "x": 424,
+          "y": 94
+        },
+        {
+          "x": 424,
+          "y": 90
+        },
+        {
+          "x": 386,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "id": "R_fold_ref_30_a",
+      "net": "fold_ref",
+      "points": [
+        {
+          "x": 94,
+          "y": 74
+        },
+        {
+          "x": 94,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_fold_ref_30_b",
+      "net": "fold_ref",
+      "points": [
+        {
+          "x": 94,
+          "y": 72
+        },
+        {
+          "x": 94,
+          "y": 59
+        }
+      ]
+    },
+    {
+      "id": "R_fold_ref_31_a",
+      "net": "fold_ref",
+      "points": [
+        {
+          "x": 244,
+          "y": 77
+        },
+        {
+          "x": 243,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_fold_ref_31_b",
+      "net": "fold_ref",
+      "points": [
+        {
+          "x": 243,
+          "y": 77
+        },
+        {
+          "x": 140,
+          "y": 77
+        },
+        {
+          "x": 140,
+          "y": 83
+        },
+        {
+          "x": 104,
+          "y": 83
+        },
+        {
+          "x": 104,
+          "y": 72
+        },
+        {
+          "x": 94,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_fold_ref_32",
+      "net": "fold_ref",
+      "points": [
+        {
+          "x": 268,
+          "y": 77
+        },
+        {
+          "x": 260,
+          "y": 77
+        },
+        {
+          "x": 260,
+          "y": 82
+        },
+        {
+          "x": 243,
+          "y": 82
+        },
+        {
+          "x": 243,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_lo_sig_33_a",
+      "net": "lo_sig",
+      "points": [
+        {
+          "x": 307,
+          "y": 80
+        },
+        {
+          "x": 307,
+          "y": 86
+        },
+        {
+          "x": 317,
+          "y": 86
+        },
+        {
+          "x": 317,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_lo_sig_33_b",
+      "net": "lo_sig",
+      "points": [
+        {
+          "x": 317,
+          "y": 80
+        },
+        {
+          "x": 317,
+          "y": 70
+        },
+        {
+          "x": 272,
+          "y": 70
+        },
+        {
+          "x": 272,
+          "y": 74
+        }
+      ]
+    },
+    {
+      "id": "R_lo_sig_34",
+      "net": "lo_sig",
+      "points": [
+        {
+          "x": 463,
+          "y": 81
+        },
+        {
+          "x": 463,
+          "y": 80
+        },
+        {
+          "x": 317,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_hi_ref_35",
+      "net": "hi_ref",
+      "points": [
+        {
+          "x": 236,
+          "y": 53
+        },
+        {
+          "x": 236,
+          "y": 24
+        },
+        {
+          "x": 16,
+          "y": 24
+        },
+        {
+          "x": 16,
+          "y": 53
+        }
+      ]
+    },
+    {
+      "id": "R_gp_36_a",
+      "net": "gp",
+      "points": [
+        {
+          "x": 128,
+          "y": 74
+        },
+        {
+          "x": 128,
+          "y": 68
+        }
+      ]
+    },
+    {
+      "id": "R_gp_36_b",
+      "net": "gp",
+      "points": [
+        {
+          "x": 128,
+          "y": 68
+        },
+        {
+          "x": 128,
+          "y": 59
+        }
+      ]
+    },
+    {
+      "id": "R_gp_37",
+      "net": "gp",
+      "points": [
+        {
+          "x": 463,
+          "y": 86
+        },
+        {
+          "x": 463,
+          "y": 83
+        },
+        {
+          "x": 471,
+          "y": 83
+        },
+        {
+          "x": 471,
+          "y": 68
+        },
+        {
+          "x": 128,
+          "y": 68
+        }
+      ]
+    },
+    {
+      "id": "R_lo_ref_38_a",
+      "net": "lo_ref",
+      "points": [
+        {
+          "x": 248,
+          "y": 74
+        },
+        {
+          "x": 248,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "id": "R_lo_ref_38_b",
+      "net": "lo_ref",
+      "points": [
+        {
+          "x": 248,
+          "y": 70
+        },
+        {
+          "x": 106,
+          "y": 70
+        },
+        {
+          "x": 106,
+          "y": 81
+        },
+        {
+          "x": 94,
+          "y": 81
+        },
+        {
+          "x": 94,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_lo_ref_39",
+      "net": "lo_ref",
+      "points": [
+        {
+          "x": 463,
+          "y": 77
+        },
+        {
+          "x": 319,
+          "y": 77
+        },
+        {
+          "x": 319,
+          "y": 66
+        },
+        {
+          "x": 248,
+          "y": 66
+        },
+        {
+          "x": 248,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_40_a",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 58,
+          "y": 74
+        },
+        {
+          "x": 58,
+          "y": 73
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_40_b",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 58,
+          "y": 73
+        },
+        {
+          "x": 53,
+          "y": 73
+        },
+        {
+          "x": 53,
+          "y": 77
+        },
+        {
+          "x": 54,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_41_a",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 124,
+          "y": 77
+        },
+        {
+          "x": 108,
+          "y": 77
+        },
+        {
+          "x": 108,
+          "y": 85
+        },
+        {
+          "x": 69,
+          "y": 85
+        },
+        {
+          "x": 69,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_41_b",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 69,
+          "y": 72
+        },
+        {
+          "x": 58,
+          "y": 72
+        },
+        {
+          "x": 58,
+          "y": 73
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_42_a",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 171,
+          "y": 38
+        },
+        {
+          "x": 171,
+          "y": 48
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_42_b",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 171,
+          "y": 48
+        },
+        {
+          "x": 69,
+          "y": 48
+        },
+        {
+          "x": 69,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_n_43",
+      "net": "vshd_n",
+      "points": [
+        {
+          "x": 463,
+          "y": 66
+        },
+        {
+          "x": 463,
+          "y": 48
+        },
+        {
+          "x": 171,
+          "y": 48
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_44_a",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 42,
+          "y": 56
+        },
+        {
+          "x": 43,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_44_b_a",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 43,
+          "y": 56
+        },
+        {
+          "x": 43,
+          "y": 63
+        },
+        {
+          "x": 42,
+          "y": 63
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_44_b_b",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 42,
+          "y": 63
+        },
+        {
+          "x": 38,
+          "y": 63
+        },
+        {
+          "x": 38,
+          "y": 59
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_45",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 90,
+          "y": 56
+        },
+        {
+          "x": 43,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_46_a",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 224,
+          "y": 94
+        },
+        {
+          "x": 224,
+          "y": 93
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_46_b",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 224,
+          "y": 93
+        },
+        {
+          "x": 68,
+          "y": 93
+        },
+        {
+          "x": 68,
+          "y": 108
+        },
+        {
+          "x": 42,
+          "y": 108
+        },
+        {
+          "x": 42,
+          "y": 63
+        }
+      ]
+    },
+    {
+      "id": "R_vshd_p_47",
+      "net": "vshd_p",
+      "points": [
+        {
+          "x": 463,
+          "y": 70
+        },
+        {
+          "x": 463,
+          "y": 75
+        },
+        {
+          "x": 473,
+          "y": 75
+        },
+        {
+          "x": 473,
+          "y": 108
+        },
+        {
+          "x": 234,
+          "y": 108
+        },
+        {
+          "x": 234,
+          "y": 93
+        },
+        {
+          "x": 224,
+          "y": 93
+        }
+      ]
+    }
+  ]
+}

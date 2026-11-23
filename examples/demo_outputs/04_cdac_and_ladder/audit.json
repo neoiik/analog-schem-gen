@@ -1,0 +1,34 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "sky130_cdac_and_ladder",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 12,
+    "netCount": 16,
+    "routeSegmentCount": 48,
+    "totalWireLengthGrids": 1034,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 12,
+    "crossingsByNet": {
+      "VREFL": 6,
+      "VDAC": 12,
+      "VREFH": 6
+    }
+  },
+  "findings": [],
+  "llmRefinementSuggestions": [
+    "网络 'VDAC' 当前产生 12 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VDAC = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'VREFL' 当前产生 6 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VREFL = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。",
+    "网络 'VREFH' 当前产生 6 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.VREFH = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+  ]
+}

@@ -1,0 +1,21 @@
+* SKY130 6-Element Binary Capacitor Bank (CDAC) + 6-Tap Reference Resistor Ladder
+*.PININFO VREFH:I VREFL:I B0:I B1:I B2:I B3:I B4:I BDUM:I VDAC:O Vtap3:O VDD:B VSS:B
+.subckt sky130_cdac_and_ladder VREFH VREFL B0 B1 B2 B3 B4 BDUM VDAC Vtap3 VDD VSS
+
+* Reference Serpentine Resistor String (VREFH -> VREFL)
+RR1 VREFH n1 2k
+RR2 n1    n2 2k
+RR3 n2    Vtap3 2k
+RR4 Vtap3 n4 2k
+RR5 n4    n5 2k
+RR6 n5    VREFL 2k
+
+* Binary Weighted MIM Capacitor Bank + Dummy Sharing Top Plate VDAC
+XCDUM VDAC BDUM sky130_fd_pr__cap_mim_m3_1 W=4  L=4  MF=1
+XC0   VDAC B0   sky130_fd_pr__cap_mim_m3_1 W=4  L=4  MF=1
+XC1   VDAC B1   sky130_fd_pr__cap_mim_m3_1 W=4  L=4  MF=2
+XC2   VDAC B2   sky130_fd_pr__cap_mim_m3_1 W=8  L=8  MF=1
+XC3   VDAC B3   sky130_fd_pr__cap_mim_m3_1 W=8  L=8  MF=2
+XC4   VDAC B4   sky130_fd_pr__cap_mim_m3_1 W=16 L=8  MF=2
+
+.ends sky130_cdac_and_ladder

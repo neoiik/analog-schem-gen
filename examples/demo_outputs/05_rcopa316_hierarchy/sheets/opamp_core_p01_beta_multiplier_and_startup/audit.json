@@ -1,0 +1,29 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "opamp_core_p01_beta_multiplier_and_startup",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 6,
+    "netCount": 5,
+    "routeSegmentCount": 41,
+    "totalWireLengthGrids": 505,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 1,
+    "crossingsByNet": {
+      "bn": 1,
+      "bp": 1
+    }
+  },
+  "findings": [],
+  "llmRefinementSuggestions": []
+}

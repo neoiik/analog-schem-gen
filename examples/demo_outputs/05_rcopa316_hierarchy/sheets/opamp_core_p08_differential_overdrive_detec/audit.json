@@ -1,0 +1,32 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "opamp_core_p08_differential_overdrive_detec",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 16,
+    "netCount": 14,
+    "routeSegmentCount": 94,
+    "totalWireLengthGrids": 1253,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 2,
+    "crossingsByNet": {
+      "ds": 2,
+      "dnr": 1,
+      "dns": 1
+    }
+  },
+  "findings": [],
+  "llmRefinementSuggestions": [
+    "网络 'ds' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.ds = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+  ]
+}

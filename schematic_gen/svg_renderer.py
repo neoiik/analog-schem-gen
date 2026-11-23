@@ -91,6 +91,28 @@ def _draw_mos_svg(pl: PlacedInstance, is_pmos: bool) -> list[str]:
     return elems
 
 
+def _draw_subckt_block_svg(pl: PlacedInstance) -> list[str]:
+    """Render a crisp hierarchical functional block symbol with internal pin labels."""
+    bx0, by0, bx1, by1 = pl.body_box
+    elems: list[str] = [
+        f'<rect x="{_px(bx0)}" y="{_px(by0)}" width="{_px(bx1 - bx0)}" height="{_px(by1 - by0)}" rx="3" fill="#f5faf8" stroke="#162d31" stroke-width="2.0"/>'
+    ]
+    for pin_name, (px, py) in pl.pin_points.items():
+        if px <= bx0:
+            elems.append(f'<line x1="{_px(px)}" y1="{_px(py)}" x2="{_px(bx0)}" y2="{_px(py)}" stroke="#162d31" stroke-width="1.8"/>')
+            elems.append(f'<text x="{_px(bx0) + 4}" y="{_px(py) + 3.5}" text-anchor="start" font-size="9.5" font-family="Consolas,monospace" fill="#25474d">{escape(pin_name)}</text>')
+        elif px >= bx1:
+            elems.append(f'<line x1="{_px(bx1)}" y1="{_px(py)}" x2="{_px(px)}" y2="{_px(py)}" stroke="#162d31" stroke-width="1.8"/>')
+            elems.append(f'<text x="{_px(bx1) - 4}" y="{_px(py) + 3.5}" text-anchor="end" font-size="9.5" font-family="Consolas,monospace" fill="#25474d">{escape(pin_name)}</text>')
+        elif py <= by0:
+            elems.append(f'<line x1="{_px(px)}" y1="{_px(py)}" x2="{_px(px)}" y2="{_px(by0)}" stroke="#162d31" stroke-width="1.8"/>')
+            elems.append(f'<text x="{_px(px)}" y="{_px(by0) + 10}" text-anchor="middle" font-size="9" font-family="Consolas,monospace" fill="#455a64">{escape(pin_name)}</text>')
+        else:
+            elems.append(f'<line x1="{_px(px)}" y1="{_px(by1)}" x2="{_px(px)}" y2="{_px(py)}" stroke="#162d31" stroke-width="1.8"/>')
+            elems.append(f'<text x="{_px(px)}" y="{_px(by1) - 3}" text-anchor="middle" font-size="9" font-family="Consolas,monospace" fill="#455a64">{escape(pin_name)}</text>')
+    return elems
+
+
 def _draw_passive_or_source_svg(pl: PlacedInstance) -> list[str]:
     """Render resistor, MIM capacitor, diode, or current/voltage source."""
     stroke = "#162d31"
@@ -273,6 +295,41 @@ def render_schematic_svg(
             f'<text x="{tx}" y="{_px(ay) + 3.5}" text-anchor="{anchor}" font-size="9.5" font-family="Consolas,monospace" fill="#455a64">{escape(bl["name"])}</text>'
         )
 
+    # Wire-label fly-wire stubs (`WireLabelStubPlaced`) + Bus Rippers (`BusRipperPlaced`)
+    for wl in solved.wire_label_stubs:
+        out.append(
+            f'<line x1="{_px(wl.x1)}" y1="{_px(wl.y1)}" x2="{_px(wl.x2)}" y2="{_px(wl.y2)}" stroke="#8d4e0f" stroke-width="1.7"/>'
+        )
+        if wl.y1 == wl.y2:
+            go_right = wl.x2 >= wl.x1
+            tx = _px(wl.x2) + (4 if go_right else -4)
+            anch = "start" if go_right else "end"
+            ty = _px(wl.y2) + 3.5
+        else:
+            tx = _px(wl.x2) + 3
+            anch = "start"
+            ty = _px(wl.y2) + (10 if wl.y2 > wl.y1 else -3)
+        out.append(
+            f'<text x="{tx}" y="{ty}" text-anchor="{anch}" font-size="10" font-weight="600" font-family="Consolas,monospace" fill="#7a3e00">{escape(wl.net_name)}</text>'
+        )
+
+    for br in solved.bus_rippers:
+        by_px = _px(br.trunk_y)
+        out.append(
+            f'<line x1="{_px(br.x_start)}" y1="{by_px}" x2="{_px(br.x_end)}" y2="{by_px}" stroke="#103b5c" stroke-width="3.4" stroke-linecap="round"/>'
+        )
+        out.append(
+            f'<text x="{_px(br.x_end) + 6}" y="{by_px + 4}" text-anchor="start" font-size="11" font-weight="700" font-family="Consolas,monospace" fill="#103b5c">{escape(br.bus_name)}</text>'
+        )
+        for t_net, tx_g, ty_g in br.taps:
+            # Draw vertical tap + 45-degree ripper tick onto bus bar
+            out.append(
+                f'<polyline points="{_px(tx_g)},{_px(ty_g)} {_px(tx_g)},{_px(br.trunk_y - 1)} {_px(tx_g + 1)},{by_px}" fill="none" stroke="#1f4e78" stroke-width="1.6"/>'
+            )
+            out.append(
+                f'<text x="{_px(tx_g) + 3}" y="{_px(br.trunk_y - 1.4)}" text-anchor="start" font-size="9" font-family="Consolas,monospace" fill="#1f4e78">{escape(t_net)}</text>'
+            )
+
     # 3. Symbols + Parameter Labels
     for pl in solved.placements.values():
         if show_debug_boxes:
@@ -285,7 +342,9 @@ def render_schematic_svg(
                 f'<rect x="{_px(lx0)}" y="{_px(ly0)}" width="{_px(lx1 - lx0)}" height="{_px(ly1 - ly0)}" fill="none" stroke="#64b5f6" stroke-dasharray="2,2"/>'
             )
 
-        if pl.device_class == "mos":
+        if pl.device_class == "subckt":
+            out.extend(_draw_subckt_block_svg(pl))
+        elif pl.device_class == "mos":
             out.extend(_draw_mos_svg(pl, is_pmos=(pl.polarity == "pmos")))
         else:
             out.extend(_draw_passive_or_source_svg(pl))
@@ -295,7 +354,7 @@ def render_schematic_svg(
         align_right = lx1 <= pl.x
         tx = _px(lx1) - 2 if align_right else _px(lx0) + 2
         anchor = "end" if align_right else "start"
-        if pl.cadence_orient in {"R90", "R270", "MXR90", "MYR90"}:
+        if pl.device_class == "subckt" or pl.cadence_orient in {"R90", "R270", "MXR90", "MYR90"}:
             tx = _px((lx0 + lx1) / 2.0)
             anchor = "middle"
         base_y = _px(ly0) + 12

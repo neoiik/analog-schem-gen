@@ -1,0 +1,229 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core_p05_rail_fraction_shield_referen",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "cascode_stage",
+      "label": "共源共栅叠层支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "SHDN",
+        "DIVNS",
+        "DIVPF",
+        "SHDP"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "CPR_SHD",
+        "CNR",
+        "CPGP",
+        "CNGP_SHD",
+        "Rdiv_nhi",
+        "SHDNP",
+        "Rdiv_phi",
+        "Cdiv_p",
+        "SHDPN",
+        "CPR",
+        "FNR",
+        "FNS",
+        "CNGP"
+      ]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 35,
+      "instances": [
+        "Rdiv_nlo",
+        "Cdiv_n",
+        "Rdiv_plo",
+        "RFNR",
+        "RFNS",
+        "CFNR",
+        "CFNS"
+      ]
+    }
+  ],
+  "motifs": [
+    {
+      "type": "symmetric_columns",
+      "leftColumn": [
+        "DIVPF",
+        "SHDP"
+      ],
+      "rightColumn": [
+        "SHDN",
+        "DIVNS"
+      ]
+    }
+  ],
+  "orientations": {
+    "DIVPF": "gate_right",
+    "SHDP": "gate_right",
+    "SHDN": "gate_left",
+    "DIVNS": "gate_left",
+    "CPR_SHD": "gate_left",
+    "CNR": "gate_left",
+    "CPGP": "gate_left",
+    "CNGP_SHD": "gate_left",
+    "Rdiv_nhi": "vertical",
+    "Rdiv_nlo": "vertical",
+    "Cdiv_n": "vertical",
+    "SHDNP": "gate_left",
+    "Rdiv_phi": "vertical",
+    "Rdiv_plo": "vertical",
+    "Cdiv_p": "vertical",
+    "SHDPN": "gate_left",
+    "CPR": "gate_left",
+    "FNR": "gate_left",
+    "FNS": "gate_left",
+    "RFNR": "vertical",
+    "RFNS": "vertical",
+    "CFNR": "vertical",
+    "CFNS": "vertical",
+    "CNGP": "gate_left"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "DIVPF",
+      "SHDP"
+    ],
+    [
+      "SHDN",
+      "DIVNS"
+    ],
+    [
+      "CPR_SHD",
+      "CNR"
+    ],
+    [
+      "CPGP",
+      "CNGP_SHD"
+    ],
+    [
+      "Rdiv_nhi"
+    ],
+    [
+      "SHDNP"
+    ],
+    [
+      "Rdiv_phi"
+    ],
+    [
+      "Cdiv_p"
+    ],
+    [
+      "SHDPN"
+    ],
+    [
+      "CPR"
+    ],
+    [
+      "FNR"
+    ],
+    [
+      "FNS"
+    ],
+    [
+      "CNGP"
+    ],
+    [
+      "Rdiv_nlo"
+    ],
+    [
+      "Cdiv_n"
+    ],
+    [
+      "Rdiv_plo"
+    ],
+    [
+      "RFNR"
+    ],
+    [
+      "RFNS"
+    ],
+    [
+      "CFNR"
+    ],
+    [
+      "CFNS"
+    ]
+  ],
+  "netPolicies": {
+    "vdd": "supply_local",
+    "vdiv_n": "label_stub",
+    "vss": "supply_local",
+    "vshd_n": "full_wire",
+    "bp": "supply_local",
+    "un": "supply_local",
+    "vdiv_p": "label_stub",
+    "vshd_p": "full_wire",
+    "pr_m": "full_wire",
+    "pcas": "supply_local",
+    "hi_ref": "full_wire",
+    "fold_ref": "full_wire",
+    "ncas": "supply_local",
+    "lo_ref": "full_wire",
+    "fnr": "full_wire",
+    "lo_sig": "full_wire",
+    "fns": "full_wire",
+    "gp": "full_wire",
+    "hi_sig": "full_wire",
+    "ngp_m": "full_wire"
+  },
+  "criticalNets": [
+    "vshd_n",
+    "bp",
+    "un",
+    "vshd_p",
+    "pr_m",
+    "pcas",
+    "hi_ref",
+    "fold_ref",
+    "ncas",
+    "lo_ref",
+    "fnr",
+    "lo_sig",
+    "fns",
+    "gp",
+    "hi_sig",
+    "ngp_m"
+  ],
+  "portSides": {
+    "vdd": "local_repeat",
+    "vss": "local_repeat",
+    "vshd_n": "right",
+    "bp": "local_repeat",
+    "un": "local_repeat",
+    "vshd_p": "right",
+    "pcas": "local_repeat",
+    "hi_ref": "left",
+    "ncas": "local_repeat",
+    "lo_ref": "right",
+    "lo_sig": "right",
+    "gp": "right",
+    "hi_sig": "left"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

@@ -39,7 +39,9 @@ def _assign_default_tiers(circuit: NetlistCircuit) -> dict[str, int]:
     tiers: dict[str, int] = {}
 
     for inst in circuit.instances:
-        if inst.polarity == "pmos":
+        if inst.device_class == "subckt":
+            tiers[inst.ref] = 3
+        elif inst.polarity == "pmos":
             # PMOS with Source directly on VDD -> Tier 1 (PMOS_TOP); cascode PMOS -> Tier 2 (PMOS_CAS)
             tiers[inst.ref] = 1 if inst.terminals.get("S") in supplies else 2
         elif inst.polarity == "nmos":
@@ -279,6 +281,94 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
                         )
                     )
 
+    # 6. Regular parallel banks (>= 4 matched-class 2-terminal passives/sources sharing one common plate/rail)
+    bank_refs: set[str] = set()
+    by_common_plate: dict[tuple[str, str], list[InstanceIR]] = defaultdict(list)
+    for inst in circuit.instances:
+        if inst.device_class.startswith(("cap", "isource")):
+            p_net = inst.terminals.get("P", "")
+            m_net = inst.terminals.get("M", "")
+            if p_net and p_net != m_net:
+                by_common_plate[(inst.device_class, p_net)].append(inst)
+            if m_net and m_net != p_net and m_net not in grounds:
+                by_common_plate[(inst.device_class, m_net)].append(inst)
+
+    def _nat_key(ref: str) -> list[Any]:
+        import re as _re
+        low = ref.lower()
+        is_dum = 0 if ("dum" in low) else 1
+        return [is_dum, *[int(t) if t.isdigit() else t for t in _re.split(r"(\d+)", low)]]
+
+    for (dcls, common_net), members in sorted(by_common_plate.items()):
+        uniq = [m for m in members if m.ref not in rc_refs and m.ref not in bank_refs]
+        if len(uniq) >= 4:
+            # Ensure opposite terminals go to >= 3 distinct nets (e.g. CDAC bit switches SW0..SW7)
+            opp_nets = {
+                (m.terminals["M"] if m.terminals["P"] == common_net else m.terminals["P"])
+                for m in uniq
+            }
+            if len(opp_nets) >= 3:
+                ordered_refs = [m.ref for m in sorted(uniq, key=lambda x: _nat_key(x.ref))]
+                bank_refs.update(ordered_refs)
+                motifs.append(
+                    CandidateMotif(
+                        id=f"bank_{common_net}",
+                        motif_type="parallel_bank",
+                        instances=ordered_refs,
+                        nets=[common_net, *sorted(opp_nets)],
+                        roles={"common_net": common_net, "instances": ordered_refs},
+                        notes=f"规整并联阵列 ({len(ordered_refs)} 单元，公共母线 {common_net})：{ordered_refs}",
+                    )
+                )
+
+    # 7. Series resistor ladder / serpentine chain (>= 4 two-pin resistors chained end-to-end)
+    chain_refs: set[str] = set()
+    two_pin_res = [r for r in res_list if r.ref not in rc_refs and len(r.terminals) == 2]
+    if len(two_pin_res) >= 4:
+        res_by_net: dict[str, list[InstanceIR]] = defaultdict(list)
+        for r in two_pin_res:
+            for n in (r.terminals["P"], r.terminals["M"]):
+                if n not in rails:
+                    res_by_net[n].append(r)
+        # Find chain endpoints (connected to != 2 resistors in `two_pin_res`)
+        visited_r: set[str] = set()
+        for start_r in sorted(two_pin_res, key=lambda x: _nat_key(x.ref)):
+            if start_r.ref in visited_r:
+                continue
+            p_deg = len(res_by_net.get(start_r.terminals["P"], []))
+            m_deg = len(res_by_net.get(start_r.terminals["M"], []))
+            if p_deg == 2 and m_deg == 2:
+                continue
+            chain = [start_r]
+            visited_r.add(start_r.ref)
+            cur = start_r
+            while True:
+                nxt_candidates = [
+                    cand
+                    for n in (cur.terminals["P"], cur.terminals["M"])
+                    if n not in rails and len(res_by_net.get(n, [])) == 2
+                    for cand in res_by_net[n]
+                    if cand.ref not in visited_r
+                ]
+                if len(nxt_candidates) != 1:
+                    break
+                cur = nxt_candidates[0]
+                visited_r.add(cur.ref)
+                chain.append(cur)
+            if len(chain) >= 4:
+                c_refs = [x.ref for x in chain]
+                chain_refs.update(c_refs)
+                motifs.append(
+                    CandidateMotif(
+                        id=f"ladder_{c_refs[0]}_{c_refs[-1]}",
+                        motif_type="serpentine_chain",
+                        instances=c_refs,
+                        nets=[],
+                        roles={"instances": c_refs, "rowsPerColumn": min(4, len(c_refs))},
+                        notes=f"串联分压电阻链 ({len(c_refs)} 级)：{c_refs}",
+                    )
+                )
+
     # Build functional groups + stage order + orientations + column hints for draft intent
     assigned: set[str] = set()
     groups: list[FunctionalGroupSpec] = []
@@ -487,6 +577,68 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
             column_hints.append([r_ref])
             column_hints.append([c_ref])
 
+    # Group D2: Regular parallel banks & serpentine resistor chains
+    for bm in [m for m in motifs if m.motif_type == "parallel_bank"]:
+        b_members = [r for r in bm.instances if r not in assigned]
+        if len(b_members) >= 4:
+            groups.append(
+                FunctionalGroupSpec(
+                    id=bm.id,
+                    label="规整并联阵列",
+                    role="array_bank",
+                    stage_order=26,
+                    instances=b_members,
+                )
+            )
+            assigned.update(b_members)
+            cnet = bm.roles["common_net"]
+            for r in b_members:
+                inst = inst_by_ref[r]
+                orientations[r] = "vertical" if inst.terminals.get("P") == cnet else "vertical_flipped"
+                column_hints.append([r])
+            intent_motifs.append(
+                {
+                    "type": "parallel_bank",
+                    "id": bm.id,
+                    "instances": b_members,
+                    "commonTopNet": cnet,
+                }
+            )
+
+    for sm in [m for m in motifs if m.motif_type == "serpentine_chain"]:
+        s_members = [r for r in sm.instances if r not in assigned]
+        if len(s_members) >= 4:
+            rows_per_col = int(sm.roles.get("rowsPerColumn", 4))
+            groups.append(
+                FunctionalGroupSpec(
+                    id=sm.id,
+                    label="串联电阻梯阵列",
+                    role="resistor_ladder",
+                    stage_order=27,
+                    instances=s_members,
+                )
+            )
+            assigned.update(s_members)
+            for col_i in range(0, len(s_members), rows_per_col):
+                chunk = s_members[col_i : col_i + rows_per_col]
+                col_idx = col_i // rows_per_col
+                if col_idx % 2 == 1:
+                    chunk = list(reversed(chunk))
+                    for r in chunk:
+                        orientations[r] = "vertical_flipped"
+                else:
+                    for r in chunk:
+                        orientations[r] = "vertical"
+                column_hints.append(chunk)
+            intent_motifs.append(
+                {
+                    "type": "serpentine_chain",
+                    "id": sm.id,
+                    "instances": s_members,
+                    "rowsPerColumn": rows_per_col,
+                }
+            )
+
     # Group E: Remaining gain / output stage branches & load passives
     remaining = [i.ref for i in circuit.instances if i.ref not in assigned]
     if remaining:
@@ -603,15 +755,25 @@ def analyze_circuit(circuit: NetlistCircuit) -> TopologyAnalysis:
         for dm in diff_motifs
         for r in (dm.roles["left"], dm.roles["right"])
     }
+    pure_gate_nets = {
+        n
+        for n in circuit.nets
+        if all(
+            pin == "G"
+            for inst in circuit.instances
+            for pin, pnet in inst.terminals.items()
+            if pnet == n
+        )
+    }
     port_sides: dict[str, str] = {}
     for p in circuit.ports:
         if p.net in supplies or p.net in grounds:
             port_sides[p.name] = "local_repeat"
         elif p.direction == "output":
             port_sides[p.name] = "right"
-        elif p.net in diff_gate_nets:
+        elif p.net in diff_gate_nets and fanout.get(p.net, 0) <= 2:
             port_sides[p.name] = "near_pin"
-        elif fanout.get(p.net, 0) >= 2 and p.direction == "input":
+        elif fanout.get(p.net, 0) >= 2 and p.direction == "input" and p.net in pure_gate_nets:
             port_sides[p.name] = "local_repeat"
         else:
             port_sides[p.name] = "left"

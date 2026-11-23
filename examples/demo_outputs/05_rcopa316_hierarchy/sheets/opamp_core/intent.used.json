@@ -1,0 +1,144 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+        "U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+        "U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+        "U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+        "U5_P04_COMMON_GATE_BIASES",
+        "U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+        "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC",
+        "U8_P07_SIGNED_BRIDGE_DRIVES_GN",
+        "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO",
+        "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION"
+      ]
+    }
+  ],
+  "motifs": [],
+  "orientations": {
+    "U1_P01_BETA_MULTIPLIER_AND_STARTUP": "vertical",
+    "U2_P05_RAIL_FRACTION_SHIELD_REFEREN": "vertical",
+    "U3_P06_RESISTOR_REFERENCED_IDLE_CUR": "vertical",
+    "U4_P02_UNIT_COPIES_AND_CONTINUOUS": "vertical",
+    "U5_P04_COMMON_GATE_BIASES": "vertical",
+    "U6_P03_MATCHED_COMPLEMENTARY_INPUT_": "vertical",
+    "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC": "vertical",
+    "U8_P07_SIGNED_BRIDGE_DRIVES_GN": "vertical",
+    "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO": "vertical",
+    "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION": "vertical"
+  },
+  "tierOverrides": {
+    "U1_P01_BETA_MULTIPLIER_AND_STARTUP": 2,
+    "U2_P05_RAIL_FRACTION_SHIELD_REFEREN": 2,
+    "U3_P06_RESISTOR_REFERENCED_IDLE_CUR": 2,
+    "U4_P02_UNIT_COPIES_AND_CONTINUOUS": 2,
+    "U5_P04_COMMON_GATE_BIASES": 4,
+    "U6_P03_MATCHED_COMPLEMENTARY_INPUT_": 4,
+    "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC": 4,
+    "U8_P07_SIGNED_BRIDGE_DRIVES_GN": 4,
+    "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO": 6,
+    "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION": 6
+  },
+  "columnOrderHints": [
+    [
+      "U1_P01_BETA_MULTIPLIER_AND_STARTUP",
+      "U5_P04_COMMON_GATE_BIASES",
+      "U9_P09_PEDESTAL_SUBTRACTION_AND_TWO"
+    ],
+    [
+      "U2_P05_RAIL_FRACTION_SHIELD_REFEREN",
+      "U6_P03_MATCHED_COMPLEMENTARY_INPUT_",
+      "U10_P10_OUTPUT_STAGE_AND_BIDIRECTION"
+    ],
+    [
+      "U3_P06_RESISTOR_REFERENCED_IDLE_CUR",
+      "U7_P08_DIFFERENTIAL_OVERDRIVE_DETEC"
+    ],
+    [
+      "U4_P02_UNIT_COPIES_AND_CONTINUOUS",
+      "U8_P07_SIGNED_BRIDGE_DRIVES_GN"
+    ]
+  ],
+  "netPolicies": {
+    "vip": "full_wire",
+    "vin": "full_wire",
+    "out": "full_wire",
+    "vdd": "supply_local",
+    "vss": "supply_local",
+    "bp": "label_stub",
+    "bn": "full_wire",
+    "vshd_n": "label_stub",
+    "un": "label_stub",
+    "vshd_p": "full_wire",
+    "pcas": "label_stub",
+    "hi_ref": "full_wire",
+    "ncas": "label_stub",
+    "lo_ref": "full_wire",
+    "lo_sig": "full_wire",
+    "gp": "label_stub",
+    "hi_sig": "full_wire",
+    "iq_n": "full_wire",
+    "gn0": "full_wire",
+    "gp0": "full_wire",
+    "up": "label_stub",
+    "hn": "label_stub",
+    "pctl": "label_stub",
+    "ds": "full_wire",
+    "dr": "full_wire",
+    "gn": "label_stub"
+  },
+  "criticalNets": [
+    "vip",
+    "vin",
+    "out",
+    "bp",
+    "bn",
+    "vshd_n",
+    "un",
+    "vshd_p",
+    "pcas",
+    "hi_ref",
+    "ncas",
+    "lo_ref",
+    "lo_sig",
+    "gp",
+    "hi_sig",
+    "iq_n",
+    "gn0",
+    "gp0",
+    "up",
+    "hn",
+    "pctl",
+    "ds",
+    "dr",
+    "gn"
+  ],
+  "portSides": {
+    "vip": "left",
+    "vin": "left",
+    "out": "right",
+    "vdd": "local_repeat",
+    "vss": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 16,
+    "inter_group_gap_x": 18,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 14,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

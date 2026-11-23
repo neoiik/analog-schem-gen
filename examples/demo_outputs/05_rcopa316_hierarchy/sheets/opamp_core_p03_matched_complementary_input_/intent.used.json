@@ -1,0 +1,185 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "opamp_core_p03_matched_complementary_input_",
+  "authoredBy": "analyzer_draft",
+  "llmNotes": "由确定性拓扑分析器生成的初始草案；大模型可在此基础上复核并微调分组顺序、器件朝向及跨级偏置网络走线策略。",
+  "groups": [
+    {
+      "id": "input_diff_1",
+      "label": "差分输入级",
+      "role": "input_diff",
+      "stage_order": 10,
+      "instances": [
+        "INS",
+        "INR",
+        "NTAIL",
+        "APS",
+        "APR"
+      ]
+    },
+    {
+      "id": "input_diff_2",
+      "label": "差分输入级",
+      "role": "input_diff",
+      "stage_order": 15,
+      "instances": [
+        "IPS",
+        "IPR",
+        "PTAIL"
+      ]
+    },
+    {
+      "id": "gain_output_stage",
+      "label": "增益与输出级",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "APREF",
+        "ACOPY",
+        "RFPR",
+        "FPR",
+        "RFPS",
+        "FPS",
+        "Rapoff"
+      ]
+    }
+  ],
+  "motifs": [
+    {
+      "type": "diff_pair",
+      "left": "INS",
+      "right": "INR",
+      "tail": "NTAIL",
+      "loadLeft": "APS",
+      "loadRight": "APR",
+      "style": "back_to_back"
+    },
+    {
+      "type": "diff_pair",
+      "left": "IPS",
+      "right": "IPR",
+      "tail": "PTAIL",
+      "loadLeft": null,
+      "loadRight": null,
+      "style": "back_to_back"
+    }
+  ],
+  "orientations": {
+    "INS": "gate_left",
+    "INR": "gate_right",
+    "NTAIL": "gate_left",
+    "APS": "gate_right",
+    "APR": "gate_left",
+    "IPS": "gate_left",
+    "IPR": "gate_right",
+    "PTAIL": "gate_left",
+    "APREF": "gate_left",
+    "ACOPY": "gate_left",
+    "RFPR": "vertical",
+    "FPR": "gate_left",
+    "RFPS": "vertical",
+    "FPS": "gate_left",
+    "Rapoff": "vertical"
+  },
+  "tierOverrides": {},
+  "columnOrderHints": [
+    [
+      "APS",
+      "INS"
+    ],
+    [
+      "NTAIL"
+    ],
+    [
+      "APR",
+      "INR"
+    ],
+    [
+      "IPS"
+    ],
+    [
+      "PTAIL"
+    ],
+    [
+      "IPR"
+    ],
+    [
+      "APREF",
+      "ACOPY"
+    ],
+    [
+      "RFPR"
+    ],
+    [
+      "FPR"
+    ],
+    [
+      "RFPS"
+    ],
+    [
+      "FPS"
+    ],
+    [
+      "Rapoff"
+    ]
+  ],
+  "netPolicies": {
+    "pt": "full_wire",
+    "pctl": "supply_local",
+    "vdd": "supply_local",
+    "lo_ref": "full_wire",
+    "vin": "full_wire",
+    "lo_sig": "full_wire",
+    "vip": "full_wire",
+    "nt": "full_wire",
+    "hn": "supply_local",
+    "vss": "supply_local",
+    "hi_ref": "full_wire",
+    "hi_sig": "full_wire",
+    "fpr": "full_wire",
+    "up": "supply_local",
+    "fps": "full_wire",
+    "ap": "label_stub"
+  },
+  "criticalNets": [
+    "pt",
+    "pctl",
+    "lo_ref",
+    "vin",
+    "lo_sig",
+    "vip",
+    "nt",
+    "hn",
+    "hi_ref",
+    "hi_sig",
+    "fpr",
+    "up",
+    "fps",
+    "ap"
+  ],
+  "portSides": {
+    "pctl": "local_repeat",
+    "vdd": "local_repeat",
+    "lo_ref": "left",
+    "vin": "local_repeat",
+    "lo_sig": "left",
+    "vip": "local_repeat",
+    "hn": "local_repeat",
+    "vss": "local_repeat",
+    "hi_ref": "left",
+    "hi_sig": "left",
+    "up": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

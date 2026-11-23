@@ -1,0 +1,32 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "opamp_core_p06_resistor_referenced_idle_cur",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 11,
+    "netCount": 12,
+    "routeSegmentCount": 70,
+    "totalWireLengthGrids": 1028,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 2,
+    "crossingsByNet": {
+      "ncas": 1,
+      "iq_n": 2,
+      "gn0": 1
+    }
+  },
+  "findings": [],
+  "llmRefinementSuggestions": [
+    "网络 'iq_n' 当前产生 2 次跨线交叉：若为偏置或控制网，可在 intent.json 中设 `netPolicies.iq_n = \"perimeter_bus\"`，或调整相关功能组的 `stage_order` / 管子 `gate_left`/`gate_right` 朝向以消除交叉。"
+  ]
+}

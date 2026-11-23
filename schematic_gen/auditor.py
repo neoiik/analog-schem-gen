@@ -222,6 +222,14 @@ def audit_manifest_and_solved(
         segments_by_net[net].append((p_b, p_end))
         port_occ_pts[f"BULK_{ref}"] = (net, p_end)
 
+    # Include explicit wire-label fly-wire stubs when auditing a `SolvedSchematic` with `allow_wire_labels=True`
+    wire_label_endpoints: dict[str, list[Point]] = defaultdict(list)
+    if solved_hint is not None:
+        for wl in solved_hint.wire_label_stubs:
+            p1, p2 = (wl.x1, wl.y1), (wl.x2, wl.y2)
+            segments_by_net[wl.net_name].append((p1, p2))
+            wire_label_endpoints[wl.net_name].append(p2)
+
     # Check physical graph connectivity per net
     for net in circuit.nets:
         net_adj: dict[Point, set[Point]] = defaultdict(set)
@@ -230,6 +238,11 @@ def audit_manifest_and_solved(
             for u, v in zip(pts_line, pts_line[1:]):
                 net_adj[u].add(v)
                 net_adj[v].add(u)
+        # Same-named explicit WireLabelStubs merge logically (just like Virtuoso `schCreateWireLabel`)
+        wl_pts = wire_label_endpoints.get(net, [])
+        for u, v in zip(wl_pts, wl_pts[1:]):
+            net_adj[u].add(v)
+            net_adj[v].add(u)
 
         req_pins = [
             pin_coords[(inst.ref, pin)]
