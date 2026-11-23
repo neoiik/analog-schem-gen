@@ -22,6 +22,14 @@ Turn raw SPICE / CDL / Spectre netlists (from 10-transistor OTAs up to 160+ tran
 | **Geometry & Routing** | **Deterministic Solver** | Vertical branch bundling, **Convex QP** symmetric placement, 2D aspect-ratio folding, and **two-phase Steiner + river-nested port routing**. |
 | **Signoff Gate** | **Deterministic Auditor** | 1-to-1 LVS netlist check, split-net check, zero symbol/label/wire collisions, and Virtuoso-ready `manifest.json` export. |
 
+### Three Ways to Use (No EDA Environment Required)
+
+Runs anywhere with **Python 3.10+** (Windows / Linux / macOS, zero third-party packages, **no EDA license needed** for standalone compilation):
+
+- **Inside AI Agents / CLI (Core Workflow)**: After tuning or generating a netlist in **Claude Code, Cursor, Antigravity, or terminal**, run one command to get clean **SVG schematics** and multi-sheet HTML books for reports, web preview, and Markdown docs.
+- **Bridge into Cadence Virtuoso**: Exports exact coordinate manifests (`manifest.json`) compatible with `virtuoso-bridge` to materialize native, editable OA schematics inside Virtuoso in one click.
+- **Built-In Browser Micro-Editor**: Need to nudge or flip a few devices? `export-editor` produces a single-file offline HTML canvas — open directly in any browser to drag, flip, and export updated coordinates.
+
 ## Examples (Reference Profile: SKY130)
 
 **1. Two-Stage Miller Op-Amp (12 instances · 0 DRC · 0 wire crossings)**
@@ -103,7 +111,15 @@ python -B -m unittest discover -s tests -v
   - **大图层次化分页 + 展平还原 LVS**：自动保护差分对/电流镜/RC 原子簇拆分子页，合成 `TOP` 顶层框图并校验 100% 晶体管连接同构。
 - **工艺无关（PDK-Agnostic）**：内置开源 **SKY130** 配置开箱即用；可通过外部 `process_map.json` 或 `extract-pdk` 接入任意 180nm/65nm/28nm 工艺及 Cadence Virtuoso。
 
-### 二、快速开始
+### 二、适用环境与三种使用方式（无 IC 环境亦可独立出图）
+
+纯 Python 3.10+ 零第三方依赖，Windows / Linux / macOS 通用；**电脑未安装 Virtuoso 或商业 PDK、手头只有一份纯文本网表时，也可 100% 离线跑通出图与 LVS 校验**：
+
+1. **在 AI Agent / 命令行里直接用（最核心）**：在 **Claude Code、Cursor、Antigravity** 或终端里，AI 跑完仿真调好网表后，一行命令直接生成干净的 **SVG 原理图**与多页 HTML 图册（可直接用于设计报告、网页预览、Markdown 展示）。
+2. **配合 Virtuoso 原生落库**：同步生成的精确坐标 JSON 清单（`manifest.json`），可通过 `virtuoso-bridge` 直接推入 **Cadence Virtuoso**，在 OA 库里一键生成原生可编辑原理图。
+3. **自带轻量浏览器画布微调**：如果对某几个器件位置想手动挪一下，执行 `export-editor` 会生成一个**单文件离线 HTML**，直接在浏览器里双击点开就能拖拽、翻转器件并导出新坐标。
+
+### 三、快速开始
 
 #### 方式 1：让 AI 一键部署并画图（最省心）
 
@@ -128,7 +144,7 @@ analog-schem-gen auto examples/sky130_two_stage_ota.spice --out out/ota
 analog-schem-gen hierarchy examples/sky130_rcopa316_core.spice --out out/opa316
 ```
 
-### 三、文档索引
+### 四、文档索引
 
 - AI 技能规范：[SKILL.md](SKILL.md)
 - 模算协同与接口规范：[docs/模算协同颗粒度规范.md](docs/模算协同颗粒度规范.md) · [docs/接口与数据结构.md](docs/接口与数据结构.md)
