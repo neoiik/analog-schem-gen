@@ -1,7 +1,7 @@
 # analog-schem-gen
 
-**PDK-Agnostic High-Readability Analog Circuit Schematic Generator & Refiner (LLM × Algorithm Co-Execution)**  
-**工艺无关的高可读性模拟电路原理图生成与整理引擎（大模型 × 确定性算法协同架构）**
+**Analog Circuit Schematic Generator & Refiner (LLM × Algorithm Co-Execution)**  
+**模拟电路原理图生成与整理引擎（大模型 × 确定性算法协同架构）**
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](pyproject.toml)
