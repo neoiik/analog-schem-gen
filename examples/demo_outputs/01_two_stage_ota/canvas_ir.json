@@ -1,0 +1,1260 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "sky130_two_stage_ota",
+  "bounds": {
+    "minX": 22,
+    "minY": 14,
+    "maxX": 226,
+    "maxY": 109
+  },
+  "congestionIterations": 1,
+  "corridorExpansions": [],
+  "groups": [
+    {
+      "id": "bias_gen",
+      "label": "偏置产生电路",
+      "role": "bias",
+      "stage_order": 0,
+      "instances": [
+        "IB0",
+        "MB0"
+      ]
+    },
+    {
+      "id": "input_diff",
+      "label": "第一级差分输入",
+      "role": "input_diff",
+      "stage_order": 10,
+      "instances": [
+        "M3",
+        "M4",
+        "M1",
+        "M2",
+        "M5"
+      ]
+    },
+    {
+      "id": "miller_comp",
+      "label": "米勒调零补偿",
+      "role": "compensation",
+      "stage_order": 20,
+      "instances": [
+        "RZ",
+        "CC"
+      ]
+    },
+    {
+      "id": "gain_stage2",
+      "label": "第二级共源放大与负载",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "M6",
+        "M7",
+        "CL"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "IB0",
+      "deviceClass": "isource",
+      "kind": null,
+      "group": "bias_gen",
+      "tier": 2,
+      "position": {
+        "x": 35,
+        "y": 42
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 35,
+          "y": 39
+        },
+        "M": {
+          "x": 35,
+          "y": 45
+        }
+      },
+      "bodyBox": [
+        33,
+        39,
+        37,
+        45
+      ],
+      "labelBox": [
+        38,
+        40,
+        43,
+        44
+      ],
+      "labelLines": [
+        "IB0",
+        "10u"
+      ]
+    },
+    {
+      "ref": "MB0",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "bias_gen",
+      "tier": 5,
+      "position": {
+        "x": 36,
+        "y": 92
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 35,
+          "y": 89
+        },
+        "G": {
+          "x": 39,
+          "y": 92
+        },
+        "S": {
+          "x": 35,
+          "y": 95
+        },
+        "B": {
+          "x": 35,
+          "y": 92
+        }
+      },
+      "bodyBox": [
+        34,
+        89,
+        39,
+        95
+      ],
+      "labelBox": [
+        28,
+        90,
+        33,
+        94
+      ],
+      "labelLines": [
+        "MB0",
+        "4u/0.5u"
+      ]
+    },
+    {
+      "ref": "M3",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "input_diff",
+      "tier": 1,
+      "position": {
+        "x": 67,
+        "y": 27
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 66,
+          "y": 30
+        },
+        "G": {
+          "x": 70,
+          "y": 27
+        },
+        "S": {
+          "x": 66,
+          "y": 24
+        },
+        "B": {
+          "x": 66,
+          "y": 27
+        }
+      },
+      "bodyBox": [
+        65,
+        24,
+        70,
+        30
+      ],
+      "labelBox": [
+        57,
+        25,
+        64,
+        29
+      ],
+      "labelLines": [
+        "M3",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M4",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "input_diff",
+      "tier": 1,
+      "position": {
+        "x": 113,
+        "y": 27
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 114,
+          "y": 30
+        },
+        "G": {
+          "x": 110,
+          "y": 27
+        },
+        "S": {
+          "x": 114,
+          "y": 24
+        },
+        "B": {
+          "x": 114,
+          "y": 27
+        }
+      },
+      "bodyBox": [
+        110,
+        24,
+        115,
+        30
+      ],
+      "labelBox": [
+        116,
+        25,
+        123,
+        29
+      ],
+      "labelLines": [
+        "M4",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M1",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "input_diff",
+      "tier": 4,
+      "position": {
+        "x": 65,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 66,
+          "y": 74
+        },
+        "G": {
+          "x": 62,
+          "y": 77
+        },
+        "S": {
+          "x": 66,
+          "y": 80
+        },
+        "B": {
+          "x": 66,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        62,
+        74,
+        67,
+        80
+      ],
+      "labelBox": [
+        68,
+        73,
+        76,
+        77
+      ],
+      "labelLines": [
+        "M1",
+        "12u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M2",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "input_diff",
+      "tier": 4,
+      "position": {
+        "x": 115,
+        "y": 77
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 114,
+          "y": 74
+        },
+        "G": {
+          "x": 118,
+          "y": 77
+        },
+        "S": {
+          "x": 114,
+          "y": 80
+        },
+        "B": {
+          "x": 114,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        113,
+        74,
+        118,
+        80
+      ],
+      "labelBox": [
+        104,
+        73,
+        112,
+        77
+      ],
+      "labelLines": [
+        "M2",
+        "12u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M5",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "input_diff",
+      "tier": 5,
+      "position": {
+        "x": 89,
+        "y": 92
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 90,
+          "y": 89
+        },
+        "G": {
+          "x": 86,
+          "y": 92
+        },
+        "S": {
+          "x": 90,
+          "y": 95
+        },
+        "B": {
+          "x": 90,
+          "y": 92
+        }
+      },
+      "bodyBox": [
+        86,
+        89,
+        91,
+        95
+      ],
+      "labelBox": [
+        92,
+        90,
+        99,
+        94
+      ],
+      "labelLines": [
+        "M5",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "RZ",
+      "deviceClass": "res_poly_3t",
+      "kind": null,
+      "group": "miller_comp",
+      "tier": 3,
+      "position": {
+        "x": 139,
+        "y": 61
+      },
+      "semanticOrient": "horizontal_l2r",
+      "cadenceOrient": "R90",
+      "pins": {
+        "P": {
+          "x": 136,
+          "y": 61
+        },
+        "M": {
+          "x": 142,
+          "y": 61
+        },
+        "B": {
+          "x": 139,
+          "y": 63
+        }
+      },
+      "bodyBox": [
+        136,
+        59,
+        142,
+        63
+      ],
+      "labelBox": [
+        136,
+        54,
+        141,
+        58
+      ],
+      "labelLines": [
+        "RZ",
+        "0.35u/8u"
+      ]
+    },
+    {
+      "ref": "CC",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "miller_comp",
+      "tier": 3,
+      "position": {
+        "x": 158,
+        "y": 61
+      },
+      "semanticOrient": "horizontal_l2r",
+      "cadenceOrient": "R90",
+      "pins": {
+        "P": {
+          "x": 155,
+          "y": 61
+        },
+        "M": {
+          "x": 161,
+          "y": 61
+        }
+      },
+      "bodyBox": [
+        155,
+        59,
+        161,
+        63
+      ],
+      "labelBox": [
+        154,
+        54,
+        161,
+        58
+      ],
+      "labelLines": [
+        "CC",
+        "12u/12u m=2"
+      ]
+    },
+    {
+      "ref": "M6",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "gain_stage2",
+      "tier": 1,
+      "position": {
+        "x": 177,
+        "y": 27
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 178,
+          "y": 30
+        },
+        "G": {
+          "x": 174,
+          "y": 27
+        },
+        "S": {
+          "x": 178,
+          "y": 24
+        },
+        "B": {
+          "x": 178,
+          "y": 27
+        }
+      },
+      "bodyBox": [
+        174,
+        24,
+        179,
+        30
+      ],
+      "labelBox": [
+        180,
+        25,
+        188,
+        29
+      ],
+      "labelLines": [
+        "M6",
+        "32u/0.5u nf=4"
+      ]
+    },
+    {
+      "ref": "M7",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "gain_stage2",
+      "tier": 5,
+      "position": {
+        "x": 177,
+        "y": 92
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 178,
+          "y": 89
+        },
+        "G": {
+          "x": 174,
+          "y": 92
+        },
+        "S": {
+          "x": 178,
+          "y": 95
+        },
+        "B": {
+          "x": 178,
+          "y": 92
+        }
+      },
+      "bodyBox": [
+        174,
+        89,
+        179,
+        95
+      ],
+      "labelBox": [
+        180,
+        90,
+        188,
+        94
+      ],
+      "labelLines": [
+        "M7",
+        "16u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "CL",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "gain_stage2",
+      "tier": 5,
+      "position": {
+        "x": 198,
+        "y": 92
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 198,
+          "y": 89
+        },
+        "M": {
+          "x": 198,
+          "y": 95
+        }
+      },
+      "bodyBox": [
+        196,
+        89,
+        200,
+        95
+      ],
+      "labelBox": [
+        201,
+        90,
+        208,
+        94
+      ],
+      "labelLines": [
+        "CL",
+        "16u/16u m=4"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_VINP",
+      "name": "VINP",
+      "net": "VINP",
+      "symbol": "port",
+      "x": 58,
+      "y": 77
+    },
+    {
+      "id": "P_VINN",
+      "name": "VINN",
+      "net": "VINN",
+      "symbol": "port",
+      "x": 122,
+      "y": 77
+    },
+    {
+      "id": "P_VOUT",
+      "name": "VOUT",
+      "net": "VOUT",
+      "symbol": "port",
+      "x": 220,
+      "y": 67
+    },
+    {
+      "id": "P_VDD_1",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 35,
+      "y": 35
+    },
+    {
+      "id": "P_VDD_2",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 66,
+      "y": 20
+    },
+    {
+      "id": "P_VDD_3",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 114,
+      "y": 20
+    },
+    {
+      "id": "P_VDD_4",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 178,
+      "y": 20
+    },
+    {
+      "id": "P_VSS_1",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 35,
+      "y": 99
+    },
+    {
+      "id": "P_VSS_2",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 90,
+      "y": 99
+    },
+    {
+      "id": "P_VSS_3",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 178,
+      "y": 99
+    },
+    {
+      "id": "P_VSS_4",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 198,
+      "y": 99
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_VDD_1",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 35,
+          "y": 39
+        },
+        {
+          "x": 35,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_VDD_2",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 66,
+          "y": 24
+        },
+        {
+          "x": 66,
+          "y": 20
+        }
+      ]
+    },
+    {
+      "id": "R_VDD_3",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 114,
+          "y": 24
+        },
+        {
+          "x": 114,
+          "y": 20
+        }
+      ]
+    },
+    {
+      "id": "R_VDD_4",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 178,
+          "y": 24
+        },
+        {
+          "x": 178,
+          "y": 20
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_5",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 35,
+          "y": 95
+        },
+        {
+          "x": 35,
+          "y": 99
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_6",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 90,
+          "y": 95
+        },
+        {
+          "x": 90,
+          "y": 99
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_7",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 178,
+          "y": 95
+        },
+        {
+          "x": 178,
+          "y": 99
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_8",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 198,
+          "y": 95
+        },
+        {
+          "x": 198,
+          "y": 99
+        }
+      ]
+    },
+    {
+      "id": "R_VINP_9",
+      "net": "VINP",
+      "points": [
+        {
+          "x": 62,
+          "y": 77
+        },
+        {
+          "x": 58,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_VINN_10",
+      "net": "VINN",
+      "points": [
+        {
+          "x": 122,
+          "y": 77
+        },
+        {
+          "x": 118,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_vmiller_11",
+      "net": "vmiller",
+      "points": [
+        {
+          "x": 155,
+          "y": 61
+        },
+        {
+          "x": 142,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_vtail_12_a",
+      "net": "vtail",
+      "points": [
+        {
+          "x": 90,
+          "y": 89
+        },
+        {
+          "x": 90,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_vtail_12_b",
+      "net": "vtail",
+      "points": [
+        {
+          "x": 90,
+          "y": 81
+        },
+        {
+          "x": 66,
+          "y": 81
+        },
+        {
+          "x": 66,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "R_vtail_13",
+      "net": "vtail",
+      "points": [
+        {
+          "x": 114,
+          "y": 80
+        },
+        {
+          "x": 114,
+          "y": 81
+        },
+        {
+          "x": 90,
+          "y": 81
+        }
+      ]
+    },
+    {
+      "id": "R_net_mir_14_a",
+      "net": "net_mir",
+      "points": [
+        {
+          "x": 66,
+          "y": 74
+        },
+        {
+          "x": 66,
+          "y": 31
+        }
+      ]
+    },
+    {
+      "id": "R_net_mir_14_b",
+      "net": "net_mir",
+      "points": [
+        {
+          "x": 66,
+          "y": 31
+        },
+        {
+          "x": 66,
+          "y": 30
+        }
+      ]
+    },
+    {
+      "id": "R_net_mir_15_a",
+      "net": "net_mir",
+      "points": [
+        {
+          "x": 70,
+          "y": 27
+        },
+        {
+          "x": 71,
+          "y": 27
+        }
+      ]
+    },
+    {
+      "id": "R_net_mir_15_b",
+      "net": "net_mir",
+      "points": [
+        {
+          "x": 71,
+          "y": 27
+        },
+        {
+          "x": 71,
+          "y": 31
+        },
+        {
+          "x": 66,
+          "y": 31
+        }
+      ]
+    },
+    {
+      "id": "R_net_mir_16",
+      "net": "net_mir",
+      "points": [
+        {
+          "x": 110,
+          "y": 27
+        },
+        {
+          "x": 71,
+          "y": 27
+        }
+      ]
+    },
+    {
+      "id": "R_vout1_17_a",
+      "net": "vout1",
+      "points": [
+        {
+          "x": 114,
+          "y": 74
+        },
+        {
+          "x": 114,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_vout1_17_b_a",
+      "net": "vout1",
+      "points": [
+        {
+          "x": 114,
+          "y": 61
+        },
+        {
+          "x": 114,
+          "y": 31
+        }
+      ]
+    },
+    {
+      "id": "R_vout1_17_b_b",
+      "net": "vout1",
+      "points": [
+        {
+          "x": 114,
+          "y": 31
+        },
+        {
+          "x": 114,
+          "y": 30
+        }
+      ]
+    },
+    {
+      "id": "R_vout1_18",
+      "net": "vout1",
+      "points": [
+        {
+          "x": 136,
+          "y": 61
+        },
+        {
+          "x": 114,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_vout1_19",
+      "net": "vout1",
+      "points": [
+        {
+          "x": 174,
+          "y": 27
+        },
+        {
+          "x": 124,
+          "y": 27
+        },
+        {
+          "x": 124,
+          "y": 31
+        },
+        {
+          "x": 114,
+          "y": 31
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_20_a",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 178,
+          "y": 30
+        },
+        {
+          "x": 178,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_20_b",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 178,
+          "y": 61
+        },
+        {
+          "x": 161,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_21_a",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 178,
+          "y": 89
+        },
+        {
+          "x": 178,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_21_b_a",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 178,
+          "y": 88
+        },
+        {
+          "x": 178,
+          "y": 67
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_21_b_b",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 178,
+          "y": 67
+        },
+        {
+          "x": 178,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_22",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 198,
+          "y": 89
+        },
+        {
+          "x": 198,
+          "y": 88
+        },
+        {
+          "x": 178,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_23",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 220,
+          "y": 67
+        },
+        {
+          "x": 178,
+          "y": 67
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_24_a",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 35,
+          "y": 89
+        },
+        {
+          "x": 35,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_24_b",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 35,
+          "y": 88
+        },
+        {
+          "x": 35,
+          "y": 45
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_25_a",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 39,
+          "y": 92
+        },
+        {
+          "x": 40,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_25_b",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 40,
+          "y": 92
+        },
+        {
+          "x": 40,
+          "y": 88
+        },
+        {
+          "x": 35,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_26_a",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 86,
+          "y": 92
+        },
+        {
+          "x": 85,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_26_b",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 85,
+          "y": 92
+        },
+        {
+          "x": 40,
+          "y": 92
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_n_27",
+      "net": "vbias_n",
+      "points": [
+        {
+          "x": 174,
+          "y": 92
+        },
+        {
+          "x": 173,
+          "y": 92
+        },
+        {
+          "x": 173,
+          "y": 103
+        },
+        {
+          "x": 85,
+          "y": 103
+        },
+        {
+          "x": 85,
+          "y": 92
+        }
+      ]
+    }
+  ]
+}

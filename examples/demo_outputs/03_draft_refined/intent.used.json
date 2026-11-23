@@ -1,0 +1,71 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "cramped_and_stretched_mirror_amp",
+  "authoredBy": "structure_preserving_refiner",
+  "llmNotes": "从既有原理图草图提取的行列顺序与朝向，经 QP 撑开过挤区、收紧过松空白并重走正交分轨导线。",
+  "groups": [
+    {
+      "id": "refined_core",
+      "label": "保结构自动整理组",
+      "role": "core",
+      "stage_order": 0,
+      "instances": [
+        "M0",
+        "M1",
+        "M2"
+      ]
+    }
+  ],
+  "motifs": [],
+  "orientations": {
+    "M0": "gate_left",
+    "M1": "gate_left",
+    "M2": "gate_left"
+  },
+  "tierOverrides": {
+    "M2": 1,
+    "M0": 2,
+    "M1": 2
+  },
+  "columnOrderHints": [
+    [
+      "M0"
+    ],
+    [
+      "M1"
+    ],
+    [
+      "M2"
+    ]
+  ],
+  "netPolicies": {
+    "VIN": "full_wire",
+    "VOUT": "full_wire",
+    "vbias": "full_wire",
+    "VDD": "supply_local",
+    "VSS": "supply_local"
+  },
+  "criticalNets": [
+    "VIN",
+    "VOUT",
+    "vbias"
+  ],
+  "portSides": {
+    "VIN": "left",
+    "VOUT": "right",
+    "VDD": "local_repeat",
+    "VSS": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 10,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

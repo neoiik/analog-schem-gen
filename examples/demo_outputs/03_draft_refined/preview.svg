@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="72.0 120.0 1176.0 600.0" width="1176" height="600" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<rect x="72.0" y="120.0" width="1176.0" height="600.0" fill="#fcfdfb"/>
+<text x="88.0" y="142.0" font-size="13" font-weight="600" fill="#2c4a4e">cramped_and_stretched_mirror_amp · SKY130 Schematic (gridUnit = 0.0625")</text>
+<rect x="312.0" y="258.0" width="696.0" height="318.0" rx="6" fill="#f3f8f6" fill-opacity="0.55" stroke="#b9d0cb" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="318.0" y="270.0" font-size="10" fill="#527370">保结构自动整理组</text>
+<polyline points="864.0,288.0 864.0,240.0" fill="none" stroke="#546e7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="384.0,552.0 384.0,600.0" fill="none" stroke="#546e7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="612.0,552.0 612.0,600.0" fill="none" stroke="#546e7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="384.0,480.0 384.0,468.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="384.0,468.0 324.0,468.0 324.0,516.0 336.0,516.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="564.0,516.0 480.0,516.0 480.0,468.0 384.0,468.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="816.0,324.0 192.0,324.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="864.0,360.0 864.0,420.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="864.0,420.0 864.0,468.0 612.0,468.0 612.0,480.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1128.0,420.0 864.0,420.0" fill="none" stroke="#00695c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="384.0,516.0 384.0,552.0" fill="none" stroke="#546e7a" stroke-width="1.5"/>
+<polyline points="612.0,516.0 612.0,552.0" fill="none" stroke="#546e7a" stroke-width="1.5"/>
+<polyline points="864.0,324.0 864.0,288.0" fill="none" stroke="#546e7a" stroke-width="1.5"/>
+<line x1="336.0" y1="516.0" x2="360.0" y2="516.0" stroke="#162d31" stroke-width="1.8"/>
+<line x1="360.0" y1="493.2" x2="360.0" y2="538.8" stroke="#162d31" stroke-width="2.0"/>
+<line x1="372.0" y1="488.4" x2="372.0" y2="543.6" stroke="#162d31" stroke-width="2.2"/>
+<polyline points="372.0,494.4 384.0,494.4 384.0,480.0" fill="none" stroke="#162d31" stroke-width="1.8"/>
+<polyline points="372.0,537.6 384.0,537.6 384.0,552.0" fill="none" stroke="#162d31" stroke-width="1.8"/>
+<line x1="372.0" y1="516.0" x2="384.0" y2="516.0" stroke="#162d31" stroke-width="1.5"/>
+<polygon points="384.0,537.6 376.2,532.56 376.2,542.64" fill="#162d31"/>
+<text x="410.0" y="504.0" text-anchor="start" font-size="10.5" font-weight="600" font-family="Consolas,monospace" fill="#102a2e">M0</text>
+<text x="410.0" y="516.0" text-anchor="start" font-size="10.5" font-weight="400" font-family="Consolas,monospace" fill="#3b595d">4u/0.5u</text>
+<line x1="564.0" y1="516.0" x2="588.0" y2="516.0" stroke="#162d31" stroke-width="1.8"/>
+<line x1="588.0" y1="493.2" x2="588.0" y2="538.8" stroke="#162d31" stroke-width="2.0"/>
+<line x1="600.0" y1="488.4" x2="600.0" y2="543.6" stroke="#162d31" stroke-width="2.2"/>
+<polyline points="600.0,494.4 612.0,494.4 612.0,480.0" fill="none" stroke="#162d31" stroke-width="1.8"/>
+<polyline points="600.0,537.6 612.0,537.6 612.0,552.0" fill="none" stroke="#162d31" stroke-width="1.8"/>
+<line x1="600.0" y1="516.0" x2="612.0" y2="516.0" stroke="#162d31" stroke-width="1.5"/>
+<polygon points="612.0,537.6 604.2,532.56 604.2,542.64" fill="#162d31"/>
+<text x="638.0" y="504.0" text-anchor="start" font-size="10.5" font-weight="600" font-family="Consolas,monospace" fill="#102a2e">M1</text>
+<text x="638.0" y="516.0" text-anchor="start" font-size="10.5" font-weight="400" font-family="Consolas,monospace" fill="#3b595d">8u/0.5u nf=2</text>
+<line x1="816.0" y1="324.0" x2="829.92" y2="324.0" stroke="#162d31" stroke-width="1.8"/>
+<circle cx="834.96" cy="324.0" r="5.04" fill="#fcfdfb" stroke="#162d31" stroke-width="1.6"/>
+<line x1="840.0" y1="301.2" x2="840.0" y2="346.8" stroke="#162d31" stroke-width="2.0"/>
+<line x1="852.0" y1="296.4" x2="852.0" y2="351.6" stroke="#162d31" stroke-width="2.2"/>
+<polyline points="852.0,302.4 864.0,302.4 864.0,288.0" fill="none" stroke="#162d31" stroke-width="1.8"/>
+<polyline points="852.0,345.6 864.0,345.6 864.0,360.0" fill="none" stroke="#162d31" stroke-width="1.8"/>
+<line x1="852.0" y1="324.0" x2="864.0" y2="324.0" stroke="#162d31" stroke-width="1.5"/>
+<polygon points="852.0,302.4 859.8,297.36 859.8,307.44" fill="#162d31"/>
+<text x="890.0" y="312.0" text-anchor="start" font-size="10.5" font-weight="600" font-family="Consolas,monospace" fill="#102a2e">M2</text>
+<text x="890.0" y="324.0" text-anchor="start" font-size="10.5" font-weight="400" font-family="Consolas,monospace" fill="#3b595d">16u/0.5u nf=2</text>
+<polygon points="192.0,324.0 185.0,319.0 174.0,319.0 174.0,329.0 185.0,329.0" fill="#e6f2f0" stroke="#00695c" stroke-width="1.5"/>
+<text x="170.0" y="328.0" text-anchor="end" font-size="11" font-weight="600" font-family="Consolas,monospace" fill="#004d40">VIN</text>
+<polygon points="1128.0,420.0 1135.0,415.0 1146.0,415.0 1146.0,425.0 1135.0,425.0" fill="#e6f2f0" stroke="#00695c" stroke-width="1.5"/>
+<text x="1150.0" y="424.0" text-anchor="start" font-size="11" font-weight="600" font-family="Consolas,monospace" fill="#004d40">VOUT</text>
+<line x1="855.0" y1="240.0" x2="873.0" y2="240.0" stroke="#37474f" stroke-width="2.3"/>
+<text x="864.0" y="235.0" text-anchor="middle" font-size="10" font-weight="600" font-family="Consolas,monospace" fill="#37474f">VDD</text>
+<polygon points="376.0,600.0 392.0,600.0 384.0,609.0" fill="none" stroke="#37474f" stroke-width="1.8"/>
+<polygon points="604.0,600.0 620.0,600.0 612.0,609.0" fill="none" stroke="#37474f" stroke-width="1.8"/>
+<circle cx="384.0" cy="468.0" r="3.3" fill="#0d2629"/>
+<circle cx="384.0" cy="552.0" r="3.3" fill="#0d2629"/>
+<circle cx="612.0" cy="552.0" r="3.3" fill="#0d2629"/>
+<circle cx="864.0" cy="288.0" r="3.3" fill="#0d2629"/>
+<circle cx="864.0" cy="420.0" r="3.3" fill="#0d2629"/>
+</svg>

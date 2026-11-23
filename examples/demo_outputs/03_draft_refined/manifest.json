@@ -1,0 +1,585 @@
+{
+  "schema": "virtuoso-bridge-exact-schematic-v1",
+  "circuits": [
+    {
+      "cellName": "cramped_and_stretched_mirror_amp",
+      "instances": [
+        {
+          "id": "source-M0",
+          "reference": "M0",
+          "deviceClass": "mos",
+          "sourceTarget": "sky130_fd_pr__nfet_01v8",
+          "sourcePosition": {
+            "x": 31,
+            "y": 43
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "D",
+              "pinName": "D",
+              "netName": "vbias"
+            },
+            {
+              "sourcePinName": "G",
+              "pinName": "G",
+              "netName": "vbias"
+            },
+            {
+              "sourcePinName": "S",
+              "pinName": "S",
+              "netName": "VSS"
+            },
+            {
+              "sourcePinName": "B",
+              "pinName": "B",
+              "netName": "VSS"
+            }
+          ],
+          "sourceParameters": {
+            "w": "4u",
+            "l": "0.5u",
+            "nf": "1",
+            "m": "1"
+          },
+          "kind": "nmos"
+        },
+        {
+          "id": "source-M1",
+          "reference": "M1",
+          "deviceClass": "mos",
+          "sourceTarget": "sky130_fd_pr__nfet_01v8",
+          "sourcePosition": {
+            "x": 50,
+            "y": 43
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "D",
+              "pinName": "D",
+              "netName": "VOUT"
+            },
+            {
+              "sourcePinName": "G",
+              "pinName": "G",
+              "netName": "vbias"
+            },
+            {
+              "sourcePinName": "S",
+              "pinName": "S",
+              "netName": "VSS"
+            },
+            {
+              "sourcePinName": "B",
+              "pinName": "B",
+              "netName": "VSS"
+            }
+          ],
+          "sourceParameters": {
+            "w": "8u",
+            "l": "0.5u",
+            "nf": "2",
+            "m": "1"
+          },
+          "kind": "nmos"
+        },
+        {
+          "id": "source-M2",
+          "reference": "M2",
+          "deviceClass": "mos",
+          "sourceTarget": "sky130_fd_pr__pfet_01v8",
+          "sourcePosition": {
+            "x": 71,
+            "y": 27
+          },
+          "sourceTransform": {
+            "rotation": 0,
+            "mirror": "none"
+          },
+          "nodes": [
+            {
+              "sourcePinName": "D",
+              "pinName": "D",
+              "netName": "VOUT"
+            },
+            {
+              "sourcePinName": "G",
+              "pinName": "G",
+              "netName": "VIN"
+            },
+            {
+              "sourcePinName": "S",
+              "pinName": "S",
+              "netName": "VDD"
+            },
+            {
+              "sourcePinName": "B",
+              "pinName": "B",
+              "netName": "VDD"
+            }
+          ],
+          "sourceParameters": {
+            "w": "16u",
+            "l": "0.5u",
+            "nf": "2",
+            "m": "1"
+          },
+          "kind": "pmos"
+        }
+      ],
+      "ports": [
+        {
+          "name": "VIN",
+          "netName": "VIN",
+          "direction": "input"
+        },
+        {
+          "name": "VOUT",
+          "netName": "VOUT",
+          "direction": "output"
+        },
+        {
+          "name": "VDD",
+          "netName": "VDD",
+          "direction": "inout"
+        },
+        {
+          "name": "VSS",
+          "netName": "VSS",
+          "direction": "inout"
+        }
+      ],
+      "nets": [
+        "VIN",
+        "VOUT",
+        "vbias",
+        "VDD",
+        "VSS"
+      ],
+      "sourceGeometry": {
+        "coordinateSystem": "source coordinates: x right, y down (1 unit = 1 Virtuoso gridUnit)",
+        "bounds": {
+          "minX": 10,
+          "minY": 14,
+          "maxX": 100,
+          "maxY": 56
+        },
+        "portOccurrences": [
+          {
+            "occurrenceId": "P_VIN",
+            "name": "VIN",
+            "netName": "VIN",
+            "direction": "input",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 16,
+              "y": 27
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_VOUT",
+            "name": "VOUT",
+            "netName": "VOUT",
+            "direction": "output",
+            "sourceSymbolId": "port",
+            "sourcePosition": {
+              "x": 94,
+              "y": 35
+            },
+            "sourceTransform": {
+              "rotation": 0,
+              "mirror": "horizontal"
+            }
+          },
+          {
+            "occurrenceId": "P_VDD_1",
+            "name": "VDD",
+            "netName": "VDD",
+            "direction": "inout",
+            "sourceSymbolId": "vdd-port",
+            "sourcePosition": {
+              "x": 72,
+              "y": 20
+            },
+            "sourceTransform": {
+              "rotation": 90,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_VSS_1",
+            "name": "VSS",
+            "netName": "VSS",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 32,
+              "y": 50
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          },
+          {
+            "occurrenceId": "P_VSS_2",
+            "name": "VSS",
+            "netName": "VSS",
+            "direction": "inout",
+            "sourceSymbolId": "ground",
+            "sourcePosition": {
+              "x": 51,
+              "y": 50
+            },
+            "sourceTransform": {
+              "rotation": 270,
+              "mirror": "none"
+            }
+          }
+        ],
+        "junctions": [
+          {
+            "id": "J_vbias_1",
+            "netName": "vbias",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 32,
+              "y": 39
+            }
+          },
+          {
+            "id": "J_VOUT_2",
+            "netName": "VOUT",
+            "role": "steiner",
+            "sourcePosition": {
+              "x": 72,
+              "y": 35
+            }
+          }
+        ],
+        "contacts": [],
+        "routes": [
+          {
+            "id": "R_VDD_1",
+            "netName": "VDD",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M2",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 72,
+                "y": 24
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_VDD_1",
+                "pinName": "VDD",
+                "sourcePoint": {
+                  "x": 72,
+                  "y": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VSS_2",
+            "netName": "VSS",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M0",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 32,
+                "y": 46
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_VSS_1",
+                "pinName": "VSS",
+                "sourcePoint": {
+                  "x": 32,
+                  "y": 50
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VSS_3",
+            "netName": "VSS",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M1",
+              "pinName": "S",
+              "sourcePoint": {
+                "x": 51,
+                "y": 46
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_VSS_2",
+                "pinName": "VSS",
+                "sourcePoint": {
+                  "x": 51,
+                  "y": 50
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vbias_4_a",
+            "netName": "vbias",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M0",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 32,
+                "y": 40
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_vbias_1",
+                "sourcePoint": {
+                  "x": 32,
+                  "y": 39
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vbias_4_b",
+            "netName": "vbias",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_vbias_1",
+              "sourcePoint": {
+                "x": 32,
+                "y": 39
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 27,
+                  "y": 39
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 27,
+                  "y": 43
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-M0",
+                "pinName": "G",
+                "sourcePoint": {
+                  "x": 28,
+                  "y": 43
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_vbias_5",
+            "netName": "vbias",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M1",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 47,
+                "y": 43
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 40,
+                  "y": 43
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 40,
+                  "y": 39
+                }
+              },
+              {
+                "kind": "junction",
+                "junctionId": "J_vbias_1",
+                "sourcePoint": {
+                  "x": 32,
+                  "y": 39
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VIN_6",
+            "netName": "VIN",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M2",
+              "pinName": "G",
+              "sourcePoint": {
+                "x": 68,
+                "y": 27
+              }
+            },
+            "steps": [
+              {
+                "kind": "port",
+                "instanceId": "P_VIN",
+                "pinName": "VIN",
+                "sourcePoint": {
+                  "x": 16,
+                  "y": 27
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VOUT_7_a",
+            "netName": "VOUT",
+            "presentation": "wire",
+            "start": {
+              "kind": "instance",
+              "instanceId": "source-M2",
+              "pinName": "D",
+              "sourcePoint": {
+                "x": 72,
+                "y": 30
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VOUT_2",
+                "sourcePoint": {
+                  "x": 72,
+                  "y": 35
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VOUT_7_b",
+            "netName": "VOUT",
+            "presentation": "wire",
+            "start": {
+              "kind": "junction",
+              "junctionId": "J_VOUT_2",
+              "sourcePoint": {
+                "x": 72,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 72,
+                  "y": 39
+                }
+              },
+              {
+                "kind": "bend",
+                "position": {
+                  "x": 51,
+                  "y": 39
+                }
+              },
+              {
+                "kind": "instance",
+                "instanceId": "source-M1",
+                "pinName": "D",
+                "sourcePoint": {
+                  "x": 51,
+                  "y": 40
+                }
+              }
+            ]
+          },
+          {
+            "id": "R_VOUT_8",
+            "netName": "VOUT",
+            "presentation": "wire",
+            "start": {
+              "kind": "port",
+              "instanceId": "P_VOUT",
+              "pinName": "VOUT",
+              "sourcePoint": {
+                "x": 94,
+                "y": 35
+              }
+            },
+            "steps": [
+              {
+                "kind": "junction",
+                "junctionId": "J_VOUT_2",
+                "sourcePoint": {
+                  "x": 72,
+                  "y": 35
+                }
+              }
+            ]
+          }
+        ],
+        "localBulkLabels": [],
+        "localBulkShorts": [
+          {
+            "reference": "M0",
+            "bulkPinName": "B",
+            "sourcePinName": "S",
+            "netName": "VSS"
+          },
+          {
+            "reference": "M1",
+            "bulkPinName": "B",
+            "sourcePinName": "S",
+            "netName": "VSS"
+          },
+          {
+            "reference": "M2",
+            "bulkPinName": "B",
+            "sourcePinName": "S",
+            "netName": "VDD"
+          }
+        ],
+        "annotationStubs": []
+      }
+    }
+  ]
+}

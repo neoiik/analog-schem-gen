@@ -1,0 +1,376 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "cramped_and_stretched_mirror_amp",
+  "bounds": {
+    "minX": 10,
+    "minY": 14,
+    "maxX": 100,
+    "maxY": 56
+  },
+  "congestionIterations": 1,
+  "corridorExpansions": [],
+  "groups": [
+    {
+      "id": "refined_core",
+      "label": "保结构自动整理组",
+      "role": "core",
+      "stage_order": 0,
+      "instances": [
+        "M0",
+        "M1",
+        "M2"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "M0",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "refined_core",
+      "tier": 2,
+      "position": {
+        "x": 31,
+        "y": 43
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 32,
+          "y": 40
+        },
+        "G": {
+          "x": 28,
+          "y": 43
+        },
+        "S": {
+          "x": 32,
+          "y": 46
+        },
+        "B": {
+          "x": 32,
+          "y": 43
+        }
+      },
+      "bodyBox": [
+        28,
+        40,
+        33,
+        46
+      ],
+      "labelBox": [
+        34,
+        41,
+        39,
+        45
+      ],
+      "labelLines": [
+        "M0",
+        "4u/0.5u"
+      ]
+    },
+    {
+      "ref": "M1",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "refined_core",
+      "tier": 2,
+      "position": {
+        "x": 50,
+        "y": 43
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 51,
+          "y": 40
+        },
+        "G": {
+          "x": 47,
+          "y": 43
+        },
+        "S": {
+          "x": 51,
+          "y": 46
+        },
+        "B": {
+          "x": 51,
+          "y": 43
+        }
+      },
+      "bodyBox": [
+        47,
+        40,
+        52,
+        46
+      ],
+      "labelBox": [
+        53,
+        41,
+        60,
+        45
+      ],
+      "labelLines": [
+        "M1",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M2",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "refined_core",
+      "tier": 1,
+      "position": {
+        "x": 71,
+        "y": 27
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 72,
+          "y": 30
+        },
+        "G": {
+          "x": 68,
+          "y": 27
+        },
+        "S": {
+          "x": 72,
+          "y": 24
+        },
+        "B": {
+          "x": 72,
+          "y": 27
+        }
+      },
+      "bodyBox": [
+        68,
+        24,
+        73,
+        30
+      ],
+      "labelBox": [
+        74,
+        25,
+        82,
+        29
+      ],
+      "labelLines": [
+        "M2",
+        "16u/0.5u nf=2"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_VIN",
+      "name": "VIN",
+      "net": "VIN",
+      "symbol": "port",
+      "x": 16,
+      "y": 27
+    },
+    {
+      "id": "P_VOUT",
+      "name": "VOUT",
+      "net": "VOUT",
+      "symbol": "port",
+      "x": 94,
+      "y": 35
+    },
+    {
+      "id": "P_VDD_1",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 72,
+      "y": 20
+    },
+    {
+      "id": "P_VSS_1",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 32,
+      "y": 50
+    },
+    {
+      "id": "P_VSS_2",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 51,
+      "y": 50
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_VDD_1",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 72,
+          "y": 24
+        },
+        {
+          "x": 72,
+          "y": 20
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_2",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 32,
+          "y": 46
+        },
+        {
+          "x": 32,
+          "y": 50
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_3",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 51,
+          "y": 46
+        },
+        {
+          "x": 51,
+          "y": 50
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_4_a",
+      "net": "vbias",
+      "points": [
+        {
+          "x": 32,
+          "y": 40
+        },
+        {
+          "x": 32,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_4_b",
+      "net": "vbias",
+      "points": [
+        {
+          "x": 32,
+          "y": 39
+        },
+        {
+          "x": 27,
+          "y": 39
+        },
+        {
+          "x": 27,
+          "y": 43
+        },
+        {
+          "x": 28,
+          "y": 43
+        }
+      ]
+    },
+    {
+      "id": "R_vbias_5",
+      "net": "vbias",
+      "points": [
+        {
+          "x": 47,
+          "y": 43
+        },
+        {
+          "x": 40,
+          "y": 43
+        },
+        {
+          "x": 40,
+          "y": 39
+        },
+        {
+          "x": 32,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_VIN_6",
+      "net": "VIN",
+      "points": [
+        {
+          "x": 68,
+          "y": 27
+        },
+        {
+          "x": 16,
+          "y": 27
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_7_a",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 72,
+          "y": 30
+        },
+        {
+          "x": 72,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_7_b",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 72,
+          "y": 35
+        },
+        {
+          "x": 72,
+          "y": 39
+        },
+        {
+          "x": 51,
+          "y": 39
+        },
+        {
+          "x": 51,
+          "y": 40
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_8",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 94,
+          "y": 35
+        },
+        {
+          "x": 72,
+          "y": 35
+        }
+      ]
+    }
+  ]
+}

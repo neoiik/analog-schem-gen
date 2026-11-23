@@ -1,0 +1,1268 @@
+{
+  "schema": "schem_gen.canvas_ir.v1",
+  "cellName": "sky130_folded_cascode_ota",
+  "bounds": {
+    "minX": 22,
+    "minY": 14,
+    "maxX": 231,
+    "maxY": 90
+  },
+  "congestionIterations": 1,
+  "corridorExpansions": [],
+  "groups": [
+    {
+      "id": "input_diff",
+      "label": "LVT 差分输入对",
+      "role": "input_diff",
+      "stage_order": 10,
+      "instances": [
+        "M1",
+        "M2",
+        "M0"
+      ]
+    },
+    {
+      "id": "folded_columns",
+      "label": "四层折叠共源共栅主支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": [
+        "M3",
+        "M5",
+        "M7",
+        "M9",
+        "M4",
+        "M6",
+        "M8",
+        "M10"
+      ]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "CL"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "ref": "M1",
+      "deviceClass": "mos",
+      "kind": "nmos_lvt",
+      "group": "input_diff",
+      "tier": 4,
+      "position": {
+        "x": 42,
+        "y": 61
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 43,
+          "y": 58
+        },
+        "G": {
+          "x": 39,
+          "y": 61
+        },
+        "S": {
+          "x": 43,
+          "y": 64
+        },
+        "B": {
+          "x": 43,
+          "y": 61
+        }
+      },
+      "bodyBox": [
+        39,
+        58,
+        44,
+        64
+      ],
+      "labelBox": [
+        45,
+        57,
+        53,
+        61
+      ],
+      "labelLines": [
+        "M1",
+        "16u/0.35u nf=4"
+      ]
+    },
+    {
+      "ref": "M2",
+      "deviceClass": "mos",
+      "kind": "nmos_lvt",
+      "group": "input_diff",
+      "tier": 4,
+      "position": {
+        "x": 104,
+        "y": 61
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 103,
+          "y": 58
+        },
+        "G": {
+          "x": 107,
+          "y": 61
+        },
+        "S": {
+          "x": 103,
+          "y": 64
+        },
+        "B": {
+          "x": 103,
+          "y": 61
+        }
+      },
+      "bodyBox": [
+        102,
+        58,
+        107,
+        64
+      ],
+      "labelBox": [
+        93,
+        57,
+        101,
+        61
+      ],
+      "labelLines": [
+        "M2",
+        "16u/0.35u nf=4"
+      ]
+    },
+    {
+      "ref": "M0",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "input_diff",
+      "tier": 5,
+      "position": {
+        "x": 72,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 73,
+          "y": 74
+        },
+        "G": {
+          "x": 69,
+          "y": 77
+        },
+        "S": {
+          "x": 73,
+          "y": 80
+        },
+        "B": {
+          "x": 73,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        69,
+        74,
+        74,
+        80
+      ],
+      "labelBox": [
+        75,
+        75,
+        83,
+        79
+      ],
+      "labelLines": [
+        "M0",
+        "12u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M3",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "folded_columns",
+      "tier": 1,
+      "position": {
+        "x": 144,
+        "y": 27
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 145,
+          "y": 30
+        },
+        "G": {
+          "x": 141,
+          "y": 27
+        },
+        "S": {
+          "x": 145,
+          "y": 24
+        },
+        "B": {
+          "x": 145,
+          "y": 27
+        }
+      },
+      "bodyBox": [
+        141,
+        24,
+        146,
+        30
+      ],
+      "labelBox": [
+        147,
+        25,
+        155,
+        29
+      ],
+      "labelLines": [
+        "M3",
+        "24u/0.5u nf=4"
+      ]
+    },
+    {
+      "ref": "M4",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "folded_columns",
+      "tier": 1,
+      "position": {
+        "x": 174,
+        "y": 27
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 173,
+          "y": 30
+        },
+        "G": {
+          "x": 177,
+          "y": 27
+        },
+        "S": {
+          "x": 173,
+          "y": 24
+        },
+        "B": {
+          "x": 173,
+          "y": 27
+        }
+      },
+      "bodyBox": [
+        172,
+        24,
+        177,
+        30
+      ],
+      "labelBox": [
+        163,
+        25,
+        171,
+        29
+      ],
+      "labelLines": [
+        "M4",
+        "24u/0.5u nf=4"
+      ]
+    },
+    {
+      "ref": "M5",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "folded_columns",
+      "tier": 2,
+      "position": {
+        "x": 144,
+        "y": 44
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 145,
+          "y": 47
+        },
+        "G": {
+          "x": 141,
+          "y": 44
+        },
+        "S": {
+          "x": 145,
+          "y": 41
+        },
+        "B": {
+          "x": 145,
+          "y": 44
+        }
+      },
+      "bodyBox": [
+        141,
+        41,
+        146,
+        47
+      ],
+      "labelBox": [
+        147,
+        40,
+        155,
+        44
+      ],
+      "labelLines": [
+        "M5",
+        "16u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M6",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "group": "folded_columns",
+      "tier": 2,
+      "position": {
+        "x": 174,
+        "y": 44
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 173,
+          "y": 47
+        },
+        "G": {
+          "x": 177,
+          "y": 44
+        },
+        "S": {
+          "x": 173,
+          "y": 41
+        },
+        "B": {
+          "x": 173,
+          "y": 44
+        }
+      },
+      "bodyBox": [
+        172,
+        41,
+        177,
+        47
+      ],
+      "labelBox": [
+        163,
+        40,
+        171,
+        44
+      ],
+      "labelLines": [
+        "M6",
+        "16u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M7",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "folded_columns",
+      "tier": 4,
+      "position": {
+        "x": 144,
+        "y": 61
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 145,
+          "y": 58
+        },
+        "G": {
+          "x": 141,
+          "y": 61
+        },
+        "S": {
+          "x": 145,
+          "y": 64
+        },
+        "B": {
+          "x": 145,
+          "y": 61
+        }
+      },
+      "bodyBox": [
+        141,
+        58,
+        146,
+        64
+      ],
+      "labelBox": [
+        147,
+        57,
+        154,
+        61
+      ],
+      "labelLines": [
+        "M7",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M8",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "folded_columns",
+      "tier": 4,
+      "position": {
+        "x": 174,
+        "y": 61
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 173,
+          "y": 58
+        },
+        "G": {
+          "x": 177,
+          "y": 61
+        },
+        "S": {
+          "x": 173,
+          "y": 64
+        },
+        "B": {
+          "x": 173,
+          "y": 61
+        }
+      },
+      "bodyBox": [
+        172,
+        58,
+        177,
+        64
+      ],
+      "labelBox": [
+        164,
+        57,
+        171,
+        61
+      ],
+      "labelLines": [
+        "M8",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M9",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "folded_columns",
+      "tier": 5,
+      "position": {
+        "x": 146,
+        "y": 77
+      },
+      "semanticOrient": "gate_right",
+      "cadenceOrient": "MY",
+      "pins": {
+        "D": {
+          "x": 145,
+          "y": 74
+        },
+        "G": {
+          "x": 149,
+          "y": 77
+        },
+        "S": {
+          "x": 145,
+          "y": 80
+        },
+        "B": {
+          "x": 145,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        144,
+        74,
+        149,
+        80
+      ],
+      "labelBox": [
+        136,
+        75,
+        143,
+        79
+      ],
+      "labelLines": [
+        "M9",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "M10",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "group": "folded_columns",
+      "tier": 5,
+      "position": {
+        "x": 172,
+        "y": 77
+      },
+      "semanticOrient": "gate_left",
+      "cadenceOrient": "R0",
+      "pins": {
+        "D": {
+          "x": 173,
+          "y": 74
+        },
+        "G": {
+          "x": 169,
+          "y": 77
+        },
+        "S": {
+          "x": 173,
+          "y": 80
+        },
+        "B": {
+          "x": 173,
+          "y": 77
+        }
+      },
+      "bodyBox": [
+        169,
+        74,
+        174,
+        80
+      ],
+      "labelBox": [
+        175,
+        75,
+        182,
+        79
+      ],
+      "labelLines": [
+        "M10",
+        "8u/0.5u nf=2"
+      ]
+    },
+    {
+      "ref": "CL",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "group": "output_load",
+      "tier": 5,
+      "position": {
+        "x": 203,
+        "y": 77
+      },
+      "semanticOrient": "vertical",
+      "cadenceOrient": "R0",
+      "pins": {
+        "P": {
+          "x": 203,
+          "y": 74
+        },
+        "M": {
+          "x": 203,
+          "y": 80
+        }
+      },
+      "bodyBox": [
+        201,
+        74,
+        205,
+        80
+      ],
+      "labelBox": [
+        206,
+        75,
+        213,
+        79
+      ],
+      "labelLines": [
+        "CL",
+        "14u/14u m=2"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "id": "P_VINP",
+      "name": "VINP",
+      "net": "VINP",
+      "symbol": "port",
+      "x": 35,
+      "y": 61
+    },
+    {
+      "id": "P_VINN",
+      "name": "VINN",
+      "net": "VINN",
+      "symbol": "port",
+      "x": 111,
+      "y": 61
+    },
+    {
+      "id": "P_VBP_1",
+      "name": "VBP",
+      "net": "VBP",
+      "symbol": "port",
+      "x": 137,
+      "y": 27
+    },
+    {
+      "id": "P_VBP_2",
+      "name": "VBP",
+      "net": "VBP",
+      "symbol": "port",
+      "x": 181,
+      "y": 27
+    },
+    {
+      "id": "P_VBCP_1",
+      "name": "VBCP",
+      "net": "VBCP",
+      "symbol": "port",
+      "x": 137,
+      "y": 44
+    },
+    {
+      "id": "P_VBCP_2",
+      "name": "VBCP",
+      "net": "VBCP",
+      "symbol": "port",
+      "x": 181,
+      "y": 44
+    },
+    {
+      "id": "P_VBCN_1",
+      "name": "VBCN",
+      "net": "VBCN",
+      "symbol": "port",
+      "x": 137,
+      "y": 61
+    },
+    {
+      "id": "P_VBCN_2",
+      "name": "VBCN",
+      "net": "VBCN",
+      "symbol": "port",
+      "x": 181,
+      "y": 61
+    },
+    {
+      "id": "P_VBN_1",
+      "name": "VBN",
+      "net": "VBN",
+      "symbol": "port",
+      "x": 65,
+      "y": 77
+    },
+    {
+      "id": "P_VOUT",
+      "name": "VOUT",
+      "net": "VOUT",
+      "symbol": "port",
+      "x": 225,
+      "y": 60
+    },
+    {
+      "id": "P_VDD_1",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 145,
+      "y": 20
+    },
+    {
+      "id": "P_VDD_2",
+      "name": "VDD",
+      "net": "VDD",
+      "symbol": "vdd-port",
+      "x": 173,
+      "y": 20
+    },
+    {
+      "id": "P_VSS_1",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 73,
+      "y": 84
+    },
+    {
+      "id": "P_VSS_2",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 145,
+      "y": 84
+    },
+    {
+      "id": "P_VSS_3",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 173,
+      "y": 84
+    },
+    {
+      "id": "P_VSS_4",
+      "name": "VSS",
+      "net": "VSS",
+      "symbol": "ground",
+      "x": 203,
+      "y": 84
+    }
+  ],
+  "routes": [
+    {
+      "id": "R_VBP_1",
+      "net": "VBP",
+      "points": [
+        {
+          "x": 141,
+          "y": 27
+        },
+        {
+          "x": 137,
+          "y": 27
+        }
+      ]
+    },
+    {
+      "id": "R_VBP_2",
+      "net": "VBP",
+      "points": [
+        {
+          "x": 177,
+          "y": 27
+        },
+        {
+          "x": 181,
+          "y": 27
+        }
+      ]
+    },
+    {
+      "id": "R_VBCP_3",
+      "net": "VBCP",
+      "points": [
+        {
+          "x": 141,
+          "y": 44
+        },
+        {
+          "x": 137,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_VBCP_4",
+      "net": "VBCP",
+      "points": [
+        {
+          "x": 177,
+          "y": 44
+        },
+        {
+          "x": 181,
+          "y": 44
+        }
+      ]
+    },
+    {
+      "id": "R_VBCN_5",
+      "net": "VBCN",
+      "points": [
+        {
+          "x": 141,
+          "y": 61
+        },
+        {
+          "x": 137,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_VBCN_6",
+      "net": "VBCN",
+      "points": [
+        {
+          "x": 177,
+          "y": 61
+        },
+        {
+          "x": 181,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_VBN_7",
+      "net": "VBN",
+      "points": [
+        {
+          "x": 69,
+          "y": 77
+        },
+        {
+          "x": 65,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_VDD_8",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 145,
+          "y": 24
+        },
+        {
+          "x": 145,
+          "y": 20
+        }
+      ]
+    },
+    {
+      "id": "R_VDD_9",
+      "net": "VDD",
+      "points": [
+        {
+          "x": 173,
+          "y": 24
+        },
+        {
+          "x": 173,
+          "y": 20
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_10",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 73,
+          "y": 80
+        },
+        {
+          "x": 73,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_11",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 145,
+          "y": 80
+        },
+        {
+          "x": 145,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_12",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 173,
+          "y": 80
+        },
+        {
+          "x": 173,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "R_VSS_13",
+      "net": "VSS",
+      "points": [
+        {
+          "x": 203,
+          "y": 80
+        },
+        {
+          "x": 203,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "R_VINP_14",
+      "net": "VINP",
+      "points": [
+        {
+          "x": 39,
+          "y": 61
+        },
+        {
+          "x": 35,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_VINN_15",
+      "net": "VINN",
+      "points": [
+        {
+          "x": 111,
+          "y": 61
+        },
+        {
+          "x": 107,
+          "y": 61
+        }
+      ]
+    },
+    {
+      "id": "R_vcas_l_16_a",
+      "net": "vcas_l",
+      "points": [
+        {
+          "x": 145,
+          "y": 58
+        },
+        {
+          "x": 145,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_vcas_l_16_b",
+      "net": "vcas_l",
+      "points": [
+        {
+          "x": 145,
+          "y": 56
+        },
+        {
+          "x": 145,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "id": "R_vcas_l_17_a",
+      "net": "vcas_l",
+      "points": [
+        {
+          "x": 149,
+          "y": 77
+        },
+        {
+          "x": 155,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_vcas_l_17_b",
+      "net": "vcas_l",
+      "points": [
+        {
+          "x": 155,
+          "y": 77
+        },
+        {
+          "x": 155,
+          "y": 56
+        },
+        {
+          "x": 145,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "R_vcas_l_18",
+      "net": "vcas_l",
+      "points": [
+        {
+          "x": 169,
+          "y": 77
+        },
+        {
+          "x": 155,
+          "y": 77
+        }
+      ]
+    },
+    {
+      "id": "R_vtail_19_a",
+      "net": "vtail",
+      "points": [
+        {
+          "x": 73,
+          "y": 74
+        },
+        {
+          "x": 73,
+          "y": 65
+        }
+      ]
+    },
+    {
+      "id": "R_vtail_19_b",
+      "net": "vtail",
+      "points": [
+        {
+          "x": 73,
+          "y": 65
+        },
+        {
+          "x": 43,
+          "y": 65
+        },
+        {
+          "x": 43,
+          "y": 64
+        }
+      ]
+    },
+    {
+      "id": "R_vtail_20",
+      "net": "vtail",
+      "points": [
+        {
+          "x": 103,
+          "y": 64
+        },
+        {
+          "x": 103,
+          "y": 65
+        },
+        {
+          "x": 73,
+          "y": 65
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_21_a",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 173,
+          "y": 58
+        },
+        {
+          "x": 173,
+          "y": 57
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_21_b",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 173,
+          "y": 57
+        },
+        {
+          "x": 173,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_22_a",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 203,
+          "y": 74
+        },
+        {
+          "x": 203,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_22_b",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 203,
+          "y": 60
+        },
+        {
+          "x": 203,
+          "y": 57
+        },
+        {
+          "x": 173,
+          "y": 57
+        }
+      ]
+    },
+    {
+      "id": "R_VOUT_23",
+      "net": "VOUT",
+      "points": [
+        {
+          "x": 225,
+          "y": 60
+        },
+        {
+          "x": 203,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "id": "R_vfold_r_24_a",
+      "net": "vfold_r",
+      "points": [
+        {
+          "x": 173,
+          "y": 30
+        },
+        {
+          "x": 173,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_vfold_r_24_b",
+      "net": "vfold_r",
+      "points": [
+        {
+          "x": 173,
+          "y": 39
+        },
+        {
+          "x": 103,
+          "y": 39
+        },
+        {
+          "x": 103,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vfold_r_25",
+      "net": "vfold_r",
+      "points": [
+        {
+          "x": 173,
+          "y": 41
+        },
+        {
+          "x": 173,
+          "y": 39
+        }
+      ]
+    },
+    {
+      "id": "R_vfold_l_26_a",
+      "net": "vfold_l",
+      "points": [
+        {
+          "x": 145,
+          "y": 30
+        },
+        {
+          "x": 145,
+          "y": 37
+        }
+      ]
+    },
+    {
+      "id": "R_vfold_l_26_b",
+      "net": "vfold_l",
+      "points": [
+        {
+          "x": 145,
+          "y": 37
+        },
+        {
+          "x": 43,
+          "y": 37
+        },
+        {
+          "x": 43,
+          "y": 58
+        }
+      ]
+    },
+    {
+      "id": "R_vfold_l_27",
+      "net": "vfold_l",
+      "points": [
+        {
+          "x": 145,
+          "y": 41
+        },
+        {
+          "x": 145,
+          "y": 37
+        }
+      ]
+    },
+    {
+      "id": "R_vm_l_28",
+      "net": "vm_l",
+      "points": [
+        {
+          "x": 145,
+          "y": 74
+        },
+        {
+          "x": 145,
+          "y": 64
+        }
+      ]
+    },
+    {
+      "id": "R_vm_r_29",
+      "net": "vm_r",
+      "points": [
+        {
+          "x": 173,
+          "y": 74
+        },
+        {
+          "x": 173,
+          "y": 64
+        }
+      ]
+    }
+  ]
+}

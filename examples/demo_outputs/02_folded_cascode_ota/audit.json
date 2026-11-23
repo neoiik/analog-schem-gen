@@ -1,0 +1,29 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "sky130_folded_cascode_ota",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 12,
+    "netCount": 15,
+    "routeSegmentCount": 53,
+    "totalWireLengthGrids": 566,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 1,
+    "crossingsByNet": {
+      "vfold_r": 1,
+      "vfold_l": 1
+    }
+  },
+  "findings": [],
+  "llmRefinementSuggestions": []
+}

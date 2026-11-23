@@ -1,0 +1,107 @@
+{
+  "schema": "schem_gen.netlist_rules.v1",
+  "pdk": "sky130",
+  "defaultDimensionUnit": "um",
+  "supplyNetPatterns": ["^VDD$", "^AVDD$", "^DVDD$", "^VPWR$", "^VCCA$", "^VCC$"],
+  "groundNetPatterns": ["^VSS$", "^AVSS$", "^DVSS$", "^VGND$", "^GND$", "^0$", "^VSSA$"],
+  "modelRules": [
+    {
+      "pattern": "^(sky130_fd_pr__)?(special_)?nfet_01v8_lvt$",
+      "deviceClass": "mos",
+      "kind": "nmos_lvt",
+      "polarity": "nmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?nfet_03v3_nvt$",
+      "deviceClass": "mos",
+      "kind": "nmos_nvt",
+      "polarity": "nmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?nfet_(g5v0d10v5|g5v0d16v0|05v0_nvt|20v0)$",
+      "deviceClass": "mos",
+      "kind": "nmos_hv",
+      "polarity": "nmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?(special_)?(nfet_01v8|nmos|nch|nfet).*$",
+      "deviceClass": "mos",
+      "kind": "nmos",
+      "polarity": "nmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?(special_)?pfet_01v8_hvt$",
+      "deviceClass": "mos",
+      "kind": "pmos_hvt",
+      "polarity": "pmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?(special_)?pfet_01v8_lvt$",
+      "deviceClass": "mos",
+      "kind": "pmos_lvt",
+      "polarity": "pmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?pfet_(g5v0d10v5|g5v0d16v0|20v0)$",
+      "deviceClass": "mos",
+      "kind": "pmos_hv",
+      "polarity": "pmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?(special_)?(pfet_01v8|pmos|pch|pfet).*$",
+      "deviceClass": "mos",
+      "kind": "pmos",
+      "polarity": "pmos",
+      "terminals": ["D", "G", "S", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?res_xhigh_po.*$",
+      "deviceClass": "res_xhigh_po_3t",
+      "kind": null,
+      "polarity": "passive",
+      "terminals": ["P", "M", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?res_high_po.*$",
+      "deviceClass": "res_poly_3t",
+      "kind": null,
+      "polarity": "passive",
+      "terminals": ["P", "M", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?res_generic.*$",
+      "deviceClass": "resistor",
+      "kind": null,
+      "polarity": "passive",
+      "terminals": ["P", "M"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?cap_mim_m3_2$",
+      "deviceClass": "cap_mim_m4",
+      "kind": null,
+      "polarity": "passive",
+      "terminals": ["P", "M"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?cap_mim.*$",
+      "deviceClass": "cap_mim",
+      "kind": null,
+      "polarity": "passive",
+      "terminals": ["P", "M"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?diode_.*$",
+      "deviceClass": "diode",
+      "kind": null,
+      "polarity": "passive",
+      "terminals": ["P", "M"]
+    }
+  ]
+}

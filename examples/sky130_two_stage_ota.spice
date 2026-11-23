@@ -1,0 +1,26 @@
+* SKY130 Two-Stage Miller-Compensated CMOS Operational Amplifier
+* Uses open-source SkyWater 130nm primitives (sky130_fd_pr__*)
+*.PININFO VINP:I VINN:I VOUT:O VDD:B VSS:B
+.subckt sky130_two_stage_ota VINP VINN VOUT VDD VSS
+
+* Bias Reference Branch
+IB0 VDD vbias_n 10u
+XMB0 vbias_n vbias_n VSS VSS sky130_fd_pr__nfet_01v8 W=4 L=0.5 nf=1 mult=1
+
+* Stage 1: Differential Input Pair + Active Mirror Load + Tail Sink
+XM3 net_mir net_mir VDD VDD sky130_fd_pr__pfet_01v8 W=8 L=0.5 nf=2 mult=1
+XM4 vout1   net_mir VDD VDD sky130_fd_pr__pfet_01v8 W=8 L=0.5 nf=2 mult=1
+XM1 net_mir VINP    vtail VSS sky130_fd_pr__nfet_01v8 W=12 L=0.5 nf=2 mult=1
+XM2 vout1   VINN    vtail VSS sky130_fd_pr__nfet_01v8 W=12 L=0.5 nf=2 mult=1
+XM5 vtail   vbias_n VSS   VSS sky130_fd_pr__nfet_01v8 W=8 L=0.5 nf=2 mult=1
+
+* Miller Nulling R-C Compensation Network (Stage 1 -> Stage 2)
+XRZ vout1 vmiller VSS sky130_fd_pr__res_high_po_0p35 W=0.35 L=8 mult=1
+XCC vmiller VOUT sky130_fd_pr__cap_mim_m3_1 W=12 L=12 MF=2
+
+* Stage 2: Common-Source Gain Stage + Load Capacitor
+XM6 VOUT vout1   VDD VDD sky130_fd_pr__pfet_01v8 W=32 L=0.5 nf=4 mult=1
+XM7 VOUT vbias_n VSS VSS sky130_fd_pr__nfet_01v8 W=16 L=0.5 nf=2 mult=1
+XCL VOUT VSS sky130_fd_pr__cap_mim_m3_1 W=16 L=16 MF=4
+
+.ends sky130_two_stage_ota

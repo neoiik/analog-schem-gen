@@ -1,0 +1,83 @@
+{
+  "demos": [
+    {
+      "case": "01_two_stage_ota",
+      "passed": true,
+      "metrics": {
+        "instanceCount": 12,
+        "netCount": 10,
+        "routeSegmentCount": 57,
+        "totalWireLengthGrids": 714,
+        "symbolOverlapCount": 0,
+        "labelOverlapCount": 0,
+        "wireThroughBodyCount": 0,
+        "wireOverForeignPinCount": 0,
+        "collinearForeignWireOverlapCount": 0,
+        "ambiguousCrossingCount": 0,
+        "parallelCrowdGridPairs": 0,
+        "wireCrossingCount": 0,
+        "crossingsByNet": {}
+      }
+    },
+    {
+      "case": "02_folded_cascode_ota",
+      "passed": true,
+      "metrics": {
+        "instanceCount": 12,
+        "netCount": 15,
+        "routeSegmentCount": 53,
+        "totalWireLengthGrids": 566,
+        "symbolOverlapCount": 0,
+        "labelOverlapCount": 0,
+        "wireThroughBodyCount": 0,
+        "wireOverForeignPinCount": 0,
+        "collinearForeignWireOverlapCount": 0,
+        "ambiguousCrossingCount": 0,
+        "parallelCrowdGridPairs": 0,
+        "wireCrossingCount": 1,
+        "crossingsByNet": {
+          "vfold_r": 1,
+          "vfold_l": 1
+        }
+      }
+    },
+    {
+      "case": "03_draft_refined",
+      "beforePassed": false,
+      "afterPassed": true,
+      "beforeMetrics": {
+        "instanceCount": 3,
+        "netCount": 5,
+        "routeSegmentCount": 15,
+        "totalWireLengthGrids": 191,
+        "symbolOverlapCount": 1,
+        "labelOverlapCount": 3,
+        "wireThroughBodyCount": 4,
+        "wireOverForeignPinCount": 1,
+        "collinearForeignWireOverlapCount": 0,
+        "ambiguousCrossingCount": 0,
+        "parallelCrowdGridPairs": 0,
+        "wireCrossingCount": 1,
+        "crossingsByNet": {
+          "vbias": 1,
+          "VSS": 1
+        }
+      },
+      "afterMetrics": {
+        "instanceCount": 3,
+        "netCount": 5,
+        "routeSegmentCount": 19,
+        "totalWireLengthGrids": 156,
+        "symbolOverlapCount": 0,
+        "labelOverlapCount": 0,
+        "wireThroughBodyCount": 0,
+        "wireOverForeignPinCount": 0,
+        "collinearForeignWireOverlapCount": 0,
+        "ambiguousCrossingCount": 0,
+        "parallelCrowdGridPairs": 0,
+        "wireCrossingCount": 0,
+        "crossingsByNet": {}
+      }
+    }
+  ]
+}

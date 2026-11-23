@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "analog-schem-gen"
+version = "0.1.0"
+description = "PDK-agnostic high-readability analog circuit schematic generator with LLM-algorithm co-execution, Convex QP placement, and orthogonal track routing."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+  {name = "neoiik"}
+]
+keywords = [
+  "eda",
+  "analog-ic",
+  "schematic-generation",
+  "virtuoso",
+  "sky130",
+  "orthogonal-routing",
+  "llm-agent"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)"
+]
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.10"
+]
+
+[project.urls]
+Homepage = "https://github.com/neoiik/analog-schem-gen"
+Repository = "https://github.com/neoiik/analog-schem-gen"
+Issues = "https://github.com/neoiik/analog-schem-gen/issues"
+
+[project.scripts]
+analog-schem-gen = "schem_gen:main"
+
+[tool.setuptools]
+py-modules = ["schem_gen"]
+packages = ["schematic_gen"]

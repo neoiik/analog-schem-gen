@@ -1,0 +1,28 @@
+{
+  "schema": "schem_gen.audit.v1",
+  "signoff": false,
+  "cellName": "sky130_two_stage_ota",
+  "overallPassed": true,
+  "electricalPassed": true,
+  "readabilityPassed": true,
+  "bridgeManifestValid": true,
+  "metrics": {
+    "instanceCount": 12,
+    "netCount": 10,
+    "routeSegmentCount": 57,
+    "totalWireLengthGrids": 714,
+    "symbolOverlapCount": 0,
+    "labelOverlapCount": 0,
+    "wireThroughBodyCount": 0,
+    "wireOverForeignPinCount": 0,
+    "collinearForeignWireOverlapCount": 0,
+    "ambiguousCrossingCount": 0,
+    "parallelCrowdGridPairs": 0,
+    "wireCrossingCount": 0,
+    "crossingsByNet": {}
+  },
+  "findings": [],
+  "llmRefinementSuggestions": [
+    "当前原理图零异网交叉、零压字、零穿模，可直接用于复核或导入目标库。"
+  ]
+}

@@ -1,0 +1,26 @@
+* SKY130 NMOS-Input Folded-Cascode OTA
+* Open-source SkyWater 130nm primitives (sky130_fd_pr__*)
+*.PININFO VINP:I VINN:I VBP:I VBCP:I VBCN:I VBN:I VOUT:O VDD:B VSS:B
+.subckt sky130_folded_cascode_ota VINP VINN VBP VBCP VBCN VBN VOUT VDD VSS
+
+* Differential Input Stage (LVT NMOS) + Tail Current Sink
+XM1 vfold_l VINP vtail VSS sky130_fd_pr__nfet_01v8_lvt W=16 L=0.35 nf=4 mult=1
+XM2 vfold_r VINN vtail VSS sky130_fd_pr__nfet_01v8_lvt W=16 L=0.35 nf=4 mult=1
+XM0 vtail   VBN  VSS   VSS sky130_fd_pr__nfet_01v8     W=12 L=0.50 nf=2 mult=1
+
+* Top PMOS Folding Current Sources + PMOS Cascode Pair
+XM3 vfold_l VBP  VDD     VDD sky130_fd_pr__pfet_01v8 W=24 L=0.50 nf=4 mult=1
+XM4 vfold_r VBP  VDD     VDD sky130_fd_pr__pfet_01v8 W=24 L=0.50 nf=4 mult=1
+XM5 vcas_l  VBCP vfold_l VDD sky130_fd_pr__pfet_01v8 W=16 L=0.50 nf=2 mult=1
+XM6 VOUT    VBCP vfold_r VDD sky130_fd_pr__pfet_01v8 W=16 L=0.50 nf=2 mult=1
+
+* Bottom NMOS Cascode Current Mirror Load
+XM7 vcas_l  VBCN vm_l VSS sky130_fd_pr__nfet_01v8 W=8 L=0.50 nf=2 mult=1
+XM8 VOUT    VBCN vm_r VSS sky130_fd_pr__nfet_01v8 W=8 L=0.50 nf=2 mult=1
+XM9 vm_l    vcas_l VSS VSS sky130_fd_pr__nfet_01v8 W=8 L=0.50 nf=2 mult=1
+XM10 vm_r   vcas_l VSS VSS sky130_fd_pr__nfet_01v8 W=8 L=0.50 nf=2 mult=1
+
+* Output Load Capacitor
+XCL VOUT VSS sky130_fd_pr__cap_mim_m3_1 W=14 L=14 MF=2
+
+.ends sky130_folded_cascode_ota

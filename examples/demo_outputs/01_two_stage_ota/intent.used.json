@@ -1,0 +1,161 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "sky130_two_stage_ota",
+  "authoredBy": "llm_co_execution_example",
+  "llmNotes": "大模型语义决策：1) 按信号流排定 [偏置列 -> 差分输入级 -> 米勒调零补偿 -> 第二级共源放大 -> 负载电容]；2) M1/M2 背靠背对称且尾流管 M5 严格居中，M3/M4 面对面共栅最短；3) RZ+CC 水平桥接第一级输出 vout1 与总输出 VOUT；4) 跨全图的偏置网 vbias_n 走底部外围母线 (`perimeter_bus`)，避免横穿差分输入对。",
+  "groups": [
+    {
+      "id": "bias_gen",
+      "label": "偏置产生电路",
+      "role": "bias",
+      "stage_order": 0,
+      "instances": [
+        "IB0",
+        "MB0"
+      ]
+    },
+    {
+      "id": "input_diff",
+      "label": "第一级差分输入",
+      "role": "input_diff",
+      "stage_order": 10,
+      "instances": [
+        "M3",
+        "M4",
+        "M1",
+        "M2",
+        "M5"
+      ]
+    },
+    {
+      "id": "miller_comp",
+      "label": "米勒调零补偿",
+      "role": "compensation",
+      "stage_order": 20,
+      "instances": [
+        "RZ",
+        "CC"
+      ]
+    },
+    {
+      "id": "gain_stage2",
+      "label": "第二级共源放大与负载",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": [
+        "M6",
+        "M7",
+        "CL"
+      ]
+    }
+  ],
+  "motifs": [
+    {
+      "type": "diff_pair",
+      "left": "M1",
+      "right": "M2",
+      "tail": "M5",
+      "loadLeft": "M3",
+      "loadRight": "M4",
+      "style": "back_to_back"
+    }
+  ],
+  "orientations": {
+    "IB0": "vertical",
+    "MB0": "gate_right",
+    "M3": "gate_right",
+    "M4": "gate_left",
+    "M1": "gate_left",
+    "M2": "gate_right",
+    "M5": "gate_left",
+    "RZ": "horizontal_l2r",
+    "CC": "horizontal_l2r",
+    "M6": "gate_left",
+    "M7": "gate_left",
+    "CL": "vertical"
+  },
+  "tierOverrides": {
+    "IB0": 2,
+    "MB0": 5,
+    "M3": 1,
+    "M4": 1,
+    "M1": 4,
+    "M2": 4,
+    "M5": 5,
+    "RZ": 3,
+    "CC": 3,
+    "M6": 1,
+    "M7": 5,
+    "CL": 5
+  },
+  "columnOrderHints": [
+    [
+      "IB0",
+      "MB0"
+    ],
+    [
+      "M3",
+      "M1"
+    ],
+    [
+      "M5"
+    ],
+    [
+      "M4",
+      "M2"
+    ],
+    [
+      "RZ"
+    ],
+    [
+      "CC"
+    ],
+    [
+      "M6",
+      "M7"
+    ],
+    [
+      "CL"
+    ]
+  ],
+  "netPolicies": {
+    "VDD": "supply_local",
+    "VSS": "supply_local",
+    "vbias_n": "perimeter_bus",
+    "net_mir": "full_wire",
+    "vtail": "full_wire",
+    "vout1": "full_wire",
+    "vmiller": "full_wire",
+    "VINP": "full_wire",
+    "VINN": "full_wire",
+    "VOUT": "full_wire"
+  },
+  "criticalNets": [
+    "VINP",
+    "VINN",
+    "vtail",
+    "net_mir",
+    "vout1",
+    "vmiller",
+    "VOUT"
+  ],
+  "portSides": {
+    "VINP": "near_pin",
+    "VINN": "near_pin",
+    "VOUT": "right",
+    "VDD": "local_repeat",
+    "VSS": "local_repeat"
+  },
+  "spacing": {
+    "intra_group_gap_x": 8,
+    "inter_group_gap_x": 14,
+    "min_clearance_x": 5,
+    "intra_stack_gap_y": 8,
+    "inter_tier_gap_y": 9,
+    "min_clearance_y": 6,
+    "wire_track_pitch": 2,
+    "shape_buffer": 2,
+    "port_margin_x": 12,
+    "port_margin_y": 8
+  }
+}

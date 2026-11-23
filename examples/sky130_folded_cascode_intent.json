@@ -1,0 +1,103 @@
+{
+  "schema": "schem_gen.intent.v1",
+  "cellName": "sky130_folded_cascode_ota",
+  "authoredBy": "llm_co_execution_example",
+  "llmNotes": "大模型语义决策：1) 左置 LVT 差分输入级 (M1/M2 + M0)，右置两列严格四层对齐的折叠共源共栅支路 [M3-M5-M7-M9] 与 [M4-M6-M8-M10]，最右置负载电容 CL；2) 折叠对内侧面对面或同向使共栅偏置连线最短；3) 四个外部偏置端口全部作为局部重复端口或左侧直入，主折叠节点 vfold_l / vfold_r 保持清晰实线连接。",
+  "groups": [
+    {
+      "id": "input_diff",
+      "label": "LVT 差分输入对",
+      "role": "input_diff",
+      "stage_order": 10,
+      "instances": ["M1", "M2", "M0"]
+    },
+    {
+      "id": "folded_columns",
+      "label": "四层折叠共源共栅主支路",
+      "role": "cascode_core",
+      "stage_order": 20,
+      "instances": ["M3", "M5", "M7", "M9", "M4", "M6", "M8", "M10"]
+    },
+    {
+      "id": "output_load",
+      "label": "输出负载",
+      "role": "output_stage",
+      "stage_order": 30,
+      "instances": ["CL"]
+    }
+  ],
+  "motifs": [
+    {
+      "type": "diff_pair",
+      "left": "M1",
+      "right": "M2",
+      "tail": "M0",
+      "style": "back_to_back"
+    }
+  ],
+  "orientations": {
+    "M1": "gate_left",
+    "M2": "gate_right",
+    "M0": "gate_left",
+    "M3": "gate_left",
+    "M5": "gate_left",
+    "M7": "gate_left",
+    "M9": "gate_right",
+    "M4": "gate_right",
+    "M6": "gate_right",
+    "M8": "gate_right",
+    "M10": "gate_left",
+    "CL": "vertical"
+  },
+  "tierOverrides": {
+    "M3": 1,
+    "M4": 1,
+    "M5": 2,
+    "M6": 2,
+    "M1": 4,
+    "M2": 4,
+    "M7": 4,
+    "M8": 4,
+    "M0": 5,
+    "M9": 5,
+    "M10": 5,
+    "CL": 5
+  },
+  "columnOrderHints": [
+    ["M1"],
+    ["M0"],
+    ["M2"],
+    ["M3", "M5", "M7", "M9"],
+    ["M4", "M6", "M8", "M10"],
+    ["CL"]
+  ],
+  "netPolicies": {
+    "VDD": "supply_local",
+    "VSS": "supply_local",
+    "VBP": "supply_local",
+    "VBCP": "supply_local",
+    "VBCN": "supply_local",
+    "VBN": "supply_local",
+    "vfold_l": "full_wire",
+    "vfold_r": "full_wire",
+    "vcas_l": "full_wire",
+    "vm_l": "full_wire",
+    "vm_r": "full_wire",
+    "vtail": "full_wire",
+    "VINP": "full_wire",
+    "VINN": "full_wire",
+    "VOUT": "full_wire"
+  },
+  "criticalNets": ["VINP", "VINN", "vtail", "vfold_l", "vfold_r", "vcas_l", "VOUT"],
+  "portSides": {
+    "VINP": "near_pin",
+    "VINN": "near_pin",
+    "VOUT": "right",
+    "VBP": "local_repeat",
+    "VBCP": "local_repeat",
+    "VBCN": "local_repeat",
+    "VBN": "local_repeat",
+    "VDD": "local_repeat",
+    "VSS": "local_repeat"
+  }
+}

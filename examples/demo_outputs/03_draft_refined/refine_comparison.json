@@ -1,0 +1,141 @@
+{
+  "before": {
+    "schema": "schem_gen.audit.v1",
+    "signoff": false,
+    "cellName": "cramped_and_stretched_mirror_amp",
+    "overallPassed": false,
+    "electricalPassed": true,
+    "readabilityPassed": false,
+    "bridgeManifestValid": true,
+    "metrics": {
+      "instanceCount": 3,
+      "netCount": 5,
+      "routeSegmentCount": 15,
+      "totalWireLengthGrids": 191,
+      "symbolOverlapCount": 1,
+      "labelOverlapCount": 3,
+      "wireThroughBodyCount": 4,
+      "wireOverForeignPinCount": 1,
+      "collinearForeignWireOverlapCount": 0,
+      "ambiguousCrossingCount": 0,
+      "parallelCrowdGridPairs": 0,
+      "wireCrossingCount": 1,
+      "crossingsByNet": {
+        "vbias": 1,
+        "VSS": 1
+      }
+    },
+    "findings": [
+      {
+        "severity": "ERROR",
+        "code": "SYMBOL_OVERLAP",
+        "message": "器件符号重叠：M0 与 M1",
+        "subjects": [
+          "M0",
+          "M1"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "LABEL_SYMBOL_OVERLAP",
+        "message": "参数文字框与相邻器件/文字重叠：M0 与 M1",
+        "subjects": [
+          "M0",
+          "M1"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_THROUGH_SYMBOL",
+        "message": "网络 'vbias' 导线穿过器件 M0 本体内部 @ (28, 40)",
+        "subjects": [
+          "vbias",
+          "M0"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_THROUGH_SYMBOL",
+        "message": "网络 'vbias' 导线穿过器件 M0 本体内部 @ (29, 40)",
+        "subjects": [
+          "vbias",
+          "M0"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_THROUGH_SYMBOL",
+        "message": "网络 'vbias' 导线穿过器件 M0 本体内部 @ (30, 40)",
+        "subjects": [
+          "vbias",
+          "M0"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_THROUGH_SYMBOL",
+        "message": "网络 'vbias' 导线穿过器件 M0 本体内部 @ (31, 40)",
+        "subjects": [
+          "vbias",
+          "M0"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_OVER_FOREIGN_PIN",
+        "message": "网络 'VSS' 导线擦过异网端子 M1.G (vbias) @ (31, 40)",
+        "subjects": [
+          "VSS",
+          "M1"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_OVER_TEXT_LABEL",
+        "message": "网络 'VSS' 导线压过器件 M0 的 W/L 参数文字框 @ (35, 40)",
+        "subjects": [
+          "VSS",
+          "M0"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "code": "WIRE_OVER_TEXT_LABEL",
+        "message": "网络 'VSS' 导线压过器件 M0 的 W/L 参数文字框 @ (35, 41)",
+        "subjects": [
+          "VSS",
+          "M0"
+        ]
+      }
+    ],
+    "llmRefinementSuggestions": []
+  },
+  "after": {
+    "schema": "schem_gen.audit.v1",
+    "signoff": false,
+    "cellName": "cramped_and_stretched_mirror_amp",
+    "overallPassed": true,
+    "electricalPassed": true,
+    "readabilityPassed": true,
+    "bridgeManifestValid": true,
+    "metrics": {
+      "instanceCount": 3,
+      "netCount": 5,
+      "routeSegmentCount": 19,
+      "totalWireLengthGrids": 156,
+      "symbolOverlapCount": 0,
+      "labelOverlapCount": 0,
+      "wireThroughBodyCount": 0,
+      "wireOverForeignPinCount": 0,
+      "collinearForeignWireOverlapCount": 0,
+      "ambiguousCrossingCount": 0,
+      "parallelCrowdGridPairs": 0,
+      "wireCrossingCount": 0,
+      "crossingsByNet": {}
+    },
+    "findings": [],
+    "llmRefinementSuggestions": [
+      "当前原理图零异网交叉、零压字、零穿模，可直接用于复核或导入目标库。"
+    ]
+  }
+}
