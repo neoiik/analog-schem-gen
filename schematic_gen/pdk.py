@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
+import re
 from typing import Any, Mapping
 
-from schematic_gen.models import BBox, InstanceIR, Point
+from schematic_gen.models import BBox, InstanceIR, NetlistCircuit, Point
 
 
 HERE = Path(__file__).resolve().parent.parent
@@ -39,6 +40,10 @@ SEMANTIC_TRANSFORMS: dict[str, tuple[int, str]] = {
     "gate_right": (0, "horizontal"),   # MY: Gate at right, Drain/Source on left
     "gate_left_flipped": (0, "vertical"),    # MX: Gate at left, vertical flip
     "gate_right_flipped": (0, "both"),       # R180: Gate at right, vertical flip
+    "horizontal_gate_down": (270, "none"),           # R90: horizontal MOS channel, Gate down (PMOS S-left/D-right)
+    "horizontal_gate_down_flipped": (270, "horizontal"),  # MXR90: horizontal MOS channel, Gate down (PMOS D-left/S-right)
+    "horizontal_gate_up": (90, "none"),              # R270: horizontal MOS channel, Gate up (PMOS D-left/S-right)
+    "horizontal_gate_up_flipped": (270, "vertical"), # MYR90: horizontal MOS channel, Gate up (PMOS S-left/D-right)
     "vertical": (0, "none"),           # R0: P at top, M at bottom
     "p_top": (0, "none"),
     "vertical_flipped": (0, "vertical"),     # MX: M at top, P at bottom
@@ -171,6 +176,55 @@ class PdkRegistry:
         self.raw_map["processes"][self.process_name].setdefault("devices", {})[dev_key] = spec
         return spec
 
+    def ensure_subckt_symbols(
+        self,
+        circuit: NetlistCircuit,
+        *,
+        rules_path: Path | str = DEFAULT_NETLIST_RULES_PATH,
+    ) -> list[str]:
+        """Auto-register clean block symbols for any black-box `subckt` instances missing from this PDK map."""
+        supply_pats = [r"^VDD$", r"^AVDD$", r"^DVDD$", r"^VPWR$", r"^VCCA$", r"^VCC$"]
+        ground_pats = [r"^VSS$", r"^AVSS$", r"^DVSS$", r"^VGND$", r"^GND$", r"^0$", r"^VSSA$"]
+        rp = Path(rules_path)
+        if rp.is_file():
+            rdata = json.loads(rp.read_text(encoding="utf-8"))
+            supply_pats = list(rdata.get("supplyNetPatterns") or supply_pats)
+            ground_pats = list(rdata.get("groundNetPatterns") or ground_pats)
+        sup_res = [re.compile(p, re.IGNORECASE) for p in supply_pats]
+        gnd_res = [re.compile(p, re.IGNORECASE) for p in ground_pats]
+        out_prefixes = ("VOUT", "OUT", "VOP", "VON", "VOM", "IOUT", "Q")
+
+        registered: list[str] = []
+        for inst in circuit.instances:
+            if inst.device_class != "subckt":
+                continue
+            dev_key = inst.device_key
+            if dev_key in self.devices:
+                continue
+            cell_name = inst.subckt_cell or inst.source_model
+            left_pins: list[str] = []
+            right_pins: list[str] = []
+            top_pins: list[str] = []
+            bottom_pins: list[str] = []
+            for pname in inst.terminals:
+                if any(rx.match(pname) for rx in sup_res):
+                    top_pins.append(pname)
+                elif any(rx.match(pname) for rx in gnd_res):
+                    bottom_pins.append(pname)
+                elif any(pname.upper().startswith(pfx) for pfx in out_prefixes):
+                    right_pins.append(pname)
+                else:
+                    left_pins.append(pname)
+            self.register_block_symbol(
+                cell_name,
+                left_pins=left_pins,
+                right_pins=right_pins,
+                top_pins=top_pins,
+                bottom_pins=bottom_pins,
+            )
+            registered.append(cell_name)
+        return registered
+
     def device_spec(self, device_key: str) -> dict[str, Any]:
         if device_key not in self.devices:
             raise KeyError(
@@ -252,7 +306,12 @@ class PdkRegistry:
                 if extras:
                     wl_str += " " + ",".join(extras)
                 lines.append(wl_str)
-        elif inst.device_class in {"res_poly_3t", "res_xhigh_po_3t", "cap_mim", "cap_mim_m4"}:
+        elif inst.device_class == "bjt":
+            m = p.get("m", "1")
+            if m and str(m) != "1":
+                lines.append(f"m={m}")
+        elif p.get("w") and p.get("l") and inst.device_class not in {"isource", "vsource", "subckt"}:
+            # Geometric passives of any PDK (poly / high-R resistors, MIM / MOM caps): show W/L instead of value
             w = p.get("w", "")
             l = p.get("l", "")
             m = p.get("mf") or p.get("m", "1")
@@ -295,10 +354,23 @@ class PdkRegistry:
             lx0 = 2
             ly1 = body[1] - 1
             label_box: BBox = (lx0, ly1 - text_h, lx0 + text_w, ly1)
-        elif inst.device_class == "mos":
-            # Gate side has horizontal gate wire; place text on opposite (channel) side.
-            gx, _ = pins["G"]
-            if gx < 0:
+        elif inst.device_class in {"mos", "bjt"}:
+            # Gate/Base side has control wire; place text on opposite (channel/C-E) side.
+            ctrl_pin = "G" if inst.device_class == "mos" else "BASE"
+            gx, gy = pins[ctrl_pin]
+            if gx == 0 and gy != 0:
+                # Horizontal MOS (R90/R270/MXR90/MYR90): D/S run left-right, G faces down (gy>0) or up (gy<0).
+                if gy > 0:
+                    # Gate faces DOWN, bulk faces UP at (0, -1): place label ABOVE body, shifted right if vertical bulk stub exists
+                    lx0 = 2 if has_bulk_label_stub else (-text_w // 2)
+                    ly1 = body[1] - 1
+                    label_box = (lx0, ly1 - text_h, lx0 + text_w, ly1)
+                else:
+                    # Gate faces UP, bulk faces DOWN at (0, +1): place label BELOW body, shifted right if vertical bulk stub exists
+                    lx0 = 2 if has_bulk_label_stub else (-text_w // 2)
+                    ly0 = body[3] + 1
+                    label_box = (lx0, ly0, lx0 + text_w, ly0 + text_h)
+            elif gx < 0:
                 # Gate on left -> channel on right (x = +1)
                 if has_bulk_label_stub:
                     # Bulk stub extends right from (1, 0) to (1 + stub, 0); place text above y=0 stub or right of body
@@ -343,11 +415,20 @@ class PdkRegistry:
 
         if has_bulk_label_stub and "B" in pins:
             bx, by = pins["B"]
-            out_dx = 1 if bx >= 0 else -1
-            stub_end_x = bx + out_dx * (self.local_stub_len + 3)
-            env_x0 = min(env_x0, stub_end_x)
-            env_x1 = max(env_x1, stub_end_x)
-            env_y0 = min(env_y0, by - 1)
-            env_y1 = max(env_y1, by + 1)
+            # Match virtuoso-bridge-lite exact_geometry 2D outward bulk-stub vector
+            if abs(bx) >= abs(by):
+                out_dx = 1 if bx >= 0 else -1
+                stub_end_x = bx + out_dx * (self.local_stub_len + 3)
+                env_x0 = min(env_x0, stub_end_x)
+                env_x1 = max(env_x1, stub_end_x)
+                env_y0 = min(env_y0, by - 1)
+                env_y1 = max(env_y1, by + 1)
+            else:
+                out_dy = 1 if by >= 0 else -1
+                stub_end_y = by + out_dy * (self.local_stub_len + 2)
+                env_x0 = min(env_x0, bx - 2)
+                env_x1 = max(env_x1, bx + 2)
+                env_y0 = min(env_y0, stub_end_y)
+                env_y1 = max(env_y1, stub_end_y)
 
         return label_box, (env_x0, env_y0, env_x1, env_y1), lines

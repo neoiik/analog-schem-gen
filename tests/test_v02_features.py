@@ -254,6 +254,68 @@ B 5 7.5 -2.5 12.5 2.5 {name=b dir=in}
         bx0, by0, bx1, by1 = p08.bounds
         self.assertLess((bx1 - bx0) / float(by1 - by0), 2.2)
 
+    def test_10_single_port_short_range_physical_wiring_and_far_wire_label(self) -> None:
+        """Non-rail `local_repeat` ports must keep ONE top-level Port, wire nearby devices
+        physically (e.g. diode + adjacent mirror), and only emit WireLabelStub for far clusters.
+        """
+        from schematic_gen.auditor import audit_solved_schematic
+        from schematic_gen.parser import parse_netlist_text
+        from schematic_gen.router import compile_schematic
+        from schematic_gen.analyzer import analyze_circuit
+
+        spice = """
+        .subckt mirror_demo VDD VSS Iin Vm
+        XM1 Iin Iin Vm VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1 nf=1 m=1
+        XM2 Vm Vm VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1 nf=1 m=1
+        XM3 n3 Vm VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1 nf=1 m=1
+        R3 VDD n3 10k
+        XM7 n7 n7 VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1 nf=1 m=1
+        R7 VDD n7 10k
+        XM8 n8 n8 VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1 nf=1 m=1
+        R8 VDD n8 10k
+        XM11 n11 Vm VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1 nf=1 m=1
+        R11 VDD n11 10k
+        .ends mirror_demo
+        """
+        circuit = parse_netlist_text(spice)
+        pdk = PdkRegistry()
+        from schematic_gen.models import SchematicIntent
+
+        intent = SchematicIntent.from_dict(analyze_circuit(circuit).draft_intent)
+        intent.column_order_hints = [
+            ["M1", "M2"],
+            ["R3", "M3"],
+            ["R7", "M7"],
+            ["R8", "M8"],
+            ["R11", "M11"],
+        ]
+        intent.port_sides["Vm"] = "local_repeat"
+        intent.net_policies["Vm"] = "perimeter_bus"
+
+        # 1. Default full-wire mode: 1 Port + 0 wire-label stubs + all pins wired
+        solved_fw = compile_schematic(circuit, intent, pdk=pdk, allow_wire_labels=False)
+        audit_fw = audit_solved_schematic(solved_fw, pdk)
+        self.assertTrue(audit_fw.overall_passed, [f.message for f in audit_fw.findings])
+        vm_ports_fw = [po for po in solved_fw.ports if po.net_name == "Vm"]
+        self.assertEqual(len(vm_ports_fw), 1, "Non-rail port Vm must have exactly 1 top-level Port")
+        self.assertEqual(len(solved_fw.wire_label_stubs), 0)
+
+        # 2. Wire-label mode: 1 Port on primary local cluster (M1/M2/M3 wired physically) + WireLabelStub on far M11
+        solved_wl = compile_schematic(circuit, intent, pdk=pdk, allow_wire_labels=True)
+        audit_wl = audit_solved_schematic(solved_wl, pdk)
+        self.assertTrue(audit_wl.overall_passed, [f.message for f in audit_wl.findings])
+        vm_ports_wl = [po for po in solved_wl.ports if po.net_name == "Vm"]
+        self.assertEqual(len(vm_ports_wl), 1, "Non-rail port Vm must still have exactly 1 top-level Port")
+        vm_routes_wl = [rt for rt in solved_wl.routes if rt.net_name == "Vm"]
+        self.assertGreaterEqual(len(vm_routes_wl), 3, "Nearby M1/M2/M3 pins must be physically wired together")
+        vm_stubs_wl = [wl for wl in solved_wl.wire_label_stubs if wl.net_name == "Vm"]
+        self.assertEqual(len(vm_stubs_wl), 1, "Only far cluster (M11) should receive a WireLabelStub")
+
+        # 3. Counterexample: dropping the far WireLabelStub must fail LVS audit
+        solved_wl.wire_label_stubs = []
+        audit_broken = audit_solved_schematic(solved_wl, pdk)
+        self.assertFalse(audit_broken.overall_passed, "Removing far WireLabelStub must trigger LVS failure")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -26,8 +26,9 @@ from schematic_gen.models import (
     SolvedSchematic,
 )
 from schematic_gen.optimizer import optimize_schematic_crossings
+from schematic_gen.quality import solved_quality_cost
 from schematic_gen.pdk import PdkRegistry
-from schematic_gen.svg_renderer import render_schematic_svg
+from schematic_gen.hierarchy_lvs import verify_hierarchy_flatten_lvs
 
 
 @dataclass
@@ -111,27 +112,80 @@ def _slugify(text: str, idx: int) -> str:
     return f"p{idx:02d}_{short[:28]}"
 
 
-def _infer_stage_rank(title: str, instances: list[InstanceIR], circuit: NetlistCircuit) -> int:
-    t = title.lower()
-    ports_in = {p.net for p in circuit.ports if p.direction == "input"}
-    ports_out = {p.net for p in circuit.ports if p.direction == "output"}
-    touched = {n for i in instances for n in i.terminals.values()}
+def _infer_page_ranks(
+    buckets: list[tuple[str, list[str]]],
+    circuit: NetlistCircuit,
+    global_bias_nets: set[str],
+) -> list[int]:
+    """Topology-only left-to-right page ranking (no page-title keywords, no demo-specific vocabulary).
 
-    if any(k in t for k in ("beta", "startup", "bandgap", "reference")):
-        return 5
-    if any(k in t for k in ("handoff", "unit copies", "shield", "common-gate bias")):
-        return 15
-    if (touched & ports_in) and any(k in t for k in ("input", "pair", "diff")):
-        return 25
-    if any(k in t for k in ("fold", "degeneration", "cascode")):
-        return 40
-    if any(k in t for k in ("idle", "replica", "bridge")):
-        return 55
-    if any(k in t for k in ("overdrive", "pedestal", "slew")):
-        return 65
-    if (touched & ports_out) or any(k in t for k in ("output", "miller", "clamp")):
-        return 85
-    return 50
+    Buckets are classified as bias source (contains an independent source or drives a global bias rail through
+    a diode-connected device) -> input (touches non-rail input ports) -> intermediate (ordered by longest
+    signal path from input pages on the page-level channel->gate graph) -> output (drives output ports).
+    """
+    inst_map = circuit.instance_map()
+    rails = set(circuit.supply_nets) | set(circuit.ground_nets)
+    in_ports = {p.net for p in circuit.ports if p.direction == "input"} - rails
+    out_ports = {p.net for p in circuit.ports if p.direction == "output"} - rails
+    ctrl_pins = {"G", "BASE"}
+
+    page_of: dict[str, int] = {r: bi for bi, (_t, mem) in enumerate(buckets) for r in mem}
+    drives: list[set[str]] = [set() for _ in buckets]
+    ctrls: list[set[str]] = [set() for _ in buckets]
+    is_bias_src = [False] * len(buckets)
+    for bi, (_t, mem) in enumerate(buckets):
+        for r in mem:
+            inst = inst_map[r]
+            if inst.device_class in {"isource", "vsource"}:
+                is_bias_src[bi] = True
+            for pin, net in inst.terminals.items():
+                if pin == "B" or net in rails:
+                    continue
+                if pin in ctrl_pins:
+                    ctrls[bi].add(net)
+                else:
+                    drives[bi].add(net)
+            # Diode-connected master feeding a global bias rail
+            g = inst.terminals.get("G", inst.terminals.get("BASE", ""))
+            d = inst.terminals.get("D", inst.terminals.get("C", ""))
+            if g and g == d and g in global_bias_nets:
+                is_bias_src[bi] = True
+
+    n = len(buckets)
+    succ: list[set[int]] = [set() for _ in range(n)]
+    for a in range(n):
+        for b in range(n):
+            if a != b and (drives[a] & ctrls[b]) - global_bias_nets:
+                succ[a].add(b)
+
+    touches_in = [bool((drives[i] | ctrls[i]) & in_ports) for i in range(n)]
+    touches_out = [bool(drives[i] & out_ports) for i in range(n)]
+    depth = [0] * n
+    frontier = [i for i in range(n) if touches_in[i]] or [i for i in range(n) if is_bias_src[i]]
+    seen = set(frontier)
+    level = 0
+    while frontier and level < n:
+        nxt: list[int] = []
+        for u in frontier:
+            for v in succ[u]:
+                if v not in seen:
+                    seen.add(v)
+                    depth[v] = level + 1
+                    nxt.append(v)
+        frontier = nxt
+        level += 1
+
+    ranks: list[int] = []
+    for i in range(n):
+        if is_bias_src[i] and not touches_out[i]:
+            ranks.append(5)
+        elif touches_out[i]:
+            ranks.append(85)
+        elif touches_in[i]:
+            ranks.append(25)
+        else:
+            ranks.append(min(80, 40 + 5 * depth[i]))
+    return ranks
 
 
 def propose_flat_partition(
@@ -185,6 +239,13 @@ def propose_flat_partition(
             a, b = uniq
             if inst_map[a].section_hint == inst_map[b].section_hint:
                 _union(a, b)
+
+    # HARD atomic segments (private pure-series nodes / same Super-MOS stack) are never split across sheets,
+    # even when netlist section comments disagree — same rule as `validate-modules`.
+    for br in analysis.branch_abstraction.get("branches", []):
+        for seg in br.get("hardSegments", []):
+            for other in seg[1:]:
+                _union(seg[0], other)
 
     clusters_by_root: dict[str, list[str]] = defaultdict(list)
     for inst in circuit.instances:
@@ -275,11 +336,14 @@ def propose_flat_partition(
     # 3. Build PagePartitionSpec list & identify cross-sheet global bias nets (>= 3 pages)
     pages: list[PagePartitionSpec] = []
     page_touch_count: Counter[str] = Counter()
+    page_ranks = _infer_page_ranks(
+        raw_buckets, circuit, set(analysis.branch_abstraction.get("globalBiasNets", []))
+    )
 
     for idx, (title, members) in enumerate(raw_buckets, start=1):
         pid = _slugify(title, idx)
         cname = f"{circuit.cell_name}_{pid}"
-        s_rank = _infer_stage_rank(title, [inst_map[r] for r in members], circuit)
+        s_rank = page_ranks[idx - 1]
         pages.append(
             PagePartitionSpec(
                 page_id=pid,
@@ -461,64 +525,6 @@ def outline_flat_circuit_to_design(
     return NetlistDesign(cells=cells, top_cell=h_intent.top_cell), pin_sides_by_cell
 
 
-def verify_hierarchy_flatten_lvs(
-    original_flat: NetlistCircuit,
-    combined_manifest: dict[str, Any],
-    top_cell_name: str,
-) -> tuple[bool, list[str]]:
-    """Flatten `TOP` + child subckt manifests in memory and verify 1-to-1 isomorphism with `original_flat`."""
-    by_cell = {str(c["cellName"]): c for c in combined_manifest.get("circuits", [])}
-    if top_cell_name not in by_cell:
-        return False, [f"Top cell {top_cell_name!r} missing from combined manifest"]
-
-    flat_extracted: dict[str, tuple[str, dict[str, str], dict[str, str]]] = {}
-    diffs: list[str] = []
-
-    def _expand_cell(cell_name: str, net_subst: dict[str, str]) -> None:
-        c_obj = by_cell[cell_name]
-        for item in c_obj.get("instances", []):
-            dev_cls = str(item["deviceClass"])
-            node_map = {
-                str(n["sourcePinName"]): net_subst.get(str(n["netName"]), str(n["netName"]))
-                for n in item.get("nodes", [])
-            }
-            if dev_cls.startswith("subckt:"):
-                child_cell = dev_cls.split(":", 1)[1]
-                if child_cell not in by_cell:
-                    diffs.append(f"Missing child manifest for {child_cell!r}")
-                    return
-                _expand_cell(child_cell, node_map)
-            else:
-                ref = str(item["reference"])
-                if ref in flat_extracted:
-                    diffs.append(f"Duplicate flattened leaf instance {ref!r}")
-                params = {str(k): str(v) for k, v in (item.get("sourceParameters") or {}).items()}
-                flat_extracted[ref] = (str(item.get("sourceTarget", "")), node_map, params)
-
-    top_identity = {p.name: p.net for p in original_flat.ports}
-    _expand_cell(top_cell_name, top_identity)
-
-    orig_map = original_flat.instance_map()
-    if set(flat_extracted) != set(orig_map):
-        missing = sorted(set(orig_map) - set(flat_extracted))
-        extra = sorted(set(flat_extracted) - set(orig_map))
-        diffs.append(f"Leaf instance set mismatch: missing={missing[:10]}, extra={extra[:10]}")
-
-    for ref, orig_inst in orig_map.items():
-        if ref not in flat_extracted:
-            continue
-        model_got, terms_got, params_got = flat_extracted[ref]
-        if model_got != orig_inst.source_model:
-            diffs.append(f"{ref}: model {model_got!r} != {orig_inst.source_model!r}")
-        if terms_got != orig_inst.terminals:
-            diffs.append(f"{ref}: terminals {terms_got} != {orig_inst.terminals}")
-        for pk, pv in orig_inst.params.items():
-            if params_got.get(pk) != str(pv):
-                diffs.append(f"{ref}.{pk}: {params_got.get(pk)!r} != {pv!r}")
-
-    return len(diffs) == 0, diffs
-
-
 def compile_hierarchical_circuit(
     circuit_or_design: NetlistCircuit | NetlistDesign,
     *,
@@ -563,6 +569,8 @@ def compile_hierarchical_circuit(
             top_pins=sides["top"],
             bottom_pins=sides["bottom"],
         )
+    for cell_obj in design.cells.values():
+        pdk_work.ensure_subckt_symbols(cell_obj)
 
     # True topological bottom-up post-order DFS: leaf cells first, intermediate parents next, `design.top_cell` last
     visited_order: list[str] = []
@@ -645,14 +653,16 @@ def compile_hierarchical_circuit(
             intent.spacing.intra_group_gap_x = max(intent.spacing.intra_group_gap_x, 12)
             intent.spacing.inter_tier_gap_y = max(intent.spacing.inter_tier_gap_y, 14)
 
+        page_allow_wl = allow_wire_labels if cname == design.top_cell else False
         if optimize_crossings and len(cell.instances) <= 22:
             solved = optimize_schematic_crossings(
-                cell, intent, pdk=pdk_work, allow_wire_labels=allow_wire_labels, max_evals=10
+                cell, intent, pdk=pdk_work, allow_wire_labels=page_allow_wl, max_evals=10,
+                cost_fn=solved_quality_cost,
             )
         else:
             from schematic_gen.router import compile_schematic
             solved = compile_schematic(
-                cell, intent, pdk=pdk_work, allow_wire_labels=allow_wire_labels
+                cell, intent, pdk=pdk_work, allow_wire_labels=page_allow_wl
             )
 
         solved_pages[cname] = solved
@@ -706,73 +716,6 @@ def compile_hierarchical_circuit(
         flatten_lvs_passed=flat_ok,
         flatten_lvs_Diffs=flat_diffs,
     )
-
-
-def render_hierarchy_book_html(result: HierarchyBuildResult, pdk: PdkRegistry) -> str:
-    """Render a standalone single-file HTML Schematic Book containing TOP + all child sheets."""
-    top_name = result.design.top_cell
-    sheet_order = [top_name] + [c for c in result.solved_pages if c != top_name]
-    title_by_cell = {top_name: f"TOP · {top_name} (顶层架构框图)"}
-    if result.hierarchy_intent:
-        for p in result.hierarchy_intent.pages:
-            title_by_cell[p.cell_name] = f"{p.page_id} · {p.title}"
-
-    rows_html: list[str] = []
-    sections_html: list[str] = []
-    for cname in sheet_order:
-        solved = result.solved_pages[cname]
-        rep = result.audits[cname]
-        m = rep.metrics
-        badge = "PASS" if rep.overall_passed else "FAIL"
-        rows_html.append(
-            f'<tr><td><a href="#{escape(cname)}"><code>{escape(cname)}</code></a></td>'
-            f"<td>{escape(title_by_cell.get(cname, cname))}</td>"
-            f"<td>{m['instanceCount']}</td><td>{m['netCount']}</td>"
-            f"<td>{m['wireCrossingCount']}</td><td><strong>{badge}</strong></td></tr>"
-        )
-        svg_inline = render_schematic_svg(solved, pdk, show_groups=True)
-        sections_html.append(
-            f'<section id="{escape(cname)}" class="sheet">'
-            f"<h2>{escape(title_by_cell.get(cname, cname))}</h2>"
-            f'<p class="meta">Instances: <code>{m["instanceCount"]}</code> · Nets: <code>{m["netCount"]}</code> · '
-            f'Crossings: <code>{m["wireCrossingCount"]}</code> · DRC: <code>{badge}</code></p>'
-            f'<div class="svg-wrap">{svg_inline}</div></section>'
-        )
-
-    lvs_badge = "PASS (100% 晶体管与网络双射同构)" if result.flatten_lvs_passed else f"FAIL ({result.flatten_lvs_Diffs})"
-    return f"""<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<title>{escape(top_name)} · Hierarchical Schematic Book</title>
-<style>
-  body {{ margin:0; background:#eef3f1; color:#162d31; font:15px/1.6 "Segoe UI","Microsoft YaHei",sans-serif; }}
-  main {{ max-width:1360px; margin:24px auto; padding:28px 36px; background:#fff; border-top:5px solid #00695c; }}
-  h1 {{ margin:0 0 8px; font-size:1.65rem; }}
-  h2 {{ margin:24px 0 6px; font-size:1.15rem; border-left:4px solid #00695c; padding-left:10px; }}
-  .summary {{ background:#f3f8f6; padding:12px 16px; border-radius:6px; margin:12px 0 20px; }}
-  table {{ width:100%; border-collapse:collapse; margin-bottom:24px; font-size:.92rem; }}
-  th, td {{ text-align:left; padding:8px 10px; border-bottom:1px solid #d5e2df; }}
-  th {{ background:#f1f6f4; color:#3d5a5e; }}
-  .sheet {{ margin-top:28px; padding-top:16px; border-top:1px solid #d5e2df; }}
-  .meta {{ color:#4f6b6e; font-size:.88rem; margin:0 0 10px; }}
-  .svg-wrap {{ overflow-x:auto; border:1px solid #dce7e4; border-radius:6px; background:#fcfdfb; padding:8px; }}
-  a {{ color:#00695c; text-decoration:none; }}
-</style>
-</head>
-<body><main>
-  <h1>{escape(top_name)} · 多页层次化原理图册</h1>
-  <div class="summary">
-    <strong>展平还原 LVS 核对（Flatten-Back Equivalence）</strong>：{escape(lvs_badge)}<br>
-    <strong>总页数</strong>：{len(sheet_order)} 页（1 张顶层信号流框图 + {len(sheet_order) - 1} 张功能子原理图）
-  </div>
-  <table>
-    <thead><tr><th>单元名</th><th>功能页说明</th><th>实例数</th><th>网络数</th><th>正交跨线</th><th>DRC 门禁</th></tr></thead>
-    <tbody>{''.join(rows_html)}</tbody>
-  </table>
-  {''.join(sections_html)}
-</main></body></html>
-"""
 
 
 def import_hierarchy_to_virtuoso_live(
@@ -846,3 +789,7 @@ def import_hierarchy_to_virtuoso_live(
         "syncedSymbols": synced_symbols,
         "topImport": top_import,
     }
+
+# Split modules (re-exported for backward compatibility)
+from schematic_gen.hierarchy_book import render_hierarchy_book_html  # noqa: E402,F401
+from schematic_gen.hierarchy_lvs import verify_hierarchy_flatten_lvs  # noqa: E402,F401

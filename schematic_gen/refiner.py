@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 from schematic_gen.models import (
@@ -14,7 +15,8 @@ from schematic_gen.models import (
     SolvedSchematic,
     SpacingConfig,
 )
-from schematic_gen.pdk import PdkRegistry, source_orientation
+from schematic_gen.parser import classify_rail_nets
+from schematic_gen.pdk import DEFAULT_NETLIST_RULES_PATH, PdkRegistry, source_orientation
 from schematic_gen.router import compile_schematic
 
 
@@ -32,6 +34,7 @@ def circuit_and_intent_from_manifest(
     manifest_data: dict[str, Any],
     *,
     spacing: SpacingConfig | None = None,
+    rules_path: Path | str = DEFAULT_NETLIST_RULES_PATH,
 ) -> tuple[NetlistCircuit, SchematicIntent]:
     """Extract electrical `NetlistCircuit` + topological `SchematicIntent` from an existing draft manifest.
 
@@ -50,8 +53,15 @@ def circuit_and_intent_from_manifest(
         for p in raw_circuit.get("ports", [])
     ]
     nets = [str(n) for n in raw_circuit.get("nets", [])]
-    supplies = [n for n in nets if n.upper() in {"VDD", "AVDD", "VPWR", "VCC"}]
-    grounds = [n for n in nets if n.upper() in {"VSS", "AVSS", "VGND", "GND", "0"}]
+    supplies, grounds = classify_rail_nets(nets, rules_path)
+    # Rails explicitly drawn with supply/ground symbols in the draft are authoritative too
+    for p_item in raw_circuit.get("ports", []):
+        sym = str(p_item.get("symbolId", p_item.get("symbol", ""))).lower()
+        net_p = str(p_item.get("netName", ""))
+        if sym in {"vdd-port", "vdd"} and net_p and net_p not in supplies:
+            supplies.append(net_p)
+        elif sym in {"ground", "gnd"} and net_p and net_p not in grounds:
+            grounds.append(net_p)
 
     instances: list[InstanceIR] = []
     pos_by_ref: dict[str, tuple[float, float]] = {}
@@ -61,11 +71,12 @@ def circuit_and_intent_from_manifest(
         ref = str(item["reference"])
         dev_class = str(item["deviceClass"])
         kind = str(item["kind"]) if item.get("kind") else None
-        polarity = (
-            kind
-            if dev_class == "mos" and kind in {"nmos", "pmos"}
-            else ("pmos" if (kind or "").startswith("pmos") else ("nmos" if dev_class == "mos" else "passive"))
-        )
+        if dev_class == "mos":
+            polarity = "pmos" if (kind or "").startswith("pmos") else "nmos"
+        elif dev_class == "bjt":
+            polarity = "pnp" if (kind or "").startswith("pnp") else "npn"
+        else:
+            polarity = "passive"
         terms = {
             str(n["sourcePinName"]): str(n["netName"]) for n in item.get("nodes", [])
         }
@@ -86,7 +97,7 @@ def circuit_and_intent_from_manifest(
         pos_by_ref[ref] = (float(sp["x"]), float(sp["y"]))
         tr = item.get("sourceTransform") or {}
         cad = source_orientation(int(round(float(tr.get("rotation", 0)))), str(tr.get("mirror", "none")))
-        if dev_class != "mos" and cad == "R0":
+        if dev_class not in {"mos", "bjt"} and cad == "R0":
             orientations[ref] = "vertical"
         else:
             orientations[ref] = _CADENCE_TO_SEMANTIC.get(cad, "gate_left")

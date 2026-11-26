@@ -78,6 +78,86 @@ class TestParserAndPdk(unittest.TestCase):
         self.assertEqual(cap_h["P"], (-3, 0))
         self.assertEqual(cap_h["M"], (3, 0))
 
+    def test_sky130_bjt_npn_and_pnp_parsing_and_polarity(self) -> None:
+        netlist = """
+        .subckt bjt_leaf VDD VSS VIN VOUT
+        XQ1 VOUT VIN VDD sky130_fd_pr__pnp_05v5_W0p68L0p68 m=2
+        XQ2 VOUT VIN VSS VSS sky130_fd_pr__npn_05v5_W1p00L1p00 m=1
+        .ends bjt_leaf
+        """
+        circuit = parse_netlist_text(netlist)
+        insts = circuit.instance_map()
+        self.assertEqual(insts["Q1"].device_class, "bjt")
+        self.assertEqual(insts["Q1"].kind, "pnp")
+        self.assertEqual(insts["Q1"].polarity, "pnp")
+        self.assertEqual(insts["Q1"].terminals, {"C": "VOUT", "BASE": "VIN", "E": "VDD"})
+        self.assertEqual(insts["Q2"].device_class, "bjt")
+        self.assertEqual(insts["Q2"].kind, "npn4")
+        self.assertEqual(insts["Q2"].polarity, "npn")
+        self.assertEqual(insts["Q2"].terminals, {"C": "VOUT", "BASE": "VIN", "E": "VSS", "B": "VSS"})
+
+        pdk = PdkRegistry()
+        rot0, mir0, _ = semantic_to_transform("gate_left")
+        pnp_pins = pdk.source_pin_offsets("pnp", rot0, mir0)
+        npn4_pins = pdk.source_pin_offsets("npn4", rot0, mir0)
+        # PNP: Emitter on top (y=-3), Collector on bottom (y=+3), Base on left (x=-3)
+        self.assertLess(pnp_pins["E"][1], pnp_pins["C"][1])
+        self.assertLess(pnp_pins["BASE"][0], 0)
+        # NPN4: Collector on top (y=-3), Emitter on bottom (y=+3), Base on left (x=-3), Substrate on right (x=+1)
+        self.assertLess(npn4_pins["C"][1], npn4_pins["E"][1])
+        self.assertLess(npn4_pins["BASE"][0], 0)
+        self.assertGreater(npn4_pins["B"][0], 0)
+
+    def test_behavioral_subckt_with_params_keyword_and_block_symbol_registration(self) -> None:
+        netlist = """
+        .subckt ideal_amp VDD VSS VIP VIN VOP VON params: gain=1e6 vocm=0
+        VCM ncm 0 DC {vocm}
+        EPLUS VOP ncm VIP VIN {gain/2}
+        EMINUS VON ncm VIN VIP {gain/2}
+        .ends ideal_amp
+
+        .subckt ideal_buf VDD VSS VIP VIN VOUT params: gain=1e6
+        B1 VOUT 0 V={gain*(V(VIP)-V(VIN))}
+        .ends ideal_buf
+
+        .subckt top_blk VDD VSS Vop Von
+        XM1 n1 n1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15 w=1 nf=1 m=1
+        X1 VDD VSS n1 VSS Von Vop ideal_amp
+        X2 VDD VSS n1 VSS n2 ideal_buf
+        R1 n2 VSS 1k
+        .ends top_blk
+        """
+        circuit = parse_netlist_text(netlist)
+        self.assertEqual(circuit.cell_name, "top_blk")
+        ports = circuit.port_map()
+        self.assertEqual(ports["Vop"].direction, "output")
+        self.assertEqual(ports["Von"].direction, "output")
+
+        insts = circuit.instance_map()
+        self.assertEqual(insts["X1"].device_class, "subckt")
+        self.assertEqual(insts["X1"].subckt_cell, "ideal_amp")
+        self.assertEqual(
+            insts["X1"].terminals,
+            {"VDD": "VDD", "VSS": "VSS", "VIP": "n1", "VIN": "VSS", "VOP": "Von", "VON": "Vop"},
+        )
+        self.assertEqual(insts["X2"].subckt_cell, "ideal_buf")
+        self.assertEqual(
+            insts["X2"].terminals,
+            {"VDD": "VDD", "VSS": "VSS", "VIP": "n1", "VIN": "VSS", "VOUT": "n2"},
+        )
+
+        pdk = PdkRegistry()
+        registered = pdk.ensure_subckt_symbols(circuit)
+        self.assertEqual(registered, ["ideal_amp", "ideal_buf"])
+        amp_pins = pdk.source_pin_offsets("subckt:ideal_amp", 0, "none")
+        # VDD top (y<0), VSS bottom (y>0), VIP/VIN left (x<0), VOP/VON right (x>0)
+        self.assertLess(amp_pins["VDD"][1], 0)
+        self.assertGreater(amp_pins["VSS"][1], 0)
+        self.assertLess(amp_pins["VIP"][0], 0)
+        self.assertLess(amp_pins["VIN"][0], 0)
+        self.assertGreater(amp_pins["VOP"][0], 0)
+        self.assertGreater(amp_pins["VON"][0], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

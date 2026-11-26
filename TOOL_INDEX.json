@@ -2,7 +2,7 @@
   "schema": "schem_gen.index.v1",
   "name": "analog-schem-gen",
   "title": "PDK-Agnostic High-Readability Analog Schematic Generator",
-  "version": "0.2.1",
+  "version": "0.3.3",
   "license": "Apache-2.0",
   "bundled_reference_pdks": ["sky130"],
   "entry": "schem_gen.py",
@@ -23,6 +23,9 @@
   ],
   "commands": [
     "analyze",
+    "inspect",
+    "validate-modules",
+    "plan-to-intent",
     "compile",
     "auto",
     "partition",

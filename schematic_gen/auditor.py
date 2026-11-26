@@ -143,7 +143,7 @@ def audit_manifest_and_solved(
         rot = int(round(float(tr.get("rotation", 0))))
         mir = str(tr.get("mirror", "none"))
         dev_key = str(
-            m_item["kind"] if m_item.get("deviceClass") == "mos" else m_item["deviceClass"]
+            m_item["kind"] if m_item.get("deviceClass") in {"mos", "bjt"} else m_item["deviceClass"]
         )
         rel_p = pdk.source_pin_offsets(dev_key, rot, mir)
         rel_b = pdk.source_body_box(dev_key, rot, mir)
@@ -217,8 +217,14 @@ def audit_manifest_and_solved(
         net = str(bl["netName"])
         p_b = pin_coords[(ref, str(bl["pinName"]))]
         mx = int(round(float(m_insts[ref]["sourcePosition"]["x"])))
-        dx = 1 if p_b[0] >= mx else -1
-        p_end = (p_b[0] + dx * pdk.local_stub_len, p_b[1])
+        my = int(round(float(m_insts[ref]["sourcePosition"]["y"])))
+        rdx, rdy = p_b[0] - mx, p_b[1] - my
+        if abs(rdx) >= abs(rdy):
+            dx = 1 if rdx >= 0 else -1
+            p_end = (p_b[0] + dx * pdk.local_stub_len, p_b[1])
+        else:
+            dy_b = 1 if rdy >= 0 else -1
+            p_end = (p_b[0], p_b[1] + dy_b * pdk.local_stub_len)
         segments_by_net[net].append((p_b, p_end))
         port_occ_pts[f"BULK_{ref}"] = (net, p_end)
 
@@ -243,6 +249,13 @@ def audit_manifest_and_solved(
         for u, v in zip(wl_pts, wl_pts[1:]):
             net_adj[u].add(v)
             net_adj[v].add(u)
+        # A WireLabelStub on a top-level port net also merges logically with that net's Port(s)
+        # (matching Virtuoso `schCreatePin` + `schCreateWireLabel` semantics)
+        if wl_pts and net in supplies_and_ports:
+            net_port_pts_merge = [pt for pnet, pt in port_occ_pts.values() if pnet == net]
+            if net_port_pts_merge:
+                net_adj[wl_pts[0]].add(net_port_pts_merge[0])
+                net_adj[net_port_pts_merge[0]].add(wl_pts[0])
 
         req_pins = [
             pin_coords[(inst.ref, pin)]
@@ -491,6 +504,30 @@ def audit_manifest_and_solved(
     if not suggestions and len(crossing_pairs) == 0:
         suggestions.append("当前原理图零异网交叉、零压字、零穿模，可直接用于复核或导入目标库。")
 
+    # Make silent policy degradation visible: `label_stub` without `--allow-wire-labels` falls back to a
+    # physical perimeter bus. Report it so the LLM knows its request was not honored literally.
+    degraded_label_nets: list[str] = []
+    if solved_hint is not None:
+        stub_nets = {wl.net_name for wl in solved_hint.wire_label_stubs}
+        degraded_label_nets = sorted(
+            n for n, pol in solved_hint.intent.net_policies.items() if pol == "label_stub" and n not in stub_nets
+        )
+        if degraded_label_nets:
+            findings.append(
+                AuditFinding(
+                    severity="INFO",
+                    code="LABEL_STUB_DEGRADED",
+                    message=(
+                        f"网络 {degraded_label_nets} 设为 `label_stub`，但本次编译未生成线标短桩（未开启 "
+                        "`--allow-wire-labels` 或该网无需短桩），已按 `perimeter_bus` 物理实线处理。"
+                    ),
+                    subjects=degraded_label_nets,
+                )
+            )
+            suggestions.append(
+                f"如需真正的线标短桩，请对 {degraded_label_nets} 使用 `--allow-wire-labels` 重新编译。"
+            )
+
     hard_readability_errors = (
         symbol_overlaps
         + label_overlaps
@@ -515,6 +552,7 @@ def audit_manifest_and_solved(
         "parallelCrowdGridPairs": parallel_crowds,
         "wireCrossingCount": len(crossing_pairs),
         "crossingsByNet": dict(crossings_by_net),
+        "degradedLabelStubNets": degraded_label_nets,
     }
 
     return AuditReport(

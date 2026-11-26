@@ -26,7 +26,7 @@ from schematic_gen.models import (
     WireLabelStubPlaced,
 )
 from schematic_gen.pdk import PdkRegistry
-from schematic_gen.placer import place_schematic
+from schematic_gen.placer import cluster_local_port_terminals, place_schematic
 
 
 DIRS: tuple[tuple[int, int], ...] = ((1, 0), (-1, 0), (0, 1), (0, -1))
@@ -209,15 +209,26 @@ class _GridOccupancy:
             net = item["netName"]
             pl = placements[ref]
             ax, ay = pl.pin_points["B"]
-            dx = 1 if ax >= pl.x else -1
-            ex = ax + dx * pdk.local_stub_len
-            for x in range(min(ax, ex), max(ax, ex) + 1):
-                self.wire_h[(x, ay)].add(net)
-            self.wire_corners[(ax, ay)].add(net)
-            self.wire_corners[(ex, ay)].add(net)
-            # Reserve small label box around bulk label tip
-            for lx in range(ex, ex + dx * 3 + (1 if dx > 0 else -1), dx):
-                self.label_blocked.add((lx, ay))
+            rdx, rdy = ax - pl.x, ay - pl.y
+            if abs(rdx) >= abs(rdy):
+                dx = 1 if rdx >= 0 else -1
+                ex = ax + dx * pdk.local_stub_len
+                for x in range(min(ax, ex), max(ax, ex) + 1):
+                    self.wire_h[(x, ay)].add(net)
+                self.wire_corners[(ax, ay)].add(net)
+                self.wire_corners[(ex, ay)].add(net)
+                for lx in range(ex, ex + dx * 3 + (1 if dx > 0 else -1), dx):
+                    self.label_blocked.add((lx, ay))
+            else:
+                dy_b = 1 if rdy >= 0 else -1
+                ey = ay + dy_b * pdk.local_stub_len
+                for y in range(min(ay, ey), max(ay, ey) + 1):
+                    self.wire_v[(ax, y)].add(net)
+                self.wire_corners[(ax, ay)].add(net)
+                self.wire_corners[(ax, ey)].add(net)
+                for ly in range(ey, ey + dy_b * 2 + (1 if dy_b > 0 else -1), dy_b):
+                    for lx in (ax - 1, ax, ax + 1):
+                        self.label_blocked.add((lx, ly))
 
         for item in local_bulk_shorts:
             ref = item["reference"]
@@ -923,10 +934,13 @@ def route_placed_schematic(
     for item in local_bulk_shorts:
         bulk_handled.add((item["reference"], item["bulkPinName"]))
 
-    repeated_port_nets = set(rails) | {
+    # Only true supply/ground rails use multi-tap rail symbols; non-rail `local_repeat`
+    # ports place a single top-level Port and wire nearby shared devices physically.
+    repeated_port_nets = set(rails)
+    local_cluster_port_nets = {
         po.net_name
         for po in ports
-        if intent.port_sides.get(po.port_name) == "local_repeat"
+        if po.net_name not in rails and intent.port_sides.get(po.port_name) == "local_repeat"
     }
     label_stub_nets_pre: set[str] = (
         {
@@ -1076,40 +1090,17 @@ def route_placed_schematic(
                             bus_handled_nets.add(t_net)
 
     # 1. Route local supply / ground / repeated-port taps first (short straight stubs!)
-    repeated_port_nets = set(rails) | {
+    # Only true supply/ground rails use multi-tap rail symbols; non-rail `local_repeat`
+    # ports place a single top-level Port and wire nearby shared devices physically.
+    repeated_port_nets = set(rails)
+    local_cluster_port_nets = {
         po.net_name
         for po in ports
-        if intent.port_sides.get(po.port_name) == "local_repeat"
+        if po.net_name not in rails and intent.port_sides.get(po.port_name) == "local_repeat"
     }
-    # Handle explicit `label_stub` nets when `allow_wire_labels=True`
+    # Handle explicit `label_stub` nets and long-span bias nets inside section 2a using
+    # local-cluster physical wiring + one clean WireLabelStub per cluster (when `allow_wire_labels=True`).
     label_stub_nets: set[str] = set()
-    if allow_wire_labels:
-        for net in circuit.nets:
-            if net not in repeated_port_nets and intent.net_policies.get(net) == "label_stub":
-                label_stub_nets.add(net)
-                for ep in endpoints_by_net.get(net, []):
-                    esc = occ.pin_escape.get((ep.x, ep.y), (ep.x - 1, ep.y))
-                    dx = esc[0] - ep.x
-                    dy = esc[1] - ep.y
-                    ex = ep.x + dx * 4
-                    ey = ep.y + dy * 4
-                    ref_name = str(ep.instance_id or "").replace("source-", "")
-                    stub_counter += 1
-                    wire_label_stubs.append(
-                        WireLabelStubPlaced(
-                            id=f"WL_{net}_{stub_counter}",
-                            net_name=net,
-                            ref=ref_name,
-                            pin_name=str(ep.pin_name or ""),
-                            x1=ep.x,
-                            y1=ep.y,
-                            x2=ex,
-                            y2=ey,
-                        )
-                    )
-                    occ.add_polyline(net, [(ep.x, ep.y), (ex, ey)])
-                    for step_k in range(1, 5):
-                        occ.label_blocked.add((ep.x + dx * (4 + step_k), ep.y + dy * (4 + step_k)))
     ep_at_point_by_net: dict[str, dict[Point, RouteStepPlaced]] = defaultdict(dict)
     junction_at_point_by_net: dict[str, dict[Point, str]] = defaultdict(dict)
     tree_points_by_net: dict[str, set[Point]] = defaultdict(set)
@@ -1118,11 +1109,32 @@ def route_placed_schematic(
         pol = intent.net_policies.get(net, "full_wire")
         if pol == "label_stub" and not allow_wire_labels:
             pol = "perimeter_bus"
+        if pol == "supply_local" and net in local_cluster_port_nets:
+            pol = "perimeter_bus"
         if pol != "perimeter_bus":
             return None
-        inst_ys = [e.y for e in endpoints_by_net.get(net, [])]
+        eps_n = endpoints_by_net.get(net, [])
+        inst_ys = [e.y for e in eps_n]
         avg_y = (sum(inst_ys) / len(inst_ys)) if inst_ys else mid_inst_y
-        return top_bus_y if avg_y <= mid_inst_y else bottom_bus_y
+        go_top = avg_y <= mid_inst_y
+        base_y = top_bus_y if go_top else bottom_bus_y
+        step_dir = -1 if go_top else 1
+        # Pick the nearest horizontal bus track completely free of label_blocked / body_blocked / foreign wire_h
+        # across the net's X span so perimeter buses stay 100% flat without meaningless U-dips!
+        xs_n = [e.x for e in eps_n] + [po.x for po in port_occs_by_net.get(net, [])]
+        if len(xs_n) >= 2:
+            x_lo, x_hi = min(xs_n), max(xs_n)
+            for k_off in range(0, 14):
+                cy = base_y + k_off * step_dir
+                if all(
+                    (cx, cy) not in occ.label_blocked
+                    and (cx, cy) not in occ.body_blocked
+                    and not (occ.wire_h.get((cx, cy), set()) - {net})
+                    and not (occ.wire_corners.get((cx, cy), set()) - {net})
+                    for cx in range(x_lo, x_hi + 1)
+                ):
+                    return cy
+        return base_y
 
     def _connect_ep_to_net_tree(
         net: str,
@@ -1130,6 +1142,7 @@ def route_placed_schematic(
         *,
         bus_y_override: int | None = None,
         prefer_tight: bool = False,
+        explicit_path: list[Point] | None = None,
     ) -> None:
         nonlocal junc_counter, route_counter
         tree_points = tree_points_by_net[net]
@@ -1143,45 +1156,48 @@ def route_placed_schematic(
         if start_pt in tree_points:
             return
 
-        bus_y = bus_y_override if bus_y_override is not None else _bus_target_for_net(net)
-        path = _astar_connect_to_tree(
-            net,
-            start_pt,
-            tree_points,
-            occ,
-            search_bounds,
-            allow_tight_parallel=prefer_tight,
-            bus_y_target=bus_y,
-        )
-        if path is None:
-            # Fallback 1: relax parallel pitch to 1 grid while keeping strict edge-port walls intact!
-            if not prefer_tight:
-                tight_nets.append(net)
+        if explicit_path is not None:
+            path: list[Point] | None = list(explicit_path)
+        else:
+            bus_y = bus_y_override if bus_y_override is not None else _bus_target_for_net(net)
             path = _astar_connect_to_tree(
                 net,
                 start_pt,
                 tree_points,
                 occ,
-                (min_x, min_y - 10, max_x, max_y + 10),
-                allow_tight_parallel=True,
+                search_bounds,
+                allow_tight_parallel=prefer_tight,
                 bus_y_target=bus_y,
             )
-        if path is None:
-            # Fallback 2: emergency outer relaxation (triggers congestion corridor expansion on retry)
-            saved_walls = set(occ.edge_wall_xs)
-            occ.edge_wall_xs.clear()
-            try:
+            if path is None:
+                # Fallback 1: relax parallel pitch to 1 grid while keeping strict edge-port walls intact!
+                if not prefer_tight:
+                    tight_nets.append(net)
                 path = _astar_connect_to_tree(
                     net,
                     start_pt,
                     tree_points,
                     occ,
-                    (min_x - 10, min_y - 10, max_x + 10, max_y + 10),
+                    (min_x, min_y - 10, max_x, max_y + 10),
                     allow_tight_parallel=True,
                     bus_y_target=bus_y,
                 )
-            finally:
-                occ.edge_wall_xs.update(saved_walls)
+            if path is None:
+                # Fallback 2: emergency outer relaxation (triggers congestion corridor expansion on retry)
+                saved_walls = set(occ.edge_wall_xs)
+                occ.edge_wall_xs.clear()
+                try:
+                    path = _astar_connect_to_tree(
+                        net,
+                        start_pt,
+                        tree_points,
+                        occ,
+                        (min_x - 10, min_y - 10, max_x + 10, max_y + 10),
+                        allow_tight_parallel=True,
+                        bus_y_target=bus_y,
+                    )
+                finally:
+                    occ.edge_wall_xs.update(saved_walls)
         if path is None:
             raise RuntimeError(f"Orthogonal router could not find obstacle-free route for net {net!r}")
 
@@ -1229,6 +1245,14 @@ def route_placed_schematic(
                 for x in range(min(a[0], b[0]), max(a[0], b[0]) + 1):
                     tree_points.add((x, a[1]))
 
+    # Precompute vertical spans of device columns so interior rail ports never hijack terminals across intervening columns
+    _col_y_buckets: dict[int, list[int]] = defaultdict(list)
+    for _pl in placements.values():
+        _col_y_buckets[_pl.x].extend([_pl.body_box[1], _pl.body_box[3]])
+    _col_y_spans: list[tuple[int, int, int]] = [
+        (cx, min(ys), max(ys)) for cx, ys in _col_y_buckets.items() if ys
+    ]
+
     for rail_net in [n for n in circuit.nets if n in repeated_port_nets]:
         rail_ports = port_occs_by_net.get(rail_net, [])
         if not rail_ports:
@@ -1255,9 +1279,9 @@ def route_placed_schematic(
 
             def _po_match_cost(po: PortOccurrencePlaced, ep: RouteStepPlaced) -> float:
                 wrong_side = 0.0
-                if po.symbol_id == "vdd-port" and po.y > ep.y:
+                if po.symbol_id == "vdd-port" and po.y > ep.y + 4:
                     wrong_side = 500.0
-                elif po.symbol_id == "ground" and po.y < ep.y:
+                elif po.symbol_id == "ground" and po.y < ep.y - 4:
                     wrong_side = 500.0
                 ya, yb = min(ep.y, po.y), max(ep.y, po.y)
                 blocked_vert = any(
@@ -1266,12 +1290,37 @@ def route_placed_schematic(
                     or occ.pin_owner.get((ep.x, cy)) not in (None, rail_net)
                     for cy in range(ya + 1, yb)
                 )
-                blk_pen = 1000.0 if blocked_vert else 0.0
+                rail_y_try = (
+                    (po.y + 2)
+                    if po.symbol_id == "vdd-port"
+                    else ((po.y - 2) if po.symbol_id == "ground" else po.y)
+                )
+                xa, xb = min(ep.x, po.x), max(ep.x, po.x)
+                blocked_horiz = any(
+                    (cx, rail_y_try) in occ.body_blocked
+                    or (cx, rail_y_try) in occ.label_blocked
+                    for cx in range(xa + 1, xb)
+                ) or any(
+                    xa < col_x < xb and cy_lo <= rail_y_try <= cy_hi
+                    for col_x, cy_lo, cy_hi in _col_y_spans
+                )
+                blk_pen = (1000.0 if blocked_vert else 0.0) + (800.0 if blocked_horiz else 0.0)
                 return wrong_side + blk_pen + abs(po.y - ep.y) + abs(po.x - ep.x) * 0.25
 
             for ep in endpoints_by_net.get(rail_net, []):
                 best_po = min(rail_ports, key=lambda po: _po_match_cost(po, ep))
                 clusters_by_po[best_po.occurrence_id].append(ep)
+
+            # Prune orphan duplicate supply/ground port occurrences that received zero terminals
+            # so floating unconnected VDD/VSS symbols never remain in the canvas or manifest.
+            if clusters_by_po:
+                unused_rail_oids = {
+                    po.occurrence_id for po in rail_ports if po.occurrence_id not in clusters_by_po
+                }
+                if unused_rail_oids:
+                    ports[:] = [po for po in ports if po.occurrence_id not in unused_rail_oids]
+                    rail_ports = [po for po in rail_ports if po.occurrence_id not in unused_rail_oids]
+                    port_occs_by_net[rail_net] = rail_ports
 
             for oid, cl_eps in clusters_by_po.items():
                 po = po_by_id[oid]
@@ -1470,7 +1519,15 @@ def route_placed_schematic(
             )
             occ.add_polyline(rail_net, path_r)
 
-    # 2. Order non-rail nets: critical short local nets first, then general full_wire, then perimeter_bus!
+    # 2. Order non-rail nets:
+    #    - Pre-compute which nets split into compact local clusters (via WireLabelStub) so their
+    #      local intra-stage bars (e.g. Vpc/Vnc/Vn cascode gate mirrors) route alongside short
+    #      structural nets BEFORE cross-column flyers!
+    #    - Route non-flying structural nets (crossed_foreign_cols == 0) before cross-column flyers
+    #      (crossed_foreign_cols >= 1) so jumpers see every intra-stage bar and vertical stem.
+    #    - Within cross-column flyers, route larger `min(xs)` first (inner nested L-elbow before
+    #      outer L-elbow) so parallel shifted pairs (e.g. diff-pair drains into folded cascode)
+    #      nest cleanly with zero mutual crossings!
     non_rail_nets = [
         n
         for n in circuit.nets
@@ -1478,7 +1535,53 @@ def route_placed_schematic(
     ]
     crit_set = set(intent.critical_nets)
 
-    def _net_priority(n: str) -> tuple[int, int, int, int]:
+    split_clusters_by_net: dict[str, list[list[tuple[str, str, Point]]]] = {}
+    for n in non_rail_nets:
+        inst_eps_cur = list(endpoints_by_net.get(n, []))
+        fixed_ports_n = fixed_port_occs_by_net.get(n, [])
+        pol_net = intent.net_policies.get(n, "full_wire")
+        is_supply_like = n.upper().startswith(
+            ("VDD", "VSS", "AVDD", "AVSS", "DVDD", "DVSS", "GND", "VPWR", "VGND")
+        )
+        has_gate_pin = any(e.pin_name == "G" for e in inst_eps_cur)
+        want_cf = (
+            allow_wire_labels
+            and len(inst_eps_cur) >= 2
+            and (
+                (n in local_cluster_port_nets and pol_net != "supply_local")
+                or pol_net == "label_stub"
+                or (pol_net == "perimeter_bus" and not port_occs_by_net.get(n) and has_gate_pin and not is_supply_like)
+            )
+        )
+        if want_cf:
+            term_tuples = [
+                (
+                    str(e.instance_id or "").replace("source-", ""),
+                    str(e.pin_name or ""),
+                    (e.x, e.y),
+                )
+                for e in inst_eps_cur
+            ]
+            cl_list = cluster_local_port_terminals(term_tuples, intent.spacing, placements=placements)
+            if len(cl_list) >= 2:
+                split_clusters_by_net[n] = cl_list
+
+    def _crossed_foreign_cols(own_refs: set[str], xs: list[int], ys: list[int]) -> int:
+        if len(xs) < 2:
+            return 0
+        x_lo, x_hi = min(xs), max(xs)
+        if x_hi - x_lo <= 12:
+            return 0
+        y_lo, y_hi = min(ys) - 4, max(ys) + 4
+        foreign_col_buckets: set[int] = set()
+        for ref_k, pl_k in placements.items():
+            if ref_k in own_refs:
+                continue
+            if (x_lo + 4) < pl_k.x < (x_hi - 4) and y_lo <= pl_k.y <= y_hi:
+                foreign_col_buckets.add(pl_k.x // 6)
+        return len(foreign_col_buckets)
+
+    def _net_priority(n: str) -> tuple[int, int, int, int, int]:
         pol = intent.net_policies.get(n, "full_wire")
         if pol == "label_stub" and not allow_wire_labels:
             pol = "perimeter_bus"
@@ -1490,39 +1593,47 @@ def route_placed_schematic(
         xs = [e.x for e in (inst_eps_n or eps)] or [0]
         ys = [e.y for e in (inst_eps_n or eps)] or [0]
         span = (max(xs) - min(xs)) + (max(ys) - min(ys))
-        # Coarse span band + left-to-right `min(xs)` ordering prevents braided cross-group diagonals!
+
+        # Split-cluster bias nets (e.g. Vpc/Vnc/Vn with WireLabelStub) behave as short local trunks!
+        if n in split_clusters_by_net:
+            cl_list = split_clusters_by_net[n]
+            max_cl_fly = 0
+            max_cl_span = 0
+            for cl in cl_list:
+                c_refs = {r for r, _, _ in cl}
+                c_xs = [pt[0] for _, _, pt in cl]
+                c_ys = [pt[1] for _, _, pt in cl]
+                max_cl_fly = max(max_cl_fly, _crossed_foreign_cols(c_refs, c_xs, c_ys))
+                max_cl_span = max(max_cl_span, (max(c_xs) - min(c_xs)) + (max(c_ys) - min(c_ys)))
+            return (1, 1 if max_cl_fly > 0 else 0, max_cl_span // 56, min(xs), max_cl_span)
+
         if pol == "perimeter_bus":
-            return (2, len(eps), min(xs), span)
-        if n in crit_set:
-            return (0, span // 56, min(xs), span)
-        return (1, span // 56, min(xs), span)
+            return (2, 0, len(eps), min(xs), span)
+
+        own_refs = {str(e.instance_id or "").replace("source-", "") for e in inst_eps_n}
+        fly_cols = _crossed_foreign_cols(own_refs, xs, ys)
+        tier_p = 0 if n in crit_set else 1
+        # Non-flying local structural nets route before cross-column flyers;
+        # within cross-column flyers, larger min(xs) routes first (inner nested L-elbow!).
+        x_ord = -min(xs) if fly_cols > 0 else min(xs)
+        return (tier_p, 1 if fly_cols > 0 else 0, span // 56, x_ord, span)
 
     non_rail_nets.sort(key=_net_priority)
 
     # 2a. Route all internal device-to-device trunks FIRST using Prim's nearest-collinear-first order!
-    for net in non_rail_nets:
-        internal_eps: list[RouteStepPlaced] = list(endpoints_by_net.get(net, []))
-        for po in fixed_port_occs_by_net.get(net, []):
-            internal_eps.append(
-                RouteStepPlaced(
-                    kind="port",
-                    x=po.x,
-                    y=po.y,
-                    instance_id=po.occurrence_id,
-                    pin_name=po.port_name,
-                )
-            )
-        if not internal_eps:
-            continue
-
-        ep_map = ep_at_point_by_net[net]
-        for e in internal_eps:
+    def _route_connected_group(net_n: str, group_eps: list[RouteStepPlaced]) -> None:
+        if not group_eps:
+            return
+        ep_map = ep_at_point_by_net[net_n]
+        local_map: dict[Point, RouteStepPlaced] = {}
+        for e in group_eps:
             ep_map[(e.x, e.y)] = e
+            local_map[(e.x, e.y)] = e
 
-        unique_eps = list(ep_map.values())
+        unique_eps = list(local_map.values())
         if len(unique_eps) == 1:
-            tree_points_by_net[net].add((unique_eps[0].x, unique_eps[0].y))
-            continue
+            tree_points_by_net[net_n].add((unique_eps[0].x, unique_eps[0].y))
+            return
 
         def _is_unobstructed_collinear(ea: RouteStepPlaced, eb: RouteStepPlaced) -> bool:
             if ea.x == eb.x:
@@ -1537,8 +1648,348 @@ def route_placed_schematic(
                 )
             return False
 
+        def _path_clear_for_net(pts: list[Point]) -> bool:
+            if len(pts) < 2:
+                return False
+            start_p, end_p = pts[0], pts[-1]
+            # Check every interior bend does not land on any foreign wire or corner
+            for bp in pts[1:-1]:
+                if bp in occ.body_blocked or bp in occ.label_blocked:
+                    return False
+                if occ.pin_owner.get(bp) not in (None, net_n):
+                    return False
+                if (occ.wire_h.get(bp, set()) - {net_n}) or (occ.wire_v.get(bp, set()) - {net_n}):
+                    return False
+            for a, b in zip(pts, pts[1:]):
+                if a == b:
+                    continue
+                if a[0] == b[0]:
+                    ya, yb = min(a[1], b[1]), max(a[1], b[1])
+                    for cy in range(ya, yb + 1):
+                        pt = (a[0], cy)
+                        if pt == start_p or pt == end_p:
+                            continue
+                        if pt in occ.body_blocked or pt in occ.label_blocked:
+                            return False
+                        if occ.pin_owner.get(pt) not in (None, net_n):
+                            return False
+                        if occ.wire_v.get(pt, set()) - {net_n}:
+                            return False
+                        if occ.wire_corners.get(pt, set()) - {net_n}:
+                            return False
+                elif a[1] == b[1]:
+                    xa, xb = min(a[0], b[0]), max(a[0], b[0])
+                    for cx in range(xa, xb + 1):
+                        pt = (cx, a[1])
+                        if pt == start_p or pt == end_p:
+                            continue
+                        if pt in occ.body_blocked or pt in occ.label_blocked:
+                            return False
+                        if occ.pin_owner.get(pt) not in (None, net_n):
+                            return False
+                        if occ.wire_h.get(pt, set()) - {net_n}:
+                            return False
+                        if occ.wire_corners.get(pt, set()) - {net_n}:
+                            return False
+                else:
+                    return False
+            return True
+
+        # Rule A: Single flat horizontal spine for multi-drop top/bottom `perimeter_bus` nets
+        # (e.g. top VDDH rail across 10 PMOS sources -> eliminates staircase step-ups/step-downs!)
+        if intent.net_policies.get(net_n) == "perimeter_bus" and len(unique_eps) >= 3:
+            all_up = all(occ.pin_escape.get((e.x, e.y), (e.x, e.y))[1] < e.y for e in unique_eps)
+            all_dn = all(occ.pin_escape.get((e.x, e.y), (e.x, e.y))[1] > e.y for e in unique_eps)
+            if all_up or all_dn:
+                eps_x_sorted = sorted(unique_eps, key=lambda e: (e.x, e.y))
+                ep_l, ep_r = eps_x_sorted[0], eps_x_sorted[-1]
+                base_y = (min(e.y for e in eps_x_sorted) - 3) if all_up else (max(e.y for e in eps_x_sorted) + 3)
+                step_dir = -1 if all_up else 1
+                chosen_spine_y: int | None = None
+                for k_off in range(0, 18):
+                    cy = base_y + k_off * step_dir
+                    cand_spine = [(ep_r.x, ep_r.y), (ep_r.x, cy), (ep_l.x, cy), (ep_l.x, ep_l.y)]
+                    if _path_clear_for_net(cand_spine):
+                        chosen_spine_y = cy
+                        break
+                if chosen_spine_y is not None:
+                    spine_path = [
+                        (ep_r.x, ep_r.y),
+                        (ep_r.x, chosen_spine_y),
+                        (ep_l.x, chosen_spine_y),
+                        (ep_l.x, ep_l.y),
+                    ]
+                    tree_points_by_net[net_n].add((ep_l.x, ep_l.y))
+                    _connect_ep_to_net_tree(net_n, ep_r, explicit_path=spine_path)
+                    for e_mid in eps_x_sorted[1:-1]:
+                        vert_tap = [(e_mid.x, e_mid.y), (e_mid.x, chosen_spine_y)]
+                        if e_mid.x not in {ep_l.x, ep_r.x} and _path_clear_for_net(vert_tap):
+                            _connect_ep_to_net_tree(net_n, e_mid, explicit_path=vert_tap)
+                        else:
+                            _connect_ep_to_net_tree(net_n, e_mid, bus_y_override=chosen_spine_y)
+                    return
+
+        # Rule B: Straight horizontal driver-to-output-port spine over downstream shunt loads
+        # (e.g. M35.S/R2.P -> flat VOUT horizontal line -> VOUT right port, with C6 & I1 tapping straight up!)
+        if net_n in occ.right_port_nets and len(unique_eps) >= 3:
+            # Find a vertical collinear driver stem (e.g. M35.S -- R2.P) with >= 2 shunt loads to its right
+            vert_stems = [
+                (ea, eb)
+                for i_a, ea in enumerate(unique_eps)
+                for eb in unique_eps[i_a + 1 :]
+                if ea.x == eb.x and _is_unobstructed_collinear(ea, eb)
+            ]
+            if vert_stems:
+                # Prefer rightmost stem containing a MOS D/S pin
+                def _stem_rank(pair: tuple[RouteStepPlaced, RouteStepPlaced]) -> tuple[int, int]:
+                    has_mos_ds = any(e.pin_name in {"D", "S"} for e in pair)
+                    return (0 if has_mos_ds else 1, -pair[0].x)
+
+                sa, sb = min(vert_stems, key=_stem_rank)
+                x_drv = sa.x
+                y_lo, y_hi = min(sa.y, sb.y), max(sa.y, sb.y)
+                right_shunts = [
+                    e
+                    for e in unique_eps
+                    if e.x > x_drv
+                    and (
+                        (e.y > y_hi and occ.pin_escape.get((e.x, e.y), (e.x, e.y))[1] < e.y)
+                        or (e.y < y_lo and occ.pin_escape.get((e.x, e.y), (e.x, e.y))[1] > e.y)
+                    )
+                ]
+                if len(right_shunts) >= 2:
+                    ep_far = max(right_shunts, key=lambda e: e.x)
+                    mid_stem_y = (y_lo + y_hi) // 2
+                    cand_ys = sorted(range(y_lo, y_hi + 1), key=lambda yv: abs(yv - mid_stem_y))
+                    chosen_y_out: int | None = None
+                    for y_try in cand_ys:
+                        l_path = [(ep_far.x, ep_far.y), (ep_far.x, y_try), (x_drv, y_try)]
+                        if _path_clear_for_net(l_path):
+                            chosen_y_out = y_try
+                            break
+                    if chosen_y_out is not None:
+                        tree_points_by_net[net_n].add((sa.x, sa.y))
+                        _connect_ep_to_net_tree(net_n, sb, explicit_path=[(sb.x, sb.y), (sa.x, sa.y)])
+                        _connect_ep_to_net_tree(
+                            net_n,
+                            ep_far,
+                            explicit_path=[(ep_far.x, ep_far.y), (ep_far.x, chosen_y_out), (x_drv, chosen_y_out)],
+                        )
+                        routed_pts = {(sa.x, sa.y), (sb.x, sb.y), (ep_far.x, ep_far.y)}
+                        for e_sh in sorted(right_shunts, key=lambda e: e.x):
+                            if (e_sh.x, e_sh.y) in routed_pts:
+                                continue
+                            v_tap = [(e_sh.x, e_sh.y), (e_sh.x, chosen_y_out)]
+                            if _path_clear_for_net(v_tap):
+                                _connect_ep_to_net_tree(net_n, e_sh, explicit_path=v_tap)
+                            else:
+                                _connect_ep_to_net_tree(net_n, e_sh, bus_y_override=chosen_y_out)
+                            routed_pts.add((e_sh.x, e_sh.y))
+                        # Also check if remaining left-side endpoints form a vertical stem straddling `chosen_y_out`
+                        # (e.g. C3.P--C4.M on VOUT): connect that vertical stem and shoot straight horizontally!
+                        left_rems = [e for e in unique_eps if (e.x, e.y) not in routed_pts and e.x < x_drv]
+                        left_stems = [
+                            (la, lb)
+                            for i_a, la in enumerate(left_rems)
+                            for lb in left_rems[i_a + 1 :]
+                            if la.x == lb.x and _is_unobstructed_collinear(la, lb)
+                        ]
+                        for la, lb in left_stems:
+                            if (la.x, la.y) in routed_pts or (lb.x, lb.y) in routed_pts:
+                                continue
+                            ly_lo, ly_hi = min(la.y, lb.y), max(la.y, lb.y)
+                            if ly_lo <= chosen_y_out <= ly_hi:
+                                direct_h = [(la.x, chosen_y_out), (x_drv, chosen_y_out)]
+                                if _path_clear_for_net(direct_h):
+                                    # Route la -> (la.x, chosen_y_out) -> (x_drv, chosen_y_out), then lb -> (la.x, chosen_y_out)
+                                    p_a = (
+                                        [(la.x, la.y), (x_drv, chosen_y_out)]
+                                        if la.y == chosen_y_out
+                                        else [(la.x, la.y), (la.x, chosen_y_out), (x_drv, chosen_y_out)]
+                                    )
+                                    _connect_ep_to_net_tree(net_n, la, explicit_path=p_a)
+                                    routed_pts.add((la.x, la.y))
+                                    p_b = [(lb.x, lb.y), (lb.x, chosen_y_out)]
+                                    if lb.y != chosen_y_out and _path_clear_for_net(p_b):
+                                        _connect_ep_to_net_tree(net_n, lb, explicit_path=p_b)
+                                        routed_pts.add((lb.x, lb.y))
+                        for e_rem in unique_eps:
+                            if (e_rem.x, e_rem.y) not in routed_pts:
+                                _connect_ep_to_net_tree(net_n, e_rem, bus_y_override=chosen_y_out)
+                                routed_pts.add((e_rem.x, e_rem.y))
+                        return
+
+        # 0) Co-gated vertical MOS gate spines: connect each vertical co-gated stack column's gates
+        # along its own straight vertical spine (placed at the column's 1-grid pin-escape X outside
+        # symbol bodyBox), then link adjacent spines with ONE single horizontal cross-bridge
+        # (never k parallel horizontal rungs across the corridor!).
+        inst_map_r = circuit.instance_map()
+        gate_eps_by_x_pol: dict[tuple[int, str], list[RouteStepPlaced]] = defaultdict(list)
+        for ep in unique_eps:
+            if ep.kind == "instance" and ep.pin_name == "G":
+                eref = str(ep.instance_id or "").replace("source-", "")
+                epol = inst_map_r[eref].polarity if eref in inst_map_r else ""
+                if epol in {"nmos", "pmos"}:
+                    gate_eps_by_x_pol[(ep.x, epol)].append(ep)
+        vert_gate_cols: list[tuple[int, int, list[RouteStepPlaced]]] = []
+        for (gx, _epol), geps in sorted(gate_eps_by_x_pol.items()):
+            if len(geps) >= 2:
+                geps_sorted = sorted(geps, key=lambda e: e.y)
+                esc0 = occ.pin_escape.get((geps_sorted[0].x, geps_sorted[0].y))
+                out_dx = (esc0[0] - gx) if (esc0 and esc0[0] != gx) else -1
+                out_dx = 1 if out_dx > 0 else -1
+                chosen_sx: int | None = None
+                for step_d in (1, 2, 0):
+                    cand_sx = gx + out_dx * step_d
+                    if _path_clear_for_net([(cand_sx, geps_sorted[0].y), (cand_sx, geps_sorted[-1].y)]) and all(
+                        _path_clear_for_net([(e.x, e.y), (cand_sx, e.y)]) for e in geps_sorted
+                    ):
+                        chosen_sx = cand_sx
+                        break
+                if chosen_sx is not None:
+                    vert_gate_cols.append((gx, chosen_sx, geps_sorted))
+
+        if len(vert_gate_cols) >= 2:
+            routed_spine_pts: set[Point] = set()
+
+            def _route_vertical_spine_from(
+                spine: list[RouteStepPlaced], sx: int, anchor_idx: int
+            ) -> None:
+                # Build straight vertical spine along x=sx radiating from anchor_idx, with 1-grid gate taps!
+                ep_anc = spine[anchor_idx]
+                for i_up in range(anchor_idx - 1, -1, -1):
+                    ep_cur = spine[i_up]
+                    ep_prev = spine[i_up + 1]
+                    if (ep_cur.x, ep_cur.y) not in routed_spine_pts:
+                        p_up = (
+                            [(ep_cur.x, ep_cur.y), (ep_prev.x, ep_prev.y)]
+                            if sx == ep_cur.x
+                            else [(ep_cur.x, ep_cur.y), (sx, ep_cur.y), (sx, ep_prev.y)]
+                        )
+                        _connect_ep_to_net_tree(net_n, ep_cur, explicit_path=p_up)
+                        routed_spine_pts.add((ep_cur.x, ep_cur.y))
+                for i_dn in range(anchor_idx + 1, len(spine)):
+                    ep_cur = spine[i_dn]
+                    ep_prev = spine[i_dn - 1]
+                    if (ep_cur.x, ep_cur.y) not in routed_spine_pts:
+                        p_dn = (
+                            [(ep_cur.x, ep_cur.y), (ep_prev.x, ep_prev.y)]
+                            if sx == ep_cur.x
+                            else [(ep_cur.x, ep_cur.y), (sx, ep_cur.y), (sx, ep_prev.y)]
+                        )
+                        _connect_ep_to_net_tree(net_n, ep_cur, explicit_path=p_dn)
+                        routed_spine_pts.add((ep_cur.x, ep_cur.y))
+
+            # Seed first vertical gate spine (column 0): connect top -> bottom along x=sx0
+            gx0, sx0, spine0 = vert_gate_cols[0]
+            tree_points_by_net[net_n].add((spine0[0].x, spine0[0].y))
+            routed_spine_pts.add((spine0[0].x, spine0[0].y))
+            if sx0 == gx0:
+                _route_vertical_spine_from(spine0, sx0, 0)
+            else:
+                # First connect spine0[1] via (gx0, y1) -> (sx0, y1) -> (sx0, y0) -> (gx0, y0)
+                ep0, ep1 = spine0[0], spine0[1]
+                _connect_ep_to_net_tree(
+                    net_n,
+                    ep1,
+                    explicit_path=[(ep1.x, ep1.y), (sx0, ep1.y), (sx0, ep0.y), (ep0.x, ep0.y)],
+                )
+                routed_spine_pts.add((ep1.x, ep1.y))
+                _route_vertical_spine_from(spine0, sx0, 1)
+
+            # Bridge each subsequent vertical gate spine with ONE single horizontal cross-bridge!
+            for prev_idx in range(len(vert_gate_cols) - 1):
+                gx_l, sx_l, sp_l = vert_gate_cols[prev_idx]
+                gx_r, sx_r, sp_r = vert_gate_cols[prev_idx + 1]
+                by_y_l = {e.y: e for e in sp_l}
+                by_y_r = {e.y: idx_r for idx_r, e in enumerate(sp_r)}
+                common_ys = sorted(set(by_y_l) & set(by_y_r))
+
+                # Default to the BOTTOM-MOST aligned pair (e.g. M4-M9 for PMOS stacks, M13-M17 for NMOS stacks)
+                # for a clean single horizontal cross-bridge along the bottom of every co-gated stack pair!
+                chosen_bridge: tuple[int, list[RouteStepPlaced], int] | None = None
+                ordered_ys = list(reversed(common_ys))
+
+                for yc in ordered_ys:
+                    if _path_clear_for_net([(sx_l, yc), (sx_r, yc)]):
+                        mids = sorted(
+                            [
+                                e
+                                for e in unique_eps
+                                if e.y == yc
+                                and min(sx_l, sx_r) < e.x < max(sx_l, sx_r)
+                                and (e.x, e.y) not in routed_spine_pts
+                            ],
+                            key=lambda e: e.x,
+                        )
+                        chosen_bridge = (yc, mids, by_y_r[yc])
+                        break
+
+                if chosen_bridge is not None:
+                    yc, mids, r_anchor_idx = chosen_bridge
+                    prev_pt = (sx_l, yc)
+                    for mid_ep in mids:
+                        _connect_ep_to_net_tree(
+                            net_n,
+                            mid_ep,
+                            explicit_path=[(mid_ep.x, mid_ep.y), prev_pt],
+                        )
+                        routed_spine_pts.add((mid_ep.x, mid_ep.y))
+                        prev_pt = (mid_ep.x, mid_ep.y)
+                    ep_r_anchor = sp_r[r_anchor_idx]
+                    p_bridge = (
+                        [(ep_r_anchor.x, ep_r_anchor.y), prev_pt]
+                        if sx_r == ep_r_anchor.x
+                        else [(ep_r_anchor.x, ep_r_anchor.y), (sx_r, yc), prev_pt]
+                    )
+                    _connect_ep_to_net_tree(net_n, ep_r_anchor, explicit_path=p_bridge)
+                    routed_spine_pts.add((ep_r_anchor.x, ep_r_anchor.y))
+                    _route_vertical_spine_from(sp_r, sx_r, r_anchor_idx)
+                else:
+                    r_anchor_idx = len(sp_r) - 1
+                    ep_r_anchor = sp_r[r_anchor_idx]
+                    _connect_ep_to_net_tree(net_n, ep_r_anchor)
+                    routed_spine_pts.add((ep_r_anchor.x, ep_r_anchor.y))
+                    if sx_r == gx_r:
+                        _route_vertical_spine_from(sp_r, sx_r, r_anchor_idx)
+                    else:
+                        # Seed sx_r via neighbor pin then route remainder
+                        nb_idx = r_anchor_idx + 1 if r_anchor_idx + 1 < len(sp_r) else r_anchor_idx - 1
+                        ep_nb = sp_r[nb_idx]
+                        _connect_ep_to_net_tree(
+                            net_n,
+                            ep_nb,
+                            explicit_path=[
+                                (ep_nb.x, ep_nb.y),
+                                (sx_r, ep_nb.y),
+                                (sx_r, ep_r_anchor.y),
+                                (ep_r_anchor.x, ep_r_anchor.y),
+                            ],
+                        )
+                        routed_spine_pts.add((ep_nb.x, ep_nb.y))
+                        _route_vertical_spine_from(sp_r, sx_r, nb_idx)
+
+            remaining = [e for e in unique_eps if (e.x, e.y) not in routed_spine_pts]
+            while remaining:
+                t_cur = tree_points_by_net[net_n]
+                nxt_ep = min(
+                    remaining,
+                    key=lambda e: min(
+                        abs(e.x - tx) + abs(e.y - ty) - (6 if (e.x == tx or e.y == ty) else 0)
+                        for tx, ty in t_cur
+                    ),
+                )
+                remaining.remove(nxt_ep)
+                _connect_ep_to_net_tree(net_n, nxt_ep)
+            return
+
         collinear_pairs = [
-            (abs(ea.x - eb.x) + abs(ea.y - eb.y), ea, eb)
+            (
+                0 if (ea.pin_name == "G" and eb.pin_name == "G" and ea.y == eb.y) else 1,
+                abs(ea.x - eb.x) + abs(ea.y - eb.y),
+                ea,
+                eb,
+            )
             for i_a, ea in enumerate(unique_eps)
             for eb in unique_eps[i_a + 1 :]
             if _is_unobstructed_collinear(ea, eb)
@@ -1547,10 +1998,11 @@ def route_placed_schematic(
         ep_xs = [e.x for e in unique_eps]
         ep_ys = [e.y for e in unique_eps]
         if collinear_pairs:
-            # 1) Lock unobstructed collinear stacks/mirrors (e.g. APR.D - INR.D) as straight 0-bend trunks first!
-            _, seed_ep, second_ep = min(collinear_pairs, key=lambda item: item[0])
-            tree_points_by_net[net].add((seed_ep.x, seed_ep.y))
-            _connect_ep_to_net_tree(net, second_ep)
+            # 1) Lock unobstructed horizontal gate-to-gate mirror bars (e.g. M30.G--M32.G, M31.G--M33.G)
+            # and collinear stacks (e.g. APR.D--INR.D) as straight 0-bend trunks FIRST!
+            _, _, seed_ep, second_ep = min(collinear_pairs, key=lambda item: (item[0], item[1]))
+            tree_points_by_net[net_n].add((seed_ep.x, seed_ep.y))
+            _connect_ep_to_net_tree(net_n, second_ep)
             remaining = [
                 e
                 for e in unique_eps
@@ -1570,8 +2022,8 @@ def route_placed_schematic(
                 far_cands,
                 key=lambda e: abs(e.x - seed_ep.x) + abs(e.y - seed_ep.y),
             )
-            tree_points_by_net[net].add((seed_ep.x, seed_ep.y))
-            _connect_ep_to_net_tree(net, second_ep)
+            tree_points_by_net[net_n].add((seed_ep.x, seed_ep.y))
+            _connect_ep_to_net_tree(net_n, second_ep)
             remaining = [
                 e
                 for e in unique_eps
@@ -1587,11 +2039,11 @@ def route_placed_schematic(
                     if sc_p < best_pair_score:
                         best_pair_score = sc_p
                         seed_ep = ea
-            tree_points_by_net[net].add((seed_ep.x, seed_ep.y))
+            tree_points_by_net[net_n].add((seed_ep.x, seed_ep.y))
             remaining = [e for e in unique_eps if (e.x, e.y) != (seed_ep.x, seed_ep.y)]
 
         while remaining:
-            t_cur = tree_points_by_net[net]
+            t_cur = tree_points_by_net[net_n]
             nxt_ep = min(
                 remaining,
                 key=lambda e: min(
@@ -1600,7 +2052,144 @@ def route_placed_schematic(
                 ),
             )
             remaining.remove(nxt_ep)
-            _connect_ep_to_net_tree(net, nxt_ep)
+            _connect_ep_to_net_tree(net_n, nxt_ep)
+
+    def _attach_cluster_wire_label(net_n: str, cl_eps: list[RouteStepPlaced]) -> None:
+        """Attach one unobstructed WireLabelStub to a routed local cluster.
+
+        Tries free pin-escape stubs first; if all pins' natural escapes are occupied
+        by intra-cluster wires (e.g. face-to-face cascode gates M24.G-M25.G), taps
+        cleanly upward/downward from the cluster's routed tree.
+        """
+        nonlocal stub_counter
+
+        pin_escape_pts = set(occ.pin_escape.values())
+
+        def _stub_clear(x0: int, y0: int, dx: int, dy: int, length: int) -> bool:
+            for k in range(1, length + 5):
+                px, py = x0 + dx * k, y0 + dy * k
+                if (px, py) in occ.body_blocked or (px, py) in occ.label_blocked:
+                    return False
+                if (px, py) in occ.pin_owner or (px, py) in pin_escape_pts:
+                    return False
+                if k <= length and (occ.wire_h.get((px, py)) or occ.wire_v.get((px, py))):
+                    return False
+            return True
+
+        chosen: tuple[int, int, int, int, str, str] | None = None
+        for ep in sorted(cl_eps, key=lambda e: (e.x, e.y)):
+            esc = occ.pin_escape.get((ep.x, ep.y), (ep.x - 1, ep.y))
+            dx, dy = esc[0] - ep.x, esc[1] - ep.y
+            if _stub_clear(ep.x, ep.y, dx, dy, 4):
+                chosen = (
+                    ep.x,
+                    ep.y,
+                    ep.x + dx * 4,
+                    ep.y + dy * 4,
+                    str(ep.instance_id or "").replace("source-", ""),
+                    str(ep.pin_name or ""),
+                )
+                break
+
+        if chosen is None:
+            # Tap cleanly from a routed tree midpoint (e.g. midpoint of M24.G--M25.G wire)
+            t_pts = sorted(tree_points_by_net.get(net_n, set()))
+            if t_pts:
+                mid_x = (min(p[0] for p in t_pts) + max(p[0] for p in t_pts)) // 2
+                cand_pts = sorted(t_pts, key=lambda p: (abs(p[0] - mid_x), p[1]))
+            else:
+                cand_pts = [(cl_eps[0].x, cl_eps[0].y)]
+            for cx, cy in cand_pts:
+                # Never poke a label stub downward into the bottom perimeter bus corridor when upward/sideways works
+                dirs = ((0, -1), (-1, 0), (1, 0), (0, 1)) if cy >= max_inst_y else ((0, -1), (0, 1), (-1, 0), (1, 0))
+                for dx, dy in dirs:
+                    if _stub_clear(cx, cy, dx, dy, 3):
+                        chosen = (
+                            cx,
+                            cy,
+                            cx + dx * 3,
+                            cy + dy * 3,
+                            str(cl_eps[0].instance_id or "").replace("source-", ""),
+                            str(cl_eps[0].pin_name or ""),
+                        )
+                        break
+                if chosen is not None:
+                    break
+
+        if chosen is None:
+            ep0 = min(cl_eps, key=lambda e: (e.x, e.y))
+            esc = occ.pin_escape.get((ep0.x, ep0.y), (ep0.x - 1, ep0.y))
+            dx, dy = esc[0] - ep0.x, esc[1] - ep0.y
+            chosen = (
+                ep0.x,
+                ep0.y,
+                ep0.x + dx * 4,
+                ep0.y + dy * 4,
+                str(ep0.instance_id or "").replace("source-", ""),
+                str(ep0.pin_name or ""),
+            )
+
+        x1, y1, x2, y2, ref_name, pin_name = chosen
+        stub_counter += 1
+        wire_label_stubs.append(
+            WireLabelStubPlaced(
+                id=f"WL_{net_n}_{stub_counter}",
+                net_name=net_n,
+                ref=ref_name,
+                pin_name=pin_name,
+                x1=x1,
+                y1=y1,
+                x2=x2,
+                y2=y2,
+            )
+        )
+        occ.add_polyline(net_n, [(x1, y1), (x2, y2)])
+        sdx = 0 if x2 == x1 else (1 if x2 > x1 else -1)
+        sdy = 0 if y2 == y1 else (1 if y2 > y1 else -1)
+        pad_steps = 3 if sdy != 0 else 5
+        for step_k in range(1, pad_steps):
+            occ.label_blocked.add((x2 + sdx * step_k, y2 + sdy * step_k))
+
+    for net in non_rail_nets:
+        inst_eps_cur = list(endpoints_by_net.get(net, []))
+        fixed_port_steps = [
+            RouteStepPlaced(
+                kind="port",
+                x=po.x,
+                y=po.y,
+                instance_id=po.occurrence_id,
+                pin_name=po.port_name,
+            )
+            for po in fixed_port_occs_by_net.get(net, [])
+        ]
+
+        if net in split_clusters_by_net:
+            clusters = split_clusters_by_net[net]
+            ep_by_key = {
+                (str(e.instance_id or "").replace("source-", ""), str(e.pin_name or ""), (e.x, e.y)): e
+                for e in inst_eps_cur
+            }
+            primary_idx = -1
+            if fixed_port_steps:
+                p0 = fixed_port_steps[0]
+                primary_idx = min(
+                    range(len(clusters)),
+                    key=lambda ci: min(
+                        abs(pt[0] - p0.x) + abs(pt[1] - p0.y) for _, _, pt in clusters[ci]
+                    ),
+                )
+            for ci, cl in enumerate(clusters):
+                cl_eps = [ep_by_key[t] for t in cl if t in ep_by_key]
+                if ci == primary_idx:
+                    cl_eps = cl_eps + fixed_port_steps
+                tree_points_by_net[net] = set()
+                _route_connected_group(net, cl_eps)
+                if ci != primary_idx and cl_eps:
+                    _attach_cluster_wire_label(net, cl_eps)
+            continue
+
+        internal_eps = inst_eps_cur + fixed_port_steps
+        _route_connected_group(net, internal_eps)
 
     # 2b. Optimally order & snap left/right edge ports onto straight horizontal rays / nested L-routes!
     for side_ports, go_right, x_lim in (

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI entry point for `analog-schem-gen` v0.2.0.
+"""CLI entry point for `analog-schem-gen` v0.3.3.
 
 Supports single-sheet LLM + Algorithm Co-Execution (`analyze`, `compile`, `auto`, `refine`, `audit`),
 large-netlist multi-sheet hierarchical partitioning & flatten-back LVS (`partition`, `hierarchy`),
@@ -43,6 +43,15 @@ from schematic_gen.pdk_extractor import (
 )
 from schematic_gen.refiner import circuit_and_intent_from_manifest, refine_existing_manifest
 from schematic_gen.router import compile_schematic
+from schematic_gen.semantic_digest import render_semantic_digest_md
+from schematic_gen.semantic_validator import (
+    expand_module_plan_to_intent,
+    format_inspect_markdown,
+    format_module_audit_markdown,
+    inspect_netlist_neighborhood,
+    propose_module_plan_draft,
+    validate_module_plan,
+)
 from schematic_gen.svg_renderer import render_schematic_svg
 
 
@@ -107,12 +116,27 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     _write_json(out_dir / "analysis.json", analysis.to_dict())
     _write_json(out_dir / "intent.draft.json", analysis.draft_intent)
+    _write_json(out_dir / "module_plan.draft.json", propose_module_plan_draft(circuit, analysis))
+    if analysis.semantic_digest_md:
+        (out_dir / "semantic_digest.md").write_text(
+            analysis.semantic_digest_md + "\n", encoding="utf-8"
+        )
+        (out_dir / "semantic_digest_full.md").write_text(
+            render_semantic_digest_md(analysis, detail="full") + "\n", encoding="utf-8"
+        )
     if len(circuit.instances) > 32:
         part = propose_flat_partition(circuit)
         _write_json(out_dir / "hierarchy_intent.draft.json", part.to_dict())
-    print(f"[analyze] cell={circuit.cell_name} instances={len(circuit.instances)} nets={len(circuit.nets)}")
+    ba = analysis.branch_abstraction or {}
+    print(
+        f"[analyze] cell={circuit.cell_name} instances={len(circuit.instances)} nets={len(circuit.nets)} "
+        f"branches={ba.get('branchCount', 0)} global_bias={len(ba.get('globalBiasNets', []))}"
+    )
     print(f"[analyze] motifs={len(analysis.motifs)} llm_ambiguities={len(analysis.ambiguities_for_llm)}")
-    print(f"[analyze] wrote {out_dir / 'analysis.json'} and {out_dir / 'intent.draft.json'}")
+    print(
+        f"[analyze] wrote {out_dir / 'analysis.json'}, {out_dir / 'intent.draft.json'}, {out_dir / 'module_plan.draft.json'}"
+        + (f", and {out_dir / 'semantic_digest.md'}" if analysis.semantic_digest_md else "")
+    )
     return 0
 
 
@@ -131,6 +155,8 @@ def _emit_solved_bundle(
 
     _write_json(out_dir / "intent.used.json", solved.intent.to_dict())
     _write_json(out_dir / "manifest.json", manifest)
+    if any(i.device_class == "subckt" for i in solved.circuit.instances):
+        _write_json(out_dir / "augmented_process_map.json", pdk.raw_map)
     _write_json(out_dir / "canvas_ir.json", canvas_ir)
     (out_dir / "preview.svg").write_text(svg_text + "\n", encoding="utf-8")
     if solved.wire_label_stubs:
@@ -148,11 +174,31 @@ def cmd_compile(args: argparse.Namespace) -> int:
         rules_path=args.rules,
         cell_name_override=args.cell_name,
     )
-    intent_raw = json.loads(Path(args.intent).read_text(encoding="utf-8"))
-    intent = SchematicIntent.from_dict(intent_raw)
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if args.module_plan:
+        plan_raw = json.loads(Path(args.module_plan).read_text(encoding="utf-8"))
+        analysis = analyze_circuit(circuit)
+        mod_rep = validate_module_plan(circuit, plan_raw, analysis)
+        _write_json(out_dir / "module_audit.json", mod_rep.to_dict())
+        (out_dir / "module_audit.md").write_text(format_module_audit_markdown(mod_rep) + "\n", encoding="utf-8")
+        if not mod_rep.overall_passed:
+            print(
+                f"[compile] module_plan validation FAILED ({mod_rep.metrics['errorCount']} errors); "
+                f"see {out_dir / 'module_audit.md'}"
+            )
+            return 2
+        intent = expand_module_plan_to_intent(circuit, plan_raw, analysis)
+        _write_json(out_dir / "intent.expanded.json", intent.to_dict())
+    elif args.intent:
+        intent_raw = json.loads(Path(args.intent).read_text(encoding="utf-8"))
+        intent = SchematicIntent.from_dict(intent_raw)
+    else:
+        raise ValueError("Specify either `--intent <intent.json>` or `--module-plan <module_plan.json>`.")
     if args.cell_name:
         intent.cell_name = args.cell_name
     pdk = PdkRegistry(args.pdk_map, args.process)
+    pdk.ensure_subckt_symbols(circuit, rules_path=args.rules)
     if args.optimize_crossings:
         solved = optimize_schematic_crossings(
             circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
@@ -161,13 +207,89 @@ def cmd_compile(args: argparse.Namespace) -> int:
         solved = compile_schematic(
             circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
         )
-    out_dir = Path(args.out)
     report = _emit_solved_bundle(solved, pdk, out_dir, debug_boxes=args.debug_boxes)
     print(
         f"[compile] cell={circuit.cell_name} overall={'PASS' if report.overall_passed else 'FAIL'} "
         f"crossings={report.metrics['wireCrossingCount']} opt_moves={len(solved.optimization_moves)}"
     )
     return 0 if report.overall_passed else 2
+
+
+def cmd_validate_modules(args: argparse.Namespace) -> int:
+    circuit = parse_netlist_file(
+        args.netlist,
+        rules_path=args.rules,
+        cell_name_override=args.cell_name,
+    )
+    plan_raw = json.loads(Path(args.plan).read_text(encoding="utf-8"))
+    analysis = analyze_circuit(circuit)
+    report = validate_module_plan(circuit, plan_raw, analysis)
+    md_text = format_module_audit_markdown(report)
+    if args.out:
+        out_dir = Path(args.out)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        _write_json(out_dir / "module_audit.json", report.to_dict())
+        (out_dir / "module_audit.md").write_text(md_text + "\n", encoding="utf-8")
+    else:
+        print(md_text)
+    print(
+        f"[validate-modules] cell={circuit.cell_name} overall={'PASS' if report.overall_passed else 'FAIL'} "
+        f"coverage={report.metrics['coveredInstanceCount']}/{report.metrics['instanceCount']} "
+        f"torn={report.metrics['tornChainCount']} orphans={report.metrics['orphanBranchCount']}"
+    )
+    return 0 if report.overall_passed else 2
+
+
+def cmd_plan_to_intent(args: argparse.Namespace) -> int:
+    circuit = parse_netlist_file(
+        args.netlist,
+        rules_path=args.rules,
+        cell_name_override=args.cell_name,
+    )
+    plan_raw = json.loads(Path(args.plan).read_text(encoding="utf-8"))
+    analysis = analyze_circuit(circuit)
+    report = validate_module_plan(circuit, plan_raw, analysis)
+    if not report.overall_passed and not args.force:
+        print(format_module_audit_markdown(report))
+        print("[plan-to-intent] validation FAILED; fix errors above or pass --force.")
+        return 2
+    intent = expand_module_plan_to_intent(circuit, plan_raw, analysis)
+    out_path = Path(args.out)
+    _write_json(out_path, intent.to_dict())
+    print(
+        f"[plan-to-intent] cell={circuit.cell_name} groups={len(intent.groups)} "
+        f"columns={len(intent.column_order_hints)} -> {out_path}"
+    )
+    return 0
+
+
+def cmd_inspect(args: argparse.Namespace) -> int:
+    circuit = parse_netlist_file(
+        args.netlist,
+        rules_path=args.rules,
+        cell_name_override=args.cell_name,
+    )
+    analysis = analyze_circuit(circuit)
+    mod_targets = [x.strip() for x in args.module.split(",") if x.strip()] if args.module else None
+    if not args.around and not mod_targets:
+        raise ValueError("Specify either `--around <REF|BRxx|NET>` or `--module <BR01,BR02,...>`.")
+    data = inspect_netlist_neighborhood(
+        circuit,
+        analysis,
+        around=args.around,
+        hops=args.hops,
+        include_bias=args.include_bias,
+        module_targets=mod_targets,
+    )
+    out_text = json.dumps(data, ensure_ascii=False, indent=2) if args.json else format_inspect_markdown(data)
+    if args.out:
+        out_path = Path(args.out)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(out_text + "\n", encoding="utf-8")
+        print(f"[inspect] wrote {out_path}")
+    else:
+        print(out_text)
+    return 0
 
 
 def cmd_auto(args: argparse.Namespace) -> int:
@@ -179,6 +301,7 @@ def cmd_auto(args: argparse.Namespace) -> int:
     analysis = analyze_circuit(circuit)
     intent = SchematicIntent.from_dict(analysis.draft_intent)
     pdk = PdkRegistry(args.pdk_map, args.process)
+    pdk.ensure_subckt_symbols(circuit, rules_path=args.rules)
     if args.optimize_crossings:
         solved = optimize_schematic_crossings(
             circuit, intent, pdk=pdk, allow_wire_labels=args.allow_wire_labels
@@ -190,6 +313,10 @@ def cmd_auto(args: argparse.Namespace) -> int:
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     _write_json(out_dir / "analysis.json", analysis.to_dict())
+    if analysis.semantic_digest_md:
+        (out_dir / "semantic_digest.md").write_text(
+            analysis.semantic_digest_md + "\n", encoding="utf-8"
+        )
     report = _emit_solved_bundle(solved, pdk, out_dir, debug_boxes=args.debug_boxes)
     print(
         f"[auto] cell={circuit.cell_name} overall={'PASS' if report.overall_passed else 'FAIL'} "
@@ -310,6 +437,7 @@ def cmd_extract_pdk(args: argparse.Namespace) -> int:
 def cmd_export_editor(args: argparse.Namespace) -> int:
     circuit = parse_netlist_file(args.netlist, rules_path=args.rules)
     pdk = PdkRegistry(args.pdk_map, args.process)
+    pdk.ensure_subckt_symbols(circuit, rules_path=args.rules)
     if args.intent:
         intent = SchematicIntent.from_dict(json.loads(Path(args.intent).read_text(encoding="utf-8")))
     else:
@@ -353,6 +481,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
         circuit = parse_netlist_file(args.netlist, rules_path=args.rules)
     else:
         circuit, _ = circuit_and_intent_from_manifest(manifest_in)
+    pdk.ensure_subckt_symbols(circuit, rules_path=args.rules)
     report = audit_manifest_and_solved(manifest_in, circuit, pdk)
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -453,7 +582,7 @@ def cmd_demo(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="analog-schem-gen",
-        description="PDK-agnostic high-readability analog circuit schematic generator v0.3.0",
+        description="PDK-agnostic high-readability analog circuit schematic generator v0.3.3",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -471,7 +600,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_co = sub.add_parser("compile", help="Step 2 (Algo): solve QP placement, orthogonal routing, SVG, and DRC")
     p_co.add_argument("netlist", type=Path)
-    p_co.add_argument("--intent", type=Path, required=True)
+    co_src = p_co.add_mutually_exclusive_group(required=True)
+    co_src.add_argument("--intent", type=Path, default=None, help="Full SchematicIntent JSON (`schem_gen.intent.v1`)")
+    co_src.add_argument("--module-plan", type=Path, default=None, help="Coarse-to-Fine module plan JSON (`schem_gen.module_plan.v1`)")
     p_co.add_argument("--out", type=Path, required=True)
     p_co.add_argument("--cell-name", default=None)
     p_co.add_argument("--optimize-crossings", action="store_true", help="Run bounded local flip/swap crossing search")
@@ -479,6 +610,35 @@ def build_parser() -> argparse.ArgumentParser:
     p_co.add_argument("--debug-boxes", action="store_true")
     _add_common_pdk(p_co)
     p_co.set_defaults(func=cmd_compile)
+
+    p_vm = sub.add_parser("validate-modules", help="Pre-layout semantic audit for `module_plan.json` or `intent.json`")
+    p_vm.add_argument("netlist", type=Path)
+    p_vm.add_argument("--plan", type=Path, required=True, help="Path to `module_plan.json` or `intent.json`")
+    p_vm.add_argument("--out", type=Path, default=None, help="Optional output directory for module_audit.{json,md}")
+    p_vm.add_argument("--cell-name", default=None)
+    p_vm.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH)
+    p_vm.set_defaults(func=cmd_validate_modules)
+
+    p_pi = sub.add_parser("plan-to-intent", help="Deterministically expand `module_plan.v1` into full `intent.json`")
+    p_pi.add_argument("netlist", type=Path)
+    p_pi.add_argument("--plan", type=Path, required=True, help="Path to `module_plan.json`")
+    p_pi.add_argument("--out", type=Path, required=True, help="Output `intent.json` file path")
+    p_pi.add_argument("--force", action="store_true", help="Expand even if semantic validation reported errors")
+    p_pi.add_argument("--cell-name", default=None)
+    p_pi.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH)
+    p_pi.set_defaults(func=cmd_plan_to_intent)
+
+    p_in = sub.add_parser("inspect", help="Read-only k-hop signal tracer (`--around`) or Stage-2 module focus window (`--module`)")
+    p_in.add_argument("netlist", type=Path)
+    p_in.add_argument("--around", default=None, help="Seed branch ID (BRxx), device ref (M1/Q9), or net name")
+    p_in.add_argument("--hops", type=int, default=2, help="Neighborhood hop depth (default: 2)")
+    p_in.add_argument("--include-bias", action="store_true", help="Include global bias distribution trees during tracing")
+    p_in.add_argument("--module", default=None, help="Comma-separated branch IDs or device refs for Meso Focus Window")
+    p_in.add_argument("--json", action="store_true", help="Emit JSON instead of Markdown")
+    p_in.add_argument("--out", type=Path, default=None, help="Optional file path to write output")
+    p_in.add_argument("--cell-name", default=None)
+    p_in.add_argument("--rules", type=Path, default=DEFAULT_NETLIST_RULES_PATH)
+    p_in.set_defaults(func=cmd_inspect)
 
     p_au = sub.add_parser("auto", help="Zero-shot automatic schematic generation")
     p_au.add_argument("netlist", type=Path)

@@ -186,6 +186,46 @@
           "parameterMap": {"area": "area", "perim": "perim", "m": "m"},
           "bodyBox": [-2, -3, 2, 3],
           "defaultLabelSide": "right"
+        },
+        "npn": {
+          "library": "sky130_fd_pr_main",
+          "cell": "npn_05v5_W1p00L1p00",
+          "view": "symbol",
+          "pinMap": {"C": "c", "BASE": "b", "E": "e"},
+          "pinOffsets": {"c": [1, 3], "b": [-3, 0], "e": [1, -3]},
+          "parameterMap": {"m": "m", "area": "area"},
+          "bodyBox": [-3, -3, 2, 3],
+          "defaultLabelSide": "channel"
+        },
+        "npn4": {
+          "library": "sky130_fd_pr_main",
+          "cell": "npn_05v5_W1p00L1p00",
+          "view": "symbol",
+          "pinMap": {"C": "c", "BASE": "b", "E": "e", "B": "s"},
+          "pinOffsets": {"c": [1, 3], "b": [-3, 0], "e": [1, -3], "s": [1, 0]},
+          "parameterMap": {"m": "m", "area": "area"},
+          "bodyBox": [-3, -3, 2, 3],
+          "defaultLabelSide": "channel"
+        },
+        "pnp": {
+          "library": "sky130_fd_pr_main",
+          "cell": "pnp_05v5_W0p68L0p68",
+          "view": "symbol",
+          "pinMap": {"C": "c", "BASE": "b", "E": "e"},
+          "pinOffsets": {"e": [1, 3], "b": [-3, 0], "c": [1, -3]},
+          "parameterMap": {"m": "m", "area": "area"},
+          "bodyBox": [-3, -3, 2, 3],
+          "defaultLabelSide": "channel"
+        },
+        "pnp4": {
+          "library": "sky130_fd_pr_main",
+          "cell": "pnp_05v5_W0p68L0p68",
+          "view": "symbol",
+          "pinMap": {"C": "c", "BASE": "b", "E": "e", "B": "s"},
+          "pinOffsets": {"e": [1, 3], "b": [-3, 0], "c": [1, -3], "s": [1, 0]},
+          "parameterMap": {"m": "m", "area": "area"},
+          "bodyBox": [-3, -3, 2, 3],
+          "defaultLabelSide": "channel"
         }
       }
     }

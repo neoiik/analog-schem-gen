@@ -18,13 +18,76 @@ def _px(grid_val: float) -> float:
 
 
 def _draw_mos_svg(pl: PlacedInstance, is_pmos: bool) -> list[str]:
-    """Render crisp NMOS or PMOS symbol matching exact pin coordinates."""
+    """Render crisp NMOS or PMOS symbol matching exact pin coordinates (vertical or horizontal)."""
     gx, gy = pl.pin_points["G"]
     dx, dy = pl.pin_points["D"]
     sx, sy = pl.pin_points["S"]
     bx, by = pl.pin_points["B"]
 
-    # Gate faces left if gx < dx else right
+    elems: list[str] = []
+    stroke = "#162d31"
+
+    # Horizontal MOS (R90 / R270 / MXR90 / MYR90): D and S share Y and span left-right; G faces down or up
+    if dy == sy and dx != sx:
+        sign_y = 1 if dy > gy else -1  # +1 when Gate is above & channel below; -1 when Gate is below & channel above
+        ch_y = dy
+        oxide_y = pl.y
+        gate_bar_y = pl.y - sign_y * 1
+
+        x_left = min(dx, sx)
+        x_right = max(dx, sx)
+        x_finger_left = pl.x - 1.8
+        x_finger_right = pl.x + 1.8
+
+        # Gate lead + bubble (for PMOS) + horizontal gate plate
+        if is_pmos:
+            bubble_r = 0.42
+            bubble_cy = gate_bar_y - sign_y * bubble_r
+            lead_end_y = gate_bar_y - sign_y * (2 * bubble_r)
+            elems.append(
+                f'<line x1="{_px(gx)}" y1="{_px(gy)}" x2="{_px(gx)}" y2="{_px(lead_end_y)}" stroke="{stroke}" stroke-width="1.8"/>'
+            )
+            elems.append(
+                f'<circle cx="{_px(gx)}" cy="{_px(bubble_cy)}" r="{_px(bubble_r)}" fill="#fcfdfb" stroke="{stroke}" stroke-width="1.6"/>'
+            )
+        else:
+            elems.append(
+                f'<line x1="{_px(gx)}" y1="{_px(gy)}" x2="{_px(gx)}" y2="{_px(gate_bar_y)}" stroke="{stroke}" stroke-width="1.8"/>'
+            )
+
+        elems.append(
+            f'<line x1="{_px(pl.x - 1.9)}" y1="{_px(gate_bar_y)}" x2="{_px(pl.x + 1.9)}" y2="{_px(gate_bar_y)}" stroke="{stroke}" stroke-width="2.0"/>'
+        )
+        # Channel plate
+        elems.append(
+            f'<line x1="{_px(pl.x - 2.3)}" y1="{_px(oxide_y)}" x2="{_px(pl.x + 2.3)}" y2="{_px(oxide_y)}" stroke="{stroke}" stroke-width="2.2"/>'
+        )
+        # Left and right vertical channel fingers + horizontal leads to D and S
+        elems.append(
+            f'<polyline points="{_px(x_finger_left)},{_px(oxide_y)} {_px(x_finger_left)},{_px(ch_y)} {_px(x_left)},{_px(ch_y)}" fill="none" stroke="{stroke}" stroke-width="1.8"/>'
+        )
+        elems.append(
+            f'<polyline points="{_px(x_finger_right)},{_px(oxide_y)} {_px(x_finger_right)},{_px(ch_y)} {_px(x_right)},{_px(ch_y)}" fill="none" stroke="{stroke}" stroke-width="1.8"/>'
+        )
+        # Bulk lead from channel center to B pin
+        elems.append(
+            f'<line x1="{_px(bx)}" y1="{_px(oxide_y)}" x2="{_px(bx)}" y2="{_px(by)}" stroke="{stroke}" stroke-width="1.5"/>'
+        )
+        # Source arrow on S finger
+        s_is_left = sx < dx
+        sx_finger = x_finger_left if s_is_left else x_finger_right
+        if not is_pmos:
+            tip_y = ch_y
+            base_y = ch_y - sign_y * 0.65
+        else:
+            tip_y = oxide_y
+            base_y = oxide_y + sign_y * 0.65
+        elems.append(
+            f'<polygon points="{_px(sx_finger)},{_px(tip_y)} {_px(sx_finger - 0.42)},{_px(base_y)} {_px(sx_finger + 0.42)},{_px(base_y)}" fill="{stroke}"/>'
+        )
+        return elems
+
+    # Vertical MOS: Gate faces left if gx < dx else right
     sign = 1 if dx > gx else -1  # +1 when Gate is left, Channel is right
     ch_x = dx  # Channel vertical connection X
     oxide_x = pl.x  # Oxide/channel plate X
@@ -34,9 +97,6 @@ def _draw_mos_svg(pl: PlacedInstance, is_pmos: bool) -> list[str]:
     y_bot = max(dy, sy)
     y_finger_top = pl.y - 1.8
     y_finger_bot = pl.y + 1.8
-
-    elems: list[str] = []
-    stroke = "#162d31"
 
     # Gate lead + bubble (for PMOS) + vertical gate plate
     if is_pmos:
@@ -88,6 +148,77 @@ def _draw_mos_svg(pl: PlacedInstance, is_pmos: bool) -> list[str]:
     elems.append(
         f'<polygon points="{_px(tip_x)},{_px(sy_finger)} {_px(base_x)},{_px(sy_finger - 0.42)} {_px(base_x)},{_px(sy_finger + 0.42)}" fill="{stroke}"/>'
     )
+    return elems
+
+
+def _draw_bjt_svg(pl: PlacedInstance, is_pnp: bool) -> list[str]:
+    """Render crisp textbook NPN or PNP BJT symbol matching exact pin coordinates."""
+    bx, by = pl.pin_points["BASE"]
+    cx, cy = pl.pin_points["C"]
+    ex, ey = pl.pin_points["E"]
+
+    sign = 1 if cx > bx else -1  # +1 when Base is left, C/E on right
+    ch_x = cx
+    base_bar_x = pl.x - sign * 0.75
+
+    y_top = min(cy, ey)
+    y_bot = max(cy, ey)
+    y_arm_top = pl.y - 1.85
+    y_arm_bot = pl.y + 1.85
+    y_bar_top = pl.y - 0.75
+    y_bar_bot = pl.y + 0.75
+
+    elems: list[str] = []
+    stroke = "#162d31"
+
+    # Base lead + thick vertical base plate
+    elems.append(
+        f'<line x1="{_px(bx)}" y1="{_px(by)}" x2="{_px(base_bar_x)}" y2="{_px(by)}" stroke="{stroke}" stroke-width="1.8"/>'
+    )
+    elems.append(
+        f'<line x1="{_px(base_bar_x)}" y1="{_px(pl.y - 2.0)}" x2="{_px(base_bar_x)}" y2="{_px(pl.y + 2.0)}" stroke="{stroke}" stroke-width="2.4"/>'
+    )
+
+    # Top diagonal arm + vertical lead to top pin
+    elems.append(
+        f'<polyline points="{_px(base_bar_x)},{_px(y_bar_top)} {_px(ch_x)},{_px(y_arm_top)} {_px(ch_x)},{_px(y_top)}" fill="none" stroke="{stroke}" stroke-width="1.8" stroke-linejoin="round"/>'
+    )
+    # Bottom diagonal arm + vertical lead to bottom pin
+    elems.append(
+        f'<polyline points="{_px(base_bar_x)},{_px(y_bar_bot)} {_px(ch_x)},{_px(y_arm_bot)} {_px(ch_x)},{_px(y_bot)}" fill="none" stroke="{stroke}" stroke-width="1.8" stroke-linejoin="round"/>'
+    )
+
+    # Emitter arrow along emitter diagonal leg (NPN: outward toward E; PNP: inward toward base bar)
+    e_is_top = ey < cy
+    p_bar = (base_bar_x, y_bar_top if e_is_top else y_bar_bot)
+    p_end = (ch_x, y_arm_top if e_is_top else y_arm_bot)
+    vx = p_end[0] - p_bar[0]
+    vy = p_end[1] - p_bar[1]
+    vlen = max(1e-6, (vx * vx + vy * vy) ** 0.5)
+    ux, uy = vx / vlen, vy / vlen  # unit vector from base bar toward emitter corner
+    nx, ny = -uy, ux
+
+    if not is_pnp:
+        # NPN: outward arrow pointing toward p_end
+        tip = (p_bar[0] + 0.85 * vx, p_bar[1] + 0.85 * vy)
+        b_ctr = (tip[0] - 0.72 * ux, tip[1] - 0.72 * uy)
+    else:
+        # PNP: inward arrow pointing toward p_bar
+        tip = (p_bar[0] + 0.25 * vx, p_bar[1] + 0.25 * vy)
+        b_ctr = (tip[0] + 0.72 * ux, tip[1] + 0.72 * uy)
+    w_half = 0.42
+    p1 = (b_ctr[0] + w_half * nx, b_ctr[1] + w_half * ny)
+    p2 = (b_ctr[0] - w_half * nx, b_ctr[1] - w_half * ny)
+    elems.append(
+        f'<polygon points="{_px(tip[0])},{_px(tip[1])} {_px(p1[0])},{_px(p1[1])} {_px(p2[0])},{_px(p2[1])}" fill="{stroke}"/>'
+    )
+
+    # Optional 4th-pin substrate lead
+    if "B" in pl.pin_points:
+        subx, suby = pl.pin_points["B"]
+        elems.append(
+            f'<line x1="{_px(base_bar_x)}" y1="{_px(suby)}" x2="{_px(subx)}" y2="{_px(suby)}" stroke="#5c7075" stroke-width="1.3" stroke-dasharray="3,2"/>'
+        )
     return elems
 
 
@@ -295,16 +426,28 @@ def render_schematic_svg(
     for bl in solved.local_bulk_labels:
         pl = solved.placements[bl["reference"]]
         ax, ay = pl.pin_points["B"]
-        dx = 1 if ax >= pl.x else -1
-        ex = ax + dx * pdk.local_stub_len
-        out.append(
-            f'<line x1="{_px(ax)}" y1="{_px(ay)}" x2="{_px(ex)}" y2="{_px(ay)}" stroke="#546e7a" stroke-width="1.4"/>'
-        )
-        anchor = "start" if dx > 0 else "end"
-        tx = _px(ex) + (4 if dx > 0 else -4)
-        out.append(
-            f'<text x="{tx}" y="{_px(ay) + 3.5}" text-anchor="{anchor}" font-size="9.5" font-family="Consolas,monospace" fill="#455a64">{escape(bl["name"])}</text>'
-        )
+        rdx, rdy = ax - pl.x, ay - pl.y
+        if abs(rdx) >= abs(rdy):
+            dx = 1 if rdx >= 0 else -1
+            ex, ey = ax + dx * pdk.local_stub_len, ay
+            out.append(
+                f'<line x1="{_px(ax)}" y1="{_px(ay)}" x2="{_px(ex)}" y2="{_px(ey)}" stroke="#546e7a" stroke-width="1.4"/>'
+            )
+            anchor = "start" if dx > 0 else "end"
+            tx = _px(ex) + (4 if dx > 0 else -4)
+            out.append(
+                f'<text x="{tx}" y="{_px(ey) + 3.5}" text-anchor="{anchor}" font-size="9.5" font-family="Consolas,monospace" fill="#455a64">{escape(bl["name"])}</text>'
+            )
+        else:
+            dy_b = 1 if rdy >= 0 else -1
+            ex, ey = ax, ay + dy_b * pdk.local_stub_len
+            out.append(
+                f'<line x1="{_px(ax)}" y1="{_px(ay)}" x2="{_px(ex)}" y2="{_px(ey)}" stroke="#546e7a" stroke-width="1.4"/>'
+            )
+            ty = _px(ey) + (11 if dy_b > 0 else -4)
+            out.append(
+                f'<text x="{_px(ex)}" y="{ty}" text-anchor="middle" font-size="9.5" font-family="Consolas,monospace" fill="#455a64">{escape(bl["name"])}</text>'
+            )
 
     # Wire-label fly-wire stubs (`WireLabelStubPlaced`) + Bus Rippers (`BusRipperPlaced`)
     for wl in solved.wire_label_stubs:
@@ -357,6 +500,8 @@ def render_schematic_svg(
             out.extend(_draw_subckt_block_svg(pl))
         elif pl.device_class == "mos":
             out.extend(_draw_mos_svg(pl, is_pmos=(pl.polarity == "pmos")))
+        elif pl.device_class == "bjt":
+            out.extend(_draw_bjt_svg(pl, is_pnp=(pl.polarity == "pnp")))
         else:
             out.extend(_draw_passive_or_source_svg(pl))
 
@@ -389,15 +534,28 @@ def render_schematic_svg(
                 f'<polygon points="{px - 8},{py} {px + 8},{py} {px},{py + 9}" fill="none" stroke="#37474f" stroke-width="1.8"/>'
             )
         else:
-            is_right = po.mirror == "horizontal"
-            dir_s = 1 if is_right else -1
-            flag = f"{px},{py} {px + dir_s * 7},{py - 5} {px + dir_s * 18},{py - 5} {px + dir_s * 18},{py + 5} {px + dir_s * 7},{py + 5}"
-            out.append(f'<polygon points="{flag}" fill="#e6f2f0" stroke="#00695c" stroke-width="1.5"/>')
-            tx = px + dir_s * 22
-            anchor = "start" if is_right else "end"
-            out.append(
-                f'<text x="{tx}" y="{py + 4}" text-anchor="{anchor}" font-size="11" font-weight="600" font-family="Consolas,monospace" fill="#004d40">{escape(po.port_name)}</text>'
-            )
+            if po.rotation == 90:
+                flag = f"{px},{py} {px - 5},{py - 7} {px - 5},{py - 18} {px + 5},{py - 18} {px + 5},{py - 7}"
+                out.append(f'<polygon points="{flag}" fill="#e6f2f0" stroke="#00695c" stroke-width="1.5"/>')
+                out.append(
+                    f'<text x="{px}" y="{py - 22}" text-anchor="middle" font-size="11" font-weight="600" font-family="Consolas,monospace" fill="#004d40">{escape(po.port_name)}</text>'
+                )
+            elif po.rotation == 270:
+                flag = f"{px},{py} {px - 5},{py + 7} {px - 5},{py + 18} {px + 5},{py + 18} {px + 5},{py + 7}"
+                out.append(f'<polygon points="{flag}" fill="#e6f2f0" stroke="#00695c" stroke-width="1.5"/>')
+                out.append(
+                    f'<text x="{px}" y="{py + 30}" text-anchor="middle" font-size="11" font-weight="600" font-family="Consolas,monospace" fill="#004d40">{escape(po.port_name)}</text>'
+                )
+            else:
+                is_right = po.mirror == "horizontal"
+                dir_s = 1 if is_right else -1
+                flag = f"{px},{py} {px + dir_s * 7},{py - 5} {px + dir_s * 18},{py - 5} {px + dir_s * 18},{py + 5} {px + dir_s * 7},{py + 5}"
+                out.append(f'<polygon points="{flag}" fill="#e6f2f0" stroke="#00695c" stroke-width="1.5"/>')
+                tx = px + dir_s * 22
+                anchor = "start" if is_right else "end"
+                out.append(
+                    f'<text x="{tx}" y="{py + 4}" text-anchor="{anchor}" font-size="11" font-weight="600" font-family="Consolas,monospace" fill="#004d40">{escape(po.port_name)}</text>'
+                )
 
     # 5. Explicit Solder Dots at Junctions & Multi-Wire Pin Joins
     solder_pts: set[Point] = {(j.x, j.y) for j in solved.junctions.values()}

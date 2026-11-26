@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from typing import Any
+import warnings
 
 
 Point = tuple[int, int]
@@ -30,7 +31,7 @@ class InstanceIR:
     def device_key(self) -> str:
         if self.device_class == "subckt" and self.subckt_cell:
             return f"subckt:{self.subckt_cell}"
-        return str(self.kind if self.device_class == "mos" else self.device_class)
+        return str(self.kind if self.device_class in {"mos", "bjt"} else self.device_class)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -135,12 +136,19 @@ class TopologyAnalysis:
     default_tiers: dict[str, int]
     ambiguities_for_llm: list[AmbiguityItem]
     draft_intent: dict[str, Any]
+    device_roles: dict[str, dict[str, Any]] = field(default_factory=dict)
+    signal_backbone: dict[str, Any] = field(default_factory=dict)
+    branch_abstraction: dict[str, Any] = field(default_factory=dict)
+    semantic_digest_md: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "schema": "schem_gen.analysis.v1",
             "circuit": self.circuit.to_dict(),
+            "deviceRoles": dict(self.device_roles),
             "candidateMotifs": [m.to_dict() for m in self.motifs],
+            "signalBackbone": dict(self.signal_backbone),
+            "branchAbstraction": dict(self.branch_abstraction),
             "netFanout": dict(self.net_fanout),
             "defaultNetPolicies": dict(self.net_classifications_default),
             "defaultTiers": dict(self.default_tiers),
@@ -180,10 +188,28 @@ class SpacingConfig:
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any] | None) -> "SpacingConfig":
+        """Accept both snake_case (`min_clearance_x`) and camelCase (`minClearanceX`) keys.
+
+        Unknown keys raise a warning instead of being silently dropped.
+        """
         if not raw:
             return cls()
         allowed = {f for f in cls.__dataclass_fields__}
-        filtered = {k: int(v) for k, v in raw.items() if k in allowed}
+        filtered: dict[str, int] = {}
+        unknown: list[str] = []
+        for k, v in raw.items():
+            snake = "".join(f"_{ch.lower()}" if ch.isupper() else ch for ch in str(k)).lstrip("_")
+            if k in allowed:
+                filtered[k] = int(v)
+            elif snake in allowed:
+                filtered.setdefault(snake, int(v))
+            else:
+                unknown.append(str(k))
+        if unknown:
+            warnings.warn(
+                f"SpacingConfig ignored unknown keys {unknown}; allowed: {sorted(allowed)}",
+                stacklevel=2,
+            )
         return cls(**filtered)
 
     def to_dict(self) -> dict[str, Any]:
@@ -206,6 +232,16 @@ class SchematicIntent:
     spacing: SpacingConfig = field(default_factory=SpacingConfig)
     authored_by: str = "heuristic_draft"
     llm_notes: str = ""
+    # net -> "llm" | "skeleton" | "optimizer" | "analyzer"; resolves who may overwrite a policy.
+    net_policy_sources: dict[str, str] = field(default_factory=dict)
+
+    def net_policy_source(self, net: str) -> str:
+        """Owner of a net policy. Policies in a hand/LLM-edited intent without explicit provenance are `llm`."""
+        if net in self.net_policy_sources:
+            return self.net_policy_sources[net]
+        if net in self.net_policies and not str(self.authored_by).startswith(("analyzer", "heuristic", "module_plan")):
+            return "llm"
+        return "analyzer"
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SchematicIntent":
@@ -214,7 +250,7 @@ class SchematicIntent:
                 id=str(g["id"]),
                 label=str(g.get("label", g["id"])),
                 role=str(g.get("role", "aux")),
-                stage_order=int(g.get("stage_order", idx)),
+                stage_order=int(g.get("stage_order", g.get("stageOrder", idx))),
                 instances=[str(x) for x in g.get("instances", [])],
             )
             for idx, g in enumerate(data.get("groups", []))
@@ -232,6 +268,10 @@ class SchematicIntent:
             spacing=SpacingConfig.from_dict(data.get("spacing")),
             authored_by=str(data.get("authoredBy", data.get("authored_by", "user_or_llm"))),
             llm_notes=str(data.get("llmNotes", data.get("llm_notes", ""))),
+            net_policy_sources={
+                str(k): str(v)
+                for k, v in data.get("netPolicySources", data.get("net_policy_sources", {})).items()
+            },
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -246,6 +286,7 @@ class SchematicIntent:
             "tierOverrides": dict(self.tier_overrides),
             "columnOrderHints": list(self.column_order_hints),
             "netPolicies": dict(self.net_policies),
+            "netPolicySources": dict(self.net_policy_sources),
             "criticalNets": list(self.critical_nets),
             "portSides": dict(self.port_sides),
             "spacing": self.spacing.to_dict(),

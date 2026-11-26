@@ -73,8 +73,8 @@ def build_bridge_manifest(solved: SolvedSchematic, pdk: PdkRegistry | None = Non
             "nodes": nodes,
             "sourceParameters": dict(inst.params),
         }
-        if inst.device_class == "mos":
-            item["kind"] = str(inst.kind or "nmos")
+        if inst.device_class in {"mos", "bjt"}:
+            item["kind"] = str(inst.kind or ("nmos" if inst.device_class == "mos" else "npn"))
         manifest_instances.append(item)
 
     manifest_ports = [

@@ -278,9 +278,28 @@ def _infer_port_direction(port_name: str, is_supply: bool, is_ground: bool) -> s
         for p in ("VIN", "IN", "VIP", "VIM", "INN", "INP", "IBIAS", "VBIAS", "VB", "EN", "CLK", "RST", "VREF", "SW")
     ):
         return "input"
-    if any(up.startswith(p) for p in ("VOUT", "OUT", "VOP", "VOM", "IOUT", "Q")):
+    if any(up.startswith(p) for p in ("VOUT", "OUT", "VOP", "VON", "VOM", "IOUT", "Q")):
         return "output"
     return "inout"
+
+
+_SUBCKT_PARAM_MARKERS: frozenset[str] = frozenset({"params:", "params", "param:", "parameters:", "parameters"})
+_BEHAVIORAL_PREFIXES: frozenset[str] = frozenset({"B", "E", "F", "G", "H"})
+
+
+def _parse_subckt_header(line: str) -> tuple[str, list[str]]:
+    """Extract `(subckt_name, port_names)` while stripping SPICE `params:` and `k=v` defaults."""
+    raw_toks = _tokenize_preserving_braces(line)[1:]
+    if not raw_toks:
+        return "", []
+    name = raw_toks[0]
+    rest_norm = re.sub(r"\s*=\s*", "=", " ".join(raw_toks[1:]))
+    ports: list[str] = []
+    for tok in _tokenize_preserving_braces(rest_norm):
+        if "=" in tok or tok.lower() in _SUBCKT_PARAM_MARKERS:
+            break
+        ports.append(tok)
+    return name, ports
 
 
 def _clean_ref_name(raw_name: str, device_class: str, is_matched_pdk: bool, existing_refs: set[str]) -> str:
@@ -289,6 +308,8 @@ def _clean_ref_name(raw_name: str, device_class: str, is_matched_pdk: bool, exis
     if len(raw_name) >= 3 and raw_name[0].upper() == "X" and device_class != "subckt":
         second = raw_name[1].upper()
         if is_matched_pdk or (device_class == "mos" and second == "M") or (
+            device_class == "bjt" and second == "Q"
+        ) or (
             device_class.startswith("res") and second == "R"
         ) or (
             device_class.startswith("cap") and second == "C"
@@ -304,6 +325,19 @@ def _clean_ref_name(raw_name: str, device_class: str, is_matched_pdk: bool, exis
             idx += 1
         candidate = f"{candidate}_{idx}"
     return candidate
+
+
+def classify_rail_nets(
+    nets: list[str],
+    rules_path: Path | str = DEFAULT_NETLIST_RULES_PATH,
+) -> tuple[list[str], list[str]]:
+    """Classify supply / ground nets with the SAME `supplyNetPatterns` / `groundNetPatterns` used by the parser."""
+    rules_data: dict[str, Any] = json.loads(Path(rules_path).read_text(encoding="utf-8"))
+    supply_res = [re.compile(p, re.IGNORECASE) for p in rules_data.get("supplyNetPatterns", [])]
+    ground_res = [re.compile(p, re.IGNORECASE) for p in rules_data.get("groundNetPatterns", [])]
+    supplies = [n for n in nets if any(rx.match(n) for rx in supply_res)]
+    grounds = [n for n in nets if any(rx.match(n) for rx in ground_res)]
+    return supplies, grounds
 
 
 def parse_netlist_design_text(
@@ -344,9 +378,9 @@ def parse_netlist_design_text(
                 if fval is not None:
                     global_params[pk.lower()] = fval
         elif upper.startswith(".SUBCKT ") or upper.startswith("SUBCKT "):
-            toks, _ = _parse_params(_tokenize_preserving_braces(line)[1:])
-            if toks:
-                subckt_headers[toks[0]] = list(toks[1:])
+            sc_name, sc_ports = _parse_subckt_header(line)
+            if sc_name:
+                subckt_headers[sc_name] = sc_ports
 
     # Partition lines into subckt bodies (or one top-level flat body if no `.subckt`)
     raw_blocks: list[tuple[str, list[str], list[tuple[int, str, str]]]] = []
@@ -360,9 +394,9 @@ def parse_netlist_design_text(
         if upper.startswith("*.PININFO") or upper.startswith(".PARAM ") or upper.startswith("PARAMETERS "):
             continue
         if upper.startswith(".SUBCKT ") or upper.startswith("SUBCKT "):
-            toks, _ = _parse_params(_tokenize_preserving_braces(line)[1:])
-            cur_name = toks[0]
-            cur_ports = list(toks[1:])
+            sc_name, sc_ports = _parse_subckt_header(line)
+            cur_name = sc_name
+            cur_ports = sc_ports
             cur_body = []
             continue
         if upper.startswith(".ENDS") or upper == "ENDS" or upper.startswith("ENDS "):
@@ -387,6 +421,7 @@ def parse_netlist_design_text(
     for b_name, declared_ports, body_lines in raw_blocks:
         instances: list[InstanceIR] = []
         existing_refs: set[str] = set()
+        is_behavioral_blackbox = False
 
         for lineno, line, sec in body_lines:
             spectre_match = _SPECTRE_INST_RE.match(line)
@@ -464,7 +499,13 @@ def parse_netlist_design_text(
                 if len(pin_nets) != len(expected_terms):
                     if device_class == "mos" and len(pin_nets) == 3:
                         pin_nets = [*pin_nets, pin_nets[2]]
-                    elif device_class in {"res_poly_3t", "res_xhigh_po_3t"} and len(pin_nets) == 2:
+                    elif device_class == "bjt" and len(pin_nets) == 3:
+                        expected_terms = ["C", "BASE", "E"]
+                        kind = "pnp" if polarity == "pnp" else "npn"
+                    elif device_class == "bjt" and len(pin_nets) == 4:
+                        expected_terms = ["C", "BASE", "E", "B"]
+                        kind = "pnp4" if polarity == "pnp" else "npn4"
+                    elif device_class.startswith("res") and device_class.endswith("_3t") and len(pin_nets) == 2:
                         device_class = "resistor"
                         expected_terms = ["P", "M"]
                     else:
@@ -485,6 +526,18 @@ def parse_netlist_design_text(
                     if len(pin_nets) != 4:
                         raise ValueError(f"Line {lineno} ({raw_name}): MOS needs 4 terminals, got {pin_nets}")
                     terminals = dict(zip(["D", "G", "S", "B"], pin_nets))
+                elif prefix == "Q":
+                    is_pnp = "pnp" in model_name.lower()
+                    device_class = "bjt"
+                    polarity = "pnp" if is_pnp else "npn"
+                    if len(pin_nets) == 4:
+                        kind = "pnp4" if is_pnp else "npn4"
+                        terminals = dict(zip(["C", "BASE", "E", "B"], pin_nets))
+                    elif len(pin_nets) == 3:
+                        kind = "pnp" if is_pnp else "npn"
+                        terminals = dict(zip(["C", "BASE", "E"], pin_nets))
+                    else:
+                        raise ValueError(f"Line {lineno} ({raw_name}): BJT needs 3 or 4 terminals, got {pin_nets}")
                 elif prefix == "R":
                     device_class = "res_poly_3t" if len(pin_nets) == 3 else "resistor"
                     kind = None
@@ -513,6 +566,10 @@ def parse_netlist_design_text(
                     kind = None
                     polarity = "source"
                     terminals = {"P": pin_nets[0], "M": pin_nets[1]}
+                elif prefix in _BEHAVIORAL_PREFIXES and len(raw_blocks) > 1 and b_name in subckt_headers:
+                    # Behavioral/controlled-source macro (B/E/F/G/H) referenced as a black-box `.subckt` block
+                    is_behavioral_blackbox = True
+                    break
                 else:
                     raise ValueError(
                         f"Line {lineno}: unrecognized subcircuit/model {model_name!r} on instance {raw_name!r}"
@@ -536,7 +593,7 @@ def parse_netlist_design_text(
                 )
             )
 
-        if not instances:
+        if is_behavioral_blackbox or not instances:
             continue
 
         nets: list[str] = []

@@ -102,6 +102,20 @@
       "kind": null,
       "polarity": "passive",
       "terminals": ["P", "M"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?(npn|qnpn).*$",
+      "deviceClass": "bjt",
+      "kind": "npn4",
+      "polarity": "npn",
+      "terminals": ["C", "BASE", "E", "B"]
+    },
+    {
+      "pattern": "^(sky130_fd_pr__)?(pnp|qpnp).*$",
+      "deviceClass": "bjt",
+      "kind": "pnp",
+      "polarity": "pnp",
+      "terminals": ["C", "BASE", "E"]
     }
   ]
 }

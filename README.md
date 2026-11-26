@@ -3,7 +3,7 @@
 **Analog Circuit Schematic Generator & Refiner (LLM × Algorithm Co-Execution)**  
 **模拟电路原理图生成与整理引擎（大模型语义决策 × 确定性算法排版布线）**
 
-[![Release](https://img.shields.io/badge/Release-v0.3.0-00897b.svg)](https://github.com/neoiik/analog-schem-gen/releases/tag/v0.3.0)
+[![Release](https://img.shields.io/badge/Release-v0.3.3-00897b.svg)](https://github.com/neoiik/analog-schem-gen/releases/tag/v0.3.3)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](pyproject.toml)
 
@@ -23,12 +23,13 @@ Turn raw SPICE / CDL / Spectre netlists (from 10-transistor OTAs up to 160+ tran
 | **Placement & Routing** | **Deterministic Solver** | Shortest-connection 2D vertical stacking, **Convex QP** symmetric placement, collinear shared `VDD`/`VSS` rails, and orthogonal Steiner routing. |
 | **Verification & Export** | **Deterministic Auditor** | Netlist connectivity & collision check, standalone SVG / multi-sheet HTML book, and Virtuoso-ready `manifest.json`. |
 
-### What's New in v0.3.0
+### What's New in v0.3.3
 
-- **Shortest-Connection 2D Stacking**: Removes artificial horizontal group walls; parallel banks stack directly over driving blocks, and coupled dual-tail / active-load pairs align in shared columns.
-- **Signal-Cohesion Vertical Floating**: Short active sub-branches (e.g., co-gated startup pairs) cohere tightly around mutual signal nodes instead of stretching to global top/bottom rows.
-- **Collinear Shared `VDD` / `VSS` Rails**: Merges supply/ground taps onto flat horizontal rail trunks with a single `VDD` / `GND` symbol and clean `T`-junction solder dots.
-- **Nearest-Boundary Ports & Post-Order Hierarchy**: Places I/O ports on the nearest unobstructed sheet edge and synchronizes child symbol pin orders bottom-up.
+- **More Accurate Complex-Netlist Extraction (Coarse → Meso → Fine)**: Vertical branch folding, global bias-tree separation, on-demand local signal tracing (`inspect`), and pre-layout semantic auditing (`validate-modules`) let LLMs decompose 40–160+ transistor anonymous netlists step by step (`core anchors → modules → local skeletons`), shrink context length, and catch missing devices, torn series chains, or misplaced branches before layout.
+- **Richer Analog Topology Recognition & Cleaner Schematics**: Recognizes composite analog structures including co-gated `Super-MOS` stacks, generalized horizontal Miller bridges, quasi-symmetric sandwich mirror cores, and complementary source followers; improves short-range direct wiring, wire-label stubs, long-branch vertical ordering, and intact branch protection during multi-sheet paging (41-instance dual-path op-amp: `2` wire crossings, `0` readability DRC violations).
+- **Per-PDK Configuration & Reliable LLM Control**: Device families and topology thresholds are configurable per PDK; LLM net policies take top priority over the crossing optimizer, policy downgrades are explicitly reported in `audit.md`, and untouched module drafts match `auto` output exactly.
+
+> **Note vs. Hand-Drawn Schematics**: Compared with ultra-compact schematics drawn manually by senior engineers, `analog-schem-gen` keeps complex blocks slightly more open — **prioritizing clear functional unfolding, zero overlaps, and immediately readable signal flow**. Use the built-in offline browser editor (`export-editor`) whenever tighter visual compaction is desired.
 
 ### Three Ways to Use (No EDA Environment Required)
 
@@ -48,15 +49,9 @@ Runs standalone on **Python 3.10+** (Windows / Linux / macOS — **no Virtuoso o
 
 ![Folded-Cascode OTA](examples/demo_outputs/02_folded_cascode_ota/preview.svg)
 
-**3. 162-Instance Rail-to-Rail Class-AB Op-Amp (`OPA316` · 1 Top + 10 Subsheets)**
+**3. 41-Instance Dual-Path Op-Amp (Super-MOS · Generalized Miller Bridge · Sandwich Mirror Core)**
 
-*Level 0 — Synthesized Top Block Diagram (`opamp_core`):*
-
-![OPA316 Top Sheet](examples/demo_outputs/05_rcopa316_hierarchy/sheets/opamp_core/preview.svg)
-
-*Level 1 — Subsheet P03: Matched Complementary Input Stage:*
-
-![OPA316 P03 Complementary Input Stage](examples/demo_outputs/05_rcopa316_hierarchy/sheets/opamp_core_p03_matched_complementary_input_/preview.svg)
+![Dual-Path Op-Amp](examples/demo_outputs/06_dual_path_opamp/preview.svg)
 
 ## Quick Start
 
@@ -85,9 +80,13 @@ analog-schem-gen hierarchy examples/sky130_rcopa316_core.spice --out out/opa316
 <summary><strong>Advanced Commands (LLM Co-Execution, Browser Drag Editor, Draft Cleanup, Custom PDK)</strong></summary>
 
 ```bash
-# Step-by-step LLM x Algorithm co-execution (analyze -> edit intent.json -> compile)
+# Step-by-step Coarse-to-Fine LLM x Algorithm co-execution (analyze -> inspect -> validate-modules -> compile)
 analog-schem-gen analyze examples/sky130_two_stage_ota.spice --out out/01_analyze
-analog-schem-gen compile examples/sky130_two_stage_ota.spice --intent examples/sky130_two_stage_intent.json --out out/02_compile
+analog-schem-gen inspect examples/sky130_two_stage_ota.spice --around M1 --hops 1
+analog-schem-gen validate-modules examples/sky130_two_stage_ota.spice --plan out/01_analyze/module_plan.draft.json
+analog-schem-gen compile examples/sky130_two_stage_ota.spice --module-plan out/01_analyze/module_plan.draft.json --out out/02_compile
+# Or compile directly from a full IntentSpec
+analog-schem-gen compile examples/sky130_two_stage_ota.spice --intent examples/sky130_two_stage_intent.json --out out/02_compile_intent
 
 # Export standalone browser drag/flip editor -> refine modified manifest
 analog-schem-gen export-editor examples/sky130_two_stage_ota.spice --out out/editor.html
@@ -109,14 +108,14 @@ python -B -m unittest discover -s tests -v
 
 将无坐标的纯文本 SPICE / CDL / Spectre 网表（从基础运放到 160+ 器件的复杂多级电路），自动编译为**纵向成列规整、少交叉、无压字**的原理图（SVG / 交互式多页图册 / Virtuoso 精确坐标清单）。
 
-### 一、核心思想与 v0.3.0 更新亮点
+### 一、核心思想与 v0.3.3 更新亮点
 
-- **大模型只做器件语义解释，确定性算法完成排版布线**：大模型仅输出模块信号流向、器件语义朝向与总线策略（零坐标）；几何坐标与正交走线全部由凸二次规划（Convex QP）与正交 Steiner 路由器精确求解。
-- **v0.3.0 核心升级**：
-  - **最简连接 2D 纵向叠放**：取消按功能分区的横向硬隔离，并联电容阵与驱动单元一对一正叠，双尾耦合与有源负载同列贯通；
-  - **信号优先纵向内聚浮动**：深栈电路中的短支路（如共栅反相启动对）优先围绕局部紧密信号聚合，不再强拉对齐全局顶底排；
-  - **共享水平共线 `VDD` / `VSS` 母线**：电源与地引脚自动汇流为单根水平对齐母线并共用单个符号（端部直角折弯、内部 `T` 型焊点）；
-  - **就近边界端口与后序层次同步**：输入/输出端口按最近无遮挡边界直出，多级子电路自底向上同步引脚顺序。
+- **大模型只做电路语义决策，确定性算法完成排版布线**：大模型按「核心锚点 → 功能模块 → 局部骨架」输出零坐标语义规划；几何坐标与正交走线全部由凸二次规划（Convex QP）与正交 Steiner 路由器精确求解。
+- **v0.3.3 核心升级**：
+  - **AI 看复杂网表更准**：新增竖向支路折叠、偏置剥离、局部追线聚焦（`inspect`）与布局前置校验（`validate-modules`），大幅压缩大电路上下文，并在画图前拦截漏管、拆断串联链与错分组；
+  - **模拟结构识别与图面质量提升**：支持共栅叠管、广义水平 Miller 补偿桥、三明治对称核与互补源随等复合结构；优化短距实线直连、线标短桩、长支路纵层顺序及大图分页保护（实测 41 管双通路运放全图仅 2 处交叉，6 项可读性 DRC 全为 0）；
+  - **多工艺适配与 AI 控制更可靠**：器件分类与拓扑阈值统一支持按工艺配置；明确 AI 策略优先级高于自动优化器，策略降级会在报告中显式提示，确保未改动草案与一键 `auto` 效果一致。
+- **与手工绘制原理图的差异**：与资深工程师极致紧凑的手绘图相比，当前工具在复杂模块上略偏舒展，**优先保证功能层级清晰展开、零重叠压字与信号流一目了然**；如需进一步收紧版面，可配合自带离线编辑器（`export-editor`）微调。
 
 ### 二、适用环境与三种使用方式（无 IC 环境亦可独立出图）
 
